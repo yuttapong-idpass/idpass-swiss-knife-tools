@@ -26,10 +26,14 @@ const Home = (props: Props) => {
         <div className="basis-full border-4">
           <div className="flex flex-col">
             <div className="h-screen">
-              {/* <div className="h-3/6 border-4">02</div>
-              <div className="h-3/6 border-4">02</div> */}
-              <InputValue />
-              <OutputValue />
+              <div className="border-4" style={{ height: '5%'}}>Navbar</div>
+              <div className="border-4" style={{ height: '40%'}}>Input content</div>
+
+              <div className="border-4" style={{ height: '5%'}}>Action Button</div>
+
+              <div className="border-4" style={{ height: '5%'}}>Navbar</div>
+              <div className="border-4" style={{ height: '45%'}}>Output content</div>
+   
             </div>
           </div>
 
