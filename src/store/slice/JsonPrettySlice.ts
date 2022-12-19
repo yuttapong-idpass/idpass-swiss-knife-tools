@@ -20,7 +20,7 @@ const jsonPrettySlice = createSlice({
     initialState: initialValues,
     reducers: {
         inputJson: (state: JsonPrettyState, action: PayloadAction<IJsonPretty>) => { 
-            state.json = action.payload
+            state = action.payload
         }
     }
 });

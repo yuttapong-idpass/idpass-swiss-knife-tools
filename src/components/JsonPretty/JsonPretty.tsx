@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import FloppyDisk from "../../assets/images/floppy-disk.png";
 import FullScreen from "../../assets/images/full-screen.png";
 
-import { JSONTree } from 'react-json-tree';
+import { JSONTree } from "react-json-tree";
 import { useSelector } from "react-redux";
 import {
   jsonPrettySelector,
@@ -45,16 +45,42 @@ const theme = {
 const JsonPretty = (props: Props) => {
   const jsonPrettyReducer = useSelector(jsonPrettySelector);
   const counterReducer = useSelector(counterSelector);
-
   const dispatch = useAppDispatch();
 
+  const [jsonArea, setJsonArea] = useState({});
+
   const handleValue = (event$: any) => {
-    console.log("$event -->", event$.target.value);
-    try {
-    } catch (error) {}
+    try { 
+        let setting = JSON.parse(event$.target.value);
+        console.log('settings -->', setting);
+        setJsonArea(setting);
+    } catch (error) { 
+        console.log('error --->', error);
+        setJsonArea({});
+    }
+
+
+   // setJsonArea(JSON.parse(event$.target.value));
   };
 
-  const handleClick = () => {};
+  const handleClick = () => {
+
+    const data: any = {
+        json: jsonArea
+    }
+
+
+    try { 
+
+        console.log('sss --->', data);
+
+       dispatch(inputJson(data))
+    } catch (error) { 
+       console.log('error json --->', error);
+    }
+   
+
+  };
 
   return (
     <div>
@@ -83,9 +109,15 @@ const JsonPretty = (props: Props) => {
           </div>
 
           <div className="border" style={{ height: "6%" }}>
-            <button onClick={() => {
+            {/* <button onClick={() => {
                 dispatch((increase()))
-              }}>Count</button>
+              }}>Count</button> */}
+            <button
+              className="bg-blue-500 hover:bg-blue-400 text-white font-bold mt-1 py-1 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+              onClick={handleClick}
+            >
+              Click
+            </button>
           </div>
 
           <div className="bg-gray-900" style={{ height: "6%" }}>
@@ -102,11 +134,14 @@ const JsonPretty = (props: Props) => {
               </div>
             </nav>
           </div>
-          <div className="text-output" style={{ height: "42%" }}>
-            {counterReducer.counter}
+          <div className="text-output p-3" style={{ height: "42%" }}>
             {/* { props.isJsonPretty ? <JsonPretty isTreeView={false} /> : null} */}
-            { props.isTreeView ? <JSONTree data={json} theme={theme} /> : <pre>{JSON.stringify(json, null, 2)}</pre> }
-            {}
+           
+            {props.isTreeView ? (
+              <JSONTree data={json} theme={theme} />
+            ) : (
+              <pre>{JSON.stringify(json, null, 2)}</pre>
+            )}
           </div>
         </div>
       </div>

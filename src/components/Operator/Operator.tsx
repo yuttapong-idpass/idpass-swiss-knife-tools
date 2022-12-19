@@ -89,7 +89,7 @@ const Operator = (props: Props) => {
         </div>
       </div> */}
 
-      <JsonPretty  isTreeView={false} />
+      <JsonPretty  isTreeView={true} />
 
     </div>
   );
