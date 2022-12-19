@@ -1,5 +1,5 @@
 import React from "react";
-import OperatorPage from './../OperatorPage/OperatorPage';
+import Operator from '../Operator/Operator';
 
 type Props = {};
 
@@ -22,7 +22,7 @@ const Home = (props: Props) => {
           </div>
         </div>
         <div className="basis-full border-4">
-          <OperatorPage />
+          <Operator isJsonPretty={true}/>
         </div>
       </div>
     </div>
