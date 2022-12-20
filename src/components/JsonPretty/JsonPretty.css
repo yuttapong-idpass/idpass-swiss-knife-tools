@@ -1,0 +1,23 @@
+.cursor {
+    cursor: pointer;
+}
+
+.display-area { 
+    overflow-y: scroll;
+    overflow-y: scroll;
+}
+
+
+textarea {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    border: none;
+    outline: none;
+}
+
+.text-output {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    border: none;
+    outline: none;
+}

@@ -4,15 +4,21 @@ import { RootState } from './../store';
 
 
 type JsonPrettyState = {
-    json: object;
+    item: any;
+    isError: boolean;
+    messageError: any;
 } 
 
 interface IJsonPretty { 
-    json: object;
+    item: any;
+    isError: boolean;
+    messageError: string;
 }
 
 const initialValues: JsonPrettyState = {
-    json: {}
+    item: {},
+    isError: false,
+    messageError: ''
 }
 
 const jsonPrettySlice = createSlice({
@@ -20,7 +26,9 @@ const jsonPrettySlice = createSlice({
     initialState: initialValues,
     reducers: {
         inputJson: (state: JsonPrettyState, action: PayloadAction<IJsonPretty>) => { 
-            state = action.payload
+           // state = action.payload
+           // Object.assign(state, action.payload);
+           return action.payload;
         }
     }
 });

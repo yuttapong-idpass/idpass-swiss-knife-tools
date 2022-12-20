@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import FloppyDisk from "../../assets/images/floppy-disk.png";
 import FullScreen from "../../assets/images/full-screen.png";
+import RawData from "../../assets/images/raw-extension.png";
+import Json from "../../assets/images/code.png";
 
 import { JSONTree } from "react-json-tree";
 import { useSelector } from "react-redux";
@@ -48,47 +50,42 @@ const JsonPretty = (props: Props) => {
   const dispatch = useAppDispatch();
 
   const [jsonArea, setJsonArea] = useState({});
+  const [isTreeView, setTreeView] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [messageError, setMessageError] = useState('');
 
   const handleValue = (event$: any) => {
-    try { 
-        let setting = JSON.parse(event$.target.value);
-        console.log('settings -->', setting);
-        setJsonArea(setting);
-    } catch (error) { 
-        console.log('error --->', error);
-        setJsonArea({});
+    try {
+      let setting = JSON.parse(event$.target.value);
+      console.log("settings -->", setting);
+      setJsonArea(setting);
+      setIsError(false);
+    } catch (error: any) {
+      setIsError(true);
+      setMessageError(String(error));
+      setJsonArea({});
     }
 
-
-   // setJsonArea(JSON.parse(event$.target.value));
+    // setJsonArea(JSON.parse(event$.target.value));
   };
 
   const handleClick = () => {
-
-    const data: any = {
-        json: jsonArea
+    const data: any = jsonArea;
+    if (isError) {
+      dispatch(inputJson({ item: {}, isError: true, messageError: messageError }));
+    } else { 
+      dispatch(inputJson({ item: data, isError: false, messageError: '' }));
     }
-
-
-    try { 
-
-        console.log('sss --->', data);
-
-       dispatch(inputJson(data))
-    } catch (error) { 
-       console.log('error json --->', error);
-    }
-   
-
+    
   };
 
   return (
     <div>
       <div className="flex flex-col">
         <div className="h-screen">
-          <div className=" bg-gray-900" style={{ height: "5%" }}>
-            <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
-              <div className="flex items-center flex-shrink-0 text-white mr-6">
+          <div className=" bg-gray-900" style={{ height: "6%" }}>
+            <nav className="flex flex-wrap bg-gray-900 p-1">
+              <div className="flex flex-shrink-0 text-white mr-6 ">
                 <img
                   src={FloppyDisk}
                   className="fill-current h-8 w-8 mr-2 p-1"
@@ -100,7 +97,7 @@ const JsonPretty = (props: Props) => {
               </div>
             </nav>
           </div>
-          <div className="" style={{ height: "42%" }}>
+          <div className="" style={{ height: "41%" }}>
             <textarea
               className="w-full h-full resize-none p-2"
               placeholder="Input here ..."
@@ -109,15 +106,14 @@ const JsonPretty = (props: Props) => {
           </div>
 
           <div className="border" style={{ height: "6%" }}>
-            {/* <button onClick={() => {
-                dispatch((increase()))
-              }}>Count</button> */}
-            <button
-              className="bg-blue-500 hover:bg-blue-400 text-white font-bold mt-1 py-1 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
-              onClick={handleClick}
-            >
-              Click
-            </button>
+            <div className="flex flex-col items-center">
+              <button
+                className="justify-self-end bg-blue-500 hover:bg-blue-400 text-white font-bold mt-1 py-1 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+                onClick={handleClick}
+              >
+                Pretty
+              </button>
+            </div>
           </div>
 
           <div className="bg-gray-900" style={{ height: "6%" }}>
@@ -125,22 +121,37 @@ const JsonPretty = (props: Props) => {
               <div className="flex items-center flex-shrink-0 text-white mr-6">
                 <img
                   src={FloppyDisk}
-                  className="fill-current h-8 w-8 mr-2 p-1"
+                  className="fill-current h-8 w-8 mr-2 p-1 cursor"
                 />
                 <img
                   src={FullScreen}
-                  className="fill-current h-8 w-8 mr-2 p-1"
+                  className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                />
+                <img
+                  src={isTreeView ? RawData : Json}
+                  className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                  onClick={() => {
+                    setTreeView(!isTreeView);
+                  }}
                 />
               </div>
             </nav>
           </div>
-          <div className="text-output p-3" style={{ height: "42%" }}>
+          <div className="border text-output p-3" style={{ height: "42%" }}>
             {/* { props.isJsonPretty ? <JsonPretty isTreeView={false} /> : null} */}
-           
-            {props.isTreeView ? (
-              <JSONTree data={json} theme={theme} />
+
+            {jsonPrettyReducer.isError ? (
+              <pre style={{color: 'red'}}>{ jsonPrettyReducer.messageError }</pre>
             ) : (
-              <pre>{JSON.stringify(json, null, 2)}</pre>
+              <div>
+                {isTreeView ? (
+                  <JSONTree data={ jsonPrettyReducer.item } theme={theme} />
+                ) : (
+                  <pre id="jsonArea">
+                    {JSON.stringify(jsonPrettyReducer.item, null, 2)}
+                  </pre>
+                )}
+              </div>
             )}
           </div>
         </div>
