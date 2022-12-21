@@ -78,7 +78,7 @@ const JsonPretty = (props: Props) => {
       <div className="flex flex-col">
         <div className="h-screen">
           <div className="" style={{ height: "6%" }}>
-            <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-1">
+            <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
               <div className="flex items-center flex-shrink-0 text-white mr-6">
                 {/* <svg
                   className="fill-current h-8 w-8 mr-2"
@@ -94,7 +94,7 @@ const JsonPretty = (props: Props) => {
                 </span> */}
                 <img
                   src={FloppyDisk}
-                  className="fill-current h-6 w-6 mr-2  cursor"
+                  className="fill-current h-8 w-8 mr-2 p-1 cursor"
                   width={"50%"}
                   height={"50%"}
                 />
@@ -108,7 +108,10 @@ const JsonPretty = (props: Props) => {
               <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
                 <div className="text-sm lg:flex-grow"></div>
                 <div>
-                  <input type="text" className="inline-block text-sm px-4 py-2 leading-none border rounded text-teal-500 border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-6" />
+                  <input
+                    type="text"
+                    className="inline-block text-sm px-4 py-2 leading-none border rounded text-teal-500 border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-6"
+                  />
                   <a
                     href="#"
                     className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
@@ -138,7 +141,7 @@ const JsonPretty = (props: Props) => {
             </div>
           </div>
 
-          <div className="bg-gray-900" style={{ height: "6%" }}>
+          <div className="bg-gray-900 " style={{ height: "6%" }}>
             <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
               <div className="flex items-center flex-shrink-0 text-white mr-6">
                 <img
@@ -148,6 +151,10 @@ const JsonPretty = (props: Props) => {
                 <img
                   src={FullScreen}
                   className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                  onClick={() => {
+                   
+                  }
+                }
                 />
                 <img
                   src={isTreeView ? RawData : Json}
@@ -159,24 +166,25 @@ const JsonPretty = (props: Props) => {
               </div>
             </nav>
           </div>
-          <div className="border text-output p-3" style={{ height: "42%" }}>
+          <div className="border text-output p-3 " style={{ height: "42%" }}>
             {/* { props.isJsonPretty ? <JsonPretty isTreeView={false} /> : null} */}
-
-            {jsonPrettyReducer.isError ? (
-              <pre style={{ color: "red" }}>
-                {jsonPrettyReducer.messageError}
-              </pre>
-            ) : (
-              <div>
-                {isTreeView ? (
-                  <JSONTree data={jsonPrettyReducer.item} theme={theme} />
-                ) : (
-                  <pre id="jsonArea">
-                    {JSON.stringify(jsonPrettyReducer.item, null, 2)}
-                  </pre>
-                )}
-              </div>
-            )}
+            <div>
+              {jsonPrettyReducer.isError ? (
+                <pre style={{ color: "red" }}>
+                  {jsonPrettyReducer.messageError}
+                </pre>
+              ) : (
+                <div>
+                  {isTreeView ? (
+                    <JSONTree data={jsonPrettyReducer.item} theme={theme} />
+                  ) : (
+                    <pre id="jsonArea">
+                      {JSON.stringify(jsonPrettyReducer.item, null, 2)}
+                    </pre>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
