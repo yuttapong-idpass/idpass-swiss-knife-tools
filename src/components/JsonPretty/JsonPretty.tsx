@@ -75,10 +75,9 @@ const JsonPretty = (props: Props) => {
 
 
   const searchAndHeighLight = () => { 
-     const textToHeighLight = jsonArea;
-
-     console.log('ss', textToHeighLight);
-
+    const textToHeighLight = jsonArea;
+    const addStyle = '<span className="heigh-light">'
+    setJsonArea(addStyle)
 
   }
 
