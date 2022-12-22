@@ -73,14 +73,25 @@ const JsonPretty = (props: Props) => {
     }
   };
 
+
+  const searchAndHeighLight = () => { 
+     const textToHeighLight = jsonArea;
+
+     console.log('ss', textToHeighLight);
+
+
+  }
+
   return (
     <div>
       <div className="flex flex-col">
         <div className="h-screen">
-          <div className="" style={{ height: "6%" }}>
-            <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
-              <div className="flex items-center flex-shrink-0 text-white mr-6">
-                {/* <svg
+          <div className="border" style={{ height: "47%" }}>
+            <div className="flex flex-col h-full">
+              <div className="border">
+                <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
+                  <div className="flex items-center flex-shrink-0 text-white mr-6">
+                    {/* <svg
                   className="fill-current h-8 w-8 mr-2"
                   width="54"
                   height="54"
@@ -92,44 +103,47 @@ const JsonPretty = (props: Props) => {
                 <span className="font-semibold text-xl tracking-tight">
                   Tailwind CSS
                 </span> */}
-                <img
-                  src={FloppyDisk}
-                  className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                  width={"50%"}
-                  height={"50%"}
-                />
-                <img
-                  src={FullScreen}
-                  className="fill-current h-6 w-6 mr-2  cursor"
-                  width={"50%"}
-                  height={"50%"}
-                />
+                    <img
+                      src={FloppyDisk}
+                      className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                      width={"50%"}
+                      height={"50%"}
+                    />
+                    <img
+                      src={FullScreen}
+                      className="fill-current h-6 w-6 mr-2  cursor"
+                      width={"50%"}
+                      height={"50%"}
+                    />
+                  </div>
+                  <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+                    <div className="text-sm lg:flex-grow"></div>
+                    <div>
+                      <input
+                        type="text"
+                        className="inline-block text-sm px-4 py-2 leading-none border rounded text-teal-500 border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-6"
+                      />
+                      <a
+                        href="#"
+                        className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
+                        onClick={searchAndHeighLight}
+                    >
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                </nav>
               </div>
-              <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-                <div className="text-sm lg:flex-grow"></div>
-                <div>
-                  <input
-                    type="text"
-                    className="inline-block text-sm px-4 py-2 leading-none border rounded text-teal-500 border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-6"
-                  />
-                  <a
-                    href="#"
-                    className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
-                  >
-                    Download
-                  </a>
-                </div>
+              <div className="border grow">
+                <textarea
+                  id="inputText"
+                  className="w-full h-full resize-none p-2"
+                  placeholder="Input here ..."
+                  onChange={handleValue}
+                ></textarea>
               </div>
-            </nav>
+            </div>
           </div>
-          <div className="" style={{ height: "41%" }}>
-            <textarea
-              className="w-full h-full resize-none p-2"
-              placeholder="Input here ..."
-              onChange={handleValue}
-            ></textarea>
-          </div>
-
           <div className="border" style={{ height: "6%" }}>
             <div className="flex flex-col items-center">
               <button
@@ -140,50 +154,49 @@ const JsonPretty = (props: Props) => {
               </button>
             </div>
           </div>
-
-          <div className="bg-gray-900 " style={{ height: "6%" }}>
-            <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
-              <div className="flex items-center flex-shrink-0 text-white mr-6">
-                <img
-                  src={FloppyDisk}
-                  className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                />
-                <img
-                  src={FullScreen}
-                  className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                  onClick={() => {
-                   
-                  }
-                }
-                />
-                <img
-                  src={isTreeView ? RawData : Json}
-                  className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                  onClick={() => {
-                    setTreeView(!isTreeView);
-                  }}
-                />
+          <div className="border" style={{ height: "47%" }}>
+            <div className="flex flex-col h-full">
+              <div className="border">
+                <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
+                  <div className="flex items-center flex-shrink-0 text-white mr-6">
+                    <img
+                      src={FloppyDisk}
+                      className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                    />
+                    <img
+                      src={FullScreen}
+                      className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                      onClick={() => {}}
+                    />
+                    <img
+                      src={isTreeView ? RawData : Json}
+                      className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                      onClick={() => {
+                        setTreeView(!isTreeView);
+                      }}
+                    />
+                  </div>
+                </nav>
               </div>
-            </nav>
-          </div>
-          <div className="border text-output p-3 " style={{ height: "42%" }}>
-            {/* { props.isJsonPretty ? <JsonPretty isTreeView={false} /> : null} */}
-            <div>
-              {jsonPrettyReducer.isError ? (
-                <pre style={{ color: "red" }}>
-                  {jsonPrettyReducer.messageError}
-                </pre>
-              ) : (
-                <div>
-                  {isTreeView ? (
-                    <JSONTree data={jsonPrettyReducer.item} theme={theme} />
-                  ) : (
-                    <pre id="jsonArea">
-                      {JSON.stringify(jsonPrettyReducer.item, null, 2)}
+              <div className="border grow text-output">
+                <div className="p-3">
+                  {jsonPrettyReducer.isError ? (
+                    <pre style={{ color: "red" }}>
+                      {jsonPrettyReducer.messageError}
                     </pre>
+                  ) : (
+                    <div>
+                      {isTreeView ? (
+                        <JSONTree data={jsonPrettyReducer.item} theme={theme} />
+                      ) : (
+                        <pre id="jsonArea">
+                          {JSON.stringify(jsonPrettyReducer.item, null, 2)}
+                        </pre>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
