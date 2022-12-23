@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import FloppyDisk from "../../assets/images/floppy-disk.png";
 import FullScreen from "../../assets/images/full-screen.png";
-import RawData from "../../assets/images/raw-extension.png";
-import Json from "../../assets/images/code.png";
-
-import { JSONTree } from "react-json-tree";
 import { useSelector } from "react-redux";
 import {
   jsonPrettySelector,
@@ -12,8 +8,9 @@ import {
 } from "./../../store/slice/JsonPrettySlice";
 import { counterSelector, increase } from "../../store/slice/counterSlice";
 import { useAppDispatch } from "../../store/store";
-
+import Highlighter from "react-highlight-words";
 import "./JsonPretty.css";
+import ReactJson from "react-json-view";
 
 type Props = {
   isTreeView: boolean;
@@ -45,10 +42,17 @@ const JsonPretty = (props: Props) => {
   const counterReducer = useSelector(counterSelector);
   const dispatch = useAppDispatch();
 
+  const options = [
+    { value: "tree", text: "tree" },
+    { value: "text", text: "text" },
+  ];
+
   const [jsonArea, setJsonArea] = useState({});
-  const [isTreeView, setTreeView] = useState(true);
   const [isError, setIsError] = useState(false);
   const [messageError, setMessageError] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [clickSearch, setClickSearch] = useState("");
+  const [selected, setSelected] = useState(options[0].value);
 
   const handleValue = (event$: any) => {
     try {
@@ -73,13 +77,18 @@ const JsonPretty = (props: Props) => {
     }
   };
 
-
-  const searchAndHeighLight = () => { 
-    const textToHeighLight = jsonArea;
-    const addStyle = '<span className="heigh-light">'
-    setJsonArea(addStyle)
-
+  const handleSearchClick = () => { 
+    setClickSearch(searchText)
   }
+
+  const handleValueSearch = ($event: any) => {
+    const getTextSearch = $event.target.value;
+    setSearchText(getTextSearch);
+  };
+
+  const handleSelectOption = ($event: any) => {
+    setSelected($event.target.value);
+  };
 
   return (
     <div>
@@ -90,18 +99,6 @@ const JsonPretty = (props: Props) => {
               <div className="border">
                 <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
                   <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    {/* <svg
-                  className="fill-current h-8 w-8 mr-2"
-                  width="54"
-                  height="54"
-                  viewBox="0 0 54 54"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" />
-                </svg>
-                <span className="font-semibold text-xl tracking-tight">
-                  Tailwind CSS
-                </span> */}
                     <img
                       src={FloppyDisk}
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
@@ -114,22 +111,6 @@ const JsonPretty = (props: Props) => {
                       width={"50%"}
                       height={"50%"}
                     />
-                  </div>
-                  <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-                    <div className="text-sm lg:flex-grow"></div>
-                    <div>
-                      <input
-                        type="text"
-                        className="inline-block text-sm px-4 py-2 leading-none border rounded text-teal-500 border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-6"
-                      />
-                      <a
-                        href="#"
-                        className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
-                        onClick={searchAndHeighLight}
-                    >
-                        Download
-                      </a>
-                    </div>
                   </div>
                 </nav>
               </div>
@@ -167,13 +148,36 @@ const JsonPretty = (props: Props) => {
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
                       onClick={() => {}}
                     />
-                    <img
-                      src={isTreeView ? RawData : Json}
-                      className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                      onClick={() => {
-                        setTreeView(!isTreeView);
-                      }}
-                    />
+                    <select
+                      className="inline-block text-sm px-3 py-1 leading-none border rounded text-black border-white  hover:bg-white mt-4 lg:mt-0"
+                      value={selected}
+                      onChange={handleSelectOption}
+                    >
+                      {options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.text}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+                    <div className="text-sm lg:flex-grow"></div>
+                    <div>
+                      <input
+                        type="text"
+                        className="inline-block text-sm px-3 py-1 leading-none border rounded text-black-500 border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-6"
+                        placeholder="Search..."
+                        onChange={handleValueSearch}
+                      />
+
+                      <a
+                        href="#"
+                        className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
+                        onClick={handleSearchClick}
+                      >
+                        Search
+                      </a>
+                    </div>
                   </div>
                 </nav>
               </div>
@@ -185,12 +189,27 @@ const JsonPretty = (props: Props) => {
                     </pre>
                   ) : (
                     <div>
-                      {isTreeView ? (
-                        <JSONTree data={jsonPrettyReducer.item} theme={theme} />
+                      {selected === "tree" ? (
+                        <div>
+                          <ReactJson
+                            src={jsonPrettyReducer.item}
+                            collapsed={3}
+                          />
+                        </div>
                       ) : (
-                        <pre id="jsonArea">
-                          {JSON.stringify(jsonPrettyReducer.item, null, 2)}
-                        </pre>
+                        <div>
+                          <pre>
+                            <Highlighter
+                              searchWords={[clickSearch]}
+                              autoEscape={true}
+                              textToHighlight={JSON.stringify(
+                                jsonPrettyReducer.item,
+                                null,
+                                2
+                              )}
+                            />
+                          </pre>
+                        </div>
                       )}
                     </div>
                   )}

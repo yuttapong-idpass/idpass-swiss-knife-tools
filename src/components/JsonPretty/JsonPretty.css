@@ -2,7 +2,7 @@
     cursor: pointer;
 }
 
-.display-area { 
+.display-area {
     overflow-y: scroll;
     overflow-y: scroll;
 }
@@ -20,9 +20,15 @@ textarea {
     overflow-x: scroll;
     border: none;
     outline: none;
+
 }
 
-.heigh-light { 
+.test-word-warp {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.heigh-light {
     background-color: yellow;
 }
 
@@ -30,10 +36,40 @@ textarea {
     position: fixed;
     top: 0;
     left: 0;
-    width:100%;
+    width: 100%;
     height: 100%;
     background: 'white';
-  }
+}
 
 
+pre {
+    white-space: pre-wrap;
+    /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;
+    /* Mozilla, since 1999 */
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+}
 
+.string {
+    color: green;
+}
+
+.number {
+    color: darkorange;
+}
+
+.boolean {
+    color: blue;
+}
+
+.null {
+    color: magenta;
+}
+
+.key {
+    color: red;
+}
