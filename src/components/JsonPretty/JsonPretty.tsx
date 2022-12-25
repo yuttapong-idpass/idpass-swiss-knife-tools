@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import FloppyDisk from "../../assets/images/floppy-disk.png";
-import FullScreen from "../../assets/images/full-screen.png";
+import FloppyDiskImage from "../../assets/images/floppy-disk.png";
+import FullScreenImage from "../../assets/images/full-screen.png";
+import CopyToClipboardImage from "../../assets/images/copy-to-clipboard.png";
 import { useSelector } from "react-redux";
 import {
   jsonPrettySelector,
@@ -8,6 +9,7 @@ import {
 } from "./../../store/slice/JsonPrettySlice";
 import { counterSelector, increase } from "../../store/slice/counterSlice";
 import { useAppDispatch } from "../../store/store";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import Highlighter from "react-highlight-words";
 import "./JsonPretty.css";
 import ReactJson from "react-json-view";
@@ -77,9 +79,9 @@ const JsonPretty = (props: Props) => {
     }
   };
 
-  const handleSearchClick = () => { 
-    setClickSearch(searchText)
-  }
+  const handleSearchClick = () => {
+    setClickSearch(searchText);
+  };
 
   const handleValueSearch = ($event: any) => {
     const getTextSearch = $event.target.value;
@@ -100,13 +102,13 @@ const JsonPretty = (props: Props) => {
                 <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
                   <div className="flex items-center flex-shrink-0 text-white mr-6">
                     <img
-                      src={FloppyDisk}
+                      src={FloppyDiskImage}
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
                       width={"50%"}
                       height={"50%"}
                     />
                     <img
-                      src={FullScreen}
+                      src={FullScreenImage}
                       className="fill-current h-6 w-6 mr-2  cursor"
                       width={"50%"}
                       height={"50%"}
@@ -140,14 +142,27 @@ const JsonPretty = (props: Props) => {
                 <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
                   <div className="flex items-center flex-shrink-0 text-white mr-6">
                     <img
-                      src={FloppyDisk}
+                      src={FloppyDiskImage}
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
                     />
                     <img
-                      src={FullScreen}
+                      src={FullScreenImage}
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
                       onClick={() => {}}
                     />
+
+                    {selected !== "tree" ? (
+                      <CopyToClipboard
+                        text={JSON.stringify(jsonPrettyReducer.item, null, 2)}
+                        onCopy={() => {}}
+                      >
+                        <img
+                          src={CopyToClipboardImage}
+                          className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                        />
+                      </CopyToClipboard>
+                    ) : null}
+
                     <select
                       className="inline-block text-sm px-3 py-1 leading-none border rounded text-black border-white  hover:bg-white mt-4 lg:mt-0"
                       value={selected}
@@ -160,25 +175,27 @@ const JsonPretty = (props: Props) => {
                       ))}
                     </select>
                   </div>
-                  <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-                    <div className="text-sm lg:flex-grow"></div>
-                    <div>
-                      <input
-                        type="text"
-                        className="inline-block text-sm px-3 py-1 leading-none border rounded text-black-500 border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-6"
-                        placeholder="Search..."
-                        onChange={handleValueSearch}
-                      />
+                  {selected !== "tree" ? (
+                    <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+                      <div className="text-sm lg:flex-grow"></div>
+                      <div>
+                        <input
+                          type="text"
+                          className="inline-block text-sm px-3 py-1 leading-none border rounded text-black-500 border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-6"
+                          placeholder="Search..."
+                          onChange={handleValueSearch}
+                        />
 
-                      <a
-                        href="#"
-                        className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
-                        onClick={handleSearchClick}
-                      >
-                        Search
-                      </a>
+                        <a
+                          href="#"
+                          className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
+                          onClick={handleSearchClick}
+                        >
+                          Search
+                        </a>
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
                 </nav>
               </div>
               <div className="border grow text-output">
