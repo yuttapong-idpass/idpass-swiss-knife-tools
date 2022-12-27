@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import FloppyDiskImage from "../../assets/images/floppy-disk.png";
 import FullScreenImage from "../../assets/images/full-screen.png";
+import ExitFullScreenImage from "../../assets/images/exit-fullscreen.png";
 import CopyToClipboardImage from "../../assets/images/copy-to-clipboard.png";
 import { useSelector } from "react-redux";
 import {
@@ -54,6 +55,8 @@ const JsonPretty = (props: Props) => {
   const [messageError, setMessageError] = useState("");
   const [searchText, setSearchText] = useState("");
   const [clickSearch, setClickSearch] = useState("");
+  const [inputToggleFullScreen, setInputToggleFullScreen] = useState(false);
+  const [outputToggleFullScreen, setOutputToggleFullScreen] = useState(false);
   const [selected, setSelected] = useState(options[0].value);
 
   const handleValue = (event$: any) => {
@@ -97,21 +100,30 @@ const JsonPretty = (props: Props) => {
       <div className="flex flex-col">
         <div className="h-screen">
           <div className="border" style={{ height: "47%" }}>
-            <div className="flex flex-col h-full">
+            <div
+              className={`flex flex-col h-full ${
+                inputToggleFullScreen ? "myModal" : ""
+              }`}
+            >
               <div className="border">
                 <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
                   <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    <img
+                    {/* <img
                       src={FloppyDiskImage}
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
                       width={"50%"}
                       height={"50%"}
-                    />
+                    /> */}
                     <img
-                      src={FullScreenImage}
-                      className="fill-current h-6 w-6 mr-2  cursor"
-                      width={"50%"}
-                      height={"50%"}
+                      src={
+                        inputToggleFullScreen
+                          ? ExitFullScreenImage
+                          : FullScreenImage
+                      }
+                      className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                      onClick={() => {
+                        setInputToggleFullScreen(!inputToggleFullScreen);
+                      }}
                     />
                   </div>
                 </nav>
@@ -137,18 +149,28 @@ const JsonPretty = (props: Props) => {
             </div>
           </div>
           <div className="border" style={{ height: "47%" }}>
-            <div className="flex flex-col h-full">
+            <div
+              className={`flex flex-col h-full ${
+                outputToggleFullScreen ? "myModal" : ""
+              }`}
+            >
               <div className="border">
                 <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
                   <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    <img
+                    {/* <img
                       src={FloppyDiskImage}
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                    />
+                    /> */}
                     <img
-                      src={FullScreenImage}
+                      src={
+                        outputToggleFullScreen
+                          ? ExitFullScreenImage
+                          : FullScreenImage
+                      }
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                      onClick={() => {}}
+                      onClick={() => {
+                        setOutputToggleFullScreen(!outputToggleFullScreen);
+                      }}
                     />
 
                     {selected !== "tree" ? (
@@ -208,10 +230,12 @@ const JsonPretty = (props: Props) => {
                     <div>
                       {selected === "tree" ? (
                         <div>
-                          <ReactJson
-                            src={jsonPrettyReducer.item}
-                            collapsed={3}
-                          />
+                          {!inputToggleFullScreen ? (
+                            <ReactJson
+                              src={jsonPrettyReducer.item}
+                              collapsed={3}
+                            />
+                          ) : null}
                         </div>
                       ) : (
                         <div>
