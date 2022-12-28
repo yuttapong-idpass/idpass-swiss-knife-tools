@@ -1,28 +1,65 @@
-import React from "react";
-import Operator from '../Operator/Operator';
+import React, { useState } from "react";
+import JsonPretty from "../JsonPretty/JsonPretty";
+import FromBase64 from "../FromBase64/FromBase64";
+import "./Home.css";
 
 type Props = {};
 
 const Home = (props: Props) => {
+  const menu = [
+    {
+      name: "JSON PRETTY",
+      active: false,
+    },
+    {
+      name: "BASE 64 IMAGE",
+      active: false,
+    },
+    {
+      name: "JWT ENCODE/DECODE",
+      active: false,
+    },
+  ];
+
+  const [active, setActive] = useState('JSON PRETTY'); 
+
+  const activeButton = (item: any) => { 
+    setActive(item);
+  }
+
+  const renderComponent = (name: string): any  => { 
+    switch(name) { 
+      case 'JSON PRETTY' : return <JsonPretty /> 
+      case 'BASE 64 IMAGE' : return <FromBase64 />
+      
+      default : <h1>Page not found</h1>
+    }
+  }
+
+
   return (
     <div className="w-full">
       <div className="flex flex-row">
         <div className="basis-1/6 border-4">
           <div className="flex flex-col">
             <div className="h-screen">
-              <div>01</div>
-              <div>01</div>
-              <div>01</div>
-              <div>01</div>
-              <div>01</div>
-              <div>01</div>
-              <div>01</div>
-              <div>01</div>
+              <div>
+                {menu.map((item) => (
+                  <button 
+                  key={item.name}
+                  className={ active === item.name ? "button-66 button-66-active" : "button-66" }
+                  role="button"
+                  onClick={() => { activeButton(item.name) }}
+                  >
+                    {item.name}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
         <div className="basis-full border-4">
-          <Operator isJsonPretty={true}/>
+        { renderComponent(active) }
         </div>
       </div>
     </div>

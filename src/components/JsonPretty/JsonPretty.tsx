@@ -16,7 +16,6 @@ import "./JsonPretty.css";
 import ReactJson from "react-json-view";
 
 type Props = {
-  isTreeView: boolean;
 };
 
 const theme = {
@@ -144,7 +143,7 @@ const JsonPretty = (props: Props) => {
                 className="justify-self-end bg-blue-500 hover:bg-blue-400 text-white font-bold mt-1 py-1 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
                 onClick={handleClick}
               >
-                Pretty
+                PRETTY
               </button>
             </div>
           </div>
