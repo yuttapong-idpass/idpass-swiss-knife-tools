@@ -2,13 +2,14 @@ import { configureStore } from "@reduxjs/toolkit"
 import { useDispatch } from "react-redux";
 import counterReducer from './slice/counterSlice';
 import jsonPrettyReducer from './slice/JsonPrettySlice';
-
+import base64Reducer from './slice/Base64Slice';
 
 
 
 const reducer = {
     counterReducer,
-    jsonPrettyReducer
+    jsonPrettyReducer,
+    base64Reducer
 }   
 
 

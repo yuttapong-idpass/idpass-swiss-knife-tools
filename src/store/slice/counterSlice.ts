@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from './../store';
 
 
@@ -14,6 +14,19 @@ const initialValues: CounterState  = {
 }
 
 
+export const setValueAsync = createAsyncThunk("counter/setValueAsync", async(value: number) => { 
+    const job = new Promise<number>((resolve, reject) => { 
+        setTimeout(() => { 
+            if (value >= 0) { 
+                resolve(value);
+            } else { 
+                reject(Error(''));
+            }
+        }, 1000);
+    });
+  return await job;
+})
+//example 
 const counterSlice = createSlice({
     name: 'counter',
     initialState: initialValues,
@@ -23,6 +36,16 @@ const counterSlice = createSlice({
         }
     },
     extraReducers: (builder) => { 
+        //success
+        builder.addCase(setValueAsync.fulfilled, (state, action) => {
+            state.counter = action.payload;
+        });
+
+        builder.addCase(setValueAsync.pending, (state, action) => {
+            state.counter = 0;
+        })
+
+
 
     }
 })

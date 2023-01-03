@@ -16,6 +16,7 @@ import "./JsonPretty.css";
 import ReactJson from "react-json-view";
 
 type Props = {
+  
 };
 
 const theme = {
