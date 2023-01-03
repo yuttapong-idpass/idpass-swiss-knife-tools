@@ -7,6 +7,7 @@ import Upload from "../../assets/images/photo.png";
 import "./FromBase64.css";
 import { useSelector } from "react-redux";
 import { base64Selector, base64 } from "../../store/slice/Base64Slice";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAppDispatch } from "../../store/store";
 
 type Props = {};
@@ -20,6 +21,8 @@ const FromBase64 = (props: Props) => {
     { value: "image", text: "to image" },
   ];
 
+  const [inputToggleFullScreen, setInputToggleFullScreen] = useState(false);
+  const [outputToggleFullScreen, setOutputToggleFullScreen] = useState(false);
   const [selected, setSelected] = useState(options[0].value);
   const [imageToBase64, setImageToBase64] = useState("");
   const [base64ToImage, setBase64ToImage] = useState("");
@@ -67,7 +70,11 @@ const FromBase64 = (props: Props) => {
       <div className="flex flex-col">
         <div className="h-screen">
           <div className="border" style={{ height: "47%" }}>
-            <div className={`flex flex-col h-full`}>
+            <div
+              className={`flex flex-col h-full ${
+                inputToggleFullScreen ? "myModal" : ""
+              }`}
+            >
               <div className="border">
                 <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
                   <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -78,10 +85,17 @@ const FromBase64 = (props: Props) => {
                       height={"50%"}
                     /> */}
                     <img
-                      src={FullScreenImage}
+                      src={
+                        inputToggleFullScreen
+                          ? ExitFullScreenImage
+                          : FullScreenImage
+                      }
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                      onClick={() => {}}
+                      onClick={() => {
+                        setInputToggleFullScreen(!inputToggleFullScreen);
+                      }}
                     />
+
                     {selected === "string" ? (
                       <div className="image-upload">
                         <label htmlFor="file-input">
@@ -163,7 +177,11 @@ const FromBase64 = (props: Props) => {
             </div>
           </div>
           <div className="border" style={{ height: "47%" }}>
-            <div className={`flex flex-col h-full`}>
+            <div
+              className={`flex flex-col h-full ${
+                outputToggleFullScreen ? "myModal" : ""
+              }`}
+            >
               <div className="border">
                 <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
                   <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -172,10 +190,28 @@ const FromBase64 = (props: Props) => {
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
                     /> */}
                     <img
-                      src={FullScreenImage}
+                      src={
+                        outputToggleFullScreen
+                          ? ExitFullScreenImage
+                          : FullScreenImage
+                      }
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                      onClick={() => {}}
+                      onClick={() => {
+                        setOutputToggleFullScreen(!outputToggleFullScreen);
+                      }}
                     />
+
+                    {selected === "string" ? (
+                      <CopyToClipboard
+                        text={base64Reducer.base64}
+                        onCopy={() => {}}
+                      >
+                        <img
+                          src={CopyToClipboardImage}
+                          className="fill-current h-8 w-8 mr-2 p-1 cursor"
+                        />
+                      </CopyToClipboard>
+                    ) : null}
                   </div>
                 </nav>
               </div>

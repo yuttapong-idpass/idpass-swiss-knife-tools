@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import FloppyDiskImage from "../../assets/images/floppy-disk.png";
 import FullScreenImage from "../../assets/images/full-screen.png";
 import ExitFullScreenImage from "../../assets/images/exit-fullscreen.png";
 import CopyToClipboardImage from "../../assets/images/copy-to-clipboard.png";
@@ -16,7 +15,7 @@ import "./JsonPretty.css";
 import ReactJson from "react-json-view";
 
 type Props = {
-  
+
 };
 
 const theme = {
