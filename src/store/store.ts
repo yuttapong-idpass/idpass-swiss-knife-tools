@@ -3,13 +3,15 @@ import { useDispatch } from "react-redux";
 import counterReducer from './slice/counterSlice';
 import jsonPrettyReducer from './slice/JsonPrettySlice';
 import base64Reducer from './slice/Base64Slice';
+import jwtTokenReducer from './slice/jwtTokenSlice';
 
 
 
 const reducer = {
     counterReducer,
     jsonPrettyReducer,
-    base64Reducer
+    base64Reducer,
+    jwtTokenReducer
 }   
 
 

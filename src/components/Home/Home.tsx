@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import JsonPretty from "../JsonPretty/JsonPretty";
 import FromBase64 from "../FromBase64/FromBase64";
+import JWTEncodeDecode from "../JWTEncodeDecode/JWTEncodeDecode";
 import "./Home.css";
 
 type Props = {};
@@ -31,6 +32,7 @@ const Home = (props: Props) => {
     switch(name) { 
       case 'JSON PRETTY' : return <JsonPretty /> 
       case 'BASE 64 IMAGE' : return <FromBase64 />
+      case 'JWT ENCODE/DECODE' : return <JWTEncodeDecode />
       
       default : <h1>Page not found</h1>
     }

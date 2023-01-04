@@ -1,0 +1,6 @@
+.text-output {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    border: none;
+    outline: none;
+}

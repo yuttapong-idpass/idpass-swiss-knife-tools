@@ -8,21 +8,6 @@ import Home from "./components/Home/Home";
 function App() {
   // const dispatch = useAppDispatch();
   // const counterReducer = useSelector(counterSelector);
-
-  let elements = document.documentElement;
-
-  const openFullScreen = () => {
-    if (elements.requestFullscreen) {
-      elements.requestFullscreen();
-    }
-  };
-
-  const closeFullScreen = () => {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    }
-  };
-
   return (
     <div>
       <Home />

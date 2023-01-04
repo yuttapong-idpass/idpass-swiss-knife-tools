@@ -17,7 +17,7 @@ const FromBase64 = (props: Props) => {
   const dispatch = useAppDispatch();
 
   const options = [
-    { value: "string", text: "to string" },
+    { value: "base64", text: "to base64" },
     { value: "image", text: "to image" },
   ];
 
@@ -96,7 +96,7 @@ const FromBase64 = (props: Props) => {
                       }}
                     />
 
-                    {selected === "string" ? (
+                    {selected === "base64" ? (
                       <div className="image-upload">
                         <label htmlFor="file-input">
                           <img
@@ -133,7 +133,7 @@ const FromBase64 = (props: Props) => {
                   placeholder="Input here ..."
                 ></textarea> */}
 
-                {selected === "string" ? (
+                {selected === "base64" ? (
                   <div className="flex flex-col items-center">
                     {/* */}
                     {!!base64Reducer.base64 ? (
@@ -201,7 +201,7 @@ const FromBase64 = (props: Props) => {
                       }}
                     />
 
-                    {selected === "string" ? (
+                    {selected === "base64" ? (
                       <CopyToClipboard
                         text={base64Reducer.base64}
                         onCopy={() => {}}
@@ -217,7 +217,7 @@ const FromBase64 = (props: Props) => {
               </div>
               <div className="border grow">
                 <div className="h-full">
-                  {selected === "string" ? (
+                  {selected === "base64" ? (
                     <textarea
                       className="w-full h-full resize-none p-4"
                       value={imageToBase64 || ""}
