@@ -41,6 +41,13 @@
     transform: translateY(-2px);
 }
 
+.button-66-disabled { 
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+}
+
+
 
 @media (min-width: 768px) {
     .button-66 {
@@ -48,3 +55,4 @@
         min-width: 150px;
     }
 }
+

@@ -10,34 +10,37 @@ const Home = (props: Props) => {
   const menu = [
     {
       name: "JSON PRETTY",
-      active: false,
+      disabled: false,
     },
     {
       name: "BASE 64 IMAGE",
-      active: false,
+      disabled: false,
     },
     {
       name: "JWT ENCODE/DECODE",
-      active: false,
+      disabled: true,
     },
   ];
 
-  const [active, setActive] = useState('JSON PRETTY'); 
+  const [active, setActive] = useState("JSON PRETTY");
 
-  const activeButton = (item: any) => { 
+  const activeButton = (item: any) => {
     setActive(item);
-  }
+  };
 
-  const renderComponent = (name: string): any  => { 
-    switch(name) { 
-      case 'JSON PRETTY' : return <JsonPretty /> 
-      case 'BASE 64 IMAGE' : return <FromBase64 />
-      case 'JWT ENCODE/DECODE' : return <JWTEncodeDecode />
-      
-      default : <h1>Page not found</h1>
+  const renderComponent = (name: string): any => {
+    switch (name) {
+      case "JSON PRETTY":
+        return <JsonPretty />;
+      case "BASE 64 IMAGE":
+        return <FromBase64 />;
+      case "JWT ENCODE/DECODE":
+        return <JWTEncodeDecode />;
+
+      default:
+        <h1>Page not found</h1>;
     }
-  }
-
+  };
 
   return (
     <div className="w-full">
@@ -47,11 +50,20 @@ const Home = (props: Props) => {
             <div className="h-screen">
               <div>
                 {menu.map((item) => (
-                  <button 
-                  key={item.name}
-                  className={ active === item.name ? "button-66 button-66-active" : "button-66" }
-                  role="button"
-                  onClick={() => { activeButton(item.name) }}
+                  <button
+                    key={item.name}
+                    className={
+                      item.disabled
+                        ? "button-66 button-66-disabled"
+                        : active === item.name
+                        ? "button-66 button-66-active"
+                        : "button-66"
+                    }
+                    role="button"
+                    disabled={item.disabled}
+                    onClick={() => {
+                      activeButton(item.name);
+                    }}
                   >
                     {item.name}
                   </button>
@@ -60,9 +72,7 @@ const Home = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className="basis-full border-4">
-        { renderComponent(active) }
-        </div>
+        <div className="basis-full border-4">{renderComponent(active)}</div>
       </div>
     </div>
   );
