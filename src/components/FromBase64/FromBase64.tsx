@@ -13,10 +13,8 @@ import { useAppDispatch } from "../../store/store";
 type Props = {};
 
 interface IDescriptionImg {
-  name: string;
   width: number;
   height: number;
-  size: number;
 }
 
 const FromBase64 = (props: Props) => {
@@ -29,10 +27,8 @@ const FromBase64 = (props: Props) => {
   ];
 
   let descriptionImg: IDescriptionImg = {
-    name: "",
     width: 0,
     height: 0,
-    size: 0,
   };
 
   const [inputToggleFullScreen, setInputToggleFullScreen] = useState(false);
@@ -53,8 +49,12 @@ const FromBase64 = (props: Props) => {
     if (!!base64ToImage) {
       // let base64String = data.result.replace("data:", "").replace(/^.+,/, "");
       // dispatch(base64({ base64: 'data:image/jpeg;base64,' + base64String}))
-      let base64String = base64ToImage.replace("data:", "").replace(/^.+,/, "");
-      dispatch(base64({ base64: "data:image/jpeg;base64," + base64String }));
+      let base64String: string = base64ToImage
+        .replace("data:", "")
+        .replace(/^.+,/, "");
+      const convertToPng: string = "data:image/png;base64," + base64String;
+      imageBase64(convertToPng);
+      dispatch(base64({ base64: convertToPng }));
     } else {
       setImageToBase64(base64Reducer.base64);
     }
@@ -74,32 +74,35 @@ const FromBase64 = (props: Props) => {
     reader.onload = () => {
       // let base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
       // dispatch(base64({ base64: base64String }))
-
       let images = new Image();
-
       images.src = reader.result;
-
       images.onload = () => {
         let height = images.height;
         let width = images.width;
-        let sizes = Number((fileUploaded.size / 1024).toFixed(2));
-        let name = fileUploaded.name;
-
         const description: IDescriptionImg = {
           height: height,
           width: width,
-          size: sizes,
-          name: name,
         };
         setDescriptionImage(description);
       };
-
-      // console.log()
-
       const base64String = reader.result;
       dispatch(base64({ base64: base64String }));
     };
     reader.readAsDataURL(fileUploaded);
+  };
+
+  const imageBase64 = (image: string) => {
+    let images = new Image();
+    images.onload = function () {
+      let height = images.height;
+      let width = images.width;
+      const description: IDescriptionImg = {
+        height: height,
+        width: width,
+      };
+      setDescriptionImage(description);
+    };
+    images.src = image;
   };
 
   return (
@@ -175,41 +178,23 @@ const FromBase64 = (props: Props) => {
                 ></textarea> */}
                 {selected === "base64" ? (
                   <div className="flex flex-col items-center p-5">
-                    {/* {!!base64Reducer.base64 ? (
-                      <div className="self-center">
-                        <img
-                          src={base64Reducer.base64}
-                          className="p-4 object-scale-down w-auto h-48"
-                        />
-                        <span>name: {descriptionImage.name} </span>
-                        <span>height: {descriptionImage.height} </span>
-                        <span>width: {descriptionImage.width} </span>
-                        <span>size: {descriptionImage.size} KB </span>
+                    {!!base64Reducer.base64 ? (
+                      <div>
+                        <figure className="max-w-lg">
+                          <figcaption className="mt-2 text-sm text-center text-black-500 dark:text-black-400">
+                            <p className="text-gray-700 text-base mb-4">
+                              height x width: {descriptionImage.height} x{" "}
+                              {descriptionImage.width}{" "}
+                            </p>
+                          </figcaption>
+                          <img
+                            className="h-auto max-w-full"
+                            src={base64Reducer.base64}
+                            alt="image description"
+                          />
+                        </figure>
                       </div>
-                    ) : null} */}
-
-                    <div className="flex justify-center">
-                      <div className="flex flex-col md:flex-row md:max-w-xl rounded-lg bg-white shadow-lg">
-                        <img
-                          className=" w-full h-full md:h-auto object-cover md:w-72 rounded-t-lg md:rounded-none md:rounded-l-lg"
-                          src={base64Reducer.base64}
-                          alt=""
-                        />
-                        <div className="p-6 flex flex-col justify-start">
-                          <h5 className="text-gray-900 text-xl font-medium mb-2">
-                            Details
-                          </h5>
-                          <p className="text-gray-700 text-base mb-4">
-                            This is a wider card with supporting text below as a
-                            natural lead-in to additional content. This content
-                            is a little bit longer.
-                          </p>
-                          <p className="text-gray-600 text-xs">
-                            Last updated 3 mins ago
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    ) : null}
                   </div>
                 ) : (
                   <textarea
@@ -283,7 +268,11 @@ const FromBase64 = (props: Props) => {
                   </div>
                 </nav>
               </div>
-              <div className="border grow">
+              <div
+                className={`border grow ${
+                  selected === "image" ? "display-area" : ""
+                }`}
+              >
                 <div className="h-full">
                   {selected === "base64" ? (
                     <textarea
@@ -295,10 +284,21 @@ const FromBase64 = (props: Props) => {
                   ) : (
                     <div className="flex flex-col items-center">
                       {!!base64Reducer.base64 ? (
-                        <img
-                          src={base64Reducer.base64}
-                          className="p-4 object-scale-down w-72 h-72"
-                        />
+                        <div>
+                          <figure className="max-w-lg">
+                            <figcaption className="mt-2 text-sm text-center text-black-500 dark:text-black-400">
+                              <p className="text-gray-700 text-base mb-4">
+                                height x width: {descriptionImage.height} x{" "}
+                                {descriptionImage.width}{" "}
+                              </p>
+                            </figcaption>
+                            <img
+                              className="h-auto max-w-full"
+                              src={base64Reducer.base64}
+                              alt="image description"
+                            />
+                          </figure>
+                        </div>
                       ) : null}
                     </div>
                   )}
