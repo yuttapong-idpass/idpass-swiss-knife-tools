@@ -12,6 +12,13 @@ import { useAppDispatch } from "../../store/store";
 
 type Props = {};
 
+interface IDescriptionImg {
+  name: string;
+  width: number;
+  height: number;
+  size: number;
+}
+
 const FromBase64 = (props: Props) => {
   const base64Reducer = useSelector(base64Selector);
   const dispatch = useAppDispatch();
@@ -21,8 +28,16 @@ const FromBase64 = (props: Props) => {
     { value: "image", text: "to image" },
   ];
 
+  let descriptionImg: IDescriptionImg = {
+    name: "",
+    width: 0,
+    height: 0,
+    size: 0,
+  };
+
   const [inputToggleFullScreen, setInputToggleFullScreen] = useState(false);
   const [outputToggleFullScreen, setOutputToggleFullScreen] = useState(false);
+  const [descriptionImage, setDescriptionImage] = useState(descriptionImg);
   const [selected, setSelected] = useState(options[0].value);
   const [imageToBase64, setImageToBase64] = useState("");
   const [base64ToImage, setBase64ToImage] = useState("");
@@ -59,6 +74,28 @@ const FromBase64 = (props: Props) => {
     reader.onload = () => {
       // let base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
       // dispatch(base64({ base64: base64String }))
+
+      let images = new Image();
+
+      images.src = reader.result;
+
+      images.onload = () => {
+        let height = images.height;
+        let width = images.width;
+        let sizes = Number((fileUploaded.size / 1024).toFixed(2));
+        let name = fileUploaded.name;
+
+        const description: IDescriptionImg = {
+          height: height,
+          width: width,
+          size: sizes,
+          name: name,
+        };
+        setDescriptionImage(description);
+      };
+
+      // console.log()
+
       const base64String = reader.result;
       dispatch(base64({ base64: base64String }));
     };
@@ -126,22 +163,53 @@ const FromBase64 = (props: Props) => {
                   </div>
                 </nav>
               </div>
-              <div className="border grow">
+              <div
+                className={`border grow ${
+                  selected === "base64" ? "display-area" : ""
+                }`}
+              >
                 {/* <textarea
                   id="inputText"
                   className="w-full h-full resize-none p-2"
                   placeholder="Input here ..."
                 ></textarea> */}
-
                 {selected === "base64" ? (
-                  <div className="flex flex-col items-center">
-                    {/* */}
-                    {!!base64Reducer.base64 ? (
-                      <img
-                        src={base64Reducer.base64}
-                        className="p-4 object-scale-down w-72 h-72"
-                      />
-                    ) : null}
+                  <div className="flex flex-col items-center p-5">
+                    {/* {!!base64Reducer.base64 ? (
+                      <div className="self-center">
+                        <img
+                          src={base64Reducer.base64}
+                          className="p-4 object-scale-down w-auto h-48"
+                        />
+                        <span>name: {descriptionImage.name} </span>
+                        <span>height: {descriptionImage.height} </span>
+                        <span>width: {descriptionImage.width} </span>
+                        <span>size: {descriptionImage.size} KB </span>
+                      </div>
+                    ) : null} */}
+
+                    <div className="flex justify-center">
+                      <div className="flex flex-col md:flex-row md:max-w-xl rounded-lg bg-white shadow-lg">
+                        <img
+                          className=" w-full h-full md:h-auto object-cover md:w-72 rounded-t-lg md:rounded-none md:rounded-l-lg"
+                          src={base64Reducer.base64}
+                          alt=""
+                        />
+                        <div className="p-6 flex flex-col justify-start">
+                          <h5 className="text-gray-900 text-xl font-medium mb-2">
+                            Details
+                          </h5>
+                          <p className="text-gray-700 text-base mb-4">
+                            This is a wider card with supporting text below as a
+                            natural lead-in to additional content. This content
+                            is a little bit longer.
+                          </p>
+                          <p className="text-gray-600 text-xs">
+                            Last updated 3 mins ago
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <textarea

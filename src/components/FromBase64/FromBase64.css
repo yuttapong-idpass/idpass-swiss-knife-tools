@@ -7,7 +7,7 @@
 }
 
 .display-area {
-    overflow-y: scroll;
+    overflow-x: scroll;
     overflow-y: scroll;
 }
 
@@ -63,4 +63,9 @@ pre {
     white-space: -o-pre-wrap;
     /* Opera 7 */
     word-wrap: break-word;
+}
+
+.test {
+    object-fit: cover;
+    width: 100%;
 }
