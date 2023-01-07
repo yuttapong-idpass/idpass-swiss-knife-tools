@@ -1,21 +1,18 @@
 import "./App.css";
-import { useAppDispatch } from "./store/store";
-import { useSelector } from "react-redux";
-import { counterSelector, increase } from "./store/slice/counterSlice";
-
+import { Routes, Route, Link, BrowserRouter, Navigate } from 'react-router-dom';
 import Home from "./components/Home/Home";
+import Menu from "./components/Menu/Menu";
 
 function App() {
-  // const dispatch = useAppDispatch();
-  // const counterReducer = useSelector(counterSelector);
+
   return (
     <div>
-      <Home />
-      {/* asdawdas
-        <button onClick={() => {dispatch(increase())}}>{counterReducer.counter}</button> */}
-{/* 
-        <button onClick={openFullScreen}>Full screen</button>
-        <button onClick={closeFullScreen}>Close screen</button> */}
+      <BrowserRouter>
+        <Menu />
+        <Routes>
+            <Route path="/" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
