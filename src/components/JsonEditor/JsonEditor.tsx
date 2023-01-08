@@ -13,8 +13,12 @@ type Props = {
 const JsonEditor = (props: Props) => {
   let container: any = createRef<HTMLElement>();
   const options: any = {
-    "modes": ["tree", "text"],
-    "indentation": 2
+    "modes": ["tree", "text", "view"],
+    "indentation": 2,
+    onError: function (err: any) {
+        console.error(err);
+      
+      },
   };
 
   useEffect(() => {
