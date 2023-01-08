@@ -2,17 +2,20 @@ import "./App.css";
 import { Routes, Route, Link, BrowserRouter, Navigate } from 'react-router-dom';
 import Home from "./components/Home/Home";
 import Menu from "./components/Menu/Menu";
+import JsonEditor from "./components/JsonEditor/JsonEditor";
 
 function App() {
 
   return (
     <div>
-      <BrowserRouter>
+      <JsonEditor options={{}} json={{}}/>
+      <JsonEditor options={{}} json={{}}/>
+      {/* <BrowserRouter>
         <Menu />
         <Routes>
             <Route path="/" element={<Home />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </div>
   );
 }
