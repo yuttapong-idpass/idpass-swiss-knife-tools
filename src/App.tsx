@@ -7,9 +7,11 @@ import JsonEditor from "./components/JsonEditor/JsonEditor";
 function App() {
 
   return (
-    <div>
-      <JsonEditor options={{}} json={{}}/>
-      <JsonEditor options={{}} json={{}}/>
+    <div className="bg-gray-200">
+      {/* <JsonEditor options={{}} json={{}}/>
+      <JsonEditor options={{}} json={{}}/> */}
+
+      <Home />
       {/* <BrowserRouter>
         <Menu />
         <Routes>
