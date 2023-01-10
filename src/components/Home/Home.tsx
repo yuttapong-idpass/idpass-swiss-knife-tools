@@ -3,6 +3,10 @@ import JsonPretty from "../JsonPretty/JsonPretty";
 import FromBase64 from "../FromBase64/FromBase64";
 import JWTEncodeDecode from "../JWTEncodeDecode/JWTEncodeDecode";
 
+import JSONImage from "../../assets/images/json.png";
+import Base64Image from "../../assets/images/base-64.png";
+import JwtImage from "../../assets/images/jwt.png";
+
 import "./Home.css";
 
 type Props = {};
@@ -10,16 +14,19 @@ type Props = {};
 const Home = (props: Props) => {
   const menu = [
     {
-      name: "JSON PRETTY",
+      name: "JSON EDITOR",
       disabled: false,
+      image: JSONImage,
     },
     {
       name: "BASE 64 IMAGE",
       disabled: false,
+      image: Base64Image,
     },
     {
-      name: "JWT ENCODE/DECODE",
+      name: "JSON WEB TOKEN",
       disabled: true,
+      image: JwtImage,
     },
   ];
 
@@ -29,19 +36,19 @@ const Home = (props: Props) => {
     setActive(item);
   };
 
-  const renderComponent = (name: string): any => {
-    switch (name) {
-      case "JSON PRETTY":
-        return <JsonPretty />;
-      case "BASE 64 IMAGE":
-        return <FromBase64 />;
-      case "JWT ENCODE/DECODE":
-        return <JWTEncodeDecode />;
+  // const renderComponent = (name: string): any => {
+  //   switch (name) {
+  //     case "JSON PRETTY":
+  //       return <JsonPretty />;
+  //     case "BASE 64 IMAGE":
+  //       return <FromBase64 />;
+  //     case "JWT ENCODE/DECODE":
+  //       return <JWTEncodeDecode />;
 
-      default:
-        <h1>Page not found</h1>;
-    }
-  };
+  //     default:
+  //       <h1>Page not found</h1>;
+  //   }
+  // };
 
   return (
     // <div className="w-full">
@@ -77,33 +84,21 @@ const Home = (props: Props) => {
     //   </div>
     // </div>
 
-    <div className="grid place-items-center h-screen p-4">
+    <div className="grid place-items-center h-screen">
       <div className="flex flex-row">
         <div className="p-4">
-          <div className="grid grid-rows-4 grid-flow-col gap-4">
-            <div >
-              <div className="max-w-sm w-72 p-2 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-100 dark:border-gray-700">
-                <svg
-                  className="w-10 h-10 mb-2 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
+          <div className="grid grid-cols-3 gap-4">
+            {menu.map((item) => (
+              <div>
+                <button
+                  type="button"
+                  className="font-bold text-neutral-700 text-white w-72 h-32 rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 mb-2 bg-gray-300"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z"
-                    clip-rule="evenodd"
-                  ></path>
-                  <path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z"></path>
-                </svg>
-                <a href="#">
-                  <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-800">
-                    Need a help in Claim?
-                  </h5>
-                </a>
+                  <img className="w-14 h-14 mr-2 -ml-1" src={item.image} />
+                  <span className="text-2xl">{item.name}</span>
+                </button>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

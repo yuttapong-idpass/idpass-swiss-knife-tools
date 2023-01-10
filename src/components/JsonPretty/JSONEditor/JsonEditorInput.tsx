@@ -3,34 +3,31 @@ import React, { createRef, useEffect } from "react";
 import JSONEditor from "jsoneditor";
 import "jsoneditor/dist/jsoneditor.css";
 
-import './JsonEditor.css';
+import "./JsonEditorInput.css";
 
 type Props = {
-    options: {},
-    json: {}
+  options: {};
+  onChangeJSON: {};
+  json: {};
 };
 
 const JsonEditor = (props: Props) => {
   let container: any = createRef<HTMLElement>();
-  const options: any = {
-    "modes": ["tree", "text", "view"],
-    "indentation": 2,
-    onError: function (err: any) {
-        console.error(err);
-      
-      },
-  };
-
   useEffect(() => {
-    let jsoneditor = new JSONEditor(container, options);
+    const options: any = {
+      modes: ["tree", "text", "view"],
+      indentation: 2,
+      onError: function (err: any) {
+        console.error(err);
+      },
+      onChangeText: props.onChangeJSON,
+    };
 
-    jsoneditor.set({ "name" : "name"});
-    
-    console.log('s', container);
-   
+    let jsoneditor = new JSONEditor(container, options);
+    jsoneditor.set(props.json);
   }, []);
 
-  return <div className="jsoneditor-react-container" ref={my => container = my} />;
+  return <div className="h-screen" ref={(my) => (container = my)} />;
 };
 
 export default JsonEditor;

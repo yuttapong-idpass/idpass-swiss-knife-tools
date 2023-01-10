@@ -3,11 +3,6 @@
 @tailwind utilities;
 
 
-html,body {
-  height: 100%;
-}
-
-
 .myModal {
   position: fixed;
   top: 0;
