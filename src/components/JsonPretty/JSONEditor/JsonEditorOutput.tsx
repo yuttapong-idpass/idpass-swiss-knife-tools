@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from "react";
+import React, { createRef, useRef, useEffect } from "react";
 
 import JSONEditor from "jsoneditor";
 import "jsoneditor/dist/jsoneditor.css";
@@ -13,7 +13,7 @@ type Props = {
 };
 
 const JsonEditor = (props: Props) => {
-  let container: any = createRef<HTMLElement>();
+  let container: any = useRef<HTMLElement>();
   useEffect(() => {
     const options: any = {
       modes: ["tree", "text", "view"],
@@ -21,16 +21,18 @@ const JsonEditor = (props: Props) => {
       onError: function (err: any) {
         console.error(err);
       },
-      onChangeText: props.onChangeJSON,
+      onChangeText: props.onChangeJSON
     };
 
-    let jsoneditor = new JSONEditor(container, options, props.json);
-   
+    let jsoneditor = new JSONEditor(container, options);
+    jsoneditor.set(props.json);
+
+    return () => {
+      console.log('Child unmounted');
+      jsoneditor.destroy();
+    };
 
 
-  
-   
-    console.log('output', jsoneditor);
  
   }, [props.json]);
 

@@ -48,7 +48,8 @@ const JsonPretty = (props: Props) => {
   }
 
   const onClickPretty = () => {
-    setResultOutput(resultInput);
+    const ss = resultInput;
+    setResultOutput(ss);
   }
 
   return (
