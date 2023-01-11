@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Transition } from "@headlessui/react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
+import SwissKnife from "../../assets/images/swiss-army-knife.png";
 
 type Props = {};
 
@@ -13,24 +15,22 @@ const Menu = (props: Props) => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <img
-                  className="h-8 w-full"
-                
-                  alt="Workflow"
-                />
+                <NavLink to="/">
+                  <img
+                    className="h-11 w-full"
+                    src={SwissKnife}
+                    alt="Workflow"
+                  />
+                </NavLink>
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  <a className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium">
-                    APPLICATION DOWNLOAD
-                  </a>
-
-                  <button
-              
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium float-right"
-                  >
-                    Logout
-                  </button>
+                  <NavLink className="text-white font-bold" to="/">
+                    ID PASS SWISS KNIFE
+                  </NavLink>
+                  <NavLink className="text-white" to="/">
+                    Home
+                  </NavLink>
                 </div>
               </div>
             </div>
@@ -92,14 +92,11 @@ const Menu = (props: Props) => {
         >
           {(ref) => (
             <div className="md:hidden" id="mobile-menu">
-              <div  className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium">
                   ID PASSGLOBAL APPLICATION DOWNLOAD
                 </a>
-                <button
-                
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium "
-                >
+                <button className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium ">
                   Logout
                 </button>
               </div>

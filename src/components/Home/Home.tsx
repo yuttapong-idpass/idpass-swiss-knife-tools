@@ -8,6 +8,7 @@ import Base64Image from "../../assets/images/base-64.png";
 import JwtImage from "../../assets/images/jwt.png";
 
 import "./Home.css";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -17,16 +18,19 @@ const Home = (props: Props) => {
       name: "JSON EDITOR",
       disabled: false,
       image: JSONImage,
+      link: '/json-editor'
     },
     {
       name: "BASE 64 IMAGE",
       disabled: false,
       image: Base64Image,
+      link: '/base64'
     },
     {
       name: "JSON WEB TOKEN",
       disabled: true,
       image: JwtImage,
+      link: ''
     },
   ];
 
@@ -89,7 +93,8 @@ const Home = (props: Props) => {
         <div className="p-4">
           <div className="grid grid-cols-3 gap-4">
             {menu.map((item) => (
-              <div>
+              <Link to={item.link}>
+                <div>
                 <button
                   type="button"
                   className="font-bold text-neutral-700 text-white w-72 h-32 rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 mb-2 bg-gray-300"
@@ -98,6 +103,7 @@ const Home = (props: Props) => {
                   <span className="text-2xl">{item.name}</span>
                 </button>
               </div>
+              </Link>
             ))}
           </div>
         </div>
