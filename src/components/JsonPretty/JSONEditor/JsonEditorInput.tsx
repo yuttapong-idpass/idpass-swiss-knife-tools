@@ -22,7 +22,7 @@ const JsonEditor = (props: Props) => {
         console.error(err);
       },
       onChangeText: props.onChangeJSON,
-      showGutter: true,
+      
     };
 
     let jsoneditor = new JSONEditor(container, options);
@@ -34,7 +34,9 @@ const JsonEditor = (props: Props) => {
     };
   }, []);
 
-  return <div className="h-screen" ref={(my) => (container = my)} />;
+  return <>
+    <div className="h-screen" ref={(my) => (container = my)} />
+  </>;
 };
 
 export default JsonEditor;

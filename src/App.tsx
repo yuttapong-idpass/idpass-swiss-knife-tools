@@ -11,13 +11,13 @@ function App() {
       {/* <JsonEditor options={{}} json={{}}/>
       <JsonEditor options={{}} json={{}}/> */}
 
-      <JsonPretty />
-      {/* <BrowserRouter>
+      {/* <JsonPretty /> */}
+      <BrowserRouter>
         <Menu />
         <Routes>
             <Route path="/" element={<Home />} />
         </Routes>
-      </BrowserRouter> */}
+      </BrowserRouter>
     </div>
   );
 }

@@ -27,11 +27,12 @@ const JsonPretty = (props: Props) => {
   let containerInput: any = createRef<HTMLElement>();
   let containerOutput: any = createRef<HTMLElement>();
 
-  let [resultInput, setResultInput] = useState("");
+  let [resultInput, setResultInput] = useState({});
   let [resultOutput, setResultOutput] = useState("");
 
   const handleJsonInput = (event: any) => {
-    setResultInput(event);
+    let setting = JSON.parse(event);
+    setResultInput(setting);
   };
 
   const handleJsonOutput = (event: any) => {
@@ -39,7 +40,12 @@ const JsonPretty = (props: Props) => {
   };
 
   const onClickPretty = () => {
-    setResultOutput(JSON.parse(resultInput));
+    const data: any = resultInput;
+    try {
+      dispatch(inputJson({ item: data, isError: false, messageError: "" }));
+    } catch (error: any) {
+      dispatch(inputJson({ item: {}, isError: true, messageError: error }));
+    }
   };
 
   return (
@@ -48,7 +54,7 @@ const JsonPretty = (props: Props) => {
         <div className="col-span-5 h-screen">
           <JsonEditorInput
             options={{}}
-            json={resultInput}
+            json={jsonPrettyReducer.item}
             onChangeJSON={handleJsonInput}
           />
         </div>
@@ -68,10 +74,11 @@ const JsonPretty = (props: Props) => {
                 border-b-4 
                 border-blue-700 
                 hover:border-blue-500 
-                rounded"
+                rounded
+                w-full"
                 onClick={onClickPretty}
               >
-                Click
+                Pretty
               </button>
             </div>
           </div>
@@ -79,7 +86,7 @@ const JsonPretty = (props: Props) => {
         <div className="col-span-5">
           <JsonEditorOutput
             options={{}}
-            json={resultOutput}
+            json={jsonPrettyReducer.item}
             onChangeJSON={handleJsonOutput}
           />
         </div>
