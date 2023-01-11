@@ -31,280 +31,53 @@ const FromBase64 = (props: Props) => {
     height: 0,
   };
 
-  const [inputToggleFullScreen, setInputToggleFullScreen] = useState(false);
-  const [outputToggleFullScreen, setOutputToggleFullScreen] = useState(false);
-  const [descriptionImage, setDescriptionImage] = useState(descriptionImg);
-  const [selected, setSelected] = useState(options[0].value);
-  const [imageToBase64, setImageToBase64] = useState("");
-  const [base64ToImage, setBase64ToImage] = useState("");
-
-  const handleSelectOption = ($event: any) => {
-    dispatch(base64({ base64: "" }));
-    setImageToBase64("");
-    setBase64ToImage("");
-    setSelected($event.target.value);
-  };
-
-  const handleBase64 = () => {
-    if (!!base64ToImage) {
-      // let base64String = data.result.replace("data:", "").replace(/^.+,/, "");
-      // dispatch(base64({ base64: 'data:image/jpeg;base64,' + base64String}))
-      let base64String: string = base64ToImage
-        .replace("data:", "")
-        .replace(/^.+,/, "");
-      const convertToPng: string = "data:image/png;base64," + base64String;
-      imageBase64(convertToPng);
-      dispatch(base64({ base64: convertToPng }));
-    } else {
-      setImageToBase64(base64Reducer.base64);
-    }
-  };
-
-  const handleChange = (event$: any) => {
-    console.log(event$.target.value);
-  };
-
-  const handleChangeBase64 = (event$: any) => {
-    setBase64ToImage(event$.target.value);
-  };
-
-  const imageUpload = (event$: any) => {
-    const fileUploaded = event$.target.files[0];
-    const reader: any = new FileReader();
-    reader.onload = () => {
-      // let base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
-      // dispatch(base64({ base64: base64String }))
-      let images = new Image();
-      images.src = reader.result;
-      images.onload = () => {
-        let height = images.height;
-        let width = images.width;
-        const description: IDescriptionImg = {
-          height: height,
-          width: width,
-        };
-        setDescriptionImage(description);
-      };
-      const base64String = reader.result;
-      dispatch(base64({ base64: base64String }));
-    };
-    reader.readAsDataURL(fileUploaded);
-  };
-
-  const imageBase64 = (image: string) => {
-    let images = new Image();
-    images.onload = function () {
-      let height = images.height;
-      let width = images.width;
-      const description: IDescriptionImg = {
-        height: height,
-        width: width,
-      };
-      setDescriptionImage(description);
-    };
-    images.src = image;
-  };
-
   return (
-    <div>
-      <div className="flex flex-col">
-        <div className="h-screen">
-          <div className="border" style={{ height: "47%" }}>
-            <div
-              className={`flex flex-col h-full ${
-                inputToggleFullScreen ? "myModal" : ""
-              }`}
-            >
-              <div className="border">
-                <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
-                  <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    {/* <img
+    <div className="container p-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-12">
+        <div className="col-span-12 h-screen bg-gray-300">
+          <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
+            <div className="flex items-center flex-shrink-0 text-white mr-6">
+              {/* <img
                       src={FloppyDiskImage}
                       className="fill-current h-8 w-8 mr-2 p-1 cursor"
                       width={"50%"}
                       height={"50%"}
                     /> */}
-                    <img
-                      src={
-                        inputToggleFullScreen
-                          ? ExitFullScreenImage
-                          : FullScreenImage
-                      }
-                      className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                      onClick={() => {
-                        setInputToggleFullScreen(!inputToggleFullScreen);
-                      }}
-                    />
+              <img className="fill-current h-8 w-8 mr-2 p-1 cursor" />
 
-                    {selected === "base64" ? (
-                      <div className="image-upload">
-                        <label htmlFor="file-input">
-                          <img
-                            src={Upload}
-                            className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                          />
-                        </label>
-                        <input
-                          id="file-input"
-                          type="file"
-                          accept="image/png, image/gif, image/jpeg"
-                          onChange={imageUpload}
-                        />
-                      </div>
-                    ) : null}
-                    <select
-                      className="inline-block text-sm px-3 py-1 leading-none border rounded text-black border-white  hover:bg-white mt-4 lg:mt-0"
-                      value={selected}
-                      onChange={handleSelectOption}
-                    >
-                      {options.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.text}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </nav>
-              </div>
-              <div
-                className={`border grow ${
-                  selected === "base64" ? "display-area" : ""
-                }`}
-              >
-                {/* <textarea
-                  id="inputText"
-                  className="w-full h-full resize-none p-2"
-                  placeholder="Input here ..."
-                ></textarea> */}
-                {selected === "base64" ? (
-                  <div className="flex flex-col items-center p-5">
-                    {!!base64Reducer.base64 ? (
-                      <div>
-                        <figure className="max-w-lg">
-                          <figcaption className="mt-2 text-sm text-center text-black-500 dark:text-black-400">
-                            <p className="text-gray-700 text-base mb-4">
-                              height x width: {descriptionImage.height} x{" "}
-                              {descriptionImage.width}{" "}
-                            </p>
-                          </figcaption>
-                          <img
-                            className="h-auto max-w-full"
-                            src={base64Reducer.base64}
-                            alt="image description"
-                          />
-                        </figure>
-                      </div>
-                    ) : null}
-                  </div>
-                ) : (
-                  <textarea
-                    id="inputText"
-                    className="w-full h-full resize-none p-2"
-                    placeholder="Input base 64 here ...."
-                    onChange={handleChangeBase64}
-                  ></textarea>
-                )}
-              </div>
+              <select className="inline-block text-sm px-3 py-1 leading-none border rounded text-black border-white  hover:bg-white mt-4 lg:mt-0">
+                {options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.text}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
-          <div className="border" style={{ height: "6%" }}>
-            <div className="flex flex-col items-center">
+          </nav>
+          <div className="p-4 h-32 m-6 border-dashed border-2 border-gray-500 rounded-2xl">
+            <span className="grid place-items-center h-full">
               <button
-                className="
-              justify-self-end 
-              bg-blue-500 
-              hover:bg-blue-400 
-              text-white 
-              font-bold
-              mt-1 
-              py-1 
-              px-4 
-              border-b-4 
-              border-blue-700 
-              hover:border-blue-500 
-              rounded"
-                onClick={handleBase64}
+                type="button"
+                className="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2"
               >
-                RESULT
+                <svg
+                  className="w-4 h-4 mr-2 -ml-1"
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="fab"
+                  data-icon="bitcoin"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M504 256c0 136.1-111 248-248 248S8 392.1 8 256 119 8 256 8s248 111 248 248zm-141.7-35.33c4.937-32.1-20.19-50.74-54.55-62.57l11.15-44.7-27.21-6.781-10.85 43.52c-7.154-1.783-14.5-3.464-21.8-5.13l10.93-43.81-27.2-6.781-11.15 44.69c-5.922-1.349-11.73-2.682-17.38-4.084l.031-.14-37.53-9.37-7.239 29.06s20.19 4.627 19.76 4.913c11.02 2.751 13.01 10.04 12.68 15.82l-12.7 50.92c.76 .194 1.744 .473 2.829 .907-.907-.225-1.876-.473-2.876-.713l-17.8 71.34c-1.349 3.348-4.767 8.37-12.47 6.464 .271 .395-19.78-4.937-19.78-4.937l-13.51 31.15 35.41 8.827c6.588 1.651 13.05 3.379 19.4 5.006l-11.26 45.21 27.18 6.781 11.15-44.73a1038 1038 0 0 0 21.69 5.627l-11.11 44.52 27.21 6.781 11.26-45.13c46.4 8.781 81.3 5.239 95.99-36.73 11.84-33.79-.589-53.28-25-65.99 17.78-4.098 31.17-15.79 34.75-39.95zm-62.18 87.18c-8.41 33.79-65.31 15.52-83.75 10.94l14.94-59.9c18.45 4.603 77.6 13.72 68.81 48.96zm8.417-87.67c-7.673 30.74-55.03 15.12-70.39 11.29l13.55-54.33c15.36 3.828 64.84 10.97 56.85 43.03z"
+                  ></path>
+                </svg>
+                Pay with Bitcoin
               </button>
-            </div>
-          </div>
-          <div className="border" style={{ height: "47%" }}>
-            <div
-              className={`flex flex-col h-full ${
-                outputToggleFullScreen ? "myModal" : ""
-              }`}
-            >
-              <div className="border">
-                <nav className="flex items-center justify-between flex-wrap bg-gray-900 p-1">
-                  <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    {/* <img
-                      src={FloppyDiskImage}
-                      className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                    /> */}
-                    <img
-                      src={
-                        outputToggleFullScreen
-                          ? ExitFullScreenImage
-                          : FullScreenImage
-                      }
-                      className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                      onClick={() => {
-                        setOutputToggleFullScreen(!outputToggleFullScreen);
-                      }}
-                    />
-
-                    {selected === "base64" ? (
-                      <CopyToClipboard
-                        text={base64Reducer.base64}
-                        onCopy={() => {}}
-                      >
-                        <img
-                          src={CopyToClipboardImage}
-                          className="fill-current h-8 w-8 mr-2 p-1 cursor"
-                        />
-                      </CopyToClipboard>
-                    ) : null}
-                  </div>
-                </nav>
-              </div>
-              <div
-                className={`border grow ${
-                  selected === "image" ? "display-area" : ""
-                }`}
-              >
-                <div className="h-full">
-                  {selected === "base64" ? (
-                    <textarea
-                      className="w-full h-full resize-none p-4"
-                      value={imageToBase64 || ""}
-                      onChange={handleChange}
-                      placeholder="Output here ..."
-                    ></textarea>
-                  ) : (
-                    <div className="flex flex-col items-center">
-                      {!!base64Reducer.base64 ? (
-                        <div>
-                          <figure className="max-w-lg">
-                            <figcaption className="mt-2 text-sm text-center text-black-500 dark:text-black-400">
-                              <p className="text-gray-700 text-base mb-4">
-                                height x width: {descriptionImage.height} x{" "}
-                                {descriptionImage.width}{" "}
-                              </p>
-                            </figcaption>
-                            <img
-                              className="h-auto max-w-full"
-                              src={base64Reducer.base64}
-                              alt="image description"
-                            />
-                          </figure>
-                        </div>
-                      ) : null}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            </span>
           </div>
         </div>
       </div>
