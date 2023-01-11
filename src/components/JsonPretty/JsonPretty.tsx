@@ -19,51 +19,69 @@ import JsonEditorOutput from "./JSONEditor/JsonEditorOutput";
 
 type Props = {};
 
-
-
 const JsonPretty = (props: Props) => {
-
-  
-
   const jsonPrettyReducer = useSelector(jsonPrettySelector);
   const counterReducer = useSelector(counterSelector);
   const dispatch = useAppDispatch();
 
-
   let containerInput: any = createRef<HTMLElement>();
   let containerOutput: any = createRef<HTMLElement>();
 
-  let [resultInput, setResultInput] = useState({});
-  let [resultOutput, setResultOutput] = useState({});
+  let [resultInput, setResultInput] = useState("");
+  let [resultOutput, setResultOutput] = useState("");
 
-
-  const handleJsonInput = (event: any) => { 
-    console.log('json change', event);
+  const handleJsonInput = (event: any) => {
     setResultInput(event);
-  }
+  };
 
-  const handleJsonOutput = (event: any) => { 
-    console.log('json change output', event);
+  const handleJsonOutput = (event: any) => {
     setResultOutput(event);
-  }
+  };
 
   const onClickPretty = () => {
-    const ss = resultInput;
-    setResultOutput(ss);
-  }
+    setResultOutput(JSON.parse(resultInput));
+  };
 
   return (
-    <div className="container p-3">
-      <div className="max-w-7xl mx-auto grid grid-cols-12 bg-gray-200">
+    <div className="container p-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-12">
         <div className="col-span-5 h-screen">
-          <JsonEditorInput  options={{}} json={resultInput} onChangeJSON={handleJsonInput}/>
+          <JsonEditorInput
+            options={{}}
+            json={resultInput}
+            onChangeJSON={handleJsonInput}
+          />
         </div>
-        <div className="col-span-2 bg-gray-300">
-          <button type="button" onClick={onClickPretty}>Click</button>
-
+        <div className="col-span-2">
+          <div className="grid place-items-center h-screen">
+            <div>
+              <button
+                type="button"
+                className=" justify-self-end 
+                bg-blue-500 
+                hover:bg-blue-400 
+                text-white 
+                font-bold
+                mt-1 
+                py-1 
+                px-4 
+                border-b-4 
+                border-blue-700 
+                hover:border-blue-500 
+                rounded"
+                onClick={onClickPretty}
+              >
+                Click
+              </button>
+            </div>
+          </div>
         </div>
         <div className="col-span-5">
-         <JsonEditorOutput  options={{}} json={resultOutput} onChangeJSON={handleJsonOutput} />
+          <JsonEditorOutput
+            options={{}}
+            json={resultOutput}
+            onChangeJSON={handleJsonOutput}
+          />
         </div>
       </div>
     </div>

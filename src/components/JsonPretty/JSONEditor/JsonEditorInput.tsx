@@ -15,16 +15,23 @@ const JsonEditor = (props: Props) => {
   let container: any = createRef<HTMLElement>();
   useEffect(() => {
     const options: any = {
+      mode: "text",
       modes: ["tree", "text", "view"],
       indentation: 2,
       onError: function (err: any) {
         console.error(err);
       },
       onChangeText: props.onChangeJSON,
+      showGutter: true,
     };
 
     let jsoneditor = new JSONEditor(container, options);
     jsoneditor.set(props.json);
+
+    return () => {
+      console.log("Child unmounted");
+      jsoneditor.destroy();
+    };
   }, []);
 
   return <div className="h-screen" ref={(my) => (container = my)} />;

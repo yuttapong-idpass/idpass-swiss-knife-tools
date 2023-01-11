@@ -3,8 +3,8 @@ import React, { createRef, useRef, useEffect } from "react";
 import JSONEditor from "jsoneditor";
 import "jsoneditor/dist/jsoneditor.css";
 
-import "./JsonEditorInput.css";
-import { json } from "stream/consumers";
+import "./JsonEditorOutput.css";
+
 
 type Props = {
   options: {};
@@ -16,6 +16,7 @@ const JsonEditor = (props: Props) => {
   let container: any = useRef<HTMLElement>();
   useEffect(() => {
     const options: any = {
+      mode: "tree",
       modes: ["tree", "text", "view"],
       indentation: 2,
       onError: function (err: any) {
