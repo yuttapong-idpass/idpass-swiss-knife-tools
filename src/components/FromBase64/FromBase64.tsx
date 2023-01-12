@@ -35,7 +35,7 @@ const FromBase64 = (props: Props) => {
   return (
     <div className="p-4 place-items-center">
       <div className="max-w-7xl mx-auto grid grid-cols-12">
-        <div className="col-span-12 h-screen bg-gray-100">
+        <div className="col-span-12 h-screen">
           <nav className="flex items-center justify-between flex-wrap bg-gray-400 p-1">
             <div className="flex items-center flex-shrink-0 text-white mr-6">
               {/* <img
