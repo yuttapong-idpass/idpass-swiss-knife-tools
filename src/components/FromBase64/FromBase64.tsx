@@ -60,7 +60,7 @@ const FromBase64 = (props: Props) => {
               </div>
             </div>
           </nav>
-          <div className="p-2 h-24 m-6 border-dashed border-2 border-gray-300 rounded-2xl grow">
+          <div className="p-2  m-6 border-dashed border-2 border-gray-300 rounded-2xl grow">
             <span className="grid place-items-center h-full">
               <button
                 type="button"
@@ -69,10 +69,78 @@ const FromBase64 = (props: Props) => {
                 <img className="w-10 h-10 mr-2 -ml-1" src={Photo} />
                 Upload image
               </button>
+              <div>
+                <span className="text-lg">Preview image</span>
+              </div>
+              <div><img src={Photo} className="h-32 w-32" /></div>
             </span>
           </div>
           <div className="m-6">
-          <div className="col-span-6 p-2 border-dashed border-2 border-gray-300 rounded-2xl h-32">xxxx</div>
+            <div className="col-span-6 rounded-2xl h-32">
+              <nav className="p-3">
+                <div className="container flex flex-wrap items-center justify-between mx-auto">
+                  <a href="#" className="flex items-center">
+                  <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">OUTPUT</span>
+                  </a>
+                  <button
+                    data-collapse-toggle="navbar-solid-bg"
+                    type="button"
+                    className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    aria-controls="navbar-solid-bg"
+                    aria-expanded="false"
+                  >
+                    <span className="sr-only">Open main menu</span>
+                    <svg
+                      className="w-6 h-6"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                  <div
+                    className="hidden w-full md:block md:w-auto"
+                    id="navbar-solid-bg"
+                  >
+                    <ul className="flex flex-col mt-4 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
+                      <li>
+                        <a
+                          href="#"
+                          className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white dark:bg-blue-600 md:dark:bg-transparent"
+                          aria-current="page"
+                        >
+                          Home
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+
+              <textarea
+                id="message"
+                rows={4}
+                className="
+                  block 
+                  p-2.5 
+                  w-full 
+                  text-sm 
+                  text-gray-900 
+                  bg-gray-50 
+                  rounded-lg 
+                  border 
+                  border-gray-300 
+                  border-dashed border-2 border-gray-300
+                  h-96"
+                placeholder="Write your thoughts here..."
+              ></textarea>
+            </div>
           </div>
         </div>
       </div>
