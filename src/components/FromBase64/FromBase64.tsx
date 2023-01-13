@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import FloppyDiskImage from "../../assets/images/floppy-disk.png";
-import FullScreenImage from "../../assets/images/full-screen.png";
-import ExitFullScreenImage from "../../assets/images/exit-fullscreen.png";
-import CopyToClipboardImage from "../../assets/images/copy-to-clipboard.png";
 import Photo from "../../assets/images/photo.png";
 import Upload from "../../assets/images/photo.png";
+import ImagePreview from "../../assets/images/image-file.png";
+import CopyToClipboardImage from "../../assets/images/documents.png";
 import "./FromBase64.css";
 import { useSelector } from "react-redux";
 import { base64Selector, base64 } from "../../store/slice/Base64Slice";
@@ -70,18 +68,18 @@ const FromBase64 = (props: Props) => {
                 Upload image
               </button>
               <div>
-                <span className="text-lg">Preview image</span>
+                <span className="text-lg font-bold">Preview image</span>
               </div>
-              <div><img src={Photo} className="h-32 w-32" /></div>
+              <div><img src={ImagePreview} className="h-10 w-10" /></div>
             </span>
           </div>
           <div className="m-6">
             <div className="col-span-6 rounded-2xl h-32">
               <nav className="p-3">
                 <div className="container flex flex-wrap items-center justify-between mx-auto">
-                  <a href="#" className="flex items-center">
-                  <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">OUTPUT</span>
-                  </a>
+                  <div  className="flex items-center">
+                    <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">OUTPUT</span>
+                  </div>
                   <button
                     data-collapse-toggle="navbar-solid-bg"
                     type="button"
@@ -109,15 +107,16 @@ const FromBase64 = (props: Props) => {
                     id="navbar-solid-bg"
                   >
                     <ul className="flex flex-col mt-4 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
-                      <li>
+                      {/* <li>
                         <a
                           href="#"
-                          className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white dark:bg-blue-600 md:dark:bg-transparent"
+                          className="block py-2 pl-3 pr-4 text-gray-800 bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white dark:bg-blue-600 md:dark:bg-transparent"
                           aria-current="page"
                         >
                           Home
                         </a>
-                      </li>
+                      </li> */}
+                      <img src={CopyToClipboardImage} className="h-8 w-8"/>
                     </ul>
                   </div>
                 </div>
@@ -138,7 +137,7 @@ const FromBase64 = (props: Props) => {
                   border-gray-300 
                   border-dashed border-2 border-gray-300
                   h-96"
-                placeholder="Write your thoughts here..."
+                  placeholder="Base 64 here..."
               ></textarea>
             </div>
           </div>
