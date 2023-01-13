@@ -7,27 +7,32 @@ import ToggleMaximize from "../../assets/images/maximize.png";
 import ToggleMinimize from "../../assets/images/minimize.png";
 import "./FromBase64.css";
 import { useSelector } from "react-redux";
-import { base64Selector, descriptionSelector, base64, descriptions, IDescription } from "../../store/slice/Base64Slice";
+import {
+  base64Selector,
+  descriptionSelector,
+  base64,
+  descriptions,
+  IDescription,
+} from "../../store/slice/Base64Slice";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAppDispatch } from "../../store/store";
 
 type Props = {};
 
+const options = [
+  { value: "base64", text: "Image to base 64" },
+  { value: "image", text: "Base64 to image" },
+];
+
 const FromBase64 = (props: Props) => {
   const [imageToBase64, setImageToBase64] = useState(null);
   const [base64ToImage, setBase64ToImage] = useState(null);
+  const [selected, setSelected] = useState(options[0].value);
   const [descriptionImage, setDescriptionImage] = useState({});
 
   const base64Reducer = useSelector(base64Selector);
   const descriptionReducer = useSelector(descriptionSelector);
   const dispatch = useAppDispatch();
-
-  const options = [
-    { value: "base64", text: "Image to base 64" },
-    { value: "image", text: "Base64 to image" },
-  ];
-
-
 
   const onInputImage = (event$: any) => {
     const fileUpload: any = event$.target.files[0];
@@ -43,35 +48,39 @@ const FromBase64 = (props: Props) => {
         const width = images.width;
         const base64String = reader.result;
 
-
-
-        calculateBase64Size({ name: '', base: base64String, height: height,  width: width});
+        calculateBase64Size({
+          name: "",
+          base: base64String,
+          height: height,
+          width: width,
+        });
         dispatch(base64({ base64: base64String }));
       };
-     
-     
     };
     reader.readAsDataURL(fileUpload);
   };
 
   const calculateBase64Size = (description: any) => {
-    const stringLength = description.base.length - "data:image/png;base64,".length;
+    const stringLength =
+      description.base.length - "data:image/png;base64,".length;
     const sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
     const sizeInKb = sizeInBytes / 1024;
     const data: IDescription = {
       size: sizeInKb,
       height: description.height,
       width: description.width,
-      name: ''
-    }
-
-
-
-
-    dispatch(descriptions(data))
+      name: "",
+    };
+    dispatch(descriptions(data));
   };
 
   const changeTextArea = (event$: any) => {};
+
+  const handleSelectOption = ($event: any) => {
+    dispatch(base64({ base64 : ""}));
+    dispatch(descriptions({ name: "", height: 0, size: 0, width: 0}))
+    setSelected($event.target.value);
+  };
 
   return (
     <div className="p-4 place-items-center">
@@ -90,7 +99,21 @@ const FromBase64 = (props: Props) => {
               <div className="p-2">
                 <h1 className="font-bold">
                   MODE :{" "}
-                  <select className="inline-block text-sm px-3 py-2 leading-none border rounded text-black border-white  hover:bg-white mt-4 lg:mt-0">
+                  <select 
+                  className="inline-block 
+                  text-sm 
+                  px-3 
+                  py-2 
+                  leading-none 
+                  border 
+                  rounded 
+                  text-black 
+                  border-white  
+                  hover:bg-white 
+                  mt-4 
+                  lg:mt-0"
+                  onChange={handleSelectOption}
+                  >
                     {options.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.text}
@@ -101,73 +124,90 @@ const FromBase64 = (props: Props) => {
               </div>
             </div>
           </nav>
-          <div className="p-2  m-6 border-dashed border-2 border-gray-300 rounded-2xl grow">
-            <span className="grid place-items-center h-full">
-              <div className="image-upload">
-                <label htmlFor="file-input">
-                  <div className="text-white bg-neutral-400 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
-                    <img
-                      className="fill-current w-10 h-10 mr-2 -ml-1 cursor"
-                      src={Photo}
-                    />
-                    Upload image
-                  </div>
-                </label>
-                <input
-                  id="file-input"
-                  type="file"
-                  accept="image/png, image/gif, image/jpeg"
-                  onChange={onInputImage}
-                />
-              </div>
+          <div>
+            <div className="p-2  m-6 border-dashed border-2 border-gray-300 rounded-2xl grow">
+              <span className="grid place-items-center h-full">
+                <div className="image-upload">
+                  <label htmlFor="file-input">
+                    <div className="text-white bg-neutral-400 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                      <img
+                        className="fill-current w-10 h-10 mr-2 -ml-1 cursor"
+                        src={Photo}
+                      />
+                      Upload image
+                    </div>
+                  </label>
+                  <input
+                    id="file-input"
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                    onChange={onInputImage}
+                  />
+                </div>
 
-              <div>
-                <span className="text-lg font-bold">Preview image</span>
-              </div>
-             
+                <div>
+                  <span className="text-lg font-bold">Preview image</span>
+                </div>
+
                 {/* <img src={base64Reducer.base64} className="h-10 w-10" /> */}
 
                 {!!base64Reducer.base64.base64 ? (
                   <div>
-                    <img src={base64Reducer.base64.base64} className="h-56 w-full" />
-                    <p className="text-m"><span className="font-bold">Scale: </span> { descriptionReducer.description.height } x { descriptionReducer.description.width } {" "}</p>
-                    <p className="text-m"><span  className="font-bold">Size: </span>{ (descriptionReducer.description.size)?.toFixed(2) } kb</p>
+                    <img
+                      src={base64Reducer.base64.base64}
+                      className="h-56 w-full"
+                    />
+                    <p className="text-m">
+                      <span className="font-bold">Scale: </span>{" "}
+                      {descriptionReducer.description.height} x{" "}
+                      {descriptionReducer.description.width}{" "}
+                    </p>
+                    <p className="text-m">
+                      <span className="font-bold">Size: </span>
+                      {descriptionReducer.description.size?.toFixed(2)} kb
+                    </p>
                   </div>
-                 
                 ) : (
                   <img src={ImagePreview} className="h-10 w-10" />
                 )}
-              
-            </span>
-          </div>
-          <div className="m-6">
-            <div className="col-span-6 rounded-2xl h-32">
-              <nav className="p-3">
-                <div className="container flex flex-wrap items-center justify-between mx-auto">
-                  <div className="flex items-center">
-                    <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
-                      OUTPUT
-                    </span>
+              </span>
+            </div>
+            <div className="m-6">
+              <div className="col-span-6 rounded-2xl h-32">
+                <nav className="p-3">
+                  <div className="container flex flex-wrap items-center justify-between mx-auto">
+                    <div className="flex items-center">
+                      <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
+                        OUTPUT
+                      </span>
+                    </div>
+
+                    <div className="flex md:order-2">
+                      <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
+                        <li>
+                          <CopyToClipboard
+                            text={base64Reducer.base64.base64}
+                            onCopy={() => {}}
+                          >
+                            <img
+                              src={CopyToClipboardImage}
+                              className="h-8 w-8"
+                            />
+                          </CopyToClipboard>
+                        </li>
+
+                        <li>
+                          <img src={ToggleMaximize} className="h-8 w-8" />
+                        </li>
+                      </ul>
+                    </div>
                   </div>
+                </nav>
 
-                  <div className="flex md:order-2">
-                    <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
-                      <li>
-                        <img src={CopyToClipboardImage} className="h-8 w-8" />
-                      </li>
-
-                      <li>
-                        <img src={ToggleMaximize} className="h-8 w-8" />
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </nav>
-
-              <textarea
-                id="message"
-                rows={4}
-                className="
+                <textarea
+                  id="message"
+                  rows={4}
+                  className="
                   block 
                   p-4
                   w-full 
@@ -179,12 +219,13 @@ const FromBase64 = (props: Props) => {
                   border-gray-300 
                   border-dashed border-2 border-gray-300
                   h-96"
-                placeholder="Base 64 here..."
-                value={base64Reducer.base64.base64
-                  .replace("data:", "")
-                  .replace(/^.+,/, "")}
-                onChange={changeTextArea}
-              ></textarea>
+                  placeholder="Base 64 here..."
+                  value={base64Reducer.base64.base64
+                    .replace("data:", "")
+                    .replace(/^.+,/, "")}
+                  onChange={changeTextArea}
+                ></textarea>
+              </div>
             </div>
           </div>
         </div>
