@@ -16,9 +16,7 @@ const JsonWebToken = (props: Props) => {
   ];
 
   const [selected, setSelected] = useState(options[0].value);
-  const [jsonArea, setJsonArea] = useState({});
-  const [token, setToken] = useState("");
-  const [jsonToken, setJsonToken] = useState("");
+  const [encode, setEncode] = useState({});
   const [messageError, setMessageError] = useState("");
   const [isError, setIsError] = useState(false);
 
@@ -26,29 +24,18 @@ const JsonWebToken = (props: Props) => {
     setSelected($event.target.value);
   };
 
-  const handleTextArea = (event$: any) => {
-    try {
-      let setting = JSON.parse(event$.target.value);
-      //   dispatch(
-      //     jwtToken({
-      //       jwt: setting,
-      //       isError: false,
-      //       messageError: "",
-      //     })
-      //   );
-      setJsonArea(setting);
-      setIsError(false);
-    } catch (error) {
-      //   dispatch(
-      //     jwtToken({
-      //       jwt: "",
-      //       isError: true,
-      //       messageError: String(error),
-      //     })
-      //   );
-      setIsError(true);
-      setMessageError(String(error));
+  const handleEncodeArea = (event$: any) => {
+    const encode = event$.target.value;
+    try { 
+      let setting = JSON.parse(encode);
+      setEncode(setting);
+    } catch (error) { 
+
     }
+  };
+
+  const onEncoded = () => {
+    encodeJWT();
   };
 
   const handleResult = () => {
@@ -79,42 +66,38 @@ const JsonWebToken = (props: Props) => {
     const encodeHeader = base64Url(stringifiedHeader);
 
     const testData = {
-      username: "TW000681",
-      timestamp: "",
-      locationCode: "50185",
-      email: "",
-      firstname: "",
-      lastname: "",
-      sharedUser: "TW000681",
-      userType: "ASP",
-      role: "ASC TW",
-      channelType: "sff-web",
-      ascCode: "000679",
-      mobileNo: "",
-      sub: "",
-      outChnSales: "Telewiz",
-      outBusinessName: "",
-      outPosition: "Owner",
-      ou: "PARTNER",
-      iat: 1672813236,
-      exp: 1672816836,
+      "username": "TW000681",
+      "timestamp": "",
+      "locationCode": "50185",
+      "email": "",
+      "firstname": "",
+      "lastname": "",
+      "sharedUser": "TW000681",
+      "userType": "ASP",
+      "role": "ASC TW",
+      "channelType": "sff-web",
+      "ascCode": "000679",
+      "mobileNo": "",
+      "sub": "",
+      "outChnSales": "Telewiz",
+      "outBusinessName": "",
+      "outPosition": "Owner",
+      "ou": "PARTNER",
+      "iat": 1672813236,
+      "exp": 1672816836
     };
 
     // const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(jsonArea));
-    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(testData));
+    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(encode));
     const encodedData = base64Url(stringifiedData);
     const token = encodeHeader + "." + encodedData;
     const secretKey = "sniper";
-    const signature = CryptoJS.HmacSHA256(token, "xz");
+    const signature = CryptoJS.HmacSHA256(token, secretKey);
     const base64Signature = base64Url(signature);
     const test = token + "." + base64Signature;
 
     console.log("test -->", test);
   };
-
-  useEffect(() => {
-    encodeJWT();
-  }, []);
 
   return (
     <div className="p-4 place-items-center">
@@ -186,18 +169,19 @@ const JsonWebToken = (props: Props) => {
                     id="message"
                     rows={4}
                     className="
-                  block 
-                  p-4
-                  w-full 
-                  text-sm 
-                  text-gray-900 
-                  bg-gray-50 
-                  rounded-lg 
-                  border 
-                  border-gray-300 
-                  border-dashed border-2 border-gray-300
-                  h-96"
+                      block 
+                      p-4
+                      w-full 
+                      text-sm 
+                      text-gray-900 
+                      bg-gray-50 
+                      rounded-lg 
+                      border 
+                      border-gray-300 
+                      border-dashed border-2 border-gray-300
+                      h-96"
                     placeholder="Paste your token here ..."
+                    onChange={handleEncodeArea}
                   ></textarea>
                 </div>
 
@@ -224,6 +208,7 @@ const JsonWebToken = (props: Props) => {
                         dark:focus:ring-[#FF9119]/40 
                         mr-1 
                         mb-1"
+                      onClick={onEncoded}
                     >
                       ENCODED
                     </button>
@@ -235,7 +220,7 @@ const JsonWebToken = (props: Props) => {
                     <div className="container flex flex-wrap items-center justify-between mx-auto">
                       <div className="flex items-center">
                         <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
-                          DECODED
+                          RESULT
                         </span>
                       </div>
 
@@ -249,7 +234,7 @@ const JsonWebToken = (props: Props) => {
 
                   <div>
                     <div className="relative overflow-x-auto">
-                      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                      {/* <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                           <tr>
                             <th scope="col" className="px-6 py-3">
@@ -284,7 +269,25 @@ const JsonWebToken = (props: Props) => {
                             </th>
                           </tr>
                         </tbody>
-                      </table>
+                      </table> */}
+
+                      <textarea
+                        id="message"
+                        rows={4}
+                        className="
+                          block 
+                          p-4
+                          w-full 
+                          text-sm 
+                          text-gray-900 
+                          bg-gray-50 
+                          rounded-lg 
+                          border 
+                          border-gray-300 
+                          border-dashed border-2 border-gray-300
+                          h-96"
+                        placeholder="Paste your token here ..."
+                      ></textarea>
                     </div>
                   </div>
                 </div>
