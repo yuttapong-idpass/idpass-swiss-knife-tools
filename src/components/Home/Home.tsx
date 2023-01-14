@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import JsonPretty from "../JsonPretty/JsonPretty";
 import FromBase64 from "../FromBase64/FromBase64";
-import JWTEncodeDecode from "../JWTEncodeDecode/JWTEncodeDecode";
+import JWTEncodeDecode from "../JsonWebToken/JsonWebToken";
 
 import JSONImage from "../../assets/images/json.png";
 import Base64Image from "../../assets/images/base-64.png";
@@ -30,7 +30,7 @@ const Home = (props: Props) => {
       name: "JSON WEB TOKEN",
       disabled: true,
       image: JwtImage,
-      link: ''
+      link: '/jwt'
     },
   ];
 
@@ -92,8 +92,8 @@ const Home = (props: Props) => {
       <div className="flex flex-row">
         <div className="p-4">
           <div className="grid grid-cols-3 gap-4">
-            {menu.map((item) => (
-              <Link to={item.link}>
+            {menu.map((item, index) => (
+              <Link to={item.link} key={index}>
                 <div>
                 <button
                   type="button"
