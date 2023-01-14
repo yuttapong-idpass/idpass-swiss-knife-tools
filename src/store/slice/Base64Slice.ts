@@ -4,6 +4,7 @@ import { RootState } from './../store';
 
 type Base64State = {
     base64: string;
+    errorImage: boolean;
 }
 
 type DescriptionState = {
@@ -14,7 +15,8 @@ type DescriptionState = {
 }
 
 interface IBase64 {
-    base64: string
+    base64: string;
+    errorImage: boolean;
 }
 
 
@@ -27,7 +29,8 @@ export interface IDescription {
 
 
 const initialValues: Base64State = {
-    base64: ''
+    base64: '',
+    errorImage: false
 }
 
 const initialValuesDescription:  DescriptionState = {
