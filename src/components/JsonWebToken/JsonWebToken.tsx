@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { jwtToken, jwtTokenSelector } from "../../store/slice/jwtTokenSlice";
 import { useAppDispatch } from "../../store/store";
 
+import ErrorImage from "../../assets/images/cross.png";
+
 type Props = {};
 
 const JsonWebToken = (props: Props) => {
@@ -15,34 +17,49 @@ const JsonWebToken = (props: Props) => {
     { value: "decode", text: "decode" },
   ];
 
+  const algorithms = [
+    { name: "HS256", value: "HS256" },
+    { name: "HS384", value: "HS384" },
+    { name: "HS512", value: "HS512" },
+  ];
+
   const [selected, setSelected] = useState(options[0].value);
+  const [algorithm, setAlgorithm] = useState(algorithms[0].value);
   const [encode, setEncode] = useState({});
+  const [secretKey, setSecretKey] = useState("");
   const [messageError, setMessageError] = useState("");
-  const [isError, setIsError] = useState(false);
 
   const handleSelectOption = ($event: any) => {
     setSelected($event.target.value);
   };
 
+  const handleSelectOptionAlgor = ($event: any) => {
+      setAlgorithm($event.target.value);
+  }
+
   const handleEncodeArea = (event$: any) => {
-    const encode = event$.target.value;
-    try { 
+    const encode: any = event$.target.value;
+    try {
       let setting = JSON.parse(encode);
       setEncode(setting);
-    } catch (error) { 
-
+      dispatch(jwtToken({ jwt: "", isError: false, messageError: "" }));
+    } catch (error) {
+      dispatch(
+        jwtToken({ jwt: "", isError: true, messageError: String(error) })
+      );
     }
   };
 
-  const onEncoded = () => {
-    encodeJWT();
+  const handleSecretArea = (event$: any) => {
+    const secret: any = event$.target.value;
+    setSecretKey(secret);
   };
 
-  const handleResult = () => {
-    if (isError) {
-      dispatch(
-        jwtToken({ jwt: "", isError: true, messageError: messageError })
-      );
+  const onChangeResultText = (event$: any) => {};
+
+  const onEncoded = () => {
+    if (jwtTokenReducer.isError) {
+      dispatch(jwtToken({ jwt: "", isError: true, messageError: "" }));
     } else {
       encodeJWT();
     }
@@ -57,46 +74,57 @@ const JsonWebToken = (props: Props) => {
   };
 
   const encodeJWT = () => {
+    // const header = {
+    //   alg: "HS256",
+    //   typ: "JWT",
+    // };
+
     const header = {
-      alg: "HS256",
-      typ: "JWT",
-    };
+      alg: algorithm,
+      typ: "JWT"
+    }
 
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodeHeader = base64Url(stringifiedHeader);
 
-    const testData = {
-      "username": "TW000681",
-      "timestamp": "",
-      "locationCode": "50185",
-      "email": "",
-      "firstname": "",
-      "lastname": "",
-      "sharedUser": "TW000681",
-      "userType": "ASP",
-      "role": "ASC TW",
-      "channelType": "sff-web",
-      "ascCode": "000679",
-      "mobileNo": "",
-      "sub": "",
-      "outChnSales": "Telewiz",
-      "outBusinessName": "",
-      "outPosition": "Owner",
-      "ou": "PARTNER",
-      "iat": 1672813236,
-      "exp": 1672816836
-    };
+    // const testData = {
+    //   "username": "TW000681",
+    //   "timestamp": "",
+    //   "locationCode": "50185",
+    //   "email": "",
+    //   "firstname": "",
+    //   "lastname": "",
+    //   "sharedUser": "TW000681",
+    //   "userType": "ASP",
+    //   "role": "ASC TW",
+    //   "channelType": "sff-web",
+    //   "ascCode": "000679",
+    //   "mobileNo": "",
+    //   "sub": "",
+    //   "outChnSales": "Telewiz",
+    //   "outBusinessName": "",
+    //   "outPosition": "Owner",
+    //   "ou": "PARTNER",
+    //   "iat": 1672813236,
+    //   "exp": 1672816836,
+    // };
 
-    // const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(jsonArea));
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(encode));
     const encodedData = base64Url(stringifiedData);
     const token = encodeHeader + "." + encodedData;
-    const secretKey = "sniper";
-    const signature = CryptoJS.HmacSHA256(token, secretKey);
-    const base64Signature = base64Url(signature);
-    const test = token + "." + base64Signature;
+    let signature 
 
-    console.log("test -->", test);
+    if (algorithm === 'HS256') {
+      signature = CryptoJS.HmacSHA256(token, secretKey);
+    } else if (algorithm === 'HS384') { 
+      signature = CryptoJS.HmacSHA384(token, secretKey);
+    } else if (algorithm === 'HS512') { 
+      signature = CryptoJS.HmacSHA512(token, secretKey);
+    }
+
+    const base64Signature = base64Url(signature);
+    const jwt = token + "." + base64Signature;
+    dispatch(jwtToken({ jwt: jwt, isError: false, messageError: "" }));
   };
 
   return (
@@ -146,8 +174,39 @@ const JsonWebToken = (props: Props) => {
                         </span>
                       </div>
 
+                      <div className="flex md:order-1">
+                        {jwtTokenReducer.isError ? (
+                          <>
+                            <img src={ErrorImage} className="h-8 w-8" />
+                            <span className="ml-3 font-bold text-red-600">
+                              Invalid Signature !
+                            </span>
+                          </>
+                        ) : null}
+                      </div>
+
+                      <div className="flex md:order-1"></div>
+
                       <div className="flex md:order-2">
                         <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
+                          <li>
+                            <label
+                              htmlFor="large-input"
+                              className="block mb-2 text-sm font-medium text-gray-900"
+                            >
+                              Algorithm
+                            </label>
+                            <select
+                              className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg  sm:text-md focus:ring-blue-500 focus:border-blue-500  dark:border-gray-300 dark:placeholder-gray-400 "
+                              onChange={handleSelectOptionAlgor}
+                            >
+                              {algorithms.map((algor) => (
+                                <option key={algor.value} value={algor.value}>
+                                  {algor.name}
+                                </option>
+                              ))}
+                            </select>
+                          </li>
                           <li>
                             <label
                               htmlFor="large-input"
@@ -159,12 +218,14 @@ const JsonWebToken = (props: Props) => {
                               type="text"
                               id="large-input"
                               className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg  sm:text-md focus:ring-blue-500 focus:border-blue-500  dark:border-gray-300 dark:placeholder-gray-400 "
+                              onChange={handleSecretArea}
                             />
                           </li>
                         </ul>
                       </div>
                     </div>
                   </nav>
+
                   <textarea
                     id="message"
                     rows={4}
@@ -287,6 +348,8 @@ const JsonWebToken = (props: Props) => {
                           border-dashed border-2 border-gray-300
                           h-96"
                         placeholder="Paste your token here ..."
+                        value={jwtTokenReducer.jwt}
+                        onChange={onChangeResultText}
                       ></textarea>
                     </div>
                   </div>
