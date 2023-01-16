@@ -6,6 +6,7 @@ import JWTEncodeDecode from "../JsonWebToken/JsonWebToken";
 import JSONImage from "../../assets/images/json.png";
 import Base64Image from "../../assets/images/base-64.png";
 import JwtImage from "../../assets/images/jwt.png";
+import IdCardImage from "../../assets/images/id-card.png";
 
 import "./Home.css";
 import { Link } from "react-router-dom";
@@ -32,6 +33,12 @@ const Home = (props: Props) => {
       image: JwtImage,
       link: '/jwt'
     },
+    {
+      name: "ID CARD GENERATOR",
+      disabled: false,
+      image: IdCardImage,
+      link: '/id-card'
+    }
   ];
 
   const [active, setActive] = useState("JSON PRETTY");
