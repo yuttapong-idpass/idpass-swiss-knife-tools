@@ -4,8 +4,8 @@ import counterReducer from './slice/counterSlice';
 import jsonPrettyReducer from './slice/JsonPrettySlice';
 import base64Reducer from './slice/Base64Slice';
 import descriptionReducer from './slice/Base64Slice';
-import jwtTokenReducer from './slice/jwtTokenSlice';
-
+import decodeReducer from './slice/jwtTokenSlice'
+import encodeReducer from './slice/jwtTokenSlice'
 
 
 const reducer = {
@@ -13,7 +13,8 @@ const reducer = {
     jsonPrettyReducer,
     base64Reducer,
     descriptionReducer,
-    jwtTokenReducer
+    encodeReducer,
+    decodeReducer
 }   
 
 

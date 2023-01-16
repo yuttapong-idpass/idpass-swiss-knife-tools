@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
 import { useSelector } from "react-redux";
-import { jwtToken, jwtTokenSelector } from "../../store/slice/jwtTokenSlice";
+import { encodeToken, encodeSelector } from "../../store/slice/jwtTokenSlice";
+import { decodeToken, decodeSelector } from "../../store/slice/jwtTokenSlice";
 import { useAppDispatch } from "../../store/store";
 
 import ErrorImage from "../../assets/images/cross.png";
@@ -9,7 +10,8 @@ import ErrorImage from "../../assets/images/cross.png";
 type Props = {};
 
 const JsonWebToken = (props: Props) => {
-  const jwtTokenReducer = useSelector(jwtTokenSelector);
+  const encodeReducer = useSelector(encodeSelector);
+  const decodeReducer = useSelector(decodeSelector);
   const dispatch = useAppDispatch();
 
   const options = [
@@ -26,27 +28,65 @@ const JsonWebToken = (props: Props) => {
   const [selected, setSelected] = useState(options[0].value);
   const [algorithm, setAlgorithm] = useState(algorithms[0].value);
   const [encode, setEncode] = useState({});
+  const [decode, setDecode] = useState("");
   const [secretKey, setSecretKey] = useState("");
-  const [messageError, setMessageError] = useState("");
 
   const handleSelectOption = ($event: any) => {
     setSelected($event.target.value);
+    dispatch(encodeToken({ result: "", isError: false, messageError: "" }));
+    dispatch(
+      decodeToken({
+        result: { algorithm: "", decodeText: "" },
+        isError: false,
+        messageError: "",
+      })
+    );
   };
 
   const handleSelectOptionAlgor = ($event: any) => {
-      setAlgorithm($event.target.value);
-  }
+    setAlgorithm($event.target.value);
+  };
 
   const handleEncodeArea = (event$: any) => {
     const encode: any = event$.target.value;
-    try {
-      let setting = JSON.parse(encode);
-      setEncode(setting);
-      dispatch(jwtToken({ jwt: "", isError: false, messageError: "" }));
-    } catch (error) {
+
+    if (!!encode) {
+      try {
+        let setting = JSON.parse(encode);
+        setEncode(setting);
+        dispatch(
+          encodeToken({
+            result: "",
+            isError: false,
+            messageError: "",
+          })
+        );
+      } catch (error) {
+        dispatch(
+          encodeToken({
+            result: "",
+            isError: true,
+            messageError: String(error),
+          })
+        );
+      }
+    } else {
       dispatch(
-        jwtToken({ jwt: "", isError: true, messageError: String(error) })
+        encodeToken({
+          result: "",
+          isError: false,
+          messageError: "",
+        })
       );
+    }
+  };
+
+  const handleDecodeArea = (event$: any) => {
+    const decoded: any = event$.target.value;
+    try {
+      setDecode(decoded);
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -58,11 +98,13 @@ const JsonWebToken = (props: Props) => {
   const onChangeResultText = (event$: any) => {};
 
   const onEncoded = () => {
-    if (jwtTokenReducer.isError) {
-      dispatch(jwtToken({ jwt: "", isError: true, messageError: "" }));
-    } else {
+    if (!encodeReducer.encoded.isError) {
       encodeJWT();
     }
+  };
+
+  const onDecode = () => {
+    decodeJWT();
   };
 
   const base64Url = (source: any) => {
@@ -81,50 +123,76 @@ const JsonWebToken = (props: Props) => {
 
     const header = {
       alg: algorithm,
-      typ: "JWT"
-    }
+      typ: "JWT",
+    };
 
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodeHeader = base64Url(stringifiedHeader);
 
-    // const testData = {
-    //   "username": "TW000681",
-    //   "timestamp": "",
-    //   "locationCode": "50185",
-    //   "email": "",
-    //   "firstname": "",
-    //   "lastname": "",
-    //   "sharedUser": "TW000681",
-    //   "userType": "ASP",
-    //   "role": "ASC TW",
-    //   "channelType": "sff-web",
-    //   "ascCode": "000679",
-    //   "mobileNo": "",
-    //   "sub": "",
-    //   "outChnSales": "Telewiz",
-    //   "outBusinessName": "",
-    //   "outPosition": "Owner",
-    //   "ou": "PARTNER",
-    //   "iat": 1672813236,
-    //   "exp": 1672816836,
-    // };
+    //  {
+    //     "username": "TW000681",
+    //     "timestamp": "",
+    //     "locationCode": "50185",
+    //     "email": "",
+    //     "firstname": "",
+    //     "lastname": "",
+    //     "sharedUser": "TW000681",
+    //     "userType": "ASP",
+    //     "role": "ASC TW",
+    //     "channelType": "sff-web",
+    //     "ascCode": "000679",
+    //     "mobileNo": "",
+    //     "sub": "",
+    //     "outChnSales": "Telewiz",
+    //     "outBusinessName": "",
+    //     "outPosition": "Owner",
+    //     "ou": "PARTNER",
+    //     "iat": 1672813236,
+    //     "exp": 1672816836
+    //   }
 
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(encode));
     const encodedData = base64Url(stringifiedData);
     const token = encodeHeader + "." + encodedData;
-    let signature 
+    let signature;
 
-    if (algorithm === 'HS256') {
+    if (algorithm === "HS256") {
       signature = CryptoJS.HmacSHA256(token, secretKey);
-    } else if (algorithm === 'HS384') { 
+    } else if (algorithm === "HS384") {
       signature = CryptoJS.HmacSHA384(token, secretKey);
-    } else if (algorithm === 'HS512') { 
+    } else if (algorithm === "HS512") {
       signature = CryptoJS.HmacSHA512(token, secretKey);
     }
 
     const base64Signature = base64Url(signature);
     const jwt = token + "." + base64Signature;
-    dispatch(jwtToken({ jwt: jwt, isError: false, messageError: "" }));
+    dispatch(encodeToken({ result: jwt, isError: false, messageError: "" }));
+  };
+
+  const decodeJWT = () => {
+    let algorithm = decode.split(".")[0];
+    let base64Payload = decode.split(".")[1];
+    try {
+      const wordsAlgorithm = CryptoJS.enc.Base64.parse(algorithm);
+      const wordsBase643 = CryptoJS.enc.Base64.parse(base64Payload);
+      const textAlgorithm = CryptoJS.enc.Utf8.stringify(wordsAlgorithm);
+      const textBase64 = CryptoJS.enc.Utf8.stringify(wordsBase643);
+      dispatch(
+        decodeToken({
+          result: { algorithm: textAlgorithm, decodeText: textBase64 },
+          isError: false,
+          messageError: "",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        decodeToken({
+          result: { algorithm: "", decodeText: "" },
+          isError: true,
+          messageError: String(error),
+        })
+      );
+    }
   };
 
   return (
@@ -175,7 +243,7 @@ const JsonWebToken = (props: Props) => {
                       </div>
 
                       <div className="flex md:order-1">
-                        {jwtTokenReducer.isError ? (
+                        {encodeReducer.encoded.isError ? (
                           <>
                             <img src={ErrorImage} className="h-8 w-8" />
                             <span className="ml-3 font-bold text-red-600">
@@ -348,7 +416,7 @@ const JsonWebToken = (props: Props) => {
                           border-dashed border-2 border-gray-300
                           h-96"
                         placeholder="Paste your token here ..."
-                        value={jwtTokenReducer.jwt}
+                        value={encodeReducer.encoded.result}
                         onChange={onChangeResultText}
                       ></textarea>
                     </div>
@@ -357,7 +425,181 @@ const JsonWebToken = (props: Props) => {
               </div>
             </div>
           ) : (
-            <div>Decode mode</div>
+            <div>
+              <div>
+                <div className="p-2">
+                  <div>
+                    <nav className="p-3">
+                      <div className="container flex flex-wrap items-center justify-between mx-auto">
+                        <div className="flex items-center">
+                          <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
+                            DECODED
+                          </span>
+                        </div>
+
+                        <div className="flex md:order-1">
+                          {encodeReducer.decoded.isError ? (
+                            <>
+                              <img src={ErrorImage} className="h-8 w-8" />
+                              <span className="ml-3 font-bold text-red-600">
+                                Error !
+                              </span>
+                            </>
+                          ) : null}
+                        </div>
+
+                        <div className="flex md:order-1"></div>
+
+                        <div className="flex md:order-2">
+                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent "></ul>
+                        </div>
+                      </div>
+                    </nav>
+
+                    <textarea
+                      id="message"
+                      rows={4}
+                      className="
+                      block 
+                      p-4
+                      w-full 
+                      text-sm 
+                      text-gray-900 
+                      bg-gray-50 
+                      rounded-lg 
+                      border 
+                      border-gray-300 
+                      border-dashed border-2 border-gray-300
+                      h-96"
+                      placeholder="Paste your token here ..."
+                      onChange={handleDecodeArea}
+                    ></textarea>
+                  </div>
+
+                  <div>
+                    <div className="grid place-items-center h-full mt-5">
+                      <button
+                        className="
+                        text-white 
+                        bg-neutral-400 
+                        bg-blue-500 
+                        hover:bg-[#FF9119]/80 
+                        focus:ring-4 
+                        focus:outline-none 
+                        focus:ring-[#FF9119]/50 
+                        font-medium 
+                        rounded-lg 
+                        text-sm 
+                        px-5 
+                        py-2.5 
+                        text-center 
+                        inline-flex 
+                        items-center 
+                        dark:hover:bg-[#FF9119]/80 
+                        dark:focus:ring-[#FF9119]/40 
+                        mr-1 
+                        mb-1"
+                        onClick={onDecode}
+                      >
+                        DECODED
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <nav className="p-3">
+                      <div className="container flex flex-wrap items-center justify-between mx-auto">
+                        <div className="flex items-center">
+                          <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
+                            RESULT
+                          </span>
+                        </div>
+
+                        <div className="flex md:order-2">
+                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
+                            <li></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </nav>
+
+                    <div>
+                      <div
+                        className="
+                          block 
+                          p-4
+                          w-full 
+                          text-sm 
+                          text-gray-900 
+                          bg-gray-50 
+                          rounded-lg 
+                          border 
+                          border-gray-300 
+                          border-dashed border-2 border-gray-300
+                        "
+                      >
+                        <div>
+                          <div>
+                            <span className="text-m  font-bold">
+                              HEADER: ALGORITHM & TOKEN TYPE
+                            </span>
+                          </div>
+                          <hr />
+                          <div className="mt-5">
+                            <span>
+                              {!!decodeReducer.decoded.result?.algorithm ? (
+                                <span className="text-fuchsia-500">
+                                  {JSON.stringify(
+                                    JSON.parse(
+                                      decodeReducer.decoded.result?.algorithm
+                                    ),
+                                    undefined,
+                                    2
+                                  )}
+                                </span>
+                              ) : (
+                                <span className="text-bold text-xl">-</span>
+                              )}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="mt-5">
+                          <div>
+                            <span className="text-m font-bold">
+                              PAYLOAD:DATA
+                            </span>
+                          </div>
+                          <hr />
+                          <div className="mt-5">
+                            <div>
+                              <pre>
+                                {/* {JSON.stringify(JSON.parse(decodeReducer.decoded.result?.decodeText), undefined, 2)} */}
+                                {/* {decodeReducer.decoded.result?.decodeText} */}
+
+                                {!!decodeReducer.decoded.result?.decodeText ? (
+                                  <span className="text-purple-600">
+                                    {JSON.stringify(
+                                      JSON.parse(
+                                        decodeReducer.decoded.result?.decodeText
+                                      ),
+                                      undefined,
+                                      2
+                                    )}
+                                  </span>
+                                ) : (
+                                  <span className="text-bold text-xl">-</span>
+                                )}
+                              </pre>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>

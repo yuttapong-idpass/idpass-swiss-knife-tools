@@ -1,34 +1,95 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice, combineReducers } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-type jwtTokenState = {
-    jwt: string;
-    isError: boolean;
-    messageError: any;
+// type jwtTokenState = {
+//     encode: string;
+//     decode: string;
+//     isError: boolean;
+//     messageError: any;
+// }
+
+// interface IJwtToken {
+//     encode: string;
+//     decode: string;
+//     isError: boolean;
+//     messageError: string;
+// }
+
+
+type EncodeState = {
+    result: string | undefined;
+    isError?: boolean;
+    messageError?: any;
 }
 
-interface IJwtToken {
-    jwt: string;
-    isError: boolean;
-    messageError: string;
+
+type DecodeState = {
+    result: {
+        algorithm: any,
+        decodeText: any
+    } | undefined;
+    isError?: boolean;
+    messageError?: any;
 }
 
-const initialValues: jwtTokenState = {
-    jwt: '',
+
+export interface IEncode { 
+    result: string | undefined;
+    isError?: boolean;
+    messageError?: any;
+}
+
+export interface IDecode { 
+    result: {
+        algorithm: any,
+        decodeText: any
+    } | undefined;
+    isError?: boolean;
+    messageError?: any;
+}
+
+
+
+const initialValueEncode: EncodeState = {
+    result: '',
     isError: false,
     messageError: ''
 }
 
-const jwtTokenSlice = createSlice({
-    name: 'jwtToken',
-    initialState: initialValues,
+const initialValueDecode: DecodeState = {
+    result: {
+        algorithm: {},
+        decodeText: {}
+    },
+    isError: false,
+    messageError: ''
+}
+
+const encodeSlice = createSlice({
+    name: 'encodedToken',
+    initialState: initialValueEncode,
     reducers: {
-        jwtToken: (state: jwtTokenState,action: PayloadAction<IJwtToken>) => { 
+        encodeToken: (state: EncodeState, action: PayloadAction<IEncode>) => { 
             return action.payload
         }
     }
 });
 
-export const { jwtToken } = jwtTokenSlice.actions;
-export const jwtTokenSelector = ( store: RootState ) => store.jwtTokenReducer;
-export default jwtTokenSlice.reducer;
+const decodeSlice = createSlice({
+    name: 'decodedToken',
+    initialState: initialValueDecode,
+    reducers: {
+        decodeToken: (state: DecodeState, action: PayloadAction<IDecode>) => { 
+            return action.payload
+        }
+    }
+})
+
+export const { encodeToken } = encodeSlice.actions;
+export const { decodeToken } = decodeSlice.actions;
+export const encodeSelector = ( store: RootState ) => store.encodeReducer;
+export const decodeSelector = ( store: RootState ) => store.decodeReducer;
+export default combineReducers({
+    encoded: encodeSlice.reducer,
+    decoded: decodeSlice.reducer
+});
