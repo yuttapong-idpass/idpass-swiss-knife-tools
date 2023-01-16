@@ -49,7 +49,7 @@ const JsonPretty = (props: Props) => {
   };
 
   return (
-    <div className="container p-4">
+    <div className="p-4">
       <div className="max-w-7xl mx-auto grid grid-cols-12">
         <div className="col-span-5 h-screen">
           <JsonEditorInput
