@@ -18,9 +18,6 @@ function App() {
 
   return (
     <div>
-      {/* <JsonEditor options={{}} json={{}}/>
-      <JsonEditor options={{}} json={{}}/> */}
-
       <BrowserRouter>
         <Menu />
         <Routes>

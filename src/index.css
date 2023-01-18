@@ -7,6 +7,14 @@ body {
   font-family: 'Kanit', sans-serif;
 }
 
+@font-face {
+  font-family: "Kanit";
+  src: local("Kanit"),
+   url("./assets/fonts/Kanit-Medium.ttf") format("truetype");
+  font-weight: bold;
+  }
+
+
 .myModal {
   position: fixed;
   top: 0;
