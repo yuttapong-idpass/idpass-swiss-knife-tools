@@ -57,7 +57,23 @@ const FromBase64 = (props: Props) => {
 
   const onInputBase64 = (event$: any) => {
     const images = new Image();
-    const imageData = "data:image/png;base64," + event$;
+    let base64String: any;
+    let imageData: any;
+
+    let mimeType = event$.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/);
+
+    if (mimeType) {
+      if (mimeType[0] === "image/svg+xml") {
+        imageData = event$;
+      } else {
+        base64String = event$.replace("data:", "").replace(/^.+,/, "");
+        imageData = "data:image/png;base64," + base64String;
+      }
+    } else {
+      base64String = event$.replace("data:", "").replace(/^.+,/, "");
+      imageData = "data:image/png;base64," + base64String;
+    }
+
     images.src = imageData;
     images.onload = () => {
       const height = images.height;
@@ -69,9 +85,9 @@ const FromBase64 = (props: Props) => {
         height: height,
         width: width,
       });
-
-      dispatch(base64({ base64: imageData, errorImage: false }));
     };
+
+    dispatch(base64({ base64: imageData, errorImage: false }));
     images.onerror = (error) => {};
   };
 
