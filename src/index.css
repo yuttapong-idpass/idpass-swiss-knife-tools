@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 
+body {
+  font-family: 'Kanit', sans-serif;
+}
+
 .myModal {
   position: fixed;
   top: 0;

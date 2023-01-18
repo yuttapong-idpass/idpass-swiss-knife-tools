@@ -124,23 +124,40 @@ const IdCardGenerator = (props: Props) => {
     },
   ];
 
-  const [cardTypes, setCardTypes] = useState(cardType[0].value);
   const [showAlien, setShowAlien] = useState(false);
-  const [alienCardTypes, setAlienCardTypes] = useState([]);
-  const [sectorNumber, setSectorNumber] = useState([]);
+  const [sectorNumber, setSectorNumber] = useState(sectorNumbers[0].type);
+
+  const [getAlienType, setAlienType] = useState("00");
+  const [getSectorValue, setSectorNumberValue] = useState("00");
+  const [result, setResult] = useState('0000000000000')
 
   const handleCardType = (event$: any) => {
     const type = event$.target.value;
     if (type === "00") {
       setShowAlien(true);
-    } else { 
+    } else {
       setShowAlien(false);
     }
   };
 
   const handleAlienCardType = (event$: any) => {
-    
+    const alien = event$.target.value;
+    const filterValue: any = sectorNumbers.find((values) => {
+      return values.name === alien;
+    });
+
+    setAlienType(alien);
+    setSectorNumber(filterValue.type);
   };
+
+  const handleSectorNumber = (event$: any) => {
+    const sector = event$.target.value;
+    setSectorNumberValue(sector);
+  };
+
+  const onRandomIdCard = () => { 
+    !showAlien ? randomThaiIdCard() : randomAlienIdCard();
+  }
 
   const randomThaiIdCard = () => {
     const digit1 = Math.floor(Math.random() * 9) + 1;
@@ -179,10 +196,61 @@ const IdCardGenerator = (props: Props) => {
     }
 
     const cid = `${digit1}${digit2}${digit3}${digit4}${digit5}${digit6}${digit7}${digit8}${digit9}${digit10}${digit11}${digit12}${digit13}`;
-    console.log("cid", cid);
+    setResult(cid);
   };
 
-  const verifyIdCard = (id: string) => {
+  const randomAlienIdCard = () => {
+    // const digit1 = Math.floor(Math.random() * 9) + 1;
+    // const digit2 = Math.floor(Math.random() * 10);
+
+    const digit1 = Number(getAlienType.charAt(0));
+    const digit2 = Number(getAlienType.charAt(1));
+    const digit3 = Math.floor(Math.random() * 10);
+    const digit4 = Math.floor(Math.random() * 10);
+    const digit5 = Math.floor(Math.random() * 10);
+
+    // const digit6 = Math.floor(Math.random() * 10);
+    // const digit7 = Math.floor(Math.random() * 10);
+
+    const digit6 = Number(getSectorValue.charAt(0));
+    const digit7 = Number(getSectorValue.charAt(1));
+
+    const digit8 = Math.floor(Math.random() * 10);
+    const digit9 = Math.floor(Math.random() * 10);
+    const digit10 = Math.floor(Math.random() * 10);
+    const digit11 = Math.floor(Math.random() * 10);
+    const digit12 = Math.floor(Math.random() * 10);
+    let digit13;
+    let number13 =
+      11 -
+      ((digit1 * 13 +
+        digit2 * 12 +
+        digit3 * 11 +
+        digit4 * 10 +
+        digit5 * 9 +
+        digit6 * 8 +
+        digit7 * 7 +
+        digit8 * 6 +
+        digit9 * 5 +
+        digit10 * 4 +
+        digit11 * 3 +
+        digit12 * 2) %
+        11);
+
+    if (number13 >= 10) {
+      digit13 = number13 - 10;
+    } else {
+      digit13 = number13;
+    }
+
+    const cid = `${digit1}${digit2}${digit3}${digit4}${digit5}${digit6}${digit7}${digit8}${digit9}${digit10}${digit11}${digit12}${digit13}`;
+    setResult(cid);
+  };
+
+
+
+  const verifyIdCard = () => {
+    const id: any = result;
     if (id === null || id.length !== 13 || !/^[0-9]\d+$/.test(id)) {
       return false;
     }
@@ -229,7 +297,12 @@ const IdCardGenerator = (props: Props) => {
                           <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
                             <li>
                               <h1 className="font-bold">
-                                ประเภท :{" "}
+                                <label
+                                  htmlFor="large-input"
+                                  className="block mb-2 text-sm  text-gray-900"
+                                >
+                                  ประเภท :
+                                </label>
                                 <select
                                   className="inline-block 
                                               text-sm 
@@ -256,27 +329,68 @@ const IdCardGenerator = (props: Props) => {
                                 </select>
                               </h1>
                             </li>
-                            {cardTypes === "00" ? (
+
+                            {showAlien ? (
                               <>
                                 <li>
                                   <h1 className="font-bold">
-                                    กลุ่ม :{" "}
+                                    <label
+                                      htmlFor="large-input"
+                                      className="block mb-2 text-sm  text-gray-900"
+                                    >
+                                      กลุ่มบุคคล :
+                                    </label>
                                     <select
                                       className="inline-block 
-                                      text-sm 
-                                      px-3 
-                                      py-2 
-                                      leading-none 
-                                      border 
-                                      rounded 
-                                      text-black 
-                                      border-gray-800
-                                      hover:bg-white 
-                                      mt-4 
-                                      lg:mt-0"
+                                               text-sm 
+                                               px-3 
+                                               py-2 
+                                               leading-none 
+                                               border 
+                                               rounded 
+                                               text-black 
+                                               border-gray-800
+                                               hover:bg-white 
+                                               mt-4 
+                                               lg:mt-0"
                                       onChange={handleAlienCardType}
                                     >
-                                      {alienCardType.map((option, index) => (
+                                      {alienCardType.map((option) => (
+                                        <option
+                                          key={option.name}
+                                          value={option.value}
+                                        >
+                                          {option.name}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </h1>
+                                </li>
+
+                                <li>
+                                  <h1 className="font-bold">
+                                    <label
+                                      htmlFor="large-input"
+                                      className="block mb-2 text-sm  text-gray-900"
+                                    >
+                                      เลขประจำหลักที่ 6-7 :
+                                    </label>
+                                    <select
+                                      className="inline-block 
+                                                  text-sm 
+                                                  px-3 
+                                                  py-2 
+                                                  leading-none 
+                                                  border 
+                                                  rounded 
+                                                  text-black 
+                                                  border-gray-800
+                                                  hover:bg-white 
+                                                  mt-4 
+                                                  lg:mt-0"
+                                      onChange={handleSectorNumber}
+                                    >
+                                      {sectorNumber.map((option) => (
                                         <option
                                           key={option.name}
                                           value={option.value}
@@ -289,44 +403,32 @@ const IdCardGenerator = (props: Props) => {
                                 </li>
                               </>
                             ) : null}
-
-                            {showAlien ? (
-                              <li>
-                                <h1 className="font-bold">
-                                  กลุ่มบุคคล :{" "}
-                                  <select
-                                    className="inline-block 
-                                               text-sm 
-                                               px-3 
-                                               py-2 
-                                               leading-none 
-                                               border 
-                                               rounded 
-                                               text-black 
-                                               border-gray-800
-                                               hover:bg-white 
-                                               mt-4 
-                                               lg:mt-0"
-                                    onChange={handleAlienCardType}
-                                  >
-                                    {alienCardType.map((option) => (
-                                      <option
-                                        key={option.name}
-                                        value={option.value}
-                                      >
-                                        {option.name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </h1>
-                              </li>
-                            ) : null}
                           </ul>
                         </div>
                       </div>
                     </nav>
                   </div>
                 </div>
+              </div>
+
+              <div
+                id="message"
+                className="
+                      mt-5
+                      block 
+                      p-4
+                      w-full 
+                      text-sm 
+                      text-gray-900 
+                      bg-gray-50 
+                      rounded-lg 
+                      border 
+                      border-gray-300 
+                      border-dashed border-2 border-gray-300
+                      grid place-items-center h-full mt-5
+                      "
+              >
+                <h1 className="text-xl font-bold text-gray-900"> หมายเลขบัตรประชาชน : {result} </h1>
               </div>
 
               <div>
@@ -352,8 +454,34 @@ const IdCardGenerator = (props: Props) => {
                         dark:focus:ring-[#FF9119]/40 
                         mr-1 
                         mb-1"
+                        onClick={randomAlienIdCard}
                   >
-                    ENCODED
+                    ตรวจสอบ
+                  </button>
+                  <button
+                    className="
+                        text-white 
+                        bg-neutral-400 
+                        bg-blue-500 
+                        hover:bg-[#FF9119]/80 
+                        focus:ring-4 
+                        focus:outline-none 
+                        focus:ring-[#FF9119]/50 
+                        font-medium 
+                        rounded-lg 
+                        text-sm 
+                        px-5 
+                        py-2.5 
+                        text-center 
+                        inline-flex 
+                        items-center 
+                        dark:hover:bg-[#FF9119]/80 
+                        dark:focus:ring-[#FF9119]/40 
+                        mr-1 
+                        mb-1"
+                        onClick={onRandomIdCard}
+                  >
+                    สุ่ม
                   </button>
                 </div>
               </div>
