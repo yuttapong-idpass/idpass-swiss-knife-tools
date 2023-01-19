@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import SuccessImage from "../../assets/images/check.png";
+import FailImage from "../../assets/images/cross.png";
+import "./IdCardGenerator.css";
 
 type Props = {};
 
@@ -32,7 +35,7 @@ const IdCardGenerator = (props: Props) => {
           value: "00",
         },
         {
-          name: "89 -คนที่ไม่มีสถานะทางทะเบียนได้รับการเพิ่มชื่อในทะเบียนประวัติโดย การสำรวจตามยุทธศาสตร์",
+          name: "89 - คนที่ไม่มีสถานะทางทะเบียนได้รับการเพิ่มชื่อในทะเบียนประวัติโดย การสำรวจตามยุทธศาสตร์",
           value: "89",
         },
       ],
@@ -129,7 +132,8 @@ const IdCardGenerator = (props: Props) => {
 
   const [getAlienType, setAlienType] = useState("00");
   const [getSectorValue, setSectorNumberValue] = useState("00");
-  const [result, setResult] = useState('0000000000000')
+  const [result, setResult] = useState("0000000000000");
+  const [verify, setVerify] = useState("");
 
   const handleCardType = (event$: any) => {
     const type = event$.target.value;
@@ -155,18 +159,30 @@ const IdCardGenerator = (props: Props) => {
     setSectorNumberValue(sector);
   };
 
-  const onRandomIdCard = () => { 
-    !showAlien ? randomThaiIdCard() : randomAlienIdCard();
-  }
+  const ransomIdCard = () => {
+    let digit1 = 0;
+    let digit2 = 0;
 
-  const randomThaiIdCard = () => {
-    const digit1 = Math.floor(Math.random() * 9) + 1;
-    const digit2 = Math.floor(Math.random() * 10);
+    let digit6 = 0;
+    let digit7 = 0;
+
+    if (!showAlien) {
+      digit1 = Math.floor(Math.random() * 9) + 1;
+      digit2 = Math.floor(Math.random() * 10);
+
+      digit6 = Math.floor(Math.random() * 10);
+      digit7 = Math.floor(Math.random() * 10);
+    } else {
+      digit1 = Number(getAlienType.charAt(0));
+      digit2 = Number(getAlienType.charAt(1));
+
+      digit6 = Number(getSectorValue.charAt(0));
+      digit7 = Number(getSectorValue.charAt(1));
+    }
+
     const digit3 = Math.floor(Math.random() * 10);
     const digit4 = Math.floor(Math.random() * 10);
     const digit5 = Math.floor(Math.random() * 10);
-    const digit6 = Math.floor(Math.random() * 10);
-    const digit7 = Math.floor(Math.random() * 10);
     const digit8 = Math.floor(Math.random() * 10);
     const digit9 = Math.floor(Math.random() * 10);
     const digit10 = Math.floor(Math.random() * 10);
@@ -198,56 +214,6 @@ const IdCardGenerator = (props: Props) => {
     const cid = `${digit1}${digit2}${digit3}${digit4}${digit5}${digit6}${digit7}${digit8}${digit9}${digit10}${digit11}${digit12}${digit13}`;
     setResult(cid);
   };
-
-  const randomAlienIdCard = () => {
-    // const digit1 = Math.floor(Math.random() * 9) + 1;
-    // const digit2 = Math.floor(Math.random() * 10);
-
-    const digit1 = Number(getAlienType.charAt(0));
-    const digit2 = Number(getAlienType.charAt(1));
-    const digit3 = Math.floor(Math.random() * 10);
-    const digit4 = Math.floor(Math.random() * 10);
-    const digit5 = Math.floor(Math.random() * 10);
-
-    // const digit6 = Math.floor(Math.random() * 10);
-    // const digit7 = Math.floor(Math.random() * 10);
-
-    const digit6 = Number(getSectorValue.charAt(0));
-    const digit7 = Number(getSectorValue.charAt(1));
-
-    const digit8 = Math.floor(Math.random() * 10);
-    const digit9 = Math.floor(Math.random() * 10);
-    const digit10 = Math.floor(Math.random() * 10);
-    const digit11 = Math.floor(Math.random() * 10);
-    const digit12 = Math.floor(Math.random() * 10);
-    let digit13;
-    let number13 =
-      11 -
-      ((digit1 * 13 +
-        digit2 * 12 +
-        digit3 * 11 +
-        digit4 * 10 +
-        digit5 * 9 +
-        digit6 * 8 +
-        digit7 * 7 +
-        digit8 * 6 +
-        digit9 * 5 +
-        digit10 * 4 +
-        digit11 * 3 +
-        digit12 * 2) %
-        11);
-
-    if (number13 >= 10) {
-      digit13 = number13 - 10;
-    } else {
-      digit13 = number13;
-    }
-
-    const cid = `${digit1}${digit2}${digit3}${digit4}${digit5}${digit6}${digit7}${digit8}${digit9}${digit10}${digit11}${digit12}${digit13}`;
-    setResult(cid);
-  };
-
-
 
   const verifyIdCard = () => {
     const id: any = result;
@@ -266,6 +232,19 @@ const IdCardGenerator = (props: Props) => {
       return true;
     }
     return false;
+  };
+
+  const onRandomIdCard = () => {
+    ransomIdCard();
+    setVerify("");
+  };
+
+  const onVerifyIdCard = () => {
+    if (verifyIdCard()) {
+      setVerify("success");
+    } else { 
+      setVerify("fail");
+    }
   };
 
   return (
@@ -428,13 +407,67 @@ const IdCardGenerator = (props: Props) => {
                       grid place-items-center h-full mt-5
                       "
               >
-                <h1 className="text-xl font-bold text-gray-900"> หมายเลขบัตรประชาชน : {result} </h1>
+                <h1 className="text-xl font-bold text-gray-900">
+                  หมายเลขบัตรประชาชน : {result}{" "}
+                </h1>
+                {(!!verify && verify === 'success') ? (
+                  <span className="text-green-500">
+                    {" "}
+                    <img
+                      src={SuccessImage}
+                      className="h-5 w-5 image-verify"
+                    />{" "}
+                    เลขบัตรประชาชนถูกต้อง{" "}
+                  </span>
+                ) : (
+                  <>
+                    {!!verify && verify === 'fail' ? (
+                      <>
+                        <span className="text-red-500">
+                          {" "}
+                          <img
+                            src={FailImage}
+                            className="h-5 w-5 image-verify"
+                          />{" "}
+                          เลขบัตรประชาชนไม่ถูกต้อง{" "}
+                        </span>
+                      </>
+                    ) : null}
+                  </>
+                )}
               </div>
 
               <div>
                 <div className="grid place-items-center h-full mt-5">
-                  <button
-                    className="
+                  <div className="inline-flex rounded-md shadow-sm">
+                    <button
+                      className="
+                        text-white 
+                        bg-neutral-400 
+                        bg-green-500 
+                        hover:bg-[#FF9119]/80 
+                        focus:ring-4 
+                        focus:outline-none 
+                        focus:ring-[#FF9119]/50 
+                        font-medium 
+                        rounded-lg 
+                        text-sm 
+                        px-5 
+                        py-2.5 
+                        text-center 
+                        inline-flex 
+                        items-center 
+                        dark:hover:bg-[#FF9119]/80 
+                        dark:focus:ring-[#FF9119]/40 
+                        mr-1 
+                        mb-1"
+                      onClick={onVerifyIdCard}
+                    >
+                      ตรวจสอบ
+                    </button>
+
+                    <button
+                      className="
                         text-white 
                         bg-neutral-400 
                         bg-blue-500 
@@ -454,35 +487,11 @@ const IdCardGenerator = (props: Props) => {
                         dark:focus:ring-[#FF9119]/40 
                         mr-1 
                         mb-1"
-                        onClick={randomAlienIdCard}
-                  >
-                    ตรวจสอบ
-                  </button>
-                  <button
-                    className="
-                        text-white 
-                        bg-neutral-400 
-                        bg-blue-500 
-                        hover:bg-[#FF9119]/80 
-                        focus:ring-4 
-                        focus:outline-none 
-                        focus:ring-[#FF9119]/50 
-                        font-medium 
-                        rounded-lg 
-                        text-sm 
-                        px-5 
-                        py-2.5 
-                        text-center 
-                        inline-flex 
-                        items-center 
-                        dark:hover:bg-[#FF9119]/80 
-                        dark:focus:ring-[#FF9119]/40 
-                        mr-1 
-                        mb-1"
-                        onClick={onRandomIdCard}
-                  >
-                    สุ่ม
-                  </button>
+                      onClick={onRandomIdCard}
+                    >
+                      สุ่ม
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
