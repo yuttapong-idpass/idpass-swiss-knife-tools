@@ -49,8 +49,8 @@ const JsonPretty = (props: Props) => {
   };
 
   return (
-    <div className="p-4">
-      <div className="max-w-7xl mx-auto grid grid-cols-12">
+    <div className="p-2">
+      <div className="max-w-8xl mx-auto grid grid-cols-12">
         <div className="col-span-5 h-screen">
           <JsonEditorInput
             options={{}}
