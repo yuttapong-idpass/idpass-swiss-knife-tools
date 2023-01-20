@@ -16,7 +16,6 @@ const JsonEditor = (props: Props) => {
   useEffect(() => {
     const options: any = {
       mode: "text",
-      modes: ["tree", "text", "view"],
       indentation: 2,
       onError: function (err: any) {
         console.error(err);
