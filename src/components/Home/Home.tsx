@@ -7,6 +7,7 @@ import JSONImage from "../../assets/images/json.png";
 import Base64Image from "../../assets/images/base-64.png";
 import JwtImage from "../../assets/images/jwt.png";
 import IdCardImage from "../../assets/images/id-card.png";
+import ShuffleImage from "../../assets/images/shuffle.png";
 
 import "./Home.css";
 import { Link } from "react-router-dom";
@@ -36,8 +37,14 @@ const Home = (props: Props) => {
     {
       name: "ID CARD GENERATOR",
       disabled: false,
-      image: IdCardImage,
+      image: ShuffleImage,
       link: '/id-card'
+    },
+    {
+      name: "MOCK UP ID CARD",
+      disabled: false,
+      image: IdCardImage,
+      link: '/mock-up'
     }
   ];
 

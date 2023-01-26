@@ -8,6 +8,7 @@ import JsonPretty from './components/JsonPretty/JsonPretty';
 import FromBase64 from './components/FromBase64/FromBase64';
 import JsonWebToken from './components/JsonWebToken/JsonWebToken';
 import IdCardGenerator from "./components/IdCardGenerator/IdCardGenerator";
+import MockIdCard from './components/MockIdCard/MockIdCard';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
             <Route path="/base64" element={<FromBase64/>} />
             <Route path="/jwt" element={<JsonWebToken />} />
             <Route path="/id-card" element={<IdCardGenerator /> }/>
+            <Route path="mock-up" element={<MockIdCard />} />
         </Routes>
       </BrowserRouter>
     </div>
