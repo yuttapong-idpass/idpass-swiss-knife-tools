@@ -6,7 +6,9 @@ import base64Reducer from './slice/Base64Slice';
 import descriptionReducer from './slice/Base64Slice';
 import decodeReducer from './slice/jwtTokenSlice'
 import encodeReducer from './slice/jwtTokenSlice'
-
+import provinceReducer from './slice/provinceSlice'
+import amphureReducer from './slice/provinceSlice'
+import tumbolReducer from './slice/provinceSlice'
 
 const reducer = {
     counterReducer,
@@ -14,7 +16,10 @@ const reducer = {
     base64Reducer,
     descriptionReducer,
     encodeReducer,
-    decodeReducer
+    decodeReducer,
+    provinceReducer,
+    amphureReducer,
+    tumbolReducer
 }   
 
 
