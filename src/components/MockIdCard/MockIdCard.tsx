@@ -48,22 +48,25 @@ const MockIdCard = (props: Props) => {
     const filterAmphure = amphureReducer.amphure.amphure.filter(
       (item: any) => Number(item.province_id) === Number(provinceId)
     );
-
-  
     setSelectProvince(allProvince[provinceId - 1]);
     setFilterAmphure(filterAmphure);
+    getDefaultAmphur(filterAmphure[0]);
   };
 
-  const getAmphurId = () => { 
-    
-  }
+  const findTumbol = (amphurId: any) => {
+    const findTumbols = tumbolReducer.tumbol.tumbol.filter(
+      (item: any) => Number(item.amphure_id) === Number(amphurId)
+    );
+    setFilterTumbol(findTumbols);
+  };
+
+  const getDefaultAmphur = (getDefault: any) => {
+    findTumbol(getDefault.id);
+  };
 
   const handleSelectAmphur = ($event: any) => {
     const amphurId = $event.target.value;
-    const filterTumbols = tumbolReducer.tumbol.tumbol.filter(
-      (item: any) => Number(item.amphure_id) === Number(amphurId)
-    );
-    setFilterTumbol(filterTumbols);
+    findTumbol(amphurId);
   };
 
   return (
