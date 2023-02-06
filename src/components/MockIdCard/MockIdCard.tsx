@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ThaiIdCardTemplate from "../../assets/images/blank_id_card.png";
+import WomenPreviewImage from "../../assets/images/removebg-preview.png";
 import "./MockIdCard.css";
 import { useAppDispatch } from "../../store/store";
 import {
@@ -466,7 +467,9 @@ const MockIdCard = (props: Props) => {
                       นาย สมทวย คงควรคอย
                     </div>
                     <div className="top-right">Top Right</div>
-                    <div className="bottom-right">Bottom Right</div>
+                    <div className="bottom-right">
+                      <img className="image-preview" src={WomenPreviewImage} />
+                    </div>
                     <div className="centered">Centered</div>
                   </div>
                 </ul>

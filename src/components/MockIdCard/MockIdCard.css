@@ -43,8 +43,8 @@
 /* Bottom right text */
 .bottom-right {
     position: absolute;
-    bottom: 8px;
-    right: 16px;
+    bottom: 37px;
+    right: -295px;
 }
 
 /* Centered text */
@@ -75,3 +75,8 @@
     font-weight: bold;
 }
 
+
+.image-preview { 
+    width: 32%;
+    height: 30%;
+}
