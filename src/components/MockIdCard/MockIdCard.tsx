@@ -6,9 +6,10 @@ import { useAppDispatch } from "../../store/store";
 import {
   getAllProvince,
   getAllAmphure,
+  getAllTumbol,
   provinceSelector,
   amphureSelector,
-  getAllTumbol,
+  tumbolSelector,
 } from "../../store/slice/provinceSlice";
 import sharedService from "../shared/share-api";
 import { useSelector } from "react-redux";
@@ -18,25 +19,12 @@ type Props = {};
 const MockIdCard = (props: Props) => {
   const provinceReducer: any = useSelector(provinceSelector);
   const amphureReducer: any = useSelector(amphureSelector);
+  const tumbolReducer: any = useSelector(tumbolSelector);
   const dispatch = useAppDispatch();
-  let defaultProvinces = [
-    {
-      id: 0,
-      name_th: "กรุณาเลือกจังหวัด",
-      name_en: "",
-    },
-  ];
 
-  let defaultAmphure = [
-    {
-      id: 0,
-      name_th: "กรุณาเลือกอำเภอ",
-      name_en: "",
-    },
-  ];
-
-  const [allProvince, setAllProvince] = useState(defaultProvinces);
-  const [filterAmphure, setFilterAmphure] = useState(defaultAmphure);
+  const [allProvince, setAllProvince] = useState([]);
+  const [filterAmphure, setFilterAmphure] = useState([]);
+  const [filterTumbol, setFilterTumbol] = useState([]);
   const [selectProvince, setSelectProvince] = useState({});
   const [selectAmphue, setSelectAmphur] = useState({});
 
@@ -50,20 +38,32 @@ const MockIdCard = (props: Props) => {
       dispatch(getAllAmphure({ amphure: data.data }));
     });
 
-    sharedService.getAllTumbol().then((data: any) => { 
+    sharedService.getAllTumbol().then((data: any) => {
       dispatch(getAllTumbol({ tumbol: data.data }));
-    })
+    });
   }, []);
 
-  const handleSelectOption = ($event: any) => {
+  const handleSelectProvince = ($event: any) => {
     const provinceId = $event.target.value;
-    const filters = amphureReducer.amphure.amphure.filter(
+    const filterAmphure = amphureReducer.amphure.amphure.filter(
       (item: any) => Number(item.province_id) === Number(provinceId)
     );
 
-    // console.log('dd', allProvince[provinceId - 1])
-    setSelectProvince(allProvince[provinceId - 1])
-    setFilterAmphure(filters);
+  
+    setSelectProvince(allProvince[provinceId - 1]);
+    setFilterAmphure(filterAmphure);
+  };
+
+  const getAmphurId = () => { 
+    
+  }
+
+  const handleSelectAmphur = ($event: any) => {
+    const amphurId = $event.target.value;
+    const filterTumbols = tumbolReducer.tumbol.tumbol.filter(
+      (item: any) => Number(item.amphure_id) === Number(amphurId)
+    );
+    setFilterTumbol(filterTumbols);
   };
 
   return (
@@ -313,13 +313,13 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                onChange={handleSelectOption}
+                                onChange={handleSelectProvince}
+                                defaultValue={allProvince[0]}
                               >
                                 <option
                                   disabled={true}
-                                  selected={true}
-                                  defaultValue={0}
-                                  value={0}
+                                  selected={allProvince[0]}
+                                  value={allProvince[0]}
                                 >
                                   กรุณาเลือกจังหวัด
                                 </option>
@@ -344,31 +344,6 @@ const MockIdCard = (props: Props) => {
                                 htmlFor="large-input"
                                 className="block  text-start text-sm  text-gray-900"
                               >
-                                ห้อง :
-                              </label>
-                              <input
-                                type="input"
-                                className="inline-block 
-                                            text-sm 
-                                            px-3 
-                                            py-2 
-                                            leading-none 
-                                            border 
-                                            rounded 
-                                            text-black 
-                                            border-gray-800
-                                            hover:bg-white 
-                                            mt-1
-                                            w-40
-                                            lg:mt-0"
-                              />
-                            </li>
-
-                            <li>
-                              <label
-                                htmlFor="large-input"
-                                className="block  text-start text-sm  text-gray-900"
-                              >
                                 เขต / อำเภอ :
                               </label>
                               <select
@@ -385,8 +360,55 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
+                                onChange={handleSelectAmphur}
+                                defaultValue={filterAmphure[0]}
                               >
+                                <option
+                                  disabled={true}
+                                  selected={true}
+                                  value={0}
+                                >
+                                  กรุณาเลือกอำเภอ
+                                </option>
                                 {filterAmphure.map((item: any) => (
+                                  <option key={item.id} value={item.id}>
+                                    {item.name_th}
+                                  </option>
+                                ))}
+                              </select>
+                            </li>
+
+                            <li>
+                              <label
+                                htmlFor="large-input"
+                                className="block  text-start text-sm  text-gray-900"
+                              >
+                                แขวง / ตำบล :
+                              </label>
+                              <select
+                                className="inline-block 
+                                            text-sm 
+                                            px-3 
+                                            py-2 
+                                            leading-none 
+                                            border 
+                                            rounded 
+                                            text-black 
+                                            border-gray-800
+                                            hover:bg-white 
+                                            mt-1
+                                            w-40
+                                            lg:mt-0"
+                                defaultValue={filterTumbol[0]}
+                              >
+                                <option
+                                  disabled={true}
+                                  selected={true}
+                                  value={0}
+                                >
+                                  กรุณาเลือกตำบล
+                                </option>
+                                {filterTumbol.map((item: any) => (
                                   <option key={item.id} value={item.name_th}>
                                     {item.name_th}
                                   </option>
