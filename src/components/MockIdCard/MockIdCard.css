@@ -33,6 +33,24 @@
 }
 
 
+.top-left-first-name-en {
+    /* position: absolute;
+    top: 8px;
+    left: 16px; */
+    position: absolute;
+    top: 133px;
+    left: 280px;
+}
+
+
+.top-left-last-name-en {
+    position: absolute;
+    top: 161px;
+    left: 318px;
+}
+
+
+
 /* Top right text */
 .top-right {
     position: absolute;
@@ -65,6 +83,14 @@
 }
 
 
+.en-name { 
+    color: #2d32ae;
+    font-family: "DilleniaUPC";
+    src: local("DilleniaUPC"),
+    url("./assets/fonts/DilleniaUPC-Bold.ttf") format("truetype");
+}
+
+
 .names { 
     font-size: 20px;
     font-weight: bold;
@@ -80,3 +106,5 @@
     width: 146px;
     height: 178px;
 }
+
+

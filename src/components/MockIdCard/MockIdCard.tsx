@@ -676,9 +676,15 @@ const MockIdCard = (props: Props) => {
                     <div className="top-left-name id-card-font numbers">
                       {values.titleName} {values.firstName} {values.lastName}
                     </div>
+                    <div className="top-left-first-name-en en-name numbers">
+                      xxxxx
+                    </div>
+                    <div className="top-left-last-name-en en-name numbers">
+                      xxxxx
+                    </div>
                     <div className="top-right">Top Right</div>
                     <div className="bottom-right">
-                      <img className="image-preview" src={WomenPreviewImage2} />
+                      <img className="image-preview" src={WomenPreviewImage} />
                     </div>
                     <div className="centered">Centered</div>
                   </div>
