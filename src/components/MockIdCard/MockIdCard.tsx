@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ThaiIdCardTemplate from "../../assets/images/blank_id_card.png";
 import WomenPreviewImage from "../../assets/images/removebg-preview.png";
+import WomenPreviewImage2 from "../../assets/images/remove-bg-mock.png";
+import MenPreviewImage from "../../assets/images/men-removebg-preview.png";
 import "./MockIdCard.css";
 import { useAppDispatch } from "../../store/store";
 import {
@@ -43,6 +45,14 @@ const MockIdCard = (props: Props) => {
       dispatch(getAllTumbol({ tumbol: data.data }));
     });
   }, []);
+
+  const handleInputChange = ($event: any) => {
+    const { name, value } = $event.target;
+
+    console.log("name", name);
+
+    console.log("value", value);
+  };
 
   const handleSelectProvince = ($event: any) => {
     const provinceId = $event.target.value;
@@ -102,10 +112,11 @@ const MockIdCard = (props: Props) => {
                                 htmlFor="large-input"
                                 className="block  text-start text-sm  text-gray-900"
                               >
-                                ชื่อ :
+                                คำนำหน้า :
                               </label>
                               <input
                                 type="input"
+                                name="titleName"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -119,6 +130,34 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
+                                onChange={handleInputChange}
+                              />
+                            </li>
+
+                            <li>
+                              <label
+                                htmlFor="large-input"
+                                className="block  text-start text-sm  text-gray-900"
+                              >
+                                ชื่อ :
+                              </label>
+                              <input
+                                type="input"
+                                name="firstName"
+                                className="inline-block 
+                                            text-sm 
+                                            px-3 
+                                            py-2 
+                                            leading-none 
+                                            border 
+                                            rounded 
+                                            text-black 
+                                            border-gray-800
+                                            hover:bg-white 
+                                            mt-1
+                                            w-40
+                                            lg:mt-0"
+                                onChange={handleInputChange}
                               />
                             </li>
 
@@ -131,6 +170,7 @@ const MockIdCard = (props: Props) => {
                               </label>
                               <input
                                 type="input"
+                                name="lastName"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -144,6 +184,150 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
+                                            onChange={handleInputChange}
+                              />
+                            </li>
+
+                            <li>
+                              <label
+                                htmlFor="large-input"
+                                className="block  text-start text-sm  text-gray-900"
+                              >
+                                เลขประจำตัวประชาชน :
+                              </label>
+                              <input
+                                type="input"
+                                name="idCard"
+                                className="inline-block 
+                                            text-sm 
+                                            px-3 
+                                            py-2 
+                                            leading-none 
+                                            border 
+                                            rounded 
+                                            text-black 
+                                            border-gray-800
+                                            hover:bg-white 
+                                            mt-1
+                                            w-40
+                                            lg:mt-0"
+                                onChange={handleInputChange}
+                              />
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </nav>
+
+                    <nav className="p-3">
+                      <div className="container flex flex-wrap justify-between mx-auto">
+                        <div className="flex md:order-2">
+                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
+                            <li>
+                              <label
+                                htmlFor="large-input"
+                                className="block  text-start text-sm  text-gray-900"
+                              >
+                                ชื่อ (อังกฤษ) :
+                              </label>
+                              <input
+                                type="input"
+                                name="enFirstName"
+                                className="inline-block 
+                                            text-sm 
+                                            px-3 
+                                            py-2 
+                                            leading-none 
+                                            border 
+                                            rounded 
+                                            text-black 
+                                            border-gray-800
+                                            hover:bg-white 
+                                            mt-1
+                                            w-40
+                                            lg:mt-0"
+                                onChange={handleInputChange}
+                              />
+                            </li>
+
+                            <li>
+                              <label
+                                htmlFor="large-input"
+                                className="block  text-start text-sm  text-gray-900"
+                              >
+                                นามสกุล (อังกฤษ) :
+                              </label>
+                              <input
+                                type="input"
+                                name="enLastName"
+                                className="inline-block 
+                                            text-sm 
+                                            px-3 
+                                            py-2 
+                                            leading-none 
+                                            border 
+                                            rounded 
+                                            text-black 
+                                            border-gray-800
+                                            hover:bg-white 
+                                            mt-1
+                                            w-40
+                                            lg:mt-0"
+                                onChange={handleInputChange}
+                              />
+                            </li>
+
+                            <li>
+                              <label
+                                htmlFor="large-input"
+                                className="block  text-start text-sm  text-gray-900"
+                              >
+                                วันเกิด (ไทย):
+                              </label>
+                              <input
+                                type="input"
+                                name="thaiBirthDate"
+                                className="inline-block 
+                                            text-sm 
+                                            px-3 
+                                            py-2 
+                                            leading-none 
+                                            border 
+                                            rounded 
+                                            text-black 
+                                            border-gray-800
+                                            hover:bg-white 
+                                            mt-1
+                                            w-40
+                                            lg:mt-0"
+                                onChange={handleInputChange}
+                              />
+                            </li>
+
+                            <li>
+                              <label
+                                htmlFor="large-input"
+                                className="block  text-start text-sm  text-gray-900"
+                              >
+                                วันเกิด (สากล) :
+                              </label>
+                              <input
+                                type="input"
+                                name="nationalBirthDate"
+                                className="inline-block 
+                                            text-sm 
+                                            px-3 
+                                            py-2 
+                                            leading-none 
+                                            border 
+                                            rounded 
+                                            text-black 
+                                            border-gray-800
+                                            hover:bg-white 
+                                            mt-1
+                                            w-40
+                                            lg:mt-0"
+                                onChange={handleInputChange}
                               />
                             </li>
                           </ul>
@@ -164,6 +348,7 @@ const MockIdCard = (props: Props) => {
                               </label>
                               <input
                                 type="input"
+                                name="homeNo"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -177,6 +362,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
+                                onChange={handleInputChange}
                               />
                             </li>
 
@@ -189,6 +375,7 @@ const MockIdCard = (props: Props) => {
                               </label>
                               <input
                                 type="input"
+                                name="soi"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -202,17 +389,10 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
+                                onChange={handleInputChange}
                               />
                             </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </nav>
 
-                    <nav className="p-3">
-                      <div className="container flex flex-wrap justify-between mx-auto">
-                        <div className="flex md:order-2">
-                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
                             <li>
                               <label
                                 htmlFor="large-input"
@@ -222,6 +402,7 @@ const MockIdCard = (props: Props) => {
                               </label>
                               <input
                                 type="input"
+                                name="MooNo"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -235,6 +416,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
+                                onChange={handleInputChange}
                               />
                             </li>
 
@@ -247,6 +429,7 @@ const MockIdCard = (props: Props) => {
                               </label>
                               <input
                                 type="input"
+                                name="road"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -260,9 +443,18 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
+                                onChange={handleInputChange}
                               />
                             </li>
                           </ul>
+                        </div>
+                      </div>
+                    </nav>
+
+                    <nav className="p-3">
+                      <div className="container flex flex-wrap justify-between mx-auto">
+                        <div className="flex md:order-2">
+                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent "></ul>
                         </div>
                       </div>
                     </nav>
@@ -280,6 +472,7 @@ const MockIdCard = (props: Props) => {
                               </label>
                               <input
                                 type="input"
+                                name="mooBan"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -293,6 +486,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
+                                onChange={handleInputChange}
                               />
                             </li>
 
@@ -334,15 +528,7 @@ const MockIdCard = (props: Props) => {
                                 ))}
                               </select>
                             </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </nav>
 
-                    <nav className="p-3">
-                      <div className="container flex flex-wrap justify-between mx-auto">
-                        <div className="flex md:order-2">
-                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
                             <li>
                               <label
                                 htmlFor="large-input"
@@ -468,7 +654,7 @@ const MockIdCard = (props: Props) => {
                     </div>
                     <div className="top-right">Top Right</div>
                     <div className="bottom-right">
-                      <img className="image-preview" src={WomenPreviewImage} />
+                      <img className="image-preview" src={WomenPreviewImage2} />
                     </div>
                     <div className="centered">Centered</div>
                   </div>

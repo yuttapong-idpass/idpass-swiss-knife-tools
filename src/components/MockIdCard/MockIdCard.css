@@ -44,8 +44,8 @@
 .bottom-right {
     position: absolute;
     bottom: 37px;
-    right: -295px;
-}
+    right: 13px;
+  }
 
 /* Centered text */
 .centered {
@@ -77,6 +77,6 @@
 
 
 .image-preview { 
-    width: 32%;
-    height: 30%;
+    width: 146px;
+    height: 178px;
 }
