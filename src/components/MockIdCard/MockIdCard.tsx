@@ -19,6 +19,25 @@ import { useSelector } from "react-redux";
 
 type Props = {};
 
+
+
+const userDataObject = {
+  titleName: '',
+  firstName: '',
+  lastName: '',
+  enFirstName: '',
+  enLastName: '',
+  thaiBirthDate: '',
+  idCard: '',
+  nationalBirthDate: '',
+  homeNo: '',
+  soi: '',
+  mooNo: '',
+  road: '',
+  mooBan: ''
+
+}
+
 const MockIdCard = (props: Props) => {
   const provinceReducer: any = useSelector(provinceSelector);
   const amphureReducer: any = useSelector(amphureSelector);
@@ -30,6 +49,7 @@ const MockIdCard = (props: Props) => {
   const [filterTumbol, setFilterTumbol] = useState([]);
   const [selectProvince, setSelectProvince] = useState({});
   const [selectAmphue, setSelectAmphur] = useState({});
+  const [values, setValues] = useState(userDataObject);
 
   useEffect(() => {
     sharedService.getAllProvince().then((data: any) => {
@@ -48,10 +68,14 @@ const MockIdCard = (props: Props) => {
 
   const handleInputChange = ($event: any) => {
     const { name, value } = $event.target;
+    setValues({
+      ...values,
+      [name]: value
+    })
+  
 
-    console.log("name", name);
+    console.log('values', values);
 
-    console.log("value", value);
   };
 
   const handleSelectProvince = ($event: any) => {
@@ -402,7 +426,7 @@ const MockIdCard = (props: Props) => {
                               </label>
                               <input
                                 type="input"
-                                name="MooNo"
+                                name="mooNo"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -647,10 +671,10 @@ const MockIdCard = (props: Props) => {
                       1234567
                     </div>
                     <div className="top-left id-card-font numbers">
-                      1 1008 00832 15 6
+                     {values.idCard}
                     </div>
                     <div className="top-left-name id-card-font numbers">
-                      นาย สมทวย คงควรคอย
+                      {values.titleName} {values.firstName} {values.lastName}
                     </div>
                     <div className="top-right">Top Right</div>
                     <div className="bottom-right">
