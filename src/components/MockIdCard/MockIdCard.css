@@ -74,6 +74,56 @@
 }
 
 
+.position-address { 
+    position: absolute;
+    bottom: 114px;
+    left: 113px;
+    word-wrap: break-word
+}
+
+.position-address-province { 
+    position: absolute;
+    bottom: 90px;
+    left: 80px;
+    word-wrap: break-word;
+}
+
+.position-birth-date { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-25%, -15%);
+}
+
+.position-expire-date { 
+    position: absolute;
+    bottom: 67px;
+    right: 182px;
+}
+
+.position-expire-date-en { 
+    position: absolute;
+    bottom: 32px;
+    right: 184px;
+}
+
+
+
+.position-issue-date { 
+    position: absolute;
+    bottom: 68px;
+    left: 81px;
+}
+
+.position-issue-date-en { 
+    position: absolute;
+    bottom: 31px;
+    left: 81px;
+}
+
+
+
+
 
 
 .id-card-font {
@@ -93,6 +143,11 @@
 
 .names { 
     font-size: 20px;
+    font-weight: bold;
+}
+
+.birth-date { 
+    font-size: 24px;
     font-weight: bold;
 }
 
