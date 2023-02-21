@@ -121,9 +121,27 @@
     left: 81px;
 }
 
+.position-birth-of-date { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(25%, 98%);
+}
 
+.position-birth-of-date { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(25%, 98%);
+}
 
+.position-region { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-40%, 212%);
 
+}
 
 
 .id-card-font {
@@ -153,6 +171,17 @@
 
 .numbers { 
     font-size: 33px;
+    font-weight: bold;
+}
+
+.birth-date-large { 
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+.birth-date-large-en { 
+    font-size: 30px;
     font-weight: bold;
 }
 

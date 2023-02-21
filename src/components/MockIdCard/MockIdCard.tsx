@@ -33,6 +33,7 @@ const userDataObject = {
   mooNo: "",
   road: "",
   mooBan: "",
+  region: ""
 };
 
 const MockIdCard = (props: Props) => {
@@ -41,6 +42,20 @@ const MockIdCard = (props: Props) => {
   const tumbolReducer: any = useSelector(tumbolSelector);
   const dispatch = useAppDispatch();
 
+  const MONTH_TH = [
+    "มกราคม",
+    "กุมภาพันธ์",
+    "มีนาคม",
+    "เมษายน",
+    "พฤษภาคม",
+    "มิถุนายน",
+    "กรกฎาคม",
+    "สิงหาคม",
+    "กันยายน",
+    "ตุลาคม",
+    "พฤศจิกายน",
+    "ธันวาคม",
+  ];
 
   const MONTH_TH_MINI = [
     "ม.ค.",
@@ -55,6 +70,21 @@ const MockIdCard = (props: Props) => {
     "ต.ค.",
     "พ.ย.",
     "ธ.ค.",
+  ];
+
+  const MONTH = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const MONTH_MINI = [
@@ -72,12 +102,9 @@ const MockIdCard = (props: Props) => {
     "Dec",
   ];
 
-
-
   const [yearIssue, setYearIssue] = useState([]);
   const [yearExpire, setYearExpire] = useState([]);
-  const [fullYearIssue, setFullYearIssue] = useState('');
-  const [fullYearExpire, setFullYearExpire] = useState('');
+  const [yearOfBirth, setYearOfBirth] = useState([]);
   const [days, setDays] = useState([]);
   const [allProvince, setAllProvince] = useState([]);
   const [filterAmphure, setFilterAmphure] = useState([]);
@@ -85,6 +112,20 @@ const MockIdCard = (props: Props) => {
   const [selectProvince, setSelectProvince] = useState({});
   const [selectAmphue, setSelectAmphur] = useState({});
   const [values, setValues] = useState(userDataObject);
+
+  const [selectBirthDate, setSelectBirthDate] = useState("");
+  const [setullYearIssue, setFullYearIssue] = useState("");
+  const [fullYearExpire, setFullYearExpire] = useState("");
+
+  const [province, setProvince] = useState("");
+  const [amphur, setAmphur] = useState("");
+  const [tumbol, setTumbol] = useState("");
+
+
+  const [dayBirth, setDayBirth] = useState("");
+  const [monthBirth, setMonthBirth] = useState("");
+  const [yearBirth, setYearBirth] = useState("");
+
 
   useEffect(() => {
     sharedService.getAllProvince().then((data: any) => {
@@ -102,36 +143,47 @@ const MockIdCard = (props: Props) => {
 
     getYearIssue();
     getYearExpire();
+    getYearOfDate();
     getDays();
   }, []);
 
   const getYearIssue = () => {
     let YEAR_ISSUE: any = [];
-    let min = (new Date().getFullYear() - 9) + 543;
-    let max = min + 10;
+    let min = new Date().getFullYear() - 100 + 543;
+    let max = min + 100;
     for (let i = min; i <= max; i++) {
       YEAR_ISSUE.push(i);
     }
     setYearIssue(YEAR_ISSUE);
   };
 
-  const getYearExpire = () => { 
+  const getYearExpire = () => {
     let YEAR_EXPIRE: any = [];
-    let min = (new Date().getFullYear()) + 543;
-    let max = min + 10;
-    for (let i = min; i <= max; i++) { 
+    let min = new Date().getFullYear() + 543;
+    let max = min + 100;
+    for (let i = min; i <= max; i++) {
       YEAR_EXPIRE.push(i);
     }
     setYearExpire(YEAR_EXPIRE);
-  }
+  };
 
-  const getDays = () => { 
+  const getYearOfDate = () => {
+    let YEAR_DATE: any = [];
+    let min = new Date().getFullYear() - 100 + 543;
+    let max = min + 100;
+    for (let i = min; i <= max; i++) {
+      YEAR_DATE.push(i);
+    }
+    setYearOfBirth(YEAR_DATE);
+  };
+
+  const getDays = () => {
     let days: any = [];
-    for (let i = 1; i <= 31; i++) { 
+    for (let i = 1; i <= 31; i++) {
       days.push(i);
     }
     setDays(days);
-  }
+  };
 
   const handleInputChange = ($event: any) => {
     const { name, value } = $event.target;
@@ -141,12 +193,33 @@ const MockIdCard = (props: Props) => {
     });
   };
 
+  const handleDayBirth = ($event: any) => {
+    const birth: any = $event.target;
+    console.log('day', birth.value)
+    setDayBirth(birth.value);
+  };
+
+  const handleMonthBirth = ($event: any) => {
+    const birth: any = $event.target;
+    console.log('month', birth.value)
+    setMonthBirth(birth.value);
+  };
+
+  const handleYearBirth = ($event: any) => {
+    const birth: any = $event.target;
+    console.log('year', birth.value)
+    setYearBirth(birth.value);
+  };
+
   const handleSelectProvince = ($event: any) => {
     const provinceId = $event.target.value;
     const filterAmphure = amphureReducer.amphure.amphure.filter(
       (item: any) => Number(item.province_id) === Number(provinceId)
     );
     setSelectProvince(allProvince[provinceId - 1]);
+
+    console.log('s', allProvince[provinceId - 1]);
+
     setFilterAmphure(filterAmphure);
     getDefaultAmphur(filterAmphure[0]);
   };
@@ -155,6 +228,8 @@ const MockIdCard = (props: Props) => {
     const findTumbols = tumbolReducer.tumbol.tumbol.filter(
       (item: any) => Number(item.amphure_id) === Number(amphurId)
     );
+
+
     setFilterTumbol(findTumbols);
   };
 
@@ -164,8 +239,42 @@ const MockIdCard = (props: Props) => {
 
   const handleSelectAmphur = ($event: any) => {
     const amphurId = $event.target.value;
+    const getAmphur = amphureReducer.amphure.amphure.find((item: any) => item.id == amphurId);
+  
+    setAmphur(getAmphur.name_th);
+
     findTumbol(amphurId);
   };
+
+
+  const onClickGenerate = () => { 
+   
+
+    const idCard = values.idCard.split('');
+    const transformText = idCard[0] + ' ' + idCard[1] + idCard[2] + idCard[3] + idCard[4] + ' '
+                          + idCard[5]  + idCard[6]  + idCard[7]  + idCard[8]  + idCard[9] + ' '
+                          + idCard[10]  + idCard[11] + ' ' +  + idCard[12]
+
+
+    const data = {
+      titleName: values.titleName,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      firstNameEN: values.enFirstName,
+      lastNameEN: values.enLastName,
+      region: values.region,
+      homeNo: values.homeNo,
+      soi: values.soi,
+      mooNo: values.mooNo,
+      road: values.road,
+      mooBan: values.mooBan
+    }
+
+    const birthDate = dayBirth + ' ' + monthBirth + ' ' + yearBirth;
+   
+    console.log('brth', amphur);
+
+  }
 
   return (
     <div className="p-4 place-items-center">
@@ -274,7 +383,15 @@ const MockIdCard = (props: Props) => {
                                 onChange={handleInputChange}
                               />
                             </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </nav>
 
+                    <nav className="p-3">
+                      <div className="container flex flex-wrap justify-between mx-auto">
+                        <div className="flex md:order-2">
+                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
                             <li>
                               <label
                                 htmlFor="large-input"
@@ -301,15 +418,7 @@ const MockIdCard = (props: Props) => {
                                 onChange={handleInputChange}
                               />
                             </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </nav>
 
-                    <nav className="p-3">
-                      <div className="container flex flex-wrap justify-between mx-auto">
-                        <div className="flex md:order-2">
-                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
                             <li>
                               <label
                                 htmlFor="large-input"
@@ -363,65 +472,10 @@ const MockIdCard = (props: Props) => {
                                 onChange={handleInputChange}
                               />
                             </li>
-
-                            <li>
-                              <label
-                                htmlFor="large-input"
-                                className="block  text-start text-sm  text-gray-900"
-                              >
-                                วันเกิด (ไทย):
-                              </label>
-                              <input
-                                type="input"
-                                name="thaiBirthDate"
-                                className="inline-block 
-                                            text-sm 
-                                            px-3 
-                                            py-2 
-                                            leading-none 
-                                            border 
-                                            rounded 
-                                            text-black 
-                                            border-gray-800
-                                            hover:bg-white 
-                                            mt-1
-                                            w-40
-                                            lg:mt-0"
-                                onChange={handleInputChange}
-                              />
-                            </li>
-
-                            <li>
-                              <label
-                                htmlFor="large-input"
-                                className="block  text-start text-sm  text-gray-900"
-                              >
-                                วันเกิด (สากล) :
-                              </label>
-                              <input
-                                type="input"
-                                name="nationalBirthDate"
-                                className="inline-block 
-                                            text-sm 
-                                            px-3 
-                                            py-2 
-                                            leading-none 
-                                            border 
-                                            rounded 
-                                            text-black 
-                                            border-gray-800
-                                            hover:bg-white 
-                                            mt-1
-                                            w-40
-                                            lg:mt-0"
-                                onChange={handleInputChange}
-                              />
-                            </li>
                           </ul>
                         </div>
                       </div>
                     </nav>
-
 
                     <nav className="p-3">
                       <div className="container flex flex-wrap justify-between mx-auto">
@@ -448,7 +502,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleDayBirth}
                               >
                                 <option
                                   disabled={true}
@@ -486,7 +540,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleMonthBirth}
                               >
                                 <option
                                   disabled={true}
@@ -524,7 +578,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleYearBirth}
                               >
                                 <option
                                   disabled={true}
@@ -545,13 +599,37 @@ const MockIdCard = (props: Props) => {
                       </div>
                     </nav>
 
-
-
-
                     <nav className="p-3">
                       <div className="container flex flex-wrap justify-between mx-auto">
                         <div className="flex md:order-2">
                           <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
+                            <li>
+                              <label
+                                htmlFor="large-input"
+                                className="block  text-start text-sm  text-gray-900"
+                              >
+                                ศาสนา :
+                              </label>
+                              <input
+                                type="input"
+                                name="region"
+                                className="inline-block 
+                                            text-sm 
+                                            px-3 
+                                            py-2 
+                                            leading-none 
+                                            border 
+                                            rounded 
+                                            text-black 
+                                            border-gray-800
+                                            hover:bg-white 
+                                            mt-1
+                                            w-40
+                                            lg:mt-0"
+                                onChange={handleInputChange}
+                              />
+                            </li>
+
                             <li>
                               <label
                                 htmlFor="large-input"
@@ -605,7 +683,15 @@ const MockIdCard = (props: Props) => {
                                 onChange={handleInputChange}
                               />
                             </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </nav>
 
+                    <nav className="p-3">
+                      <div className="container flex flex-wrap justify-between mx-auto">
+                        <div className="flex md:order-2">
+                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
                             <li>
                               <label
                                 htmlFor="large-input"
@@ -659,23 +745,7 @@ const MockIdCard = (props: Props) => {
                                 onChange={handleInputChange}
                               />
                             </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </nav>
 
-                    <nav className="p-3">
-                      <div className="container flex flex-wrap justify-between mx-auto">
-                        <div className="flex md:order-2">
-                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent "></ul>
-                        </div>
-                      </div>
-                    </nav>
-
-                    <nav className="p-3">
-                      <div className="container flex flex-wrap justify-between mx-auto">
-                        <div className="flex md:order-2">
-                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
                             <li>
                               <label
                                 htmlFor="large-input"
@@ -702,7 +772,15 @@ const MockIdCard = (props: Props) => {
                                 onChange={handleInputChange}
                               />
                             </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </nav>
 
+                    <nav className="p-3">
+                      <div className="container flex flex-wrap justify-between mx-auto">
+                        <div className="flex md:order-2">
+                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
                             <li>
                               <label
                                 htmlFor="large-input"
@@ -1066,11 +1144,6 @@ const MockIdCard = (props: Props) => {
                         </div>
                       </div>
                     </nav>
-
-
-
-
-
                   </div>
                 </div>
               </div>
@@ -1099,6 +1172,7 @@ const MockIdCard = (props: Props) => {
                       dark:focus:ring-[#FF9119]/40 
                       mr-1 
                       mb-1"
+                      onClick={onClickGenerate}
                     >
                       GENERATE
                     </button>
@@ -1137,10 +1211,10 @@ const MockIdCard = (props: Props) => {
                       style={{ width: "100%" }}
                     />
                     <div className="top-left id-card-font numbers">
-                      {values.idCard}
+                      1 2701 00029 24 4
                     </div>
                     <div className="top-left-name id-card-font numbers">
-                      {values.titleName} {values.firstName} {values.lastName}
+                      นาย ทดสอบ ทอสอบ
                     </div>
                     <div className="top-left-first-name-en en-name numbers">
                       xxxxx
@@ -1148,13 +1222,21 @@ const MockIdCard = (props: Props) => {
                     <div className="top-left-last-name-en en-name numbers">
                       xxxxx
                     </div>
-                    <div className="top-right">Top Right</div>
                     <div className="bottom-right">
                       <img className="image-preview" src={WomenPreviewImage} />
                     </div>
-                    <div className="position-birth-date id-card-font birth-date">
+                    <div className="position-birth-date id-card-font birth-date-large">
                       Birth date
                     </div>
+
+                    <div className="position-birth-of-date id-card-font birth-date-large en-name">
+                      Birth date
+                    </div>
+
+                    <div className="position-region id-card-font birth-date en-name">
+                      Birth date
+                    </div>
+
                     <div className="position-address id-card-font birth-date">
                       164/30 ภ.คอนกรีต แขวงบางรัก
                     </div>
@@ -1171,13 +1253,12 @@ const MockIdCard = (props: Props) => {
                     </div>
 
                     <div className="position-issue-date id-card-font birth-date">
-                    4 ม.ค. 2573
+                      4 ม.ค. 2573
                     </div>
 
                     <div className="position-issue-date-en id-card-font birth-date en-name">
-                    4 Jan 2573
+                      4 Jan 2573
                     </div>
-
                   </div>
                 </ul>
               </div>
