@@ -61,21 +61,20 @@ const MockIdCard = (props: Props) => {
   const tumbolReducer: any = useSelector(tumbolSelector);
   const dispatch = useAppDispatch();
 
-
   const photoPreview = [
     {
       value: "รูปผู้ชาย",
-      path: MenPreviewImage
+      path: MenPreviewImage,
     },
     {
       value: "รูปผู้หญิง",
-      path: WomenPreviewImage
+      path: WomenPreviewImage,
     },
     {
       value: "รูปผู้หญิง 2",
-      path: WomenPreviewImage2
-    }
-  ]
+      path: WomenPreviewImage2,
+    },
+  ];
 
   const MONTH_TH = [
     "มกราคม",
@@ -343,33 +342,36 @@ const MockIdCard = (props: Props) => {
     setTumbol(getTumbols);
   };
 
-  const handleSelectImage = ($event: any) => { 
-    const image = $event.target
+  const handleSelectImage = ($event: any) => {
+    const image = $event.target;
     setImage(image.value);
-    console.log('image', image.value);
-
-  }
+    console.log("image", image.value);
+  };
 
   const onClickGenerate = () => {
     const idCard = values.idCard.split("");
-    const transformText =
-      idCard[0] +
-      " " +
-      idCard[1] +
-      idCard[2] +
-      idCard[3] +
-      idCard[4] +
-      " " +
-      idCard[5] +
-      idCard[6] +
-      idCard[7] +
-      idCard[8] +
-      idCard[9] +
-      " " +
-      idCard[10] +
-      idCard[11] +
-      " " +
-      +idCard[12];
+    let transformText;
+
+    if (values.idCard) {
+      transformText =
+        idCard[0] +
+        " " +
+        idCard[1] +
+        idCard[2] +
+        idCard[3] +
+        idCard[4] +
+        " " +
+        idCard[5] +
+        idCard[6] +
+        idCard[7] +
+        idCard[8] +
+        idCard[9] +
+        " " +
+        idCard[10] +
+        idCard[11] +
+        " " +
+        +idCard[12];
+    }
 
     const birthDate = dayBirth + " " + monthBirth + " " + yearBirth;
     const issueDate =
@@ -382,9 +384,6 @@ const MockIdCard = (props: Props) => {
       selectDateIssue + " " + selectMonthIssueEN + " " + selectYearIssue;
     const expireDateEN =
       selectDateExpire + " " + selectMonthExpireEN + " " + selectYearExpire;
-
-    console.log("issue date", issueDate);
-    console.log("expire date", expireDate);
 
     let firstAddress: string = "";
     let secondAddress: string = "";
@@ -404,41 +403,43 @@ const MockIdCard = (props: Props) => {
       // setSecondAddress(secondAddress);
     } else {
       firstAddress += `${values.homeNo} `;
-      firstAddress += values.mooBan ? `${values.mooBan} ` : " ";
-      firstAddress += values.mooNo ? `หมู่ที่ ${values.mooNo} ` : " ";
-      firstAddress += values.soi ? "ซ." + `${values.soi} ` : " ";
-      firstAddress += values.road ? "ถ." + `${values.road} ` : " ";
+      firstAddress += values.mooBan ? `${values.mooBan} ` : "";
+      firstAddress += values.mooNo ? `หมู่ที่ ${values.mooNo} ` : "";
+      firstAddress += values.soi ? "ซ." + `${values.soi} ` : "";
+      firstAddress += values.road ? "ถ." + `${values.road} ` : "";
       firstAddress += `ต.${tumbol.name_th} `;
 
-      secondAddress += amphur ? `อ.${amphur.name_th} ` : " ";
-      secondAddress += province ? `จ.${province.name_th}` : " ";
+      secondAddress += amphur ? `อ.${amphur.name_th} ` : "";
+      secondAddress += province ? `จ.${province.name_th}` : "";
     }
 
     const data: any = {
       titleName: values.titleName,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      firstNameEN: values.lastNameEN,
-      lastNameEN: values.lastNameEN,
-      region: values.region,
-      homeNo: values.homeNo,
-      soi: values.soi,
-      mooNo: values.mooNo,
-      road: values.road,
-      mooBan: values.mooBan,
-      idCard: transformText,
-      birthDate: birthDate,
-      birthDateEN: birthDateEN,
-      issueDate: issueDate,
-      issueDateEN: issueDateEN,
-      expireDate: expireDate,
-      expireDateEN: expireDateEN,
-      firstAddress: firstAddress,
-      secondAddress: secondAddress,
+      firstName: values.firstName ? values.firstName : undefined,
+      lastName: values.lastName ? values.lastName : undefined,
+      firstNameEN: values.lastNameEN ? values.lastNameEN : undefined,
+      lastNameEN: values.lastNameEN ? values.lastNameEN : undefined,
+      region: values.region ? values.region : undefined,
+      homeNo: values.homeNo ? values.homeNo : undefined,
+      soi: values.soi ? values.soi : undefined,
+      mooNo: values.mooNo ? values.mooNo : undefined,
+      road: values.road ? values.road : undefined,
+      mooBan: values.mooBan ? values.mooBan : undefined,
+      idCard: transformText ? transformText : undefined,
+      birthDate: birthDate ? birthDate : undefined,
+      birthDateEN: birthDateEN ? birthDateEN : undefined,
+      issueDate: issueDate ? issueDate : undefined,
+      issueDateEN: issueDateEN ? issueDateEN : undefined,
+      expireDate: expireDate ? expireDate : undefined,
+      expireDateEN: expireDateEN ? expireDateEN : undefined,
+      firstAddress: firstAddress ? firstAddress : undefined,
+      secondAddress: secondAddress ? secondAddress : undefined,
     };
 
-    setCustomer(data);
-    setGenerate(true);
+    console.log("data", data);
+
+    // setCustomer(data);
+    // setGenerate(true);
   };
 
   return (
@@ -567,6 +568,7 @@ const MockIdCard = (props: Props) => {
                               <input
                                 type="number"
                                 name="idCard"
+                                maxLength={13}
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -1312,7 +1314,6 @@ const MockIdCard = (props: Props) => {
                       </div>
                     </nav>
 
-
                     <nav className="p-3">
                       <div className="container flex flex-wrap justify-between mx-auto">
                         <div className="flex md:order-2">
@@ -1322,7 +1323,7 @@ const MockIdCard = (props: Props) => {
                                 htmlFor="large-input"
                                 className="block  text-start text-sm  text-gray-900"
                               >
-                                วันที่หมดอายุ :
+                                รูปบัตรประชาชน :
                               </label>
                               <select
                                 className="inline-block 
@@ -1354,14 +1355,10 @@ const MockIdCard = (props: Props) => {
                                 ))}
                               </select>
                             </li>
-
                           </ul>
                         </div>
                       </div>
                     </nav>
-
-
-
                   </div>
                 </div>
               </div>
@@ -1444,10 +1441,7 @@ const MockIdCard = (props: Props) => {
                           {customer.lastNameEN}
                         </div>
                         <div className="bottom-right">
-                          <img
-                            className="image-preview"
-                            src={images}
-                          />
+                          <img className="image-preview" src={images} />
                         </div>
                         <div className="position-birth-date id-card-font birth-date-large">
                           {customer.birthDate}
