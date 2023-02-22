@@ -23,17 +23,36 @@ const userDataObject = {
   titleName: "",
   firstName: "",
   lastName: "",
-  enFirstName: "",
-  enLastName: "",
-  thaiBirthDate: "",
+  firstNameEN: "",
+  lastNameEN: "",
+  birthDate: "",
+  birthDateEN: "",
   idCard: "",
   nationalBirthDate: "",
   homeNo: "",
   soi: "",
+  tumbol: "",
   mooNo: "",
   road: "",
   mooBan: "",
-  region: ""
+  region: "",
+  province: "",
+  firstAddress: "",
+  secondAddress: "",
+  issueDate: "",
+  issueDateEN: "",
+  expireDate: "",
+  expireDateEN: "",
+};
+
+const provinceData = {
+  created_at: "",
+  deleted_at: "",
+  id: 0,
+  name_en: "",
+  name_th: "",
+  province_id: 1,
+  updated_at: "",
 };
 
 const MockIdCard = (props: Props) => {
@@ -41,6 +60,22 @@ const MockIdCard = (props: Props) => {
   const amphureReducer: any = useSelector(amphureSelector);
   const tumbolReducer: any = useSelector(tumbolSelector);
   const dispatch = useAppDispatch();
+
+
+  const photoPreview = [
+    {
+      value: "รูปผู้ชาย",
+      path: MenPreviewImage
+    },
+    {
+      value: "รูปผู้หญิง",
+      path: WomenPreviewImage
+    },
+    {
+      value: "รูปผู้หญิง 2",
+      path: WomenPreviewImage2
+    }
+  ]
 
   const MONTH_TH = [
     "มกราคม",
@@ -109,23 +144,33 @@ const MockIdCard = (props: Props) => {
   const [allProvince, setAllProvince] = useState([]);
   const [filterAmphure, setFilterAmphure] = useState([]);
   const [filterTumbol, setFilterTumbol] = useState([]);
-  const [selectProvince, setSelectProvince] = useState({});
-  const [selectAmphue, setSelectAmphur] = useState({});
   const [values, setValues] = useState(userDataObject);
 
-  const [selectBirthDate, setSelectBirthDate] = useState("");
-  const [setullYearIssue, setFullYearIssue] = useState("");
-  const [fullYearExpire, setFullYearExpire] = useState("");
+  const [province, setProvince] = useState(provinceData);
+  const [amphur, setAmphur] = useState(provinceData);
+  const [tumbol, setTumbol] = useState(provinceData);
 
-  const [province, setProvince] = useState("");
-  const [amphur, setAmphur] = useState("");
-  const [tumbol, setTumbol] = useState("");
-
+  const [customer, setCustomer] = useState(userDataObject);
+  const [firstAddress, setFirstAddress] = useState("");
+  const [secondeAddress, setSecondAddress] = useState("");
 
   const [dayBirth, setDayBirth] = useState("");
   const [monthBirth, setMonthBirth] = useState("");
+  const [monthBirthEN, setMonthBirthEN] = useState("");
   const [yearBirth, setYearBirth] = useState("");
 
+  const [selectDateIssue, setSelectDateIssue] = useState("");
+  const [selectMonthIssue, setSelectMonthIssue] = useState("");
+  const [selectMonthIssueEN, setSelectMonthIssueEN] = useState("");
+  const [selectYearIssue, setSelectYearIssue] = useState("");
+
+  const [selectDateExpire, setSelectDateExpire] = useState("");
+  const [selectMonthExpire, setSelectMonthExpire] = useState("");
+  const [selectMonthExpireEN, setSelectMonthExpireEN] = useState("");
+  const [selectYearExpire, setSelectYearExpire] = useState("");
+
+  const [generate, setGenerate] = useState(false);
+  const [images, setImage] = useState("");
 
   useEffect(() => {
     sharedService.getAllProvince().then((data: any) => {
@@ -194,21 +239,62 @@ const MockIdCard = (props: Props) => {
   };
 
   const handleDayBirth = ($event: any) => {
+    MONTH_MINI;
     const birth: any = $event.target;
-    console.log('day', birth.value)
+    console.log("day", MONTH_TH_MINI[Number(birth.value)]);
     setDayBirth(birth.value);
   };
 
   const handleMonthBirth = ($event: any) => {
-    const birth: any = $event.target;
-    console.log('month', birth.value)
-    setMonthBirth(birth.value);
+    const month: any = $event.target;
+    // setMonthBirth(birth.value);
+    console.log("month", month.value);
+    setMonthBirth(MONTH_TH_MINI[Number(month.value)]);
+    setMonthBirthEN(MONTH_MINI[Number(month.value)]);
   };
 
   const handleYearBirth = ($event: any) => {
     const birth: any = $event.target;
-    console.log('year', birth.value)
     setYearBirth(birth.value);
+  };
+
+  const handleDateIssue = ($event: any) => {
+    const date = $event.target;
+    console.log("date issue", date.value);
+    setSelectDateIssue(date.value);
+  };
+
+  const handleMonthIssue = ($event: any) => {
+    const month = $event.target;
+    // setSelectMonthIssue(month.value);
+    setSelectMonthIssue(MONTH_TH_MINI[Number(month.value)]);
+    setSelectMonthIssueEN(MONTH_MINI[Number(month.value)]);
+  };
+
+  const handleYearIssue = ($event: any) => {
+    const year = $event.target;
+    console.log("year issue", year.value);
+    setSelectYearIssue(year.value);
+  };
+
+  const handleDateExpire = ($event: any) => {
+    const date = $event.target;
+    console.log("data expire", date.value);
+    setSelectDateExpire(date.value);
+  };
+
+  const handleMonthExpire = ($event: any) => {
+    const month = $event.target;
+    console.log("month expire", month.value);
+    // setSelectMonthExpire(month.value);
+    setSelectMonthExpire(MONTH_TH_MINI[Number(month.value)]);
+    setSelectMonthExpireEN(MONTH_MINI[Number(month.value)]);
+  };
+
+  const handleYearExpire = ($event: any) => {
+    const year = $event.target;
+    console.log("year expire", year.value);
+    setSelectYearExpire(year.value);
   };
 
   const handleSelectProvince = ($event: any) => {
@@ -216,10 +302,14 @@ const MockIdCard = (props: Props) => {
     const filterAmphure = amphureReducer.amphure.amphure.filter(
       (item: any) => Number(item.province_id) === Number(provinceId)
     );
-    setSelectProvince(allProvince[provinceId - 1]);
 
-    console.log('s', allProvince[provinceId - 1]);
+    const getProvince = provinceReducer.province.province.find(
+      (item: any) => item.id === Number(provinceId)
+    );
 
+    console.log("province", getProvince);
+
+    setProvince(getProvince);
     setFilterAmphure(filterAmphure);
     getDefaultAmphur(filterAmphure[0]);
   };
@@ -228,8 +318,6 @@ const MockIdCard = (props: Props) => {
     const findTumbols = tumbolReducer.tumbol.tumbol.filter(
       (item: any) => Number(item.amphure_id) === Number(amphurId)
     );
-
-
     setFilterTumbol(findTumbols);
   };
 
@@ -239,42 +327,119 @@ const MockIdCard = (props: Props) => {
 
   const handleSelectAmphur = ($event: any) => {
     const amphurId = $event.target.value;
-    const getAmphur = amphureReducer.amphure.amphure.find((item: any) => item.id == amphurId);
-  
-    setAmphur(getAmphur.name_th);
+    const getAmphur = amphureReducer.amphure.amphure.find(
+      (item: any) => item.id == Number(amphurId)
+    );
 
+    setAmphur(getAmphur);
     findTumbol(amphurId);
   };
 
+  const handleSelectTumbol = ($event: any) => {
+    const tumbolId = $event.target.value;
+    const getTumbols = tumbolReducer.tumbol.tumbol.find(
+      (item: any) => item.id == Number(tumbolId)
+    );
+    setTumbol(getTumbols);
+  };
 
-  const onClickGenerate = () => { 
-   
+  const handleSelectImage = ($event: any) => { 
+    const image = $event.target
+    setImage(image.value);
+    console.log('image', image.value);
 
-    const idCard = values.idCard.split('');
-    const transformText = idCard[0] + ' ' + idCard[1] + idCard[2] + idCard[3] + idCard[4] + ' '
-                          + idCard[5]  + idCard[6]  + idCard[7]  + idCard[8]  + idCard[9] + ' '
-                          + idCard[10]  + idCard[11] + ' ' +  + idCard[12]
+  }
 
+  const onClickGenerate = () => {
+    const idCard = values.idCard.split("");
+    const transformText =
+      idCard[0] +
+      " " +
+      idCard[1] +
+      idCard[2] +
+      idCard[3] +
+      idCard[4] +
+      " " +
+      idCard[5] +
+      idCard[6] +
+      idCard[7] +
+      idCard[8] +
+      idCard[9] +
+      " " +
+      idCard[10] +
+      idCard[11] +
+      " " +
+      +idCard[12];
 
-    const data = {
+    const birthDate = dayBirth + " " + monthBirth + " " + yearBirth;
+    const issueDate =
+      selectDateIssue + " " + selectMonthIssue + " " + selectYearIssue;
+    const expireDate =
+      selectDateExpire + " " + selectMonthExpire + " " + selectYearExpire;
+
+    const birthDateEN = dayBirth + " " + monthBirthEN + " " + yearBirth;
+    const issueDateEN =
+      selectDateIssue + " " + selectMonthIssueEN + " " + selectYearIssue;
+    const expireDateEN =
+      selectDateExpire + " " + selectMonthExpireEN + " " + selectYearExpire;
+
+    console.log("issue date", issueDate);
+    console.log("expire date", expireDate);
+
+    let firstAddress: string = "";
+    let secondAddress: string = "";
+
+    if (province.name_en === "Bangkok") {
+      firstAddress += `${values.homeNo} `;
+      firstAddress += values.mooBan ? `${values.mooBan} ` : " ";
+      firstAddress += values.mooNo ? `หมู่ที่ ${values.mooNo} ` : " ";
+      firstAddress += values.soi ? "ซ." + `${values.soi} ` : " ";
+      firstAddress += values.road ? "ถ." + `${values.road} ` : " ";
+      firstAddress += `แขวง${tumbol.name_th} `;
+
+      secondAddress += amphur ? `${amphur.name_th} ` : " ";
+      secondAddress += province.name_th;
+
+      // setFirstAddress(firstAddress);
+      // setSecondAddress(secondAddress);
+    } else {
+      firstAddress += `${values.homeNo} `;
+      firstAddress += values.mooBan ? `${values.mooBan} ` : " ";
+      firstAddress += values.mooNo ? `หมู่ที่ ${values.mooNo} ` : " ";
+      firstAddress += values.soi ? "ซ." + `${values.soi} ` : " ";
+      firstAddress += values.road ? "ถ." + `${values.road} ` : " ";
+      firstAddress += `ต.${tumbol.name_th} `;
+
+      secondAddress += amphur ? `อ.${amphur.name_th} ` : " ";
+      secondAddress += province ? `จ.${province.name_th}` : " ";
+    }
+
+    const data: any = {
       titleName: values.titleName,
       firstName: values.firstName,
       lastName: values.lastName,
-      firstNameEN: values.enFirstName,
-      lastNameEN: values.enLastName,
+      firstNameEN: values.lastNameEN,
+      lastNameEN: values.lastNameEN,
       region: values.region,
       homeNo: values.homeNo,
       soi: values.soi,
       mooNo: values.mooNo,
       road: values.road,
-      mooBan: values.mooBan
-    }
+      mooBan: values.mooBan,
+      idCard: transformText,
+      birthDate: birthDate,
+      birthDateEN: birthDateEN,
+      issueDate: issueDate,
+      issueDateEN: issueDateEN,
+      expireDate: expireDate,
+      expireDateEN: expireDateEN,
+      firstAddress: firstAddress,
+      secondAddress: secondAddress,
+    };
 
-    const birthDate = dayBirth + ' ' + monthBirth + ' ' + yearBirth;
-   
-    console.log('brth', amphur);
-
-  }
+    setCustomer(data);
+    setGenerate(true);
+  };
 
   return (
     <div className="p-4 place-items-center">
@@ -400,7 +565,7 @@ const MockIdCard = (props: Props) => {
                                 เลขประจำตัวประชาชน :
                               </label>
                               <input
-                                type="input"
+                                type="number"
                                 name="idCard"
                                 className="inline-block 
                                             text-sm 
@@ -428,7 +593,7 @@ const MockIdCard = (props: Props) => {
                               </label>
                               <input
                                 type="input"
-                                name="enFirstName"
+                                name="firstNameEN"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -455,7 +620,7 @@ const MockIdCard = (props: Props) => {
                               </label>
                               <input
                                 type="input"
-                                name="enLastName"
+                                name="lastNameEN"
                                 className="inline-block 
                                             text-sm 
                                             px-3 
@@ -512,9 +677,7 @@ const MockIdCard = (props: Props) => {
                                   กรุณาเลือกวัน
                                 </option>
                                 {days.map((item: any) => (
-                                  <option key={item} value={item}>
-                                    {item}
-                                  </option>
+                                  <option key={item}>{item}</option>
                                 ))}
                               </select>
                             </li>
@@ -549,11 +712,13 @@ const MockIdCard = (props: Props) => {
                                 >
                                   กรุณาเลือกเดือน
                                 </option>
-                                {MONTH_TH_MINI.map((item: any) => (
-                                  <option key={item} value={item}>
-                                    {item}
-                                  </option>
-                                ))}
+                                {MONTH_TH_MINI.map(
+                                  (item: any, index: number) => (
+                                    <option key={item} value={index}>
+                                      {item}
+                                    </option>
+                                  )
+                                )}
                               </select>
                             </li>
 
@@ -587,7 +752,7 @@ const MockIdCard = (props: Props) => {
                                 >
                                   กรุณาเลือกปี
                                 </option>
-                                {yearExpire.map((item: any) => (
+                                {yearOfBirth.map((item: any) => (
                                   <option key={item} value={item}>
                                     {item}
                                   </option>
@@ -803,7 +968,6 @@ const MockIdCard = (props: Props) => {
                                             w-40
                                             lg:mt-0"
                                 onChange={handleSelectProvince}
-                                defaultValue={allProvince[0]}
                               >
                                 <option
                                   disabled={true}
@@ -842,7 +1006,6 @@ const MockIdCard = (props: Props) => {
                                             w-40
                                             lg:mt-0"
                                 onChange={handleSelectAmphur}
-                                defaultValue={filterAmphure[0]}
                               >
                                 <option
                                   disabled={true}
@@ -880,7 +1043,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleSelectTumbol}
                               >
                                 <option
                                   disabled={true}
@@ -890,7 +1053,7 @@ const MockIdCard = (props: Props) => {
                                   กรุณาเลือกตำบล
                                 </option>
                                 {filterTumbol.map((item: any) => (
-                                  <option key={item.id} value={item.name_th}>
+                                  <option key={item.id} value={item.id}>
                                     {item.name_th}
                                   </option>
                                 ))}
@@ -926,7 +1089,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleDateIssue}
                               >
                                 <option
                                   disabled={true}
@@ -964,7 +1127,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleMonthIssue}
                               >
                                 <option
                                   disabled={true}
@@ -973,11 +1136,13 @@ const MockIdCard = (props: Props) => {
                                 >
                                   กรุณาเลือกเดือน
                                 </option>
-                                {MONTH_TH_MINI.map((item: any) => (
-                                  <option key={item} value={item}>
-                                    {item}
-                                  </option>
-                                ))}
+                                {MONTH_TH_MINI.map(
+                                  (item: any, index: number) => (
+                                    <option key={item} value={index}>
+                                      {item}
+                                    </option>
+                                  )
+                                )}
                               </select>
                             </li>
 
@@ -1002,7 +1167,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleYearIssue}
                               >
                                 <option
                                   disabled={true}
@@ -1048,7 +1213,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleDateExpire}
                               >
                                 <option
                                   disabled={true}
@@ -1086,7 +1251,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleMonthExpire}
                               >
                                 <option
                                   disabled={true}
@@ -1095,11 +1260,13 @@ const MockIdCard = (props: Props) => {
                                 >
                                   กรุณาเลือกเดือน
                                 </option>
-                                {MONTH_TH_MINI.map((item: any) => (
-                                  <option key={item} value={item}>
-                                    {item}
-                                  </option>
-                                ))}
+                                {MONTH_TH_MINI.map(
+                                  (item: any, index: number) => (
+                                    <option key={item} value={index}>
+                                      {item}
+                                    </option>
+                                  )
+                                )}
                               </select>
                             </li>
 
@@ -1124,7 +1291,7 @@ const MockIdCard = (props: Props) => {
                                             mt-1
                                             w-40
                                             lg:mt-0"
-                                defaultValue={filterTumbol[0]}
+                                onChange={handleYearExpire}
                               >
                                 <option
                                   disabled={true}
@@ -1144,6 +1311,57 @@ const MockIdCard = (props: Props) => {
                         </div>
                       </div>
                     </nav>
+
+
+                    <nav className="p-3">
+                      <div className="container flex flex-wrap justify-between mx-auto">
+                        <div className="flex md:order-2">
+                          <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
+                            <li>
+                              <label
+                                htmlFor="large-input"
+                                className="block  text-start text-sm  text-gray-900"
+                              >
+                                วันที่หมดอายุ :
+                              </label>
+                              <select
+                                className="inline-block 
+                                            text-sm 
+                                            px-3 
+                                            py-2 
+                                            leading-none 
+                                            border 
+                                            rounded 
+                                            text-black 
+                                            border-gray-800
+                                            hover:bg-white 
+                                            mt-1
+                                            w-40
+                                            lg:mt-0"
+                                onChange={handleSelectImage}
+                              >
+                                <option
+                                  disabled={true}
+                                  selected={true}
+                                  value={0}
+                                >
+                                  กรุณาเลือกรูป
+                                </option>
+                                {photoPreview.map((item: any) => (
+                                  <option key={item.value} value={item.path}>
+                                    {item.value}
+                                  </option>
+                                ))}
+                              </select>
+                            </li>
+
+                          </ul>
+                        </div>
+                      </div>
+                    </nav>
+
+
+
                   </div>
                 </div>
               </div>
@@ -1180,9 +1398,11 @@ const MockIdCard = (props: Props) => {
                 </div>
               </div>
 
-              <div
-                id="message"
-                className="
+              {generate ? (
+                <>
+                  <div
+                    id="message"
+                    className="
                     mt-5
                     block 
                     p-4
@@ -1196,72 +1416,80 @@ const MockIdCard = (props: Props) => {
                     border-dashed border-2 border-gray-300
                     grid place-items-center h-full mt-5
                     "
-              >
-                <h1 className="text-xl font-bold text-gray-900">
-                  บัตรประชาชน :
-                </h1>
+                  >
+                    <h1 className="text-xl font-bold text-gray-900">
+                      บัตรประชาชน :
+                    </h1>
 
-                <br />
+                    <br />
 
-                <ul>
-                  <div className="container">
-                    <img
-                      src={ThaiIdCardTemplate}
-                      alt="Snow"
-                      style={{ width: "100%" }}
-                    />
-                    <div className="top-left id-card-font numbers">
-                      1 2701 00029 24 4
-                    </div>
-                    <div className="top-left-name id-card-font numbers">
-                      นาย ทดสอบ ทอสอบ
-                    </div>
-                    <div className="top-left-first-name-en en-name numbers">
-                      xxxxx
-                    </div>
-                    <div className="top-left-last-name-en en-name numbers">
-                      xxxxx
-                    </div>
-                    <div className="bottom-right">
-                      <img className="image-preview" src={WomenPreviewImage} />
-                    </div>
-                    <div className="position-birth-date id-card-font birth-date-large">
-                      Birth date
-                    </div>
+                    <ul>
+                      <div className="container">
+                        <img
+                          src={ThaiIdCardTemplate}
+                          alt="Snow"
+                          style={{ width: "100%" }}
+                        />
+                        <div className="top-left id-card-font numbers">
+                          {/* 1 2701 00029 24 4 */}
+                          {customer.idCard}
+                        </div>
+                        <div className="top-left-name id-card-font numbers">
+                          {customer.titleName} {customer.firstName}
+                        </div>
+                        <div className="top-left-first-name-en en-name numbers">
+                          {customer.firstNameEN}
+                        </div>
+                        <div className="top-left-last-name-en en-name numbers">
+                          {customer.lastNameEN}
+                        </div>
+                        <div className="bottom-right">
+                          <img
+                            className="image-preview"
+                            src={images}
+                          />
+                        </div>
+                        <div className="position-birth-date id-card-font birth-date-large">
+                          {customer.birthDate}
+                        </div>
 
-                    <div className="position-birth-of-date id-card-font birth-date-large en-name">
-                      Birth date
-                    </div>
+                        <div className="position-birth-of-date-en id-card-font birth-date-large en-name">
+                          {customer.birthDateEN}
+                        </div>
 
-                    <div className="position-region id-card-font birth-date en-name">
-                      Birth date
-                    </div>
+                        <div className="position-region id-card-font birth-date en-name">
+                          {customer.region}
+                        </div>
 
-                    <div className="position-address id-card-font birth-date">
-                      164/30 ภ.คอนกรีต แขวงบางรัก
-                    </div>
-                    <div className="position-address-province id-card-font birth-date">
-                      เขตภาษีเจริญ กรุงเทพมหานคร
-                    </div>
+                        <div className="position-address id-card-font birth-date">
+                          {/* 164/30 ภ.คอนกรีต แขวงบางรัก */}
+                          {customer.firstAddress}
+                        </div>
+                        <div className="position-address-province id-card-font birth-date">
+                          {customer.secondAddress}
+                        </div>
 
-                    <div className="position-expire-date id-card-font birth-date">
-                      4 ม.ค. 2573
-                    </div>
+                        <div className="position-expire-date id-card-font birth-date">
+                          {customer.expireDate}
+                        </div>
 
-                    <div className="position-expire-date-en id-card-font birth-date en-name">
-                      4 Jan 2573
-                    </div>
+                        <div className="position-expire-date-en id-card-font birth-date en-name">
+                          {customer.expireDateEN}
+                        </div>
 
-                    <div className="position-issue-date id-card-font birth-date">
-                      4 ม.ค. 2573
-                    </div>
+                        <div className="position-issue-date id-card-font birth-date">
+                          {customer.issueDate}
+                        </div>
 
-                    <div className="position-issue-date-en id-card-font birth-date en-name">
-                      4 Jan 2573
-                    </div>
+                        <div className="position-issue-date-en id-card-font birth-date en-name">
+                          {/* 4 Jan 2573 */}
+                          {customer.issueDateEN}
+                        </div>
+                      </div>
+                    </ul>
                   </div>
-                </ul>
-              </div>
+                </>
+              ) : null}
             </div>
           </div>
         </div>
