@@ -1430,8 +1430,8 @@ const MockIdCard = (props: Props) => {
                           {customer.idCard}
                         </div>
                         <div className="top-left-name id-card-font numbers">
-                          {customer.titleName} {customer.firstName}
-                        </div>
+                          {customer.titleName} {customer.firstName} {customer.lastName}
+                        </div> 
                         <div className="top-left-first-name-en en-name numbers">
                           {customer.firstNameEN}
                         </div>
