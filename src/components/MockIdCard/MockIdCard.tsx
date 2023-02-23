@@ -436,10 +436,8 @@ const MockIdCard = (props: Props) => {
       secondAddress: secondAddress ? secondAddress : undefined,
     };
 
-    console.log("data", data);
-
-    // setCustomer(data);
-    // setGenerate(true);
+    setCustomer(data);
+    setGenerate(true);
   };
 
   return (
