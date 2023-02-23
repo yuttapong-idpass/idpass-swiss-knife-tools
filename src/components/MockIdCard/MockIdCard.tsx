@@ -43,6 +43,7 @@ const userDataObject = {
   issueDateEN: "",
   expireDate: "",
   expireDateEN: "",
+  imagePath: ""
 };
 
 const provinceData = {
@@ -345,7 +346,6 @@ const MockIdCard = (props: Props) => {
   const handleSelectImage = ($event: any) => {
     const image = $event.target;
     setImage(image.value);
-    console.log("image", image.value);
   };
 
   const onClickGenerate = () => {
@@ -434,6 +434,7 @@ const MockIdCard = (props: Props) => {
       expireDateEN: expireDateEN ? expireDateEN : undefined,
       firstAddress: firstAddress ? firstAddress : undefined,
       secondAddress: secondAddress ? secondAddress : undefined,
+      imagePath: images ? images : ''
     };
 
     setCustomer(data);
@@ -1439,7 +1440,7 @@ const MockIdCard = (props: Props) => {
                           {customer.lastNameEN}
                         </div>
                         <div className="bottom-right">
-                          <img className="image-preview" src={images} />
+                          <img className="image-preview" src={customer.imagePath} />
                         </div>
                         <div className="position-birth-date id-card-font birth-date-large">
                           {customer.birthDate}
