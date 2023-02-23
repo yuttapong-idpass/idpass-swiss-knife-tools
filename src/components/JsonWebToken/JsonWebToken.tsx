@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
+import { Base64 } from "js-base64";
 import { useSelector } from "react-redux";
 import { encodeToken, encodeSelector } from "../../store/slice/jwtTokenSlice";
 import { decodeToken, decodeSelector } from "../../store/slice/jwtTokenSlice";
@@ -128,29 +129,6 @@ const JsonWebToken = (props: Props) => {
 
     const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
     const encodeHeader = base64Url(stringifiedHeader);
-
-    //  {
-    //     "username": "TW000681",
-    //     "timestamp": "",
-    //     "locationCode": "50185",
-    //     "email": "",
-    //     "firstname": "",
-    //     "lastname": "",
-    //     "sharedUser": "TW000681",
-    //     "userType": "ASP",
-    //     "role": "ASC TW",
-    //     "channelType": "sff-web",
-    //     "ascCode": "000679",
-    //     "mobileNo": "",
-    //     "sub": "",
-    //     "outChnSales": "Telewiz",
-    //     "outBusinessName": "",
-    //     "outPosition": "Owner",
-    //     "ou": "PARTNER",
-    //     "iat": 1672813236,
-    //     "exp": 1672816836
-    //   }
-
     const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(encode));
     const encodedData = base64Url(stringifiedData);
     const token = encodeHeader + "." + encodedData;
@@ -173,18 +151,30 @@ const JsonWebToken = (props: Props) => {
     let algorithm = decode.split(".")[0];
     let base64Payload = decode.split(".")[1];
     try {
-      const wordsAlgorithm = CryptoJS.enc.Base64.parse(algorithm);
-      const wordsBase643 = CryptoJS.enc.Base64.parse(base64Payload);
-      const textAlgorithm = CryptoJS.enc.Utf8.stringify(wordsAlgorithm);
-      const textBase64 = CryptoJS.enc.Utf8.stringify(wordsBase643);
+      // const wordsAlgorithm = CryptoJS.enc.Base64.parse(algorithm);
+      // const textAlgorithm = CryptoJS.enc.Utf8.stringify(wordsAlgorithm);
+      // const wordsBase64 = CryptoJS.enc.Base64.parse(base64Payload);
+      // const textBase64 = CryptoJS.enc.Utf8.stringify(wordsBase64);
+      // dispatch(
+      //   decodeToken({
+      //     result: { algorithm: textAlgorithm, decodeText: textBase64 },
+      //     isError: false,
+      //     messageError: "",
+      //   })
+      // );
+
+      const decodeAlgorithm = Base64.decode(algorithm);
+      const decodePayload = Base64.decode(base64Payload);
+
       dispatch(
         decodeToken({
-          result: { algorithm: textAlgorithm, decodeText: textBase64 },
+          result: { algorithm: decodeAlgorithm, decodeText: decodePayload },
           isError: false,
           messageError: "",
         })
       );
     } catch (error) {
+      console.error("json web token error -->", error);
       dispatch(
         decodeToken({
           result: { algorithm: "", decodeText: "" },
@@ -548,14 +538,15 @@ const JsonWebToken = (props: Props) => {
                           <div className="mt-5">
                             <span>
                               {!!decodeReducer.decoded.result?.algorithm ? (
-                                <span className="text-fuchsia-500">
-                                  {JSON.stringify(
+                                <span className="text-fuchsia-500 font-bold">
+                                  {/* {JSON.stringify(
                                     JSON.parse(
                                       decodeReducer.decoded.result?.algorithm
                                     ),
                                     undefined,
                                     2
-                                  )}
+                                  )} */}
+                                  { decodeReducer.decoded.result?.algorithm }
                                 </span>
                               ) : (
                                 <span className="text-bold text-xl">-</span>
@@ -578,7 +569,7 @@ const JsonWebToken = (props: Props) => {
                                 {/* {decodeReducer.decoded.result?.decodeText} */}
 
                                 {!!decodeReducer.decoded.result?.decodeText ? (
-                                  <span className="text-purple-600">
+                                  <span className="text-purple-600 font-bold">
                                     {JSON.stringify(
                                       JSON.parse(
                                         decodeReducer.decoded.result?.decodeText

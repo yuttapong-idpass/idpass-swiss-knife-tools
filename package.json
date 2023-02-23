@@ -16,6 +16,7 @@
     "axios": "^1.2.5",
     "crypto-js": "^4.1.1",
     "firebase": "^9.15.0",
+    "js-base64": "^3.7.5",
     "jsoneditor": "^9.9.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
