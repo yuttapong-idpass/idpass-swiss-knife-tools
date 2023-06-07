@@ -417,7 +417,7 @@ const MockIdCard = (props: Props) => {
       titleName: values.titleName,
       firstName: values.firstName ? values.firstName : undefined,
       lastName: values.lastName ? values.lastName : undefined,
-      firstNameEN: values.lastNameEN ? values.lastNameEN : undefined,
+      firstNameEN: values.firstNameEN ? values.firstNameEN : undefined,
       lastNameEN: values.lastNameEN ? values.lastNameEN : undefined,
       region: values.region ? values.region : undefined,
       homeNo: values.homeNo ? values.homeNo : undefined,
