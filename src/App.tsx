@@ -27,7 +27,7 @@ function App() {
             <Route path="/base64" element={<FromBase64/>} />
             <Route path="/jwt" element={<JsonWebToken />} />
             <Route path="/id-card" element={<IdCardGenerator /> }/>
-            <Route path="mock-up" element={<MockIdCard />} />
+            <Route path="/mock-up" element={<MockIdCard />} />
         </Routes>
       </BrowserRouter>
     </div>

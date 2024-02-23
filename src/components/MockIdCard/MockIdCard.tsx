@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ThaiIdCardTemplate from "../../assets/images/blank_id_card.png";
-import WomenPreviewImage from "../../assets/images/removebg-preview.png";
-import WomenPreviewImage2 from "../../assets/images/remove-bg-mock.png";
-import MenPreviewImage from "../../assets/images/men-removebg-preview.png";
+
 import "./MockIdCard.css";
 import { useAppDispatch } from "../../store/store";
 import {
@@ -16,6 +14,15 @@ import {
 } from "../../store/slice/provinceSlice";
 import sharedService from "../shared/share-api";
 import { useSelector } from "react-redux";
+
+import WomenPreviewImage from "../../assets/images/person/removebg-preview.png";
+import WomenPreviewImage2 from "../../assets/images/person/remove-bg-mock.png";
+import WomenPreviewImage3 from "../../assets/images/person/women_001.png";
+import WomenPreviewImage4 from "../../assets/images/person/women_002.png";
+
+import MenPreviewImage from "../../assets/images/person/men-removebg-preview.png";
+import MenPreviewImage2 from "../../assets/images/person/men_001.png";
+import MenPreviewImage3 from "../../assets/images/person/men_002.png";
 
 type Props = {};
 
@@ -43,7 +50,7 @@ const userDataObject = {
   issueDateEN: "",
   expireDate: "",
   expireDateEN: "",
-  imagePath: ""
+  imagePath: "",
 };
 
 const provinceData = {
@@ -64,16 +71,32 @@ const MockIdCard = (props: Props) => {
 
   const photoPreview = [
     {
-      value: "รูปผู้ชาย",
+      value: "รูปผู้ชายใส่เสื้อสีดำ",
       path: MenPreviewImage,
     },
     {
-      value: "รูปผู้หญิง",
+      value: "รูปผู้ชายใส่ผมทองใส่ต่างหู",
+      path: MenPreviewImage2,
+    },
+    {
+      value: "รูปผู้ชายผมยาวมีหนวดเคราสวมเสื้อบอล",
+      path: MenPreviewImage3,
+    },
+    {
+      value: "รูปผู้หญิงรัดผมใส่เสื้อสูทสีเทา",
       path: WomenPreviewImage,
     },
     {
-      value: "รูปผู้หญิง 2",
+      value: "รูปผู้หญิงผมยาวใส่เสื้อสีขาว",
       path: WomenPreviewImage2,
+    },
+    {
+      value: "รูปผู้หญิงผมสีทองใส่เสื้อลาย",
+      path: WomenPreviewImage3,
+    },
+    {
+      value: "รูปผู้หญิงผมยาวปิดใบหน้า",
+      path: WomenPreviewImage4,
     },
   ];
 
@@ -434,7 +457,7 @@ const MockIdCard = (props: Props) => {
       expireDateEN: expireDateEN ? expireDateEN : undefined,
       firstAddress: firstAddress ? firstAddress : undefined,
       secondAddress: secondAddress ? secondAddress : undefined,
-      imagePath: images ? images : ''
+      imagePath: images ? images : "",
     };
 
     setCustomer(data);
@@ -1431,8 +1454,9 @@ const MockIdCard = (props: Props) => {
                           {customer.idCard}
                         </div>
                         <div className="top-left-name id-card-font numbers">
-                          {customer.titleName} {customer.firstName} {customer.lastName}
-                        </div> 
+                          {customer.titleName} {customer.firstName}{" "}
+                          {customer.lastName}
+                        </div>
                         <div className="top-left-first-name-en en-name numbers">
                           {customer.firstNameEN}
                         </div>
@@ -1440,7 +1464,10 @@ const MockIdCard = (props: Props) => {
                           {customer.lastNameEN}
                         </div>
                         <div className="bottom-right">
-                          <img className="image-preview" src={customer.imagePath} />
+                          <img
+                            className="image-preview"
+                            src={customer.imagePath}
+                          />
                         </div>
                         <div className="position-birth-date id-card-font birth-date-large">
                           {customer.birthDate}
