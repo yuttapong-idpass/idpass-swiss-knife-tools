@@ -32,12 +32,9 @@ const JsonEditor = (props: Props) => {
       console.log('Child unmounted');
       jsoneditor.destroy();
     };
-
-
- 
   }, [props.json]);
 
-  return <div className="h-screen" ref={(my) => (container = my)} />;
+  return <div className="h-[97vh] mt-3 mr-3" ref={(my) => (container = my)} />;
 };
 
 export default JsonEditor;

@@ -12,7 +12,7 @@ import { useAppDispatch } from "../../store/store";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Highlighter from "react-highlight-words";
 import "./JsonPretty.css";
-import ReactJson from "react-json-view";
+// import ReactJson from "react-json-view";
 
 import JsonEditorInput from "./JSONEditor/JsonEditorInput";
 import JsonEditorOutput from "./JSONEditor/JsonEditorOutput";
@@ -27,69 +27,98 @@ const JsonPretty = (props: Props) => {
   let containerInput: any = createRef<HTMLElement>();
   let containerOutput: any = createRef<HTMLElement>();
 
-  let [resultInput, setResultInput] = useState({});
-  let [resultOutput, setResultOutput] = useState("");
+  let [resultInput, setResultInput] = useState(null);
+  let [resultOutput, setResultOutput] = useState(null);
 
   const handleJsonInput = (event: any) => {
-    let setting = JSON.parse(event);
-    setResultInput(setting);
+    // let setting = JSON.parse(event);
+    // setResultInput(setting);
   };
 
   const handleJsonOutput = (event: any) => {
-    setResultOutput(event);
+    // setResultOutput(event);
   };
 
-  const onClickPretty = () => {
-    const data: any = resultInput;
-    try {
-      dispatch(inputJson({ item: data, isError: false, messageError: "" }));
-    } catch (error: any) {
-      dispatch(inputJson({ item: {}, isError: true, messageError: error }));
-    }
-  };
+  // const onClickPretty = () => {
+  //   const data: any = resultInput;
+  //   try {
+  //     dispatch(inputJson({ item: data, isError: false, messageError: "" }));
+  //   } catch (error: any) {
+  //     dispatch(inputJson({ item: {}, isError: true, messageError: error }));
+  //   }
+  // };
 
   return (
-    <div className="p-2">
-      <div className="max-w-8xl mx-auto grid grid-cols-12">
-        <div className="col-span-5 h-screen">
-          <JsonEditorInput
-            options={{}}
-            json={jsonPrettyReducer.item}
-            onChangeJSON={handleJsonInput}
-          />
+    // <div className="p-2">
+    //   <div className="max-w-8xl mx-auto grid grid-cols-12">
+    //     <div className="col-span-5 h-screen">
+    //       <JsonEditorInput
+    //         options={{}}
+    //         json={jsonPrettyReducer.item}
+    //         onChangeJSON={handleJsonInput}
+    //       />
+    //     </div>
+    //     <div className="col-span-2">
+    //       <div className="grid place-items-center h-screen">
+    //         <div>
+    //           <button
+    //             type="button"
+    //             className=" justify-self-end
+    //             bg-blue-500
+    //             hover:bg-blue-400
+    //             text-white
+    //             font-bold
+    //             mt-1
+    //             py-1
+    //             px-4
+    //             border-b-4
+    //             border-blue-700
+    //             hover:border-blue-500
+    //             rounded
+    //             w-full"
+    //             onClick={onClickPretty}
+    //           >
+    //             Pretty
+    //           </button>
+    //         </div>
+    //       </div>
+    //     </div>
+    //     <div className="col-span-5">
+    //       <JsonEditorOutput
+    //         options={{}}
+    //         json={jsonPrettyReducer.item}
+    //         onChangeJSON={handleJsonOutput}
+    //       />
+    //     </div>
+    //   </div>
+    // </div>
+    <div className="flex flex-row w-full gap-4">
+      <div className="flex-initial w-full">
+        <JsonEditorInput
+          options={{}}
+          json={jsonPrettyReducer.item}
+          onChangeJSON={handleJsonInput}
+        />
+      </div>
+      <div className="flex-initial w-80">
+        <div className="grid place-items-center h-screen p-4">
+          <a
+            href="#_"
+            className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-green-600 border rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            data-rounded="rounded-md"
+            data-primary="blue-600"
+            data-primary-reset="{}"
+          >
+            Pretty
+          </a>
         </div>
-        <div className="col-span-2">
-          <div className="grid place-items-center h-screen">
-            <div>
-              <button
-                type="button"
-                className=" justify-self-end 
-                bg-blue-500 
-                hover:bg-blue-400 
-                text-white 
-                font-bold
-                mt-1 
-                py-1 
-                px-4 
-                border-b-4 
-                border-blue-700 
-                hover:border-blue-500 
-                rounded
-                w-full"
-                onClick={onClickPretty}
-              >
-                Pretty
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col-span-5">
-          <JsonEditorOutput
-            options={{}}
-            json={jsonPrettyReducer.item}
-            onChangeJSON={handleJsonOutput}
-          />
-        </div>
+      </div>
+      <div className="flex-initial w-full">
+        <JsonEditorOutput
+          options={{}}
+          json={jsonPrettyReducer.item}
+          onChangeJSON={handleJsonInput}
+        />
       </div>
     </div>
   );

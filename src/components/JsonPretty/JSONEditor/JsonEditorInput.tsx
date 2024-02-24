@@ -28,13 +28,12 @@ const JsonEditor = (props: Props) => {
     jsoneditor.set(props.json);
 
     return () => {
-      console.log("Child unmounted");
       jsoneditor.destroy();
     };
   }, []);
 
   return <>
-    <div className="h-screen" ref={(my) => (container = my)} />
+    <div className="h-[97vh] mt-3 ml-3" ref={(my) => (container = my)} />
   </>;
 };
 

@@ -19,7 +19,6 @@ interface IBase64 {
     errorImage: boolean;
 }
 
-
 export interface IDescription {
     name: string;
     height?: number;
