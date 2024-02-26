@@ -16,7 +16,7 @@ interface IJsonPretty {
 }
 
 const initialValues: JsonPrettyState = {
-    item: {},
+    item: undefined, 
     isError: false,
     messageError: ''
 }

@@ -21,7 +21,6 @@ type Props = {};
 
 const JsonPretty = (props: Props) => {
   const jsonPrettyReducer = useSelector(jsonPrettySelector);
-  const counterReducer = useSelector(counterSelector);
   const dispatch = useAppDispatch();
 
   let containerInput: any = createRef<HTMLElement>();
@@ -29,15 +28,22 @@ const JsonPretty = (props: Props) => {
 
   let [resultInput, setResultInput] = useState(null);
   let [resultOutput, setResultOutput] = useState(null);
+  let [errorsJson, setErrorJson ] = useState(null);
 
   const handleJsonInput = (event: any) => {
-    // let setting = JSON.parse(event);
-    // setResultInput(setting);
+    // let inputJson = JSON.parse(event);
+    // setResultInput(inputJson);
+    console.log('event', event);
   };
 
   const handleJsonOutput = (event: any) => {
-    // setResultOutput(event);
+    setResultOutput(event);
   };
+
+  const handleError = ($event: any)  => { 
+    console.log('error', $event)
+  }
+
 
   // const onClickPretty = () => {
   //   const data: any = resultInput;
@@ -95,22 +101,34 @@ const JsonPretty = (props: Props) => {
     <div className="flex flex-row w-full gap-4">
       <div className="flex-initial w-full">
         <JsonEditorInput
-          options={{}}
           json={jsonPrettyReducer.item}
+          onError={handleError}
           onChangeJSON={handleJsonInput}
         />
       </div>
       <div className="flex-initial w-80">
-        <div className="grid place-items-center h-screen p-4">
-          <a
-            href="#_"
-            className="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-green-600 border rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-            data-rounded="rounded-md"
-            data-primary="blue-600"
-            data-primary-reset="{}"
-          >
-            Pretty
-          </a>
+        <div className="grid place-items-center h-[98vh]">
+          <div>
+            <a
+              href="#_"
+              className="inline-flex w-full items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-green-600 border rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              data-rounded="rounded-md"
+              data-primary="blue-600"
+              data-primary-reset="{}"
+            >
+              Pretty
+            </a>
+    
+            <a
+              href="#_"
+              className="inline-flex mt-6 w-full items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-sky-600 border rounded-md shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+              data-rounded="rounded-md"
+              data-primary="blue-600"
+              data-primary-reset="{}"
+            >
+              Compare
+            </a>
+          </div>
         </div>
       </div>
       <div className="flex-initial w-full">

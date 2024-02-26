@@ -22,11 +22,25 @@ const JsonEditor = (props: Props) => {
       onError: function (err: any) {
         console.error(err);
       },
-      onChangeText: props.onChangeJSON
+      onChangeText: props.onChangeJSON,
     };
 
+    const mockUp = {
+    'array': [1, 2, 3],
+    'boolean': true,
+    'null': null,
+    'number': 123,
+    'object': {'a': 'b', 'c': 'd'},
+    'string': 'Hello World'
+  }
+
+
+
     let jsoneditor = new JSONEditor(container, options);
-    jsoneditor.set(props.json);
+    // jsoneditor.set(props.json); //! use
+    jsoneditor.focus();
+    // jsoneditor.set(null);  
+
 
     return () => {
       console.log('Child unmounted');
