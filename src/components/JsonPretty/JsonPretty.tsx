@@ -104,6 +104,7 @@ const JsonPretty = (props: Props) => {
           json={jsonPrettyReducer.item}
           onError={handleError}
           onChangeJSON={handleJsonInput}
+          container={containerInput}
         />
       </div>
       <div className="flex-initial w-80">
