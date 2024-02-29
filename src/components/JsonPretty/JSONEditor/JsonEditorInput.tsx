@@ -1,14 +1,8 @@
 import React, { createRef, useEffect, useState } from "react";
 import { saveAs } from "file-saver";
-import {
-  FaMaximize,
-  FaMinimize,
-  FaCopy,
-  FaFolderOpen,
-  FaEraser,
-} from "react-icons/fa6";
-import { FaSave } from "react-icons/fa";
-import { MdDeleteForever } from "react-icons/md";
+import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
+import { FaSave, FaEraser } from "react-icons/fa";
+import { MdOutlineDeleteForever } from "react-icons/md";
 
 import JSONEditor from "jsoneditor";
 import "jsoneditor/dist/jsoneditor.css";
@@ -25,6 +19,7 @@ type Props = {
 
 const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
   let [toggleFullScreen, setToggleFullScreen] = useState(false);
+  let [copyText, setCopyText] = useState("");
   let jsonEditorElementInput: any;
   const options: any = {
     mode: "code",
@@ -49,6 +44,10 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
     setToggleFullScreen(!toggleFullScreen);
   };
 
+  const onDeleteText = () => {
+    jsonEditorElementInput.setText();
+  };
+
   const onClickUploadTextFile = ($event: any) => {
     // const fileUpload: any = $event.target.files[0];
     const reader: any = new FileReader();
@@ -61,7 +60,7 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
     } else {
       console.log("file path ==>", filePath);
       reader.onload = () => {
-        jsonEditorElementInput.setText(JSON.parse(reader.result));
+        jsonEditorElementInput.setText(reader.result);
       };
       reader.readAsText($event.target.files[0]);
     }
@@ -89,15 +88,11 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
     }
   };
 
-  const onRemoveText = () => {
-    jsonEditorElementInput.set(undefined);
-  };
-
   const onCopyToClipBoard = () => {
-    <CopyToClipboard
-      text={'asdasdads'}
-      onCopy={() => {}}
-    ></CopyToClipboard>;
+    console.log('json', jsonEditorElementInput.getText());
+
+
+    // setCopyText(jsonEditorElementInput.getText());
   };
 
   return (
@@ -134,24 +129,15 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
             />
           </div>
           <div>
-            <CopyToClipboard 
-              text={'good'}
-              onCopy={() => {}}
-            ></CopyToClipboard>
-
-            <FaCopy
-              size={23}
-              className="hover:bg-gray-500"
-              title="Copy text"
-            />
+            <CopyToClipboard text={copyText} onCopy={() => {}}>
+              <span onClick={onCopyToClipBoard}>
+                Copy to clipboard with span
+              </span>
+            </CopyToClipboard>
+            {/* <FaCopy size={23} className="hover:bg-gray-500" title="Copy text" onClick={onCopyToClipBoard}/> */}
           </div>
           <div>
-            <FaEraser
-              size={23}
-              className="hover:bg-gray-500"
-              title="Remove text"
-              onClick={onRemoveText}
-            />
+            <FaEraser size={20} onClick={onDeleteText} />
           </div>
           <div onClick={onClickMaximize}>
             {toggleFullScreen ? (
