@@ -52,7 +52,7 @@ function App() {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex dark:bg-dark-bg">
         <BrowserRouter>
           <Sidebar>
             {/* <hr className="my-3" /> */}

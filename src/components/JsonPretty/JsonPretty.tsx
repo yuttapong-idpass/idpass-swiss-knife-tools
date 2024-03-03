@@ -33,7 +33,7 @@ const JsonPretty = (props: Props) => {
   const handleJsonInput = (event: any) => {
     // let inputJson = JSON.parse(event);
     // setResultInput(inputJson);
-    console.log('event', event);
+    // console.log('event', event);
   };
 
   const handleJsonOutput = (event: any) => {
@@ -134,9 +134,10 @@ const JsonPretty = (props: Props) => {
       </div>
       <div className="flex-initial w-full">
         <JsonEditorOutput
-          options={{}}
           json={jsonPrettyReducer.item}
-          onChangeJSON={handleJsonInput}
+          onError={handleError}
+          onChangeJSON={handleJsonOutput}
+          container={containerOutput}
         />
       </div>
     </div>

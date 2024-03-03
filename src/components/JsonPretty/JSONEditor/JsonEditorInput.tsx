@@ -8,7 +8,6 @@ import JSONEditor from "jsoneditor";
 import "jsoneditor/dist/jsoneditor.css";
 
 import "./JsonEditorInput.css";
-import CopyToClipboard from "react-copy-to-clipboard";
 
 type Props = {
   onChangeJSON: any;
@@ -23,7 +22,7 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
   let jsonEditorElementInput: any;
   const options: any = {
     mode: "code",
-    modes: ["text", "code", "tree"],
+    modes: ["text", "code"],
     indentation: 2,
     // onError: function (err: any) {
     //   console.error(err);
@@ -45,7 +44,15 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
   };
 
   const onDeleteText = () => {
-    jsonEditorElementInput.setText();
+    const mode = jsonEditorElementInput.getMode();
+    switch (mode) {
+      case "text":
+        jsonEditorElementInput.setText("");
+        break;
+      case "code":
+        jsonEditorElementInput.set();
+        break;
+    }
   };
 
   const onClickUploadTextFile = ($event: any) => {
@@ -88,11 +95,13 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
     }
   };
 
-  const onCopyToClipBoard = () => {
-    console.log('json', jsonEditorElementInput.getText());
-
-
-    // setCopyText(jsonEditorElementInput.getText());
+  const onCopyToClipBoard = async () => {
+    try {
+      const getText = jsonEditorElementInput.get();
+      await navigator.clipboard.writeText(JSON.stringify(getText));
+    } catch (error) {
+      console.log("error -> ", error);
+    }
   };
 
   return (
@@ -129,15 +138,20 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
             />
           </div>
           <div>
-            <CopyToClipboard text={copyText} onCopy={() => {}}>
-              <span onClick={onCopyToClipBoard}>
-                Copy to clipboard with span
-              </span>
-            </CopyToClipboard>
-            {/* <FaCopy size={23} className="hover:bg-gray-500" title="Copy text" onClick={onCopyToClipBoard}/> */}
+            <FaCopy
+              size={23}
+              className="hover:bg-gray-500"
+              title="Copy to clipboard"
+              onClick={onCopyToClipBoard}
+            />
           </div>
           <div>
-            <FaEraser size={20} onClick={onDeleteText} />
+            <FaEraser
+              size={23}
+              className="hover:bg-gray-500"
+              title="Delete"
+              onClick={onDeleteText}
+            />
           </div>
           <div onClick={onClickMaximize}>
             {toggleFullScreen ? (

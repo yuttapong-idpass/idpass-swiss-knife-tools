@@ -4,6 +4,7 @@ import SwissKnife from "../../assets/images/swiss-army-knife.png";
 import { createContext, useContext, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import DarkLightToggle from "../DarkLightToggle/DarkLightToggle";
 type Props = {
   children: any;
 };
@@ -23,7 +24,7 @@ export default function Sidebar({ children }: Props) {
   return (
     <>
       <aside className="h-screen">
-        <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+        <nav className="h-full flex flex-col bg-white dark:bg-dark-bg border-r border-[#000] shadow-sm">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               title="logo"
@@ -33,7 +34,7 @@ export default function Sidebar({ children }: Props) {
               }`}
             />
 
-            {expanded ? <span>ID PASS SWISS KNIFE</span> : null}
+            {expanded ? <span className="text-gray-600 dark:text-[#FABD40]">ID PASS SWISS KNIFE</span> : null}
 
             <button
               onClick={() => setExpanded((curr) => !curr)}
@@ -47,22 +48,23 @@ export default function Sidebar({ children }: Props) {
             <ul className="flex-1 px-3">{children}</ul>
           </SidebarContext.Provider>
 
-          <div className="border-t flex p-3">
+          <div className="border-t border-[#000] flex p-3">
             {/* <img
               title="profile"
               src={profile}
               className="w-10 h-10 rounded-md"
             /> */}
             <div
-              className={`flex justify-between items-center overflow-hidden transition-all ${
+              className={`flex justify-center items-center overflow-hidden transition-all ${
                 expanded ? "w-52 ml-3" : "w-0"
               } `}
             >
               <div className="leading-4">
-                <h4 className="font-semibold">constGenius</h4>
+                {/* <h4 className="font-semibold">constGenius</h4>
                 <span className="text-xs text-gray-600">
                   constgenius@gmail.com
-                </span>
+                </span> */}
+                <DarkLightToggle />
               </div>
               {/* <MoreVertical size={20} /> */}
             </div>
@@ -80,7 +82,7 @@ export function SidebarItem({ icon, text, active, alert, link }: SidebarProps) {
       className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-          : "hover:bg-indigo-50 text-gray-600"
+          : "hover:bg-indigo-50 text-gray-600 dark:text-gray-300"
       }`}
     >
       {icon}
