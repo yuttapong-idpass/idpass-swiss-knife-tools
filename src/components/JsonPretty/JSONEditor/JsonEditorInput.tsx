@@ -1,9 +1,9 @@
-import React, { createRef, useEffect, useState } from "react";
+import React, { createRef, useEffect, useState, useContext } from "react";
 import { saveAs } from "file-saver";
 import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
 import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
-
+import { ThemeContext } from "../../../providers/ThemeProvider";
 import JSONEditor from "jsoneditor";
 import "jsoneditor/dist/jsoneditor.css";
 
@@ -17,6 +17,9 @@ type Props = {
 };
 
 const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
+  const { theme, setTheme } = useContext(ThemeContext);
+  const isDark = theme === "dark";
+
   let [toggleFullScreen, setToggleFullScreen] = useState(false);
   let [copyText, setCopyText] = useState("");
   let jsonEditorElementInput: any;
@@ -109,7 +112,7 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
       className={`${toggleFullScreen ? "fullscreen" : "mt-3 ml-3"}`}
       id="jsonEditorInput"
     >
-      <div className="flex justify-between p-2 gap-2 w-full h-10  bg-[#202c37] text-gray-300">
+      <div className={`flex justify-between p-2 gap-2 w-full h-10  dark:bg-[#5C469C] text-gray-300`}>
         <div>Input Panel</div>
         <div className="flex gap-3">
           <div>
@@ -171,7 +174,7 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
         </div>
       </div>
       <div
-        className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} text-style`}
+        className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${isDark ? 'dark-mode' : 'light-mode'}`}
         ref={(my) => (container = my)}
       />
     </div>
