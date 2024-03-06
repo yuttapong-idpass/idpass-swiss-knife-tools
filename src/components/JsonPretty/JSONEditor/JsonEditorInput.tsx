@@ -109,7 +109,7 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
       className={`${toggleFullScreen ? "fullscreen" : "mt-3 ml-3"}`}
       id="jsonEditorInput"
     >
-      <div className="flex justify-between p-2 gap-2 w-full h-8  bg-sky-950 text-gray-300">
+      <div className="flex justify-between p-2 gap-2 w-full h-10  bg-[#202c37] text-gray-300">
         <div>Input Panel</div>
         <div className="flex gap-3">
           <div>
@@ -171,7 +171,7 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
         </div>
       </div>
       <div
-        className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"}`}
+        className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} text-style`}
         ref={(my) => (container = my)}
       />
     </div>
