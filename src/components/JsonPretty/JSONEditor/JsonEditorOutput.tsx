@@ -1,9 +1,9 @@
-import React, {  useState, useEffect } from "react";
+import React, {  useState, useEffect, useContext } from "react";
 import { saveAs } from "file-saver";
 import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
 import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
-
+import { ThemeContext } from "../../../providers/ThemeProvider";
 import JSONEditor from "jsoneditor";
 import "jsoneditor/dist/jsoneditor.css";
 
@@ -17,6 +17,10 @@ type Props = {
 };
 
 const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
+  const { theme, setTheme } = useContext(ThemeContext);
+  const isDark = theme === 'dark';  
+
+
   let [toggleFullScreen, setToggleFullScreen] = useState(false);
   let [copyText, setCopyText] = useState("");
   let jsonEditorElementInput: any;
@@ -37,22 +41,10 @@ const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
     return () => {
       jsonEditorElementInput.destroy();
     };
-  }, []);
+  }, [json]);
 
   const onClickMaximize = () => {
     setToggleFullScreen(!toggleFullScreen);
-  };
-
-  const onDeleteText = () => {
-    const mode = jsonEditorElementInput.getMode();
-    switch (mode) {
-      case "text":
-        jsonEditorElementInput.setText("");
-        break;
-      case "code":
-        jsonEditorElementInput.set();
-        break;
-    }
   };
 
   const onClickUploadTextFile = ($event: any) => {
@@ -110,7 +102,7 @@ const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
         className={`${toggleFullScreen ? "fullscreen" : "mt-3 ml-3 mr-3"}`}
         id="jsonEditorInput"
       >
-        <div className="flex justify-between p-2 gap-2 w-full h-10  bg-[#202c37] text-gray-300">
+        <div className="flex justify-between p-2 gap-2 w-full h-10  bg-[#1e1e1e] dark:bg-[#5c469c] text-gray-300">
           <div>Output Panel</div>
           <div className="flex gap-3">
             <div>
@@ -146,14 +138,6 @@ const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
                 onClick={onCopyToClipBoard}
               />
             </div>
-            <div>
-              <FaEraser
-                size={23}
-                className="hover:bg-gray-500"
-                title="Delete"
-                onClick={onDeleteText}
-              />
-            </div>
             <div onClick={onClickMaximize}>
               {toggleFullScreen ? (
                 <FaMinimize
@@ -172,7 +156,7 @@ const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
           </div>
         </div>
         <div
-          className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"}`}
+          className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${isDark ? 'dark-mode' : 'light-mode'}`}
           ref={(my) => (container = my)}
         />
       </div>

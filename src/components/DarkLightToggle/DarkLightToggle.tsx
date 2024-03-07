@@ -15,6 +15,7 @@ const DarkLightToggle = (props: Props) => {
       </div>
       <div className="toggle">
         <input
+          readOnly
           type="checkbox"
           id="toggle"
           value="dark"

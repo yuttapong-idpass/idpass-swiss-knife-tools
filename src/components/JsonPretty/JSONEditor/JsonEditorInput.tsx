@@ -46,18 +46,6 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
     setToggleFullScreen(!toggleFullScreen);
   };
 
-  const onDeleteText = () => {
-    const mode = jsonEditorElementInput.getMode();
-    switch (mode) {
-      case "text":
-        jsonEditorElementInput.setText("");
-        break;
-      case "code":
-        jsonEditorElementInput.set();
-        break;
-    }
-  };
-
   const onClickUploadTextFile = ($event: any) => {
     // const fileUpload: any = $event.target.files[0];
     const reader: any = new FileReader();
@@ -112,7 +100,7 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
       className={`${toggleFullScreen ? "fullscreen" : "mt-3 ml-3"}`}
       id="jsonEditorInput"
     >
-      <div className={`flex justify-between p-2 gap-2 w-full h-10  dark:bg-[#5C469C] text-gray-300`}>
+      <div className={'flex justify-between p-2 gap-2 w-full h-10 text-gray-300 bg-[#1E1E1E] dark:bg-[#5C469C] '}>
         <div>Input Panel</div>
         <div className="flex gap-3">
           <div>
@@ -146,14 +134,6 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
               className="hover:bg-gray-500"
               title="Copy to clipboard"
               onClick={onCopyToClipBoard}
-            />
-          </div>
-          <div>
-            <FaEraser
-              size={23}
-              className="hover:bg-gray-500"
-              title="Delete"
-              onClick={onDeleteText}
             />
           </div>
           <div onClick={onClickMaximize}>

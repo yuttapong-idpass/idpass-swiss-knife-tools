@@ -4,37 +4,27 @@ import { RootState } from './../store';
 
 
 type JsonPrettyState = {
-    item: any;
-    isError: boolean;
-    messageError: any;
+    data: any;
 }
 
 interface IJsonPretty {
-    item: any;
-    isError: boolean;
-    messageError: string;
+    data: any;
 }
 
 const initialValues: JsonPrettyState = {
-    item: undefined, 
-    isError: false,
-    messageError: ''
+    data: undefined
 }
 
 const jsonPrettySlice = createSlice({
     name: 'jsonPretty',
     initialState: initialValues,
     reducers: {
-        inputJson: (state: JsonPrettyState, action: PayloadAction<IJsonPretty>) => {
+        jsonData: (state: JsonPrettyState, action: PayloadAction<IJsonPretty>) => {
             return action.payload;
         },
-        outputJson: (state: JsonPrettyState, action: PayloadAction<IJsonPretty>) => {
-            return action.payload;
-        }
-
     }
 });
 
-export const { inputJson, outputJson } = jsonPrettySlice.actions;
+export const { jsonData } = jsonPrettySlice.actions;
 export const jsonPrettySelector = (store: RootState) => store.jsonPrettyReducer;
 export default jsonPrettySlice.reducer;

@@ -1,18 +1,11 @@
 import React, { createRef, useEffect, useState } from "react";
-import FullScreenImage from "../../assets/images/full-screen.png";
-import ExitFullScreenImage from "../../assets/images/exit-fullscreen.png";
-import CopyToClipboardImage from "../../assets/images/copy-to-clipboard.png";
 import { useSelector } from "react-redux";
 import {
   jsonPrettySelector,
-  inputJson,
+  jsonData,
 } from "./../../store/slice/JsonPrettySlice";
-import { counterSelector, increase } from "../../store/slice/counterSlice";
 import { useAppDispatch } from "../../store/store";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import Highlighter from "react-highlight-words";
 import "./JsonPretty.css";
-// import ReactJson from "react-json-view";
 
 import JsonEditorInput from "./JSONEditor/JsonEditorInput";
 import JsonEditorOutput from "./JSONEditor/JsonEditorOutput";
@@ -26,82 +19,33 @@ const JsonPretty = (props: Props) => {
   let containerInput: any = createRef<HTMLElement>();
   let containerOutput: any = createRef<HTMLElement>();
 
-  let [resultInput, setResultInput] = useState(null);
-  let [resultOutput, setResultOutput] = useState(null);
-  let [errorsJson, setErrorJson ] = useState(null);
+  let [resultInput, setResultInput] = useState("");
 
   const handleJsonInput = (event: any) => {
-    // let inputJson = JSON.parse(event);
-    // setResultInput(inputJson);
-    // console.log('event', event);
+    setResultInput(event);
   };
 
   const handleJsonOutput = (event: any) => {
-    setResultOutput(event);
   };
 
-  const handleError = ($event: any)  => { 
-    console.log('error', $event)
-  }
+  const handleError = ($event: any) => {
+    console.log("error", $event);
+  };
 
-
-  // const onClickPretty = () => {
-  //   const data: any = resultInput;
-  //   try {
-  //     dispatch(inputJson({ item: data, isError: false, messageError: "" }));
-  //   } catch (error: any) {
-  //     dispatch(inputJson({ item: {}, isError: true, messageError: error }));
-  //   }
-  // };
+  const onClickPretty = () => {
+    try {
+      const data = JSON.parse(resultInput);
+      dispatch(jsonData({ data: data }));
+    } catch (error) {
+      console.log("error ->", error);
+    }
+  };
 
   return (
-    // <div className="p-2">
-    //   <div className="max-w-8xl mx-auto grid grid-cols-12">
-    //     <div className="col-span-5 h-screen">
-    //       <JsonEditorInput
-    //         options={{}}
-    //         json={jsonPrettyReducer.item}
-    //         onChangeJSON={handleJsonInput}
-    //       />
-    //     </div>
-    //     <div className="col-span-2">
-    //       <div className="grid place-items-center h-screen">
-    //         <div>
-    //           <button
-    //             type="button"
-    //             className=" justify-self-end
-    //             bg-blue-500
-    //             hover:bg-blue-400
-    //             text-white
-    //             font-bold
-    //             mt-1
-    //             py-1
-    //             px-4
-    //             border-b-4
-    //             border-blue-700
-    //             hover:border-blue-500
-    //             rounded
-    //             w-full"
-    //             onClick={onClickPretty}
-    //           >
-    //             Pretty
-    //           </button>
-    //         </div>
-    //       </div>
-    //     </div>
-    //     <div className="col-span-5">
-    //       <JsonEditorOutput
-    //         options={{}}
-    //         json={jsonPrettyReducer.item}
-    //         onChangeJSON={handleJsonOutput}
-    //       />
-    //     </div>
-    //   </div>
-    // </div>
     <div className="flex flex-row w-full gap-4">
       <div className="flex-initial w-full">
         <JsonEditorInput
-          json={jsonPrettyReducer.item}
+          json={jsonPrettyReducer.data}
           onError={handleError}
           onChangeJSON={handleJsonInput}
           container={containerInput}
@@ -110,31 +54,19 @@ const JsonPretty = (props: Props) => {
       <div className="flex-initial w-80">
         <div className="grid place-items-center h-[98vh]">
           <div>
-            <a
-              href="#_"
-              className="inline-flex w-full items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-green-600 border rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              data-rounded="rounded-md"
-              data-primary="blue-600"
-              data-primary-reset="{}"
+            <button
+              title="Pretty json"
+              className="inline-flex w-full item-centers justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-[#38b000] rounded-md shadow-sm hover:bg-[#73DF5C]"
+              onClick={onClickPretty}
             >
               Pretty
-            </a>
-    
-            <a
-              href="#_"
-              className="inline-flex mt-6 w-full items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-sky-600 border rounded-md shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
-              data-rounded="rounded-md"
-              data-primary="blue-600"
-              data-primary-reset="{}"
-            >
-              Compare
-            </a>
+            </button>
           </div>
         </div>
       </div>
       <div className="flex-initial w-full">
         <JsonEditorOutput
-          json={jsonPrettyReducer.item}
+          json={jsonPrettyReducer.data}
           onError={handleError}
           onChangeJSON={handleJsonOutput}
           container={containerOutput}
