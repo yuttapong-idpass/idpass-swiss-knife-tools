@@ -142,7 +142,6 @@ tr.jsoneditor-selected {
   div.jsoneditor-field,
   div.jsoneditor-value {
     color: #ffff;
-
   }
 
 
@@ -217,7 +216,6 @@ div.jsoneditor-value.jsoneditor-invalid {
   top: 0;
   left: 0;
 }
-
 
 .image-upload>input {
   display: none;

@@ -10,33 +10,33 @@ import "jsoneditor/dist/jsoneditor.css";
 import "./JsonEditorInput.css";
 
 type Props = {
-  onChangeJSON: any;
+  onChangeText: any;
   onError: any;
-  json: any;
   container: any;
+  onChangeTextFromFile?: any
 };
 
-const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
+const JsonEditorInput = ({ onChangeText, onError, container, onChangeTextFromFile }: Props) => {
   const { theme, setTheme } = useContext(ThemeContext);
   const isDark = theme === "dark";
 
-  let [toggleFullScreen, setToggleFullScreen] = useState(false);
-  let [copyText, setCopyText] = useState("");
+  const [toggleFullScreen, setToggleFullScreen] = useState(false);
+  const [copyText, setCopyText] = useState("");
   let jsonEditorElementInput: any;
   const options: any = {
     mode: "code",
-    modes: ["text", "code"],
+    modes: ["text", "code", "tree"],
     indentation: 2,
-    // onError: function (err: any) {
-    //   console.error(err);
-    // },
     onError: onError,
-    onChangeText: onChangeJSON,
+    onChangeText: function ($event: any) {
+      onChangeText($event);
+      jsonEditorElementInput.refresh();
+    }
   };
 
   useEffect(() => {
     jsonEditorElementInput = new JSONEditor(container, options);
-    jsonEditorElementInput.set(json);
+    jsonEditorElementInput.update(undefined);
     return () => {
       jsonEditorElementInput.destroy();
     };
@@ -56,9 +56,9 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
       filePath.value = "";
       return false;
     } else {
-      console.log("file path ==>", filePath);
       reader.onload = () => {
         jsonEditorElementInput.setText(reader.result);
+        onChangeTextFromFile(reader.result);
       };
       reader.readAsText($event.target.files[0]);
     }
@@ -88,8 +88,12 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
 
   const onCopyToClipBoard = async () => {
     try {
-      const getText = jsonEditorElementInput.get();
-      await navigator.clipboard.writeText(JSON.stringify(getText));
+      if (typeof copyText === "string") {
+        await navigator.clipboard.writeText(copyText);
+      }
+      if (typeof copyText === "object") {
+        await navigator.clipboard.writeText(JSON.stringify(copyText));
+      }
     } catch (error) {
       console.log("error -> ", error);
     }
@@ -100,7 +104,11 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
       className={`${toggleFullScreen ? "fullscreen" : "mt-3 ml-3"}`}
       id="jsonEditorInput"
     >
-      <div className={'flex justify-between p-2 gap-2 w-full h-10 text-gray-300 bg-[#1E1E1E] dark:bg-[#5C469C] '}>
+      <div
+        className={
+          "flex justify-between p-2 gap-2 w-full h-10 text-gray-300 bg-[#1E1E1E] dark:bg-[#5C469C] "
+        }
+      >
         <div>Input Panel</div>
         <div className="flex gap-3">
           <div>
@@ -154,7 +162,9 @@ const JsonEditorInput = ({ onChangeJSON, onError, json, container }: Props) => {
         </div>
       </div>
       <div
-        className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${isDark ? 'dark-mode' : 'light-mode'}`}
+        className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${
+          isDark ? "dark-mode" : "light-mode"
+        }`}
         ref={(my) => (container = my)}
       />
     </div>

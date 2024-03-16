@@ -1,4 +1,4 @@
-import React, {  useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { saveAs } from "file-saver";
 import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
 import { FaSave, FaEraser } from "react-icons/fa";
@@ -10,38 +10,37 @@ import "jsoneditor/dist/jsoneditor.css";
 import "./JsonEditorOutput.css";
 
 type Props = {
-  onChangeJSON: any;
   onError: any;
-  json: any;
+  text: any;
   container: any;
 };
 
-const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
+const JsonEditor = ({ onError, text, container }: Props) => {
   const { theme, setTheme } = useContext(ThemeContext);
-  const isDark = theme === 'dark';  
-
+  const isDark = theme === "dark";
 
   let [toggleFullScreen, setToggleFullScreen] = useState(false);
   let [copyText, setCopyText] = useState("");
-  let jsonEditorElementInput: any;
+  let jsonEditorElementOutput: any;
   const options: any = {
     mode: "code",
-    modes: ["text", "code"],
+    modes: ["text", "code", "tree"],
     indentation: 2,
-    // onError: function (err: any) {
-    //   console.error(err);
-    // },
+    onClassName: 'light_mode',
     onError: onError,
-    onChangeText: onChangeJSON,
+    onChangeText: function ($event: any) {
+      setCopyText($event);
+      jsonEditorElementOutput.refresh();
+    }
   };
 
   useEffect(() => {
-    jsonEditorElementInput = new JSONEditor(container, options);
-    jsonEditorElementInput.set(json);
+    jsonEditorElementOutput = new JSONEditor(container, options);
+    jsonEditorElementOutput.update(text);
     return () => {
-      jsonEditorElementInput.destroy();
+      jsonEditorElementOutput.destroy();
     };
-  }, [json]);
+  }, [text]);
 
   const onClickMaximize = () => {
     setToggleFullScreen(!toggleFullScreen);
@@ -59,7 +58,7 @@ const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
     } else {
       console.log("file path ==>", filePath);
       reader.onload = () => {
-        jsonEditorElementInput.setText(reader.result);
+        jsonEditorElementOutput.setText(reader.result);
       };
       reader.readAsText($event.target.files[0]);
     }
@@ -77,7 +76,7 @@ const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
           fileName = fileName?.split(".")[0] + ".json";
         }
       }
-      const blob = new Blob([jsonEditorElementInput.getText()], {
+      const blob = new Blob([jsonEditorElementOutput.getText()], {
         type: "application/json;charset=utf-8",
       });
       saveAs(blob, fileName);
@@ -89,8 +88,7 @@ const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
 
   const onCopyToClipBoard = async () => {
     try {
-      const getText = jsonEditorElementInput.get();
-      await navigator.clipboard.writeText(JSON.stringify(getText));
+      await navigator.clipboard.writeText(JSON.stringify(copyText));
     } catch (error) {
       console.log("error -> ", error);
     }
@@ -156,7 +154,9 @@ const JsonEditor = ({ onChangeJSON, onError, json, container }: Props) => {
           </div>
         </div>
         <div
-          className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${isDark ? 'dark-mode' : 'light-mode'}`}
+          className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${
+            isDark ? "dark-mode" : "light-mode"
+          }`}
           ref={(my) => (container = my)}
         />
       </div>

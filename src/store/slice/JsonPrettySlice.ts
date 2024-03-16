@@ -1,30 +1,51 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, combineReducers, createSlice } from '@reduxjs/toolkit';
 import { RootState } from './../store';
 
 
-
-type JsonPrettyState = {
-    data: any;
+type JsonTextInputState = {
+    input: any;
 }
 
-interface IJsonPretty {
-    data: any;
+type JsonTextOutputState = {
+    output: any;
 }
 
-const initialValues: JsonPrettyState = {
-    data: undefined
+
+
+const initialInputValue: JsonTextInputState = {
+    input: undefined
 }
 
-const jsonPrettySlice = createSlice({
-    name: 'jsonPretty',
-    initialState: initialValues,
+const initialOutputValue: JsonTextOutputState = {
+    output: undefined
+}
+
+const jsonPrettyInputSlice = createSlice({
+    name: 'jsonPrettyInput',
+    initialState: initialInputValue,
     reducers: {
-        jsonData: (state: JsonPrettyState, action: PayloadAction<IJsonPretty>) => {
+        inputData: (state: JsonTextInputState, action: PayloadAction<{ input: any }>) => {
             return action.payload;
         },
     }
 });
 
-export const { jsonData } = jsonPrettySlice.actions;
-export const jsonPrettySelector = (store: RootState) => store.jsonPrettyReducer;
-export default jsonPrettySlice.reducer;
+const jsonPrettyOutputSlice = createSlice({
+    name: 'jsonPrettyOutput',
+    initialState: initialOutputValue,
+    reducers: {
+        outputData: (state: JsonTextOutputState, action: PayloadAction<{ output: any }>) => {
+            return action.payload;
+        }
+    }
+});
+
+
+export const { inputData } = jsonPrettyInputSlice.actions;
+export const { outputData } = jsonPrettyOutputSlice.actions;
+export const jsonPrettyInputSelector = (store: RootState) => store.jsonPrettyInputReducer;
+export const jsonPrettyOutputSelector = (store: RootState) => store.jsonPrettyOutputReducer;
+export default combineReducers({
+    input: jsonPrettyInputSlice.reducer,
+    output: jsonPrettyOutputSlice.reducer
+})

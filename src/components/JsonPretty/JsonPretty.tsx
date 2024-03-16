@@ -1,41 +1,49 @@
 import React, { createRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  jsonPrettySelector,
-  jsonData,
-} from "./../../store/slice/JsonPrettySlice";
 import { useAppDispatch } from "../../store/store";
 import "./JsonPretty.css";
 
+import {
+  jsonPrettyInputSelector,
+  inputData,
+} from "../../store/slice/JsonPrettySlice";
+
+import {
+  jsonPrettyOutputSelector,
+  outputData,
+} from "../../store/slice/JsonPrettySlice";
+
 import JsonEditorInput from "./JSONEditor/JsonEditorInput";
 import JsonEditorOutput from "./JSONEditor/JsonEditorOutput";
+import _ from "lodash";
 
 type Props = {};
 
 const JsonPretty = (props: Props) => {
-  const jsonPrettyReducer = useSelector(jsonPrettySelector);
+  const jsonPrettyInputReducer = useSelector(jsonPrettyInputSelector);
+  const jsonPrettyOutputReducer = useSelector(jsonPrettyOutputSelector);
+
   const dispatch = useAppDispatch();
 
   let containerInput: any = createRef<HTMLElement>();
   let containerOutput: any = createRef<HTMLElement>();
 
-  let [resultInput, setResultInput] = useState("");
-
-  const handleJsonInput = (event: any) => {
-    setResultInput(event);
+  const handleJsonInput = (text: any) => {
+    dispatch(inputData({ input: text }));
   };
 
-  const handleJsonOutput = (event: any) => {
-  };
+  const handleJsonInputFromFile = (text: any) => { 
+    dispatch(inputData({ input: text }));
+  }
 
-  const handleError = ($event: any) => {
-    console.log("error", $event);
+  const handleError = (text: any) => {
+    console.log('error json editor ->', text);
   };
-
   const onClickPretty = () => {
     try {
-      const data = JSON.parse(resultInput);
-      dispatch(jsonData({ data: data }));
+      dispatch(
+        outputData({ output: JSON.parse(jsonPrettyInputReducer.input.input) })
+      );
     } catch (error) {
       console.log("error ->", error);
     }
@@ -45,10 +53,10 @@ const JsonPretty = (props: Props) => {
     <div className="flex flex-row w-full gap-4">
       <div className="flex-initial w-full">
         <JsonEditorInput
-          json={jsonPrettyReducer.data}
           onError={handleError}
-          onChangeJSON={handleJsonInput}
           container={containerInput}
+          onChangeText={handleJsonInput}
+          onChangeTextFromFile={handleJsonInputFromFile}
         />
       </div>
       <div className="flex-initial w-80">
@@ -66,9 +74,8 @@ const JsonPretty = (props: Props) => {
       </div>
       <div className="flex-initial w-full">
         <JsonEditorOutput
-          json={jsonPrettyReducer.data}
+          text={jsonPrettyOutputReducer.output.output}
           onError={handleError}
-          onChangeJSON={handleJsonOutput}
           container={containerOutput}
         />
       </div>
