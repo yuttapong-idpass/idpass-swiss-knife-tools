@@ -1,11 +1,19 @@
-import React, { createRef, useEffect, useState, useContext } from "react";
+import React, {
+  createRef,
+  useEffect,
+  useState,
+  useContext,
+  useRef,
+} from "react";
 import { saveAs } from "file-saver";
 import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
 import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { ThemeContext } from "../../../providers/ThemeProvider";
-import JSONEditor from "jsoneditor";
-import "jsoneditor/dist/jsoneditor.css";
+// import JSONEditor from "jsoneditor";
+// import "jsoneditor/dist/jsoneditor.css";
+
+import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
 
 import "./JsonEditorInput.css";
 
@@ -13,34 +21,66 @@ type Props = {
   onChangeText: any;
   onError: any;
   container: any;
-  onChangeTextFromFile?: any
 };
 
-const JsonEditorInput = ({ onChangeText, onError, container, onChangeTextFromFile }: Props) => {
+const JsonEditorInput = (props: Props) => {
   const { theme, setTheme } = useContext(ThemeContext);
   const isDark = theme === "dark";
 
+  // let jsonEditorElementInput: any;
+  // const options: any = {
+  //   mode: "code",
+  //   modes: ["text", "code", "tree"],
+  //   indentation: 2,
+  //   onError: onError,
+  //   onChangeText: function ($event: any) {
+  //     onChangeText($event);
+  //     jsonEditorElementInput.refresh();
+  //   }
+  // };
+
+  // useEffect(() => {
+  // jsonEditorElementInput = new JSONEditor(container, options);
+  // jsonEditorElementInput.update(undefined);
+  // return () => {
+  //   jsonEditorElementInput.destroy();
+  // };
+  // }, []);
+
+
+
+  const refContainer = useRef<HTMLDivElement>(null);
+  const refEditor = useRef<JSONEditor | null>(null);
+  const [inputText, setInputText] = useState("");
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
   const [copyText, setCopyText] = useState("");
-  let jsonEditorElementInput: any;
-  const options: any = {
-    mode: "code",
-    modes: ["text", "code", "tree"],
-    indentation: 2,
-    onError: onError,
-    onChangeText: function ($event: any) {
-      onChangeText($event);
-      jsonEditorElementInput.refresh();
-    }
-  };
 
   useEffect(() => {
-    jsonEditorElementInput = new JSONEditor(container, options);
-    jsonEditorElementInput.update(undefined);
+    //create editor
+    refEditor.current = new JSONEditor({
+      target: refContainer.current!,
+      props: {
+        onChange(content: any, previousContent, status) {
+          props.onChangeText(JSON.parse(content.text));
+        },
+        mode: Mode.text,
+      }
+    });
+
     return () => {
-      jsonEditorElementInput.destroy();
+      if (refEditor.current) {
+        refEditor.current.destroy();
+        refEditor.current = null;
+      }
     };
   }, []);
+
+  useEffect(() => {
+    // update props
+    if (refEditor.current) {
+      refEditor.current.updateProps(props);
+    }
+  }, [props]);
 
   const onClickMaximize = () => {
     setToggleFullScreen(!toggleFullScreen);
@@ -57,33 +97,38 @@ const JsonEditorInput = ({ onChangeText, onError, container, onChangeTextFromFil
       return false;
     } else {
       reader.onload = () => {
-        jsonEditorElementInput.setText(reader.result);
-        onChangeTextFromFile(reader.result);
+        // jsonEditorElementInput.updateText(reader.result);
+        refEditor.current?.update({ json: JSON.parse(reader.result)});
+        console.log('get data', refEditor.current?.get());
+        props.onChangeText(refEditor.current?.get());
+        // onChangeTextFromFile(reader.result);
       };
       reader.readAsText($event.target.files[0]);
+      $event.target.value = "";
     }
   };
 
   const onClickSaveJsonFile = () => {
-    let fileName = window.prompt("Save as...");
-    if (!!fileName) {
-      if (fileName?.indexOf(".") === -1) {
-        fileName = fileName + ".json";
-      } else {
-        if (fileName?.split(".").pop()?.toLowerCase() === "json") {
-          // Nothing to do
-        } else {
-          fileName = fileName?.split(".")[0] + ".json";
-        }
-      }
-      const blob = new Blob([jsonEditorElementInput.getText()], {
-        type: "application/json;charset=utf-8",
-      });
-      saveAs(blob, fileName);
-    } else {
-      //! nothing
-      return;
-    }
+    // let fileName = window.prompt("Save as...");
+    // if (!!fileName) {
+    //   if (fileName?.indexOf(".") === -1) {
+    //     fileName = fileName + ".json";
+    //   } else {
+    //     if (fileName?.split(".").pop()?.toLowerCase() === "json") {
+    //       // Nothing to do
+    //     } else {
+    //       fileName = fileName?.split(".")[0] + ".json";
+    //     }
+    //   }
+    //   const currentJson: any = refEditor.current?.get();
+    //   const blob = new Blob([JSON.stringify(currentJson?.json)], {
+    //     type: "application/json;charset=utf-8",
+    //   });
+    //   saveAs(blob, fileName);
+    // } else {
+    //   //! nothing
+    //   return;
+    // }
   };
 
   const onCopyToClipBoard = async () => {
@@ -141,7 +186,6 @@ const JsonEditorInput = ({ onChangeText, onError, container, onChangeTextFromFil
               size={23}
               className="hover:bg-gray-500"
               title="Copy to clipboard"
-              onClick={onCopyToClipBoard}
             />
           </div>
           <div onClick={onClickMaximize}>
@@ -165,7 +209,7 @@ const JsonEditorInput = ({ onChangeText, onError, container, onChangeTextFromFil
         className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${
           isDark ? "dark-mode" : "light-mode"
         }`}
-        ref={(my) => (container = my)}
+        ref={refContainer}
       />
     </div>
   );

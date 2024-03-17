@@ -29,7 +29,8 @@ const JsonPretty = (props: Props) => {
   let containerOutput: any = createRef<HTMLElement>();
 
   const handleJsonInput = (text: any) => {
-    dispatch(inputData({ input: text }));
+    console.log('data', text);
+    // dispatch(inputData({ input: text }));
   };
 
   const handleJsonInputFromFile = (text: any) => { 
@@ -50,13 +51,12 @@ const JsonPretty = (props: Props) => {
   };
 
   return (
-    <div className="flex flex-row w-full gap-4">
+    <div className="flex flex-row w-full gap-2">
       <div className="flex-initial w-full">
         <JsonEditorInput
           onError={handleError}
           container={containerInput}
           onChangeText={handleJsonInput}
-          onChangeTextFromFile={handleJsonInputFromFile}
         />
       </div>
       <div className="flex-initial w-80">
