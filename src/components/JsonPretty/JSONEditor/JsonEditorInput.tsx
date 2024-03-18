@@ -13,6 +13,7 @@ import { ThemeContext } from "../../../providers/ThemeProvider";
 // import JSONEditor from "jsoneditor";
 // import "jsoneditor/dist/jsoneditor.css";
 
+import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
 
 import "./JsonEditorInput.css";
@@ -47,8 +48,6 @@ const JsonEditorInput = (props: Props) => {
   // };
   // }, []);
 
-
-
   const refContainer = useRef<HTMLDivElement>(null);
   const refEditor = useRef<JSONEditor | null>(null);
   const [inputText, setInputText] = useState("");
@@ -64,7 +63,7 @@ const JsonEditorInput = (props: Props) => {
           props.onChangeText(JSON.parse(content.text));
         },
         mode: Mode.text,
-      }
+      },
     });
 
     return () => {
@@ -98,8 +97,8 @@ const JsonEditorInput = (props: Props) => {
     } else {
       reader.onload = () => {
         // jsonEditorElementInput.updateText(reader.result);
-        refEditor.current?.update({ json: JSON.parse(reader.result)});
-        console.log('get data', refEditor.current?.get());
+        refEditor.current?.update({ json: JSON.parse(reader.result) });
+        console.log("get data", refEditor.current?.get());
         props.onChangeText(refEditor.current?.get());
         // onChangeTextFromFile(reader.result);
       };
@@ -109,36 +108,48 @@ const JsonEditorInput = (props: Props) => {
   };
 
   const onClickSaveJsonFile = () => {
-    // let fileName = window.prompt("Save as...");
-    // if (!!fileName) {
-    //   if (fileName?.indexOf(".") === -1) {
-    //     fileName = fileName + ".json";
-    //   } else {
-    //     if (fileName?.split(".").pop()?.toLowerCase() === "json") {
-    //       // Nothing to do
-    //     } else {
-    //       fileName = fileName?.split(".")[0] + ".json";
-    //     }
-    //   }
-    //   const currentJson: any = refEditor.current?.get();
-    //   const blob = new Blob([JSON.stringify(currentJson?.json)], {
-    //     type: "application/json;charset=utf-8",
-    //   });
-    //   saveAs(blob, fileName);
-    // } else {
-    //   //! nothing
-    //   return;
-    // }
+    let fileName = window.prompt("Save as...");
+    if (!!fileName) {
+      if (fileName?.indexOf(".") === -1) {
+        fileName = fileName + ".json";
+      } else {
+        if (fileName?.split(".").pop()?.toLowerCase() === "json") {
+          // Nothing to do
+        } else {
+          fileName = fileName?.split(".")[0] + ".json";
+        }
+      }
+      let currentData: any = refEditor.current?.get();
+      if (!!currentData.text) {
+        const blob = new Blob([currentData.text], {
+          type: "application/json;charset=utf-8",
+        });
+        saveAs(blob, fileName);
+      }
+
+      if (!!currentData.json) {
+        const blob = new Blob([currentData.json], {
+          type: "application/json;charset=utf-8",
+        });
+        saveAs(blob, fileName);
+      }
+    } else {
+      //! nothing
+      return;
+    }
   };
 
   const onCopyToClipBoard = async () => {
     try {
-      if (typeof copyText === "string") {
-        await navigator.clipboard.writeText(copyText);
-      }
-      if (typeof copyText === "object") {
-        await navigator.clipboard.writeText(JSON.stringify(copyText));
-      }
+      // if (typeof refEditor.current?.get === "string") {
+      //   await navigator.clipboard.writeText();
+      // }
+      // if (typeof copyText === "object") {
+      //   await navigator.clipboard.writeText(JSON.stringify(copyText));
+      // }
+      await navigator.clipboard.writeText(
+        JSON.stringify(refEditor.current?.get())
+      );
     } catch (error) {
       console.log("error -> ", error);
     }
@@ -151,7 +162,7 @@ const JsonEditorInput = (props: Props) => {
     >
       <div
         className={
-          "flex justify-between p-2 gap-2 w-full h-10 text-gray-300 bg-[#1E1E1E] dark:bg-[#5C469C] "
+          "flex justify-between p-2 gap-2 w-full h-10 text-gray-300 bg-[#041C32] dark:bg-[#5C469C] "
         }
       >
         <div>Input Panel</div>
@@ -186,6 +197,7 @@ const JsonEditorInput = (props: Props) => {
               size={23}
               className="hover:bg-gray-500"
               title="Copy to clipboard"
+              onClick={onCopyToClipBoard}
             />
           </div>
           <div onClick={onClickMaximize}>
@@ -207,7 +219,7 @@ const JsonEditorInput = (props: Props) => {
       </div>
       <div
         className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${
-          isDark ? "dark-mode" : "light-mode"
+          isDark ? "jse-theme-dark" : "input-json"
         }`}
         ref={refContainer}
       />

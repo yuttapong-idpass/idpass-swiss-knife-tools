@@ -34,7 +34,7 @@ export default function Sidebar({ children }: Props) {
               }`}
             />
 
-            {expanded ? <span className="text-gray-600 dark:text-[#FABD40]">ID PASS SWISS KNIFE</span> : null}
+            {expanded ? <span className="text-gray-600 dark:text-[#FABD40]">ANY TOOLS</span> : null}
 
             <button
               onClick={() => setExpanded((curr) => !curr)}
