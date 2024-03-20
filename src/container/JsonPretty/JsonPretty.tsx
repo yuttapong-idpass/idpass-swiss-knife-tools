@@ -1,0 +1,73 @@
+import React, { createRef, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/store";
+import "./JsonPretty.css";
+
+import JsonEditorInput from "./JSONEditor/JsonEditorInput";
+import JsonEditorOutput from "./JSONEditor/JsonEditorOutput";
+import _ from "lodash";
+
+type Props = {};
+
+const JsonPretty = (props: Props) => {
+  const [inputJson, setInputJson] = useState(undefined);
+  const [outputJson, setOutputJson] = useState(undefined);
+
+  const dispatch = useAppDispatch();
+
+  const handleJsonInput = (text: any) => {
+    setInputJson(text);
+  };
+
+  const handleError = (text: any) => {};
+
+  const onClickPretty = () => {
+    try {
+      setOutputJson(inputJson);
+    } catch (error) {
+      console.log("error ->", error);
+    }
+  };
+
+  return (
+    <div className="flex flex-row w-full gap-2">
+      <div className="flex-initial w-full">
+        <JsonEditorInput onError={handleError} onChangeText={handleJsonInput} />
+      </div>
+      <div className="flex-initial w-80">
+        <div className="grid place-items-center h-[98vh]">
+          <div>
+            <button
+              title="Pretty json"
+              className="
+              inline-flex 
+              w-full 
+              item-centers 
+              justify-center 
+              px-4 
+              py-2 
+              text-base 
+              font-medium 
+              leading-6 
+              text-white 
+              dark:text-gray-300 
+              whitespace-no-wrap 
+              bg-[#38b000] 
+              rounded-md 
+              shadow-sm 
+              hover:bg-[#73DF5C]"
+              onClick={onClickPretty}
+            >
+              Pretty
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="flex-initial w-full">
+        <JsonEditorOutput text={outputJson} onError={handleError} />
+      </div>
+    </div>
+  );
+};
+
+export default JsonPretty;

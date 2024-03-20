@@ -69,3 +69,8 @@ pre {
     object-fit: cover;
     width: 100%;
 }
+
+
+#base64Area { 
+    overflow: hidden;
+}

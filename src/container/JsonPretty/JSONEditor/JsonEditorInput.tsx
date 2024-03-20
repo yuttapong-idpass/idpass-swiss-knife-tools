@@ -12,16 +12,14 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import { ThemeContext } from "../../../providers/ThemeProvider";
 // import JSONEditor from "jsoneditor";
 // import "jsoneditor/dist/jsoneditor.css";
-
 import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
-
+import ToastNotify from "../../../components/ToastNotify/ToastNotify";
 import "./JsonEditorInput.css";
-
+import { toast } from "react-toastify";
 type Props = {
   onChangeText: any;
   onError: any;
-  container: any;
 };
 
 const JsonEditorInput = (props: Props) => {
@@ -50,9 +48,7 @@ const JsonEditorInput = (props: Props) => {
 
   const refContainer = useRef<HTMLDivElement>(null);
   const refEditor = useRef<JSONEditor | null>(null);
-  const [inputText, setInputText] = useState("");
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
-  const [copyText, setCopyText] = useState("");
 
   useEffect(() => {
     //create editor
@@ -61,6 +57,9 @@ const JsonEditorInput = (props: Props) => {
       props: {
         onChange(content: any, previousContent, status) {
           props.onChangeText(JSON.parse(content.text));
+        },
+        onError(error: Error) {
+          props.onError(error);
         },
         mode: Mode.text,
       },
@@ -96,11 +95,8 @@ const JsonEditorInput = (props: Props) => {
       return false;
     } else {
       reader.onload = () => {
-        // jsonEditorElementInput.updateText(reader.result);
         refEditor.current?.update({ json: JSON.parse(reader.result) });
-        console.log("get data", refEditor.current?.get());
         props.onChangeText(refEditor.current?.get());
-        // onChangeTextFromFile(reader.result);
       };
       reader.readAsText($event.target.files[0]);
       $event.target.value = "";
@@ -128,7 +124,7 @@ const JsonEditorInput = (props: Props) => {
       }
 
       if (!!currentData.json) {
-        const blob = new Blob([currentData.json], {
+        const blob = new Blob([JSON.stringify(currentData.json, null, 4)], {
           type: "application/json;charset=utf-8",
         });
         saveAs(blob, fileName);
@@ -141,15 +137,15 @@ const JsonEditorInput = (props: Props) => {
 
   const onCopyToClipBoard = async () => {
     try {
-      // if (typeof refEditor.current?.get === "string") {
-      //   await navigator.clipboard.writeText();
-      // }
-      // if (typeof copyText === "object") {
-      //   await navigator.clipboard.writeText(JSON.stringify(copyText));
-      // }
-      await navigator.clipboard.writeText(
-        JSON.stringify(refEditor.current?.get())
-      );
+      const getCurrentValue: any = refEditor.current?.get();
+      if (!!getCurrentValue.text) {
+        await navigator.clipboard.writeText(getCurrentValue?.text);
+      }
+
+      if (!!getCurrentValue.json) {
+        await navigator.clipboard.writeText(JSON.stringify(getCurrentValue?.json, null, 4));
+      }
+      toast.success("Copies!");
     } catch (error) {
       console.log("error -> ", error);
     }
@@ -160,6 +156,7 @@ const JsonEditorInput = (props: Props) => {
       className={`${toggleFullScreen ? "fullscreen" : "mt-3 ml-3"}`}
       id="jsonEditorInput"
     >
+      <ToastNotify />
       <div
         className={
           "flex justify-between p-2 gap-2 w-full h-10 text-gray-300 bg-[#041C32] dark:bg-[#5C469C] "

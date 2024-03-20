@@ -12,7 +12,7 @@ import {
   amphureSelector,
   tumbolSelector,
 } from "../../store/slice/provinceSlice";
-import sharedService from "../shared/share-api";
+import sharedService from "../../components/shared/share-api";
 import { useSelector } from "react-redux";
 
 import WomenPreviewImage from "../../assets/images/person/removebg-preview.png";
@@ -499,6 +499,7 @@ const MockIdCard = (props: Props) => {
                                 คำนำหน้า :
                               </label>
                               <input
+                                autoFocus={true}
                                 type="input"
                                 name="titleName"
                                 className="inline-block 

@@ -1,8 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { useDispatch } from "react-redux";
 import counterReducer from './slice/counterSlice';
-import jsonPrettyInputReducer from './slice/JsonPrettySlice';
-import jsonPrettyOutputReducer from './slice/JsonPrettySlice';
 import base64Reducer from './slice/Base64Slice';
 import descriptionReducer from './slice/Base64Slice';
 import decodeReducer from './slice/jwtTokenSlice'
@@ -19,9 +17,7 @@ const reducer = {
     decodeReducer,
     provinceReducer,
     amphureReducer,
-    tumbolReducer,
-    jsonPrettyInputReducer,
-    jsonPrettyOutputReducer
+    tumbolReducer
 }   
 
 

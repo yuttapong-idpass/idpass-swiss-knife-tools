@@ -1,10 +1,11 @@
-// import logo from "../assets/logo.png";
-// import profile from "../assets/profile.png";
-import SwissKnife from "../../assets/images/swiss-army-knife.png";
 import { createContext, useContext, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import DarkLightToggle from "../DarkLightToggle/DarkLightToggle";
+
+
+import Tools from '../../assets/images/tools.png'
+
 type Props = {
   children: any;
 };
@@ -28,13 +29,13 @@ export default function Sidebar({ children }: Props) {
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               title="logo"
-              src={SwissKnife}
+              src={Tools}
               className={`overflow-hidden transition-all ${
                 expanded ? "w-12" : "w-0"
               }`}
             />
 
-            {expanded ? <span className="text-gray-600 dark:text-[#FABD40]">ANY TOOLS</span> : null}
+            {expanded ? <span className="text-gray-600 dark:text-[#FABD40]">IDPASS TOOLS</span> : null}
 
             <button
               onClick={() => setExpanded((curr) => !curr)}
@@ -81,8 +82,8 @@ export function SidebarItem({ icon, text, active, alert, link }: SidebarProps) {
     <li
       className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         active
-          ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-          : "hover:bg-indigo-50 text-gray-600 dark:text-gray-300"
+          ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-gray-800"
+          : "hover:bg-[#808080] text-gray-600 dark:text-gray-300"
       }`}
     >
       {icon}
@@ -103,7 +104,7 @@ export function SidebarItem({ icon, text, active, alert, link }: SidebarProps) {
 
       {!expanded && (
         <div
-          className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+          className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-gray-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
         >
           {text}
         </div>

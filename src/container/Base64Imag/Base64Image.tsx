@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Photo from "../../assets/images/photo.png";
 import ImagePreview from "../../assets/images/image-file.png";
 import CopyToClipboardImage from "../../assets/images/documents.png";
-import "./FromBase64.css";
+import "./Base64Image.css";
 import { useSelector } from "react-redux";
 import {
   base64Selector,
@@ -118,11 +118,75 @@ const FromBase64 = (props: Props) => {
   };
 
   return (
-    <>
-    
-    </>
-
-
+    <div className="flex flex-col w-full gap-4 mt-6 ml-6">
+      <div></div>
+      <div className="flex flex-row">
+        <div className="flex-initial w-full ml-2">
+          <div className="">
+            <div>
+              <label
+                htmlFor="base64"
+                className="block 
+              mb-2 
+              text-md 
+              font-medium 
+              text-gray-800 
+              dark:text-gray-300"
+              >
+                Base64 text
+              </label>
+              <textarea
+                name="base64"
+                id="base64Area"
+                rows={12}
+                className="
+              bg-gray-50 
+              border 
+              border-gray-300 
+              text-gray-900 
+              text-md 
+              rounded-lg 
+              focus:ring-blue-500 
+              focus:border-blue-500 
+              block 
+              w-full 
+              p-2.5 
+              dark:bg-gray-700 
+              dark:border-gray-600 
+              dark:placeholder-gray-400 
+              dark:text-white 
+              dark:focus:ring-blue-500 
+              dark:focus:border-blue-500"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div className="flex-initial w-1/2">
+          <div className="flex mt-6 flex-col items-center justify-center">
+            <button
+              title="Generate"
+              className="              
+              inline-flex 
+              w-full 
+              item-centers 
+              justify-center 
+              px-4 
+              py-2 
+              text-base 
+              font-medium 
+              leading-6 
+              text-white 
+              dark:text-gray-300 
+              whitespace-no-wrap 
+              bg-[#38b000] 
+              rounded-md 
+              shadow-sm 
+              hover:bg-[#73DF5C]"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     // <div className="p-4 place-items-center">
     //   <div className="max-w-7xl mx-auto grid grid-cols-12">
@@ -133,17 +197,17 @@ const FromBase64 = (props: Props) => {
     //             <h1 className="font-bold">
     //               MODE :{" "}
     //               <select
-    //                 className="inline-block 
-    //               text-sm 
-    //               px-3 
-    //               py-2 
-    //               leading-none 
-    //               border 
-    //               rounded 
-    //               text-black 
-    //               border-white  
-    //               hover:bg-white 
-    //               mt-4 
+    //                 className="inline-block
+    //               text-sm
+    //               px-3
+    //               py-2
+    //               leading-none
+    //               border
+    //               rounded
+    //               text-black
+    //               border-white
+    //               hover:bg-white
+    //               mt-4
     //               lg:mt-0"
     //                 onChange={handleSelectOption}
     //               >
@@ -242,15 +306,15 @@ const FromBase64 = (props: Props) => {
     //                 id="message"
     //                 rows={4}
     //                 className="
-    //               block 
+    //               block
     //               p-4
-    //               w-full 
-    //               text-sm 
-    //               text-gray-900 
-    //               bg-gray-50 
-    //               rounded-lg 
-    //               border 
-    //               border-gray-300 
+    //               w-full
+    //               text-sm
+    //               text-gray-900
+    //               bg-gray-50
+    //               rounded-lg
+    //               border
+    //               border-gray-300
     //               border-dashed border-2 border-gray-300
     //               h-96"
     //                 placeholder="Base 64 here..."
@@ -270,15 +334,15 @@ const FromBase64 = (props: Props) => {
     //                 id="message"
     //                 rows={4}
     //                 className="
-    //               block 
+    //               block
     //               p-4
-    //               w-full 
-    //               text-sm 
-    //               text-gray-900 
-    //               bg-gray-50 
-    //               rounded-lg 
-    //               border 
-    //               border-gray-300 
+    //               w-full
+    //               text-sm
+    //               text-gray-900
+    //               bg-gray-50
+    //               rounded-lg
+    //               border
+    //               border-gray-300
     //               border-dashed border-2 border-gray-300
     //               h-96"
     //                 onChange={changeTextAreaBase}
@@ -303,23 +367,23 @@ const FromBase64 = (props: Props) => {
     //                         {!!base64Reducer.base64.base64 ? (
     //                           <a
     //                             className="
-    //                             text-white 
-    //                             bg-neutral-400 
-    //                             bg-blue-500 
-    //                             hover:bg-[#FF9119]/80 
-    //                             focus:ring-4 
-    //                             focus:outline-none 
-    //                             focus:ring-[#FF9119]/50 
-    //                             font-medium 
-    //                             rounded-lg 
-    //                             text-sm px-5 
-    //                             py-2.5 
-    //                             text-center 
-    //                             inline-flex 
-    //                             items-center 
-    //                             dark:hover:bg-[#FF9119]/80 
-    //                             dark:focus:ring-[#FF9119]/40 
-    //                             mr-1 
+    //                             text-white
+    //                             bg-neutral-400
+    //                             bg-blue-500
+    //                             hover:bg-[#FF9119]/80
+    //                             focus:ring-4
+    //                             focus:outline-none
+    //                             focus:ring-[#FF9119]/50
+    //                             font-medium
+    //                             rounded-lg
+    //                             text-sm px-5
+    //                             py-2.5
+    //                             text-center
+    //                             inline-flex
+    //                             items-center
+    //                             dark:hover:bg-[#FF9119]/80
+    //                             dark:focus:ring-[#FF9119]/40
+    //                             mr-1
     //                             mb-1"
     //                             download="convertFromBase64Image.png"
     //                             href={base64Reducer.base64.base64}
@@ -355,24 +419,24 @@ const FromBase64 = (props: Props) => {
     //                       <div className="grid place-items-center h-full">
     //                         <a
     //                           className="
-    //                             text-white 
-    //                             bg-neutral-400 
-    //                             bg-blue-500 
-    //                             hover:bg-[#FF9119]/80 
-    //                             focus:ring-4 
-    //                             focus:outline-none 
-    //                             focus:ring-[#FF9119]/50 
-    //                             font-medium 
-    //                             rounded-lg 
-    //                             text-sm 
-    //                             px-5 
-    //                             py-2.5 
-    //                             text-center 
-    //                             inline-flex 
-    //                             items-center 
-    //                             dark:hover:bg-[#FF9119]/80 
-    //                             dark:focus:ring-[#FF9119]/40 
-    //                             mr-1 
+    //                             text-white
+    //                             bg-neutral-400
+    //                             bg-blue-500
+    //                             hover:bg-[#FF9119]/80
+    //                             focus:ring-4
+    //                             focus:outline-none
+    //                             focus:ring-[#FF9119]/50
+    //                             font-medium
+    //                             rounded-lg
+    //                             text-sm
+    //                             px-5
+    //                             py-2.5
+    //                             text-center
+    //                             inline-flex
+    //                             items-center
+    //                             dark:hover:bg-[#FF9119]/80
+    //                             dark:focus:ring-[#FF9119]/40
+    //                             mr-1
     //                             mb-1"
     //                           download="convertFromBase64Image.png"
     //                           href={base64Reducer.base64.base64}
