@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Photo from "../../assets/images/photo.png";
-import ImagePreview from "../../assets/images/image-file.png";
 import CopyToClipboardImage from "../../assets/images/documents.png";
 import "./Base64Image.css";
 import { useSelector } from "react-redux";
@@ -14,22 +12,32 @@ import {
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useAppDispatch } from "../../store/store";
 
+import { FaFolderOpen } from "react-icons/fa6";
+
+import Photo from "../../assets/images/photo.png";
+import ImagePreview from "../../assets/images/image-file.png";
+import CorruptedFile from "../../assets/images/corrupted-file.png";
+
 type Props = {};
 
-const options = [
-  { value: "base64", text: "Image to base 64" },
-  { value: "image", text: "Base64 to image" },
-];
+// const options = [
+//   { value: "base64", text: "Image to base 64" },
+//   { value: "image", text: "Base64 to image" },
+// ];
 
-const FromBase64 = (props: Props) => {
-  const [selected, setSelected] = useState(options[0].value);
+const Base64Image = (props: Props) => {
+  // const [selected, setSelected] = useState(options[0].value);
 
-  const base64Reducer = useSelector(base64Selector);
-  const descriptionReducer = useSelector(descriptionSelector);
-  const dispatch = useAppDispatch();
+  // const base64Reducer = useSelector(base64Selector);
+  // const descriptionReducer = useSelector(descriptionSelector);
+  // const dispatch = useAppDispatch();
 
-  const onInputImage = (event$: any) => {
-    const fileUpload: any = event$.target.files[0];
+  const [base64Text, setBase64Text] = useState("");
+  const [pixels, setPixels] = useState(null);
+  const [size, setSize] = useState(null);
+
+  const onUploadFileImage = ($event: any) => {
+    const fileUpload: any = $event.target.files[0];
     const reader: any = new FileReader();
 
     reader.onload = () => {
@@ -48,11 +56,13 @@ const FromBase64 = (props: Props) => {
           height: height,
           width: width,
         });
-
-        dispatch(base64({ base64: base64String, errorImage: false }));
+        setBase64Text(base64String);
+        // dispatch(base64({ base64: base64String, errorImage: false }));
       };
     };
     reader.readAsDataURL(fileUpload);
+    $event.target.value = '';
+    
   };
 
   const onInputBase64 = (event$: any) => {
@@ -87,7 +97,8 @@ const FromBase64 = (props: Props) => {
       });
     };
 
-    dispatch(base64({ base64: imageData, errorImage: false }));
+    // dispatch(base64({ base64: imageData, errorImage: false }));
+    setBase64Text(imageData);
     images.onerror = (error) => {};
   };
 
@@ -102,7 +113,7 @@ const FromBase64 = (props: Props) => {
       width: description.width,
       name: "",
     };
-    dispatch(descriptions(data));
+    // dispatch(descriptions(data));
   };
 
   const changeTextArea = (event$: any) => {};
@@ -112,33 +123,53 @@ const FromBase64 = (props: Props) => {
   };
 
   const handleSelectOption = ($event: any) => {
-    dispatch(base64({ base64: "", errorImage: false }));
-    dispatch(descriptions({ name: "", height: 0, size: 0, width: 0 }));
-    setSelected($event.target.value);
+    // dispatch(base64({ base64: "", errorImage: false }));
+    // dispatch(descriptions({ name: "", height: 0, size: 0, width: 0 }));
+    // setSelected($event.target.value);
   };
 
   return (
-    <div className="flex flex-col w-full gap-4 mt-6 ml-6">
-      <div></div>
+    <div className="flex flex-col  w-full p-4">
       <div className="flex flex-row">
-        <div className="flex-initial w-full ml-2">
-          <div className="">
-            <div>
-              <label
-                htmlFor="base64"
-                className="block 
+        <div className="flex-initial w-full">
+          <div className="flex flex-col">
+            <div className="flex flex-row w-full justify-between">
+              <div>
+                <label
+                  htmlFor="base64"
+                  className="block 
               mb-2 
-              text-md 
+              text-lg 
               font-medium 
               text-gray-800 
               dark:text-gray-300"
-              >
-                Base64 text
-              </label>
+                >
+                  Base64 Image Decoded
+                </label>
+              </div>
+              <div>
+                <div className="image-upload">
+                  <label htmlFor="file-input">
+                    <FaFolderOpen
+                      size={23}
+                      className="text-gray-800 hover:bg-gray-500 dark:text-gray-300"
+                      title="Upload file"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    id="file-input"
+                    accept=".jpg,.jpeg,.png,.gif"
+                    onChange={onUploadFileImage}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
               <textarea
                 name="base64"
                 id="base64Area"
-                rows={12}
+                rows={8}
                 className="
               bg-gray-50 
               border 
@@ -162,28 +193,107 @@ const FromBase64 = (props: Props) => {
           </div>
         </div>
         <div className="flex-initial w-1/2">
-          <div className="flex mt-6 flex-col items-center justify-center">
-            <button
-              title="Generate"
-              className="              
+          <div className="flex mt-10 ml-6 mr-6 flex-col items-center justify-center">
+            <div className="w-full">
+              <button
+                title="Generate"
+                className="              
               inline-flex 
               w-full 
               item-centers 
               justify-center 
-              px-4 
-              py-2 
+              px-4
+              py-4 
               text-base 
               font-medium 
               leading-6 
               text-white 
-              dark:text-gray-300 
+              dark:text-gray-200 
               whitespace-no-wrap 
-              bg-[#38b000] 
+              bg-lime-500 
               rounded-md 
               shadow-sm 
-              hover:bg-[#73DF5C]"
-            ></button>
+              hover:bg-lime-400"
+              >
+                Generate Image
+              </button>
+            </div>
+            <div className="pt-10 w-full">
+              <button
+                title="Generate"
+                className="              
+              inline-flex 
+              w-full 
+              item-centers 
+              justify-center 
+              px-4
+              py-4 
+              text-base 
+              font-medium 
+              leading-6 
+              dark:text-gray-200 
+              whitespace-no-wrap 
+              text-white
+              bg-sky-600 
+              rounded-md 
+              shadow-sm 
+              hover:bg-sky-400
+              hover:text-sky-200  
+              "
+              >
+                Download Image
+              </button>
+            </div>
           </div>
+        </div>
+      </div>
+      <div className="w-full mt-6">
+        <div className="flex justify-between">
+          <div>
+            <label
+              htmlFor="base64"
+              className=" 
+                      mb-2 
+                      text-lg 
+                      font-medium 
+                    text-gray-800 
+                    dark:text-gray-300"
+            >
+              Preview Image
+            </label>
+          </div>
+          <div className="flex gap-4">
+            <div>
+              <label
+                htmlFor="base64"
+                className=" 
+              mb-2 
+              text-lg 
+              font-medium 
+              text-gray-800 
+              dark:text-gray-300"
+              >
+                Pixels : 1024 x 768
+              </label>
+            </div>
+            <div>
+              <label
+                htmlFor="base64"
+                className=" 
+              mb-2 
+              text-lg 
+              font-medium 
+              text-gray-800 
+              dark:text-gray-300"
+              >
+                Size: 100 mb
+              </label>
+            </div>
+          </div>
+        </div>
+        <div className="flex place-items-center justify-center mt-4">
+          <img src={base64Text} alt="result" />
+          {/* { base64Text } */}
         </div>
       </div>
     </div>
@@ -460,4 +570,4 @@ const FromBase64 = (props: Props) => {
   );
 };
 
-export default FromBase64;
+export default Base64Image;

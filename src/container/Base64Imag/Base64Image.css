@@ -71,6 +71,11 @@ pre {
 }
 
 
-#base64Area { 
-    overflow: hidden;
+.image-upload>input { 
+    display: none;
+}
+
+#base64Area {
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
