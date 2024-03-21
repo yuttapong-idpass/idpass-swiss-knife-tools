@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CopyToClipboardImage from "../../assets/images/documents.png";
 import "./Base64Image.css";
 import { useSelector } from "react-redux";
@@ -17,6 +17,7 @@ import { FaFolderOpen } from "react-icons/fa6";
 import Photo from "../../assets/images/photo.png";
 import ImagePreview from "../../assets/images/image-file.png";
 import CorruptedFile from "../../assets/images/corrupted-file.png";
+import { MdImageSearch } from "react-icons/md";
 
 type Props = {};
 
@@ -28,41 +29,60 @@ type Props = {};
 const Base64Image = (props: Props) => {
   // const [selected, setSelected] = useState(options[0].value);
 
-  // const base64Reducer = useSelector(base64Selector);
+  const base64Reducer = useSelector(base64Selector);
   // const descriptionReducer = useSelector(descriptionSelector);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const [base64Text, setBase64Text] = useState("");
   const [pixels, setPixels] = useState(null);
   const [size, setSize] = useState(null);
 
+
+
+  useEffect(() => { 
+
+  }, [base64Text]);
+
+
   const onUploadFileImage = ($event: any) => {
-    const fileUpload: any = $event.target.files[0];
-    const reader: any = new FileReader();
+    // const fileUpload: any = $event.target.files[0];
+    // const reader: any = new FileReader();
 
-    reader.onload = () => {
-      // let base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
-      // dispatch(base64({ base64: base64String }))
-      let images = new Image();
-      images.src = reader.result;
-      images.onload = () => {
-        const height = images.height;
-        const width = images.width;
-        const base64String = reader.result;
+    // reader.onload = () => {
+    //   // let base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+    //   // dispatch(base64({ base64: base64String }))
+    //   let images = new Image();
+    //   images.src = reader.result;
+    //   images.onload = () => {
+    //     const height = images.height;
+    //     const width = images.width;
+    //     const base64String = reader.result;
 
-        calculateBase64Size({
-          name: "",
-          base: base64String,
-          height: height,
-          width: width,
-        });
-        setBase64Text(base64String);
-        // dispatch(base64({ base64: base64String, errorImage: false }));
+    //     calculateBase64Size({
+    //       name: "",
+    //       base: base64String,
+    //       height: height,
+    //       width: width,
+    //     });
+    //     // setBase64Text(base64String);
+    //     // dispatch(base64({ base64: base64String, errorImage: false }));
+    //     dispatch(base64({ base64: base64String }));
+    //   };
+    // };
+    // reader.readAsDataURL(fileUpload);
+    // $event.target.value = '';
+    const imageFile = $event.target.files[0];
+    const reader = new FileReader();
+    let images = new Image();
+    try {
+      reader.onload = function (e: any) {
+        setBase64Text(e.target.result);
+        images.onload = () => {};
       };
-    };
-    reader.readAsDataURL(fileUpload);
-    $event.target.value = '';
-    
+      reader.readAsDataURL(imageFile);
+    } catch (error) {
+      console.log("error ->", error);
+    }
   };
 
   const onInputBase64 = (event$: any) => {
@@ -85,7 +105,7 @@ const Base64Image = (props: Props) => {
     }
 
     images.src = imageData;
-    images.onload = () => {
+    images.onload = async () => {
       const height = images.height;
       const width = images.width;
 
@@ -98,7 +118,8 @@ const Base64Image = (props: Props) => {
     };
 
     // dispatch(base64({ base64: imageData, errorImage: false }));
-    setBase64Text(imageData);
+    // setBase64Text(imageData);
+
     images.onerror = (error) => {};
   };
 
@@ -126,6 +147,10 @@ const Base64Image = (props: Props) => {
     // dispatch(base64({ base64: "", errorImage: false }));
     // dispatch(descriptions({ name: "", height: 0, size: 0, width: 0 }));
     // setSelected($event.target.value);
+  };
+
+  const handleTextArea = ($event: any) => {
+    setBase64Text($event.target.value);
   };
 
   return (
@@ -170,24 +195,22 @@ const Base64Image = (props: Props) => {
                 name="base64"
                 id="base64Area"
                 rows={8}
+                value={base64Text}
+                onChange={handleTextArea}
                 className="
+                block
               bg-gray-50 
-              border 
+                border 
               border-gray-300 
               text-gray-900 
-              text-md 
-              rounded-lg 
-              focus:ring-blue-500 
-              focus:border-blue-500 
-              block 
-              w-full 
-              p-2.5 
+                text-md 
+                rounded-lg 
+                w-full 
+                p-2 
               dark:bg-gray-700 
               dark:border-gray-600 
               dark:placeholder-gray-400 
-              dark:text-white 
-              dark:focus:ring-blue-500 
-              dark:focus:border-blue-500"
+              dark:text-white"
               ></textarea>
             </div>
           </div>
@@ -280,9 +303,9 @@ const Base64Image = (props: Props) => {
               <label
                 htmlFor="base64"
                 className=" 
-              mb-2 
-              text-lg 
-              font-medium 
+                mb-2 
+                text-lg 
+                font-medium 
               text-gray-800 
               dark:text-gray-300"
               >

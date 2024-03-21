@@ -4,7 +4,6 @@ import { RootState } from './../store';
 
 type Base64State = {
     base64: string;
-    errorImage: boolean;
 }
 
 type DescriptionState = {
@@ -13,12 +12,6 @@ type DescriptionState = {
     width?: number,
     size?: number
 }
-
-interface IBase64 {
-    base64: string;
-    errorImage: boolean;
-}
-
 export interface IDescription {
     name: string;
     height?: number;
@@ -29,7 +22,6 @@ export interface IDescription {
 
 const initialValues: Base64State = {
     base64: '',
-    errorImage: false
 }
 
 const initialValuesDescription:  DescriptionState = {
@@ -44,12 +36,9 @@ const base64Slice = createSlice({
     name: 'base64',
     initialState: initialValues,
     reducers: {
-        base64: (state: Base64State, action: PayloadAction<IBase64>) => {
+        base64: (state: Base64State, action: PayloadAction<{ base64: any}>) => {
             return action.payload
         }
-    },
-    extraReducers: {
-
     }
 });
 
