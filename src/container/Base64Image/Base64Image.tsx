@@ -1,160 +1,126 @@
-import React, { useEffect, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 import CopyToClipboardImage from "../../assets/images/documents.png";
 import "./Base64Image.css";
 import { useSelector } from "react-redux";
-import {
-  base64Selector,
-  descriptionSelector,
-  base64,
-  descriptions,
-  IDescription,
-} from "../../store/slice/Base64Slice";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useAppDispatch } from "../../store/store";
+import { IDescription } from "../../store/slice/Base64Slice";
 
-import { FaFolderOpen } from "react-icons/fa6";
-
-import Photo from "../../assets/images/photo.png";
-import ImagePreview from "../../assets/images/image-file.png";
-import CorruptedFile from "../../assets/images/corrupted-file.png";
-import { MdImageSearch } from "react-icons/md";
-
+import { FaFolderOpen, FaTrashCan, FaCopy } from "react-icons/fa6";
 type Props = {};
 
-// const options = [
-//   { value: "base64", text: "Image to base 64" },
-//   { value: "image", text: "Base64 to image" },
-// ];
-
 const Base64Image = (props: Props) => {
-  // const [selected, setSelected] = useState(options[0].value);
-
-  const base64Reducer = useSelector(base64Selector);
-  // const descriptionReducer = useSelector(descriptionSelector);
-  const dispatch = useAppDispatch();
-
+  const [autoGenerate, setAutoGenerate] = useState(true);
   const [base64Text, setBase64Text] = useState("");
-  const [pixels, setPixels] = useState(null);
-  const [size, setSize] = useState(null);
+  const [textArea, setTextArea] = useState("");
+  const [description, setDescription] = useState({
+    size: 0,
+    height: 0,
+    width: 0,
+  });
 
-
-
-  useEffect(() => { 
-
-  }, [base64Text]);
-
+  useEffect(() => {
+    if (autoGenerate) {
+      generateImage();
+    }
+  }, [base64Text, autoGenerate]);
 
   const onUploadFileImage = ($event: any) => {
-    // const fileUpload: any = $event.target.files[0];
-    // const reader: any = new FileReader();
-
-    // reader.onload = () => {
-    //   // let base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
-    //   // dispatch(base64({ base64: base64String }))
-    //   let images = new Image();
-    //   images.src = reader.result;
-    //   images.onload = () => {
-    //     const height = images.height;
-    //     const width = images.width;
-    //     const base64String = reader.result;
-
-    //     calculateBase64Size({
-    //       name: "",
-    //       base: base64String,
-    //       height: height,
-    //       width: width,
-    //     });
-    //     // setBase64Text(base64String);
-    //     // dispatch(base64({ base64: base64String, errorImage: false }));
-    //     dispatch(base64({ base64: base64String }));
-    //   };
-    // };
-    // reader.readAsDataURL(fileUpload);
-    // $event.target.value = '';
-    const imageFile = $event.target.files[0];
-    const reader = new FileReader();
-    let images = new Image();
+    const reader: any = new FileReader();
     try {
       reader.onload = function (e: any) {
-        setBase64Text(e.target.result);
-        images.onload = () => {};
+        setBase64Text(reader.result);
       };
-      reader.readAsDataURL(imageFile);
+      reader.readAsDataURL($event.target.files[0]);
+      $event.target.value = null;
     } catch (error) {
       console.log("error ->", error);
     }
   };
 
-  const onInputBase64 = (event$: any) => {
+  const generateImage = () => {
     const images = new Image();
-    let base64String: any;
+    let base64String: any = base64Text;
     let imageData: any;
-
-    let mimeType = event$.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/);
-
-    if (mimeType) {
-      if (mimeType[0] === "image/svg+xml") {
-        imageData = event$;
+    let mimeType = base64Text.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/);
+    if (!!base64String) {
+      if (mimeType) {
+        if (mimeType[0] === "image/svg+xml") {
+          imageData = base64Text;
+        } else if (mimeType[0] !== "image/svg+xml" && !!mimeType[0]) {
+          imageData = base64String;
+        } else {
+          imageData =
+            "data:image/png;base64," +
+            base64String.replace("data:", "").replace(/^.+,/, "");
+        }
       } else {
-        base64String = event$.replace("data:", "").replace(/^.+,/, "");
-        imageData = "data:image/png;base64," + base64String;
+        imageData =
+          "data:image/png;base64," +
+          base64String.replace("data:", "").replace(/^.+,/, "");
       }
-    } else {
-      base64String = event$.replace("data:", "").replace(/^.+,/, "");
-      imageData = "data:image/png;base64," + base64String;
+
+      images.src = imageData;
+      images.onload = async () => {
+        const height = images.height;
+        const width = images.width;
+        calculateBase64Size({
+          name: "",
+          base64: imageData,
+          height: height,
+          width: width,
+        });
+      };
+      setTextArea(imageData);
     }
-
-    images.src = imageData;
-    images.onload = async () => {
-      const height = images.height;
-      const width = images.width;
-
-      calculateBase64Size({
-        name: "",
-        base: imageData,
-        height: height,
-        width: width,
-      });
-    };
-
-    // dispatch(base64({ base64: imageData, errorImage: false }));
-    // setBase64Text(imageData);
 
     images.onerror = (error) => {};
   };
 
   const calculateBase64Size = (description: any) => {
     const stringLength =
-      description.base.length - "data:image/png;base64,".length;
-    const sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
-    const sizeInKb = sizeInBytes / 1024;
+      description.base64.length - "data:image/png;base64,".length;
+    const sizeInBytes: number =
+      4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
+    const sizeInKb: number = sizeInBytes / 1024;
     const data: IDescription = {
       size: sizeInKb,
       height: description.height,
       width: description.width,
       name: "",
     };
-    // dispatch(descriptions(data));
+    setDescription({
+      size: data.size!,
+      height: data.height!,
+      width: data.width!,
+    });
   };
 
-  const changeTextArea = (event$: any) => {};
-  const changeTextAreaBase = (event$: any) => {
-    const base64 = event$.target.value;
-    onInputBase64(base64);
+  const onClearText = () => {
+    setTextArea("");
+    setBase64Text("");
+    setDescription({ size: 0, height: 0, width: 0 });
   };
 
-  const handleSelectOption = ($event: any) => {
-    // dispatch(base64({ base64: "", errorImage: false }));
-    // dispatch(descriptions({ name: "", height: 0, size: 0, width: 0 }));
-    // setSelected($event.target.value);
+  const onCopyText = async () => { 
+      try {
+        await navigator.clipboard.writeText(textArea);
+      } catch (error) { 
+        console.log('Copy error text ->', error);
+      }
+  }
+
+  const handleCheckBoxAutoGenerate = ($event: SyntheticEvent<EventTarget>) => {
+    const checkBoxEvent = ($event.target as HTMLInputElement).checked;
+    setAutoGenerate(checkBoxEvent);
   };
 
-  const handleTextArea = ($event: any) => {
-    setBase64Text($event.target.value);
+  const handleTextArea = ($event: SyntheticEvent<EventTarget>) => {
+    const valueTextArea = ($event.target as HTMLInputElement).value;
+    setBase64Text(valueTextArea);
   };
 
   return (
-    <div className="flex flex-col  w-full p-4">
+    <div className="flex flex-col w-full p-4">
       <div className="flex flex-row">
         <div className="flex-initial w-full">
           <div className="flex flex-col">
@@ -163,21 +129,37 @@ const Base64Image = (props: Props) => {
                 <label
                   htmlFor="base64"
                   className="block 
-              mb-2 
-              text-lg 
-              font-medium 
-              text-gray-800 
-              dark:text-gray-300"
+                      mb-2 
+                      text-lg 
+                      font-medium 
+                    text-gray-800 
+                    dark:text-gray-300"
                 >
                   Base64 Image Decoded
                 </label>
               </div>
-              <div>
+              <div className="flex flex-row gap-2">
+                <div>
+                  <FaCopy 
+                    size={30}
+                    className="text-gray-800 hover:bg-gray-500 dark:text-gray-300 p-1"
+                    title="Copy"
+                    onClick={onCopyText}
+                  />
+                </div>
+                <div>
+                  <FaTrashCan
+                    size={30}
+                    className="text-gray-800 hover:bg-gray-500 dark:text-gray-300 p-1"
+                    title="Clear"
+                    onClick={onClearText}
+                  />
+                </div>
                 <div className="image-upload">
                   <label htmlFor="file-input">
                     <FaFolderOpen
-                      size={23}
-                      className="text-gray-800 hover:bg-gray-500 dark:text-gray-300"
+                      size={30}
+                      className="text-gray-800 hover:bg-gray-500 dark:text-gray-300 p-1"
                       title="Upload file"
                     />
                   </label>
@@ -190,32 +172,36 @@ const Base64Image = (props: Props) => {
                 </div>
               </div>
             </div>
-            <div className="w-full">
-              <textarea
-                name="base64"
-                id="base64Area"
-                rows={8}
-                value={base64Text}
-                onChange={handleTextArea}
-                className="
-                block
-              bg-gray-50 
-                border 
-              border-gray-300 
-              text-gray-900 
-                text-md 
-                rounded-lg 
-                w-full 
-                p-2 
-              dark:bg-gray-700 
-              dark:border-gray-600 
-              dark:placeholder-gray-400 
-              dark:text-white"
-              ></textarea>
+            <div className="flex flex-col w-full">
+              <div className="control">
+                <textarea
+                  name="base64"
+                  id="base64Area"
+                  rows={8}
+                  value={base64Text}
+                  onChange={handleTextArea}
+                  className="
+                  break-words
+                  base64input
+                  block
+                bg-gray-50 
+                  border 
+                border-gray-300 
+                text-gray-900 
+                  text-md 
+                  rounded-lg 
+                  w-full 
+                  p-2 
+                dark:bg-gray-700 
+                dark:border-gray-600 
+                dark:placeholder-gray-400 
+                dark:text-white"
+                ></textarea>
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex-initial w-1/2">
+        <div className="flex-initial w-1/4">
           <div className="flex mt-10 ml-6 mr-6 flex-col items-center justify-center">
             <div className="w-full">
               <button
@@ -237,11 +223,43 @@ const Base64Image = (props: Props) => {
               rounded-md 
               shadow-sm 
               hover:bg-lime-400"
+                onClick={generateImage}
               >
                 Generate Image
               </button>
             </div>
-            <div className="pt-10 w-full">
+            <div className="mt-2 w-full">
+              <input
+                id="autoGenerate"
+                type="checkbox"
+                className="
+                w-4 
+                h-4 
+                text-blue-600 
+                bg-gray-100 
+                border-gray-300 rounded 
+              focus:ring-blue-500 
+              dark:focus:ring-blue-600 
+                dark:ring-offset-gray-800focus:ring-2
+                dark:bg-gray-700
+                dark:border-gray-600
+              "
+                defaultChecked={true}
+                onChange={handleCheckBoxAutoGenerate}
+              />
+              <label
+                htmlFor="labelAutoGenerate"
+                className=" 
+                      ms-2
+                      text-lg 
+                      font-medium 
+                    text-gray-800 
+                    dark:text-gray-300"
+              >
+                Auto generate
+              </label>
+            </div>
+            <div className="mt-2 w-full">
               <button
                 title="Generate"
                 className="              
@@ -296,7 +314,7 @@ const Base64Image = (props: Props) => {
               text-gray-800 
               dark:text-gray-300"
               >
-                Pixels : 1024 x 768
+                Pixels : {description.width} x {description.height}
               </label>
             </div>
             <div>
@@ -309,14 +327,19 @@ const Base64Image = (props: Props) => {
               text-gray-800 
               dark:text-gray-300"
               >
-                Size: 100 mb
+                Size: {description.size.toFixed(2)} Kb
               </label>
             </div>
           </div>
         </div>
         <div className="flex place-items-center justify-center mt-4">
-          <img src={base64Text} alt="result" />
-          {/* { base64Text } */}
+          {textArea ? (
+            <img
+              className="border"
+              src={DOMPurify.sanitize(textArea)}
+              alt="result"
+            />
+          ) : null}
         </div>
       </div>
     </div>

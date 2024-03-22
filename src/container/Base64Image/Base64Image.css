@@ -71,18 +71,13 @@ pre {
 }
 
 
-.image-upload>input { 
+.image-upload>input {
     display: none;
 }
 
-#base64Area {
 
-      width: 500px;
-  height: 500px;
-  overflow-y: hidden;
-  resize: none;
-  overflow-x: scroll;
-  text-overflow: ellipsis;
-  /* white-space: nowrap; */
-  overflow-wrap: break-word;
+
+.base64input { 
+    min-height: 200px;
+    overflow-wrap: break-word;
 }

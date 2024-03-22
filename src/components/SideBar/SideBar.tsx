@@ -3,8 +3,8 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import DarkLightToggle from "../DarkLightToggle/DarkLightToggle";
 
-
-import Tools from '../../assets/images/tools.png'
+import './SideBar.css';
+import Tools from '../../assets/images/tools.png';
 
 type Props = {
   children: any;
@@ -24,7 +24,7 @@ export default function Sidebar({ children }: Props) {
   const [expanded, setExpanded] = useState(true);
   return (
     <>
-      <aside className="h-screen">
+      <aside className="h-screen test-sticky">
         <nav className="h-full flex flex-col bg-white dark:bg-dark-bg border-r border-[#000] shadow-sm">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img

@@ -5,7 +5,7 @@ import { setupFirebase } from "./utils/firebase";
 import Home from "./container/Home/Home";
 import Menu from "./container/Menu/Menu";
 import JsonPretty from "./container/JsonPretty/JsonPretty";
-import Base64Image from "./container/Base64Imag/Base64Image";
+import Base64Image from "./container/Base64Image/Base64Image";
 import JsonWebToken from "./container/JsonWebToken/JsonWebToken";
 import IdCardGenerator from "./container/IdCardGenerator/IdCardGenerator";
 import MockIdCard from "./container/MockIdCard/MockIdCard";

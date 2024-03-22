@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import JsonPretty from "../JsonPretty/JsonPretty";
-import FromBase64 from "../Base64Imag/Base64Image";
+import FromBase64 from "../Base64Image/Base64Image";
 import JWTEncodeDecode from "../JsonWebToken/JsonWebToken";
 
 import JSONImage from "../../assets/images/json.png";
