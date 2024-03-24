@@ -10,7 +10,7 @@ import * as jose from "jose";
 
 import ErrorImage from "../../assets/images/cross.png";
 import "./JsonWebToken.css";
-import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 type Props = {};
 
@@ -233,17 +233,18 @@ const JsonWebToken = (props: Props) => {
         ></textarea>
       </div>
       <div className="flex-initial w-80">
-        <div className="grid place-items-center h-[98vh]">
-          <button
-            title="Generate"
-            className="              
+        <div className="flex h-[98vh]">
+          <div className="m-auto">
+            <button
+              title="Generate"
+              className="              
               inline-flex 
               w-full 
               text-center
               item-centers 
               justify-center 
-              px-12
-              py-2.5 
+              pl-6
+              py-2 
               text-base 
               font-medium 
               leading-6 
@@ -254,42 +255,75 @@ const JsonWebToken = (props: Props) => {
               rounded-md 
               shadow-sm
               hover:bg-teal-400"
-          >
-            Encode
-            <FaAngleRight 
-              size={26}
-              className="text-gray-800 hover:bg-gray-500 dark:text-gray-300"
-              title="Encoded"
-            />
-          </button>
-          <button
-            title="Generate"
-            className="              
+            >
+              Encode
+              <FaAngleRight
+                size={24}
+                className="text-gray-200 dark:text-gray-300"
+                title="Encoded"
+              />
+            </button>
+            <button
+              title="Generate"
+              className="              
               inline-flex 
               w-full 
               text-center
               item-centers 
               justify-center 
-              px-12
-              py-2.5 
+              mt-2
+              pr-6
+              py-2 
               text-base 
               font-medium 
               leading-6 
               text-white 
               dark:text-gray-200 
               whitespace-no-wrap 
-              bg-teal-500 
+              bg-sky-500 
               rounded-md 
               shadow-sm
-              hover:bg-teal-400"
-          >
-            Encode
-            <FaAngleRight 
-              size={26}
-              className="text-gray-800 hover:bg-gray-500 dark:text-gray-300"
-              title="Encoded"
-            />
-          </button>
+              hover:bg-sky-400"
+            >
+              <FaAngleLeft
+                size={24}
+                className="text-gray-200 dark:text-gray-300"
+                title="Encoded"
+              />
+              Decode
+            </button>
+
+            <div className="mt-2">
+              <input
+                id="autoGenerate"
+                type="checkbox"
+                className="
+                w-4 
+                h-4 
+                text-blue-600 
+                bg-gray-100 
+                border-gray-300 rounded 
+              focus:ring-blue-500 
+              dark:focus:ring-blue-600 
+                dark:ring-offset-gray-800focus:ring-2
+                dark:bg-gray-700
+                dark:border-gray-600
+              "
+                defaultChecked={true}
+              />
+              <label
+                htmlFor="labelAutoGenerate"
+                className=" 
+                      ms-2
+                      text-lg 
+                      font-medium 
+                    text-gray-800 
+                    dark:text-gray-300"
+              >
+                Auto detect 
+              </label>
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex-initial flex-col w-full">
