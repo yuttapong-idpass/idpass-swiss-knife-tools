@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { IDescription } from "../../store/slice/Base64Slice";
 
 import { FaFolderOpen, FaTrashCan, FaCopy } from "react-icons/fa6";
+import ToastNotify from "../../components/ToastNotify/ToastNotify";
+import { toast } from "react-toastify";
 type Props = {};
 
 const Base64Image = (props: Props) => {
@@ -101,13 +103,14 @@ const Base64Image = (props: Props) => {
     setDescription({ size: 0, height: 0, width: 0 });
   };
 
-  const onCopyText = async () => { 
-      try {
-        await navigator.clipboard.writeText(textArea);
-      } catch (error) { 
-        console.log('Copy error text ->', error);
-      }
-  }
+  const onCopyText = async () => {
+    try {
+      await navigator.clipboard.writeText(textArea);
+      toast.success("Copies!");
+    } catch (error) {
+      console.log("Copy error text ->", error);
+    }
+  };
 
   const handleCheckBoxAutoGenerate = ($event: SyntheticEvent<EventTarget>) => {
     const checkBoxEvent = ($event.target as HTMLInputElement).checked;
@@ -121,6 +124,7 @@ const Base64Image = (props: Props) => {
 
   return (
     <div className="flex flex-col w-full p-4">
+      <ToastNotify />
       <div className="flex flex-row">
         <div className="flex-initial w-full">
           <div className="flex flex-col">
@@ -140,7 +144,7 @@ const Base64Image = (props: Props) => {
               </div>
               <div className="flex flex-row gap-2">
                 <div>
-                  <FaCopy 
+                  <FaCopy
                     size={30}
                     className="text-gray-800 hover:bg-gray-500 dark:text-gray-300 p-1"
                     title="Copy"
@@ -189,7 +193,6 @@ const Base64Image = (props: Props) => {
                 border-gray-300 
                 text-gray-900 
                   text-md 
-                  rounded-lg 
                   w-full 
                   p-2 
                 dark:bg-gray-700 
@@ -260,7 +263,7 @@ const Base64Image = (props: Props) => {
               </label>
             </div>
             <div className="mt-2 w-full">
-              <button
+              <a
                 title="Generate"
                 className="              
               inline-flex 
@@ -281,9 +284,11 @@ const Base64Image = (props: Props) => {
               hover:bg-sky-400
               hover:text-sky-200  
               "
+                download="fromBase64Image.png"
+                href={textArea}
               >
                 Download Image
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -314,7 +319,7 @@ const Base64Image = (props: Props) => {
               text-gray-800 
               dark:text-gray-300"
               >
-                Pixels : {description.width} x {description.height}
+                Dimensions : {description.width} x {description.height}
               </label>
             </div>
             <div>
