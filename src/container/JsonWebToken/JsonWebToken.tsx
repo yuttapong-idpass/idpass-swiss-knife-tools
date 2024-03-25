@@ -10,7 +10,12 @@ import * as jose from "jose";
 
 import ErrorImage from "../../assets/images/cross.png";
 import "./JsonWebToken.css";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import {
+  FaArrowRight,
+  FaArrowLeft,
+  FaAngleLeft,
+  FaAngleRight,
+} from "react-icons/fa6";
 
 type Props = {};
 
@@ -25,97 +30,95 @@ const JsonWebToken = (props: Props) => {
   ];
 
   const algorithms = [
-    { name: "HS256", value: "HS256" },
-    { name: "HS384", value: "HS384" },
-    { name: "HS512", value: "HS512" },
+    { name: "HS256", value: "HS256", algorithm: "HMACSHA256" },
+    { name: "HS384", value: "HS384", algorithm: "HMACSHA384" },
+    { name: "HS512", value: "HS512", algorithm: "HMACSHA512" },
   ];
 
   const [selected, setSelected] = useState(options[0].value);
-  const [algorithm, setAlgorithm] = useState(algorithms[0].value);
+  const [algorithm, setAlgorithm] = useState(algorithms[0]);
   const [encode, setEncode] = useState({});
   const [decode, setDecode] = useState("");
   const [secretKey, setSecretKey] = useState("");
 
   const handleSelectOption = ($event: any) => {
-    setSelected($event.target.value);
-    dispatch(encodeToken({ result: "", isError: false, messageError: "" }));
-    dispatch(
-      decodeToken({
-        result: { algorithm: "", decodeText: "" },
-        isError: false,
-        messageError: "",
-      })
+    // setSelected($event.target.value);
+    // dispatch(encodeToken({ result: "", isError: false, messageError: "" }));
+    // dispatch(
+    //   decodeToken({
+    //     result: { algorithm: "", decodeText: "" },
+    //     isError: false,
+    //     messageError: "",
+    //   })
+    // );
+  };
+
+  const handleSelectOptionAlgorithm = ($event: any) => {
+    const getAlgorithm = algorithms.find(
+      (item) => item.value === $event.target.value
     );
+    setAlgorithm(getAlgorithm!);
   };
 
-  const handleSelectOptionAlgor = ($event: any) => {
-    setAlgorithm($event.target.value);
-  };
+  // const handleEncodeArea = (event$: any) => {
+  //   const encode: any = event$.target.value;
 
-  const handleEncodeArea = (event$: any) => {
-    const encode: any = event$.target.value;
+  //   if (!!encode) {
+  //     try {
+  //       let setting = JSON.parse(encode);
+  //       setEncode(setting);
+  //       dispatch(
+  //         encodeToken({
+  //           result: "",
+  //           isError: false,
+  //           messageError: "",
+  //         })
+  //       );
+  //     } catch (error) {
+  //       dispatch(
+  //         encodeToken({
+  //           result: "",
+  //           isError: true,
+  //           messageError: String(error),
+  //         })
+  //       );
+  //     }
+  //   } else {
+  //     dispatch(
+  //       encodeToken({
+  //         result: "",
+  //         isError: false,
+  //         messageError: "",
+  //       })
+  //     );
+  //   }
+  // };
 
-    if (!!encode) {
-      try {
-        let setting = JSON.parse(encode);
-        setEncode(setting);
-        dispatch(
-          encodeToken({
-            result: "",
-            isError: false,
-            messageError: "",
-          })
-        );
-      } catch (error) {
-        dispatch(
-          encodeToken({
-            result: "",
-            isError: true,
-            messageError: String(error),
-          })
-        );
-      }
-    } else {
-      dispatch(
-        encodeToken({
-          result: "",
-          isError: false,
-          messageError: "",
-        })
-      );
-    }
-  };
+  // const handleDecodeArea = (event$: any) => {
+  //   const decoded: any = event$.target.value;
+  //   try {
+  //     setDecode(decoded);
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
 
-  const handleDecodeArea = (event$: any) => {
-    const decoded: any = event$.target.value;
-    try {
-      setDecode(decoded);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const handleSecretArea = (event$: any) => {
-    const secret: any = event$.target.value;
-    setSecretKey(secret);
-  };
-
-  const onChangeResultText = (event$: any) => {};
+  // const handleSecretArea = (event$: any) => {
+  //   const secret: any = event$.target.value;
+  //   setSecretKey(secret);
+  // };
 
   const onEncoded = async () => {
     // if (!encodeReducer.encoded.isEr
-
-    const secret = new TextEncoder().encode(
-      "cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2"
-    );
-    const alg = "HS256";
-    const typ = "JWT";
-
-    const jwt = await new jose.SignJWT({ good: "good" })
-      .setProtectedHeader({ alg, typ })
-      .sign(secret);
-
-    console.log(jwt);
+    // const secret = new TextEncoder().encode(
+    //   "cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2"
+    // );
+    // const alg = "HS256";
+    // const typ = "JWT";
+    // const jwt = await new jose.SignJWT({ good: "good" })
+    //   .setProtectedHeader({ alg, typ })
+    //   .sign(secret);
+    // console.log(jwt);
   };
 
   const onDecode = () => {
@@ -150,13 +153,13 @@ const JsonWebToken = (props: Props) => {
     const token = encodeHeader + "." + encodedData;
     let signature;
 
-    if (algorithm === "HS256") {
-      signature = CryptoJS.HmacSHA256(token, secretKey);
-    } else if (algorithm === "HS384") {
-      signature = CryptoJS.HmacSHA384(token, secretKey);
-    } else if (algorithm === "HS512") {
-      signature = CryptoJS.HmacSHA512(token, secretKey);
-    }
+    // if (algorithm === "HS256") {
+    //   signature = CryptoJS.HmacSHA256(token, secretKey);
+    // } else if (algorithm === "HS384") {
+    //   signature = CryptoJS.HmacSHA384(token, secretKey);
+    // } else if (algorithm === "HS512") {
+    //   signature = CryptoJS.HmacSHA512(token, secretKey);
+    // }
 
     const base64Signature = base64Url(signature);
     const jwt = token + "." + base64Signature;
@@ -202,26 +205,33 @@ const JsonWebToken = (props: Props) => {
   };
 
   return (
-    <div className="flex flex-row w-full gap-2 p-2">
-      <div className="flex-initial w-full">
-        <label
-          htmlFor="encoded"
-          className="mb-2 text-lg font-medium text-gray-800 dark:text-gray-300"
-        >
-          Encode
-        </label>
+    <main className="flex flex-row w-full gap-4 p-2">
+      <section className="flex-initial w-full">
+        <div className="flex justify-between">
+          <div className="items-center">
+            <label
+              htmlFor="encoded"
+              className="text-lg font-medium text-gray-800 dark:text-gray-300"
+            >
+              Encoded
+            </label>
+          </div>
+          <div className="flex flex-row"></div>
+        </div>
         <textarea
           name="encoded"
           id="encoded"
           rows={8}
+          placeholder="Enter your token here..."
           className="
             block 
             p-4        
             w-full
             text-md
             text-gray-900
-            bg-gray-200
-            h-[95vh]
+            bg-gray-50
+            h-[94vh]
+            rounded-md
             border
             border-gray-300
             border-solid
@@ -231,17 +241,53 @@ const JsonWebToken = (props: Props) => {
             dark:text-white
           "
         ></textarea>
-      </div>
-      <div className="flex-initial w-80">
+      </section>
+      <section className="flex-initial w-80">
         <div className="flex h-[98vh]">
           <div className="m-auto">
+            <div className="mb-3">
+              <label
+                htmlFor="algorithm"
+                className="text-lg items-center mr-2 font-medium text-gray-800 dark:text-gray-300"
+              >
+                Alg:
+              </label>
+              {/* <input
+              type="text"
+              id="alg"
+              className="border border-solid border-gray-300 p-1 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            /> */}
+
+              <select
+                title="alg"
+                name="alg"
+                id="alg"
+                className="border 
+                  border-solid 
+                  rounded-md
+                  border-gray-300 p-1 
+                  bg-gray-50 
+                  text-gray-900 
+                  dark:bg-gray-700 
+                  dark:border-gray-600 
+                  dark:placeholder-gray-400 
+                  dark:text-white"
+                onChange={handleSelectOptionAlgorithm}
+              >
+                {algorithms.map((item, index) => (
+                  <option key={index} value={item.value}>
+                    {item.value}
+                  </option>
+                ))}
+              </select>
+            </div>
             <button
               title="Generate"
               className="              
               inline-flex 
               w-full 
               text-center
-              item-centers 
+              items-center
               justify-center 
               pl-6
               py-2 
@@ -258,8 +304,8 @@ const JsonWebToken = (props: Props) => {
             >
               Encode
               <FaAngleRight
-                size={24}
-                className="text-gray-200 dark:text-gray-300"
+                size={15}
+                className="text-white dark:text-gray-200 ml-3 mt-1"
                 title="Encoded"
               />
             </button>
@@ -271,7 +317,7 @@ const JsonWebToken = (props: Props) => {
               text-center
               item-centers 
               justify-center 
-              mt-2
+              mt-3
               pr-6
               py-2 
               text-base 
@@ -286,8 +332,8 @@ const JsonWebToken = (props: Props) => {
               hover:bg-sky-400"
             >
               <FaAngleLeft
-                size={24}
-                className="text-gray-200 dark:text-gray-300"
+                size={15}
+                className="text-white dark:text-gray-200 mr-3 mt-1"
                 title="Encoded"
               />
               Decode
@@ -320,17 +366,55 @@ const JsonWebToken = (props: Props) => {
                     text-gray-800 
                     dark:text-gray-300"
               >
-                Auto detect 
+                Auto detect
               </label>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex-initial flex-col w-full">
-        <div>
+      </section>
+      <section className="flex-initial flex-col w-full">
+        <div className="flex flex-col">
+          <label
+            htmlFor="secret"
+            className="text-lg font-medium text-gray-800 dark:text-gray-300"
+          >
+            Secret
+          </label>
+          <section
+            className="
+          flex
+          p-2 
+          w-full 
+          text-md 
+          text-gray-900 
+          bg-gray-50 
+          h-[9vh] border 
+          border-gray-300 
+          border-solid 
+          rounded-md
+          mb-3
+          dark:bg-gray-700 
+          dark:border-gray-600
+          dark:placeholder-gary-400
+          dark:text-white
+          items-center
+          "
+          >
+            <span className="text-md font-medium-text-gray dark:text-gray-300">
+              {algorithm.algorithm}
+            </span>
+
+            <input
+              type="input"
+              id="secret"
+              placeholder="Enter your secret..."
+              className=" h-10 border rounded-sm border-solid border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            />
+          </section>
+
           <label
             htmlFor="headers"
-            className="mb-2 text-lg font-medium text-gray-800 dark:text-gray-300"
+            className="text-lg font-medium text-gray-800 dark:text-gray-300"
           >
             Headers
           </label>
@@ -344,9 +428,11 @@ const JsonWebToken = (props: Props) => {
             w-full
             text-md
             text-gray-900
-            bg-gray-200
-            h-[46vh]
+            bg-gray-50
+            h-[38vh]
+            rounded-md
             border
+            mb-3
             border-gray-300
             border-solid
             dark:bg-gray-700
@@ -373,8 +459,9 @@ const JsonWebToken = (props: Props) => {
             w-full
             text-md
             text-gray-900
-            bg-gray-200
-            h-[46vh]
+            bg-gray-50
+            h-[38vh]
+            rounded-md
             border
             border-gray-300
             border-solid
@@ -385,8 +472,8 @@ const JsonWebToken = (props: Props) => {
           "
           ></textarea>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
     // <div className="p-4 place-items-center">
     //   <div className="max-w-7xl mx-auto grid grid-cols-12 h-screen">
     //     <div className="col-span-12 h-screen">

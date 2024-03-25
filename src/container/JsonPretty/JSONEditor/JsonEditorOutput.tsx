@@ -151,7 +151,6 @@ const JsonEditorOutput = (props: Props) => {
     if (!validateExtension.exec(filePath)) {
       console.log("not allow file type");
       filePath.value = "";
-      return false;
     } else {
       reader.onload = () => {
         refEditor.current?.update({ json: JSON.parse(reader.result) });
