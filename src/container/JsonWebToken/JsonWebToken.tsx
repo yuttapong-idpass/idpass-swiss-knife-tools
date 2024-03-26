@@ -53,10 +53,16 @@ const JsonWebToken = (props: Props) => {
     // );
   };
 
+  const handleSecretKey = ($event: any) => {
+    console.log('handle secret key', $event.target.value);
+    setSecretKey($event.target.value);
+  };
+
   const handleSelectOptionAlgorithm = ($event: any) => {
-    const getAlgorithm = algorithms.find(
-      (item) => item.value === $event.target.value
-    );
+    // const getAlgorithm = algorithms.find(
+    //   (item) => item.value === $event.target.value
+    // );
+    const getAlgorithm = algorithms[$event.target.value];
     setAlgorithm(getAlgorithm!);
   };
 
@@ -109,16 +115,17 @@ const JsonWebToken = (props: Props) => {
   // };
 
   const onEncoded = async () => {
-    // if (!encodeReducer.encoded.isEr
-    // const secret = new TextEncoder().encode(
-    //   "cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2"
-    // );
-    // const alg = "HS256";
-    // const typ = "JWT";
-    // const jwt = await new jose.SignJWT({ good: "good" })
-    //   .setProtectedHeader({ alg, typ })
-    //   .sign(secret);
-    // console.log(jwt);
+    const secret = new TextEncoder().encode("1234567");
+    const alg = "HS256";
+    const typ = "JWT";
+    const jwt = await new jose.SignJWT({
+      sub: "1234567890",
+      name: "John Doe",
+      iat: 1516239022,
+    })
+      .setProtectedHeader({ alg, typ })
+      .sign(secret);
+    console.log(jwt);
   };
 
   const onDecode = () => {
@@ -132,8 +139,6 @@ const JsonWebToken = (props: Props) => {
     encodedSource = encodedSource.replace(/\//g, "_");
     return encodedSource;
   };
-
-  const encodeJwt = () => {};
 
   const encodeJWT = () => {
     // const header = {
@@ -275,7 +280,7 @@ const JsonWebToken = (props: Props) => {
                 onChange={handleSelectOptionAlgorithm}
               >
                 {algorithms.map((item, index) => (
-                  <option key={index} value={item.value}>
+                  <option key={index} value={index}>
                     {item.value}
                   </option>
                 ))}
@@ -301,6 +306,7 @@ const JsonWebToken = (props: Props) => {
               rounded-md 
               shadow-sm
               hover:bg-teal-400"
+              onClick={onEncoded}
             >
               Encode
               <FaAngleRight
@@ -409,6 +415,7 @@ const JsonWebToken = (props: Props) => {
               id="secret"
               placeholder="Enter your secret..."
               className=" h-10 border rounded-sm border-solid border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              onChange={handleSecretKey}
             />
           </section>
 
