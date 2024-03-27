@@ -36,9 +36,10 @@ const JsonWebToken = (props: Props) => {
   ];
 
   const [selected, setSelected] = useState(options[0].value);
+  const [isEncodedSecret, setIsEncodedSecret] = useState(false);
   const [algorithm, setAlgorithm] = useState(algorithms[0]);
-  const [encode, setEncode] = useState({});
-  const [decode, setDecode] = useState("");
+  const [encoded, setEncoded] = useState("");
+  const [decoded, setDecoded] = useState("");
   const [secretKey, setSecretKey] = useState("");
 
   const handleSelectOption = ($event: any) => {
@@ -54,8 +55,15 @@ const JsonWebToken = (props: Props) => {
   };
 
   const handleSecretKey = ($event: any) => {
-    console.log('handle secret key', $event.target.value);
     setSecretKey($event.target.value);
+  };
+
+  const handleEncodeArea = ($event: any) => {
+    setEncoded($event.target.value);
+  };
+
+  const handelDecodedArea = ($event: any) => {
+    setDecoded($event.target.value);
   };
 
   const handleSelectOptionAlgorithm = ($event: any) => {
@@ -64,6 +72,31 @@ const JsonWebToken = (props: Props) => {
     // );
     const getAlgorithm = algorithms[$event.target.value];
     setAlgorithm(getAlgorithm!);
+  };
+
+  const onEncoded = async () => {
+    // const secret = new TextEncoder().encode("1234567");
+    // const alg = "HS256";
+    // const typ = "JWT";
+    // const jwt = await new jose.SignJWT({
+    //   sub: "1234567890",
+    //   name: "John Doe",
+    //   iat: 1516239022,
+    // })
+    //   .setProtectedHeader({ alg, typ })
+    //   .sign(secret);
+    // console.log(jwt);
+    let secret;
+
+    try {
+      const convertToObject = JSON.parse(decoded);
+    } catch (error) {
+      console.log('error json ->', error);
+    }
+
+    // if (isEncodedSecret) {
+    //   secret = jose.base64url.encode(secretKey);
+    // }
   };
 
   // const handleEncodeArea = (event$: any) => {
@@ -113,20 +146,6 @@ const JsonWebToken = (props: Props) => {
   //   const secret: any = event$.target.value;
   //   setSecretKey(secret);
   // };
-
-  const onEncoded = async () => {
-    const secret = new TextEncoder().encode("1234567");
-    const alg = "HS256";
-    const typ = "JWT";
-    const jwt = await new jose.SignJWT({
-      sub: "1234567890",
-      name: "John Doe",
-      iat: 1516239022,
-    })
-      .setProtectedHeader({ alg, typ })
-      .sign(secret);
-    console.log(jwt);
-  };
 
   const onDecode = () => {
     decodeJWT();
