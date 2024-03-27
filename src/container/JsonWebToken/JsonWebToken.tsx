@@ -30,17 +30,22 @@ const JsonWebToken = (props: Props) => {
   ];
 
   const algorithms = [
-    { name: "HS256", value: "HS256", algorithm: "HMACSHA256" },
-    { name: "HS384", value: "HS384", algorithm: "HMACSHA384" },
-    { name: "HS512", value: "HS512", algorithm: "HMACSHA512" },
+    { name: "HS256", alg: "HS256", typ: "JWT", algorithm: "HMACSHA256" },
+    { name: "HS384", alg: "HS384", typ: "JWT", algorithm: "HMACSHA384" },
+    { name: "HS512", alg: "HS512", typ: "JWT", algorithm: "HMACSHA512" },
   ];
 
   const [selected, setSelected] = useState(options[0].value);
   const [isEncodedSecret, setIsEncodedSecret] = useState(false);
   const [algorithm, setAlgorithm] = useState(algorithms[0]);
-  const [encoded, setEncoded] = useState("");
-  const [decoded, setDecoded] = useState("");
+  const [jwtArea, setJwtArea] = useState("");
+  const [headerArea, setHeaderArea] = useState(
+    JSON.stringify({ alg: "HS256", typ: "JWT" }, null, 2)
+  );
+  const [payloadArea, setPayloadArea] = useState("");
   const [secretKey, setSecretKey] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const handleSelectOption = ($event: any) => {
     // setSelected($event.target.value);
@@ -58,40 +63,49 @@ const JsonWebToken = (props: Props) => {
     setSecretKey($event.target.value);
   };
 
-  const handleEncodeArea = ($event: any) => {
-    setEncoded($event.target.value);
+  const handleJwtArea = ($event: any) => {
+    setJwtArea($event.target.value);
   };
 
-  const handelDecodedArea = ($event: any) => {
-    setDecoded($event.target.value);
+  const handleHeadersArea = ($event: any) => {
+    setHeaderArea($event.target.value);
+  };
+
+  const handlePayloadArea = ($event: any) => {
+    setPayloadArea($event.target.value);
   };
 
   const handleSelectOptionAlgorithm = ($event: any) => {
-    // const getAlgorithm = algorithms.find(
-    //   (item) => item.value === $event.target.value
-    // );
     const getAlgorithm = algorithms[$event.target.value];
     setAlgorithm(getAlgorithm!);
   };
 
   const onEncoded = async () => {
-    // const secret = new TextEncoder().encode("1234567");
-    // const alg = "HS256";
-    // const typ = "JWT";
-    // const jwt = await new jose.SignJWT({
-    //   sub: "1234567890",
-    //   name: "John Doe",
-    //   iat: 1516239022,
-    // })
-    //   .setProtectedHeader({ alg, typ })
-    //   .sign(secret);
-    // console.log(jwt);
-    let secret;
-
     try {
-      const convertToObject = JSON.parse(decoded);
-    } catch (error) {
-      console.log('error json ->', error);
+      // const headerObject = JSON.parse(headerArea);
+      const payloadObject = JSON.parse(payloadArea);
+      let secret: any;
+
+      if (isEncodedSecret) {
+        const encodedSecret = jose.base64url.encode(secretKey);
+        secret = new TextEncoder().encode(encodedSecret);
+      } else {
+        secret = new TextEncoder().encode(secretKey);
+      }
+
+      const alg = algorithm.alg;
+      const typ = algorithm.typ;
+      if (typeof payloadObject === "object") {
+        const jwt = await new jose.SignJWT(payloadObject)
+          .setProtectedHeader({ alg, typ })
+          .sign(secret);
+        setJwtArea(jwt);
+        setHeaderArea(JSON.stringify({ alg: alg, typ: typ }, null, 2));
+      }
+    } catch (error: any) {
+      console.log("error json ->", error.message);
+      setIsError(true);
+      setErrorMessage(`Error Payload! : ${error.message}`);
     }
 
     // if (isEncodedSecret) {
@@ -164,19 +178,16 @@ const JsonWebToken = (props: Props) => {
     //   alg: "HS256",
     //   typ: "JWT",
     // };
-
-    const header = {
-      alg: algorithm,
-      typ: "JWT",
-    };
-
-    const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
-    const encodeHeader = base64Url(stringifiedHeader);
-    const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(encode));
-    const encodedData = base64Url(stringifiedData);
-    const token = encodeHeader + "." + encodedData;
-    let signature;
-
+    // const header = {
+    //   alg: algorithm,
+    //   typ: "JWT",
+    // };
+    // const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+    // const encodeHeader = base64Url(stringifiedHeader);
+    // const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(encode));
+    // const encodedData = base64Url(stringifiedData);
+    // const token = encodeHeader + "." + encodedData;
+    // let signature;
     // if (algorithm === "HS256") {
     //   signature = CryptoJS.HmacSHA256(token, secretKey);
     // } else if (algorithm === "HS384") {
@@ -184,48 +195,45 @@ const JsonWebToken = (props: Props) => {
     // } else if (algorithm === "HS512") {
     //   signature = CryptoJS.HmacSHA512(token, secretKey);
     // }
-
-    const base64Signature = base64Url(signature);
-    const jwt = token + "." + base64Signature;
-    dispatch(encodeToken({ result: jwt, isError: false, messageError: "" }));
+    // const base64Signature = base64Url(signature);
+    // const jwt = token + "." + base64Signature;
+    // dispatch(encodeToken({ result: jwt, isError: false, messageError: "" }));
   };
 
   const decodeJWT = () => {
-    let algorithm = decode.split(".")[0];
-    let base64Payload = decode.split(".")[1];
-    try {
-      // const wordsAlgorithm = CryptoJS.enc.Base64.parse(algorithm);
-      // const textAlgorithm = CryptoJS.enc.Utf8.stringify(wordsAlgorithm);
-      // const wordsBase64 = CryptoJS.enc.Base64.parse(base64Payload);
-      // const textBase64 = CryptoJS.enc.Utf8.stringify(wordsBase64);
-      // dispatch(
-      //   decodeToken({
-      //     result: { algorithm: textAlgorithm, decodeText: textBase64 },
-      //     isError: false,
-      //     messageError: "",
-      //   })
-      // );
-
-      const decodeAlgorithm = Base64.decode(algorithm);
-      const decodePayload = Base64.decode(base64Payload);
-
-      dispatch(
-        decodeToken({
-          result: { algorithm: decodeAlgorithm, decodeText: decodePayload },
-          isError: false,
-          messageError: "",
-        })
-      );
-    } catch (error) {
-      console.error("json web token error -->", error);
-      dispatch(
-        decodeToken({
-          result: { algorithm: "", decodeText: "" },
-          isError: true,
-          messageError: String(error),
-        })
-      );
-    }
+    // let algorithm = decode.split(".")[0];
+    // let base64Payload = decode.split(".")[1];
+    // try {
+    // const wordsAlgorithm = CryptoJS.enc.Base64.parse(algorithm);
+    // const textAlgorithm = CryptoJS.enc.Utf8.stringify(wordsAlgorithm);
+    // const wordsBase64 = CryptoJS.enc.Base64.parse(base64Payload);
+    // const textBase64 = CryptoJS.enc.Utf8.stringify(wordsBase64);
+    // dispatch(
+    //   decodeToken({
+    //     result: { algorithm: textAlgorithm, decodeText: textBase64 },
+    //     isError: false,
+    //     messageError: "",
+    //   })
+    // );
+    //   const decodeAlgorithm = Base64.decode(algorithm);
+    //   const decodePayload = Base64.decode(base64Payload);
+    //   dispatch(
+    //     decodeToken({
+    //       result: { algorithm: decodeAlgorithm, decodeText: decodePayload },
+    //       isError: false,
+    //       messageError: "",
+    //     })
+    //   );
+    // } catch (error) {
+    //   console.error("json web token error -->", error);
+    //   dispatch(
+    //     decodeToken({
+    //       result: { algorithm: "", decodeText: "" },
+    //       isError: true,
+    //       messageError: String(error),
+    //     })
+    //   );
+    // }
   };
 
   return (
@@ -245,6 +253,7 @@ const JsonWebToken = (props: Props) => {
         <textarea
           name="encoded"
           id="encoded"
+          value={jwtArea}
           rows={8}
           placeholder="Enter your token here..."
           className="
@@ -264,11 +273,21 @@ const JsonWebToken = (props: Props) => {
             dark:placeholder-gray-400
             dark:text-white
           "
+          onChange={handleJwtArea}
         ></textarea>
       </section>
       <section className="flex-initial w-80">
         <div className="flex h-[98vh]">
           <div className="m-auto">
+            {isError ? (
+              <div className="mb-12">
+                <div className="p-4 bg-red-200 border border-1 border-red-500">
+                  <span className="font-bold text-red-600  items-center">
+                    {errorMessage}
+                  </span>
+                </div>
+              </div>
+            ) : null}
             <div className="mb-3">
               <label
                 htmlFor="algorithm"
@@ -300,13 +319,13 @@ const JsonWebToken = (props: Props) => {
               >
                 {algorithms.map((item, index) => (
                   <option key={index} value={index}>
-                    {item.value}
+                    {item.alg}
                   </option>
                 ))}
               </select>
             </div>
             <button
-              title="Generate"
+              title="Decoded"
               className="              
               inline-flex 
               w-full 
@@ -327,7 +346,7 @@ const JsonWebToken = (props: Props) => {
               hover:bg-teal-400"
               onClick={onEncoded}
             >
-              Encode
+              Decoded
               <FaAngleRight
                 size={15}
                 className="text-white dark:text-gray-200 ml-3 mt-1"
@@ -355,13 +374,14 @@ const JsonWebToken = (props: Props) => {
               rounded-md 
               shadow-sm
               hover:bg-sky-400"
+              onClick={onEncoded}
             >
               <FaAngleLeft
                 size={15}
                 className="text-white dark:text-gray-200 mr-3 mt-1"
                 title="Encoded"
               />
-              Decode
+              Encoded
             </button>
 
             <div className="mt-2">
@@ -428,7 +448,6 @@ const JsonWebToken = (props: Props) => {
             <span className="text-md font-medium-text-gray dark:text-gray-300">
               {algorithm.algorithm}
             </span>
-
             <input
               type="input"
               id="secret"
@@ -448,6 +467,7 @@ const JsonWebToken = (props: Props) => {
             name="headers"
             id="headers"
             rows={8}
+            value={headerArea}
             className="
             block 
             p-4        
@@ -466,6 +486,7 @@ const JsonWebToken = (props: Props) => {
             dark:placeholder-gray-400
             dark:text-white
           "
+            onChange={handleHeadersArea}
           ></textarea>
         </div>
         <div>
@@ -496,6 +517,7 @@ const JsonWebToken = (props: Props) => {
             dark:placeholder-gray-400
             dark:text-white
           "
+            onChange={handlePayloadArea}
           ></textarea>
         </div>
       </section>
