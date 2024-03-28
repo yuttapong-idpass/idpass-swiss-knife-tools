@@ -24,9 +24,9 @@ interface IAlgorithm {
   typ: string;
 }
 
-const initialJwtValue = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
-    eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkV4YW1wbGUgSldUIiwiaWF0IjoxNTE2MjM5MDIyfQ.
-    HncDT1ysNqeX8wRJnu9qvHXySrjTqzxWAxNPgUZt3f8`;
+// deepcode ignore HardcodedNonCryptoSecret: <please specify a reason of ignoring this>
+const initialJwtValue: any =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkV4YW1wbGUgSldUIiwiaWF0IjoxNTE2MjM5MDIyfQ.HncDT1ysNqeX8wRJnu9qvHXySrjTqzxWAxNPgUZt3f8";
 
 const initialHeaderValue = JSON.stringify(
   { alg: "HS256", typ: "JWT" },
@@ -60,7 +60,12 @@ const JsonWebToken = (props: Props) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (isEncodedSecret) { 
+      
+    }
+  }, 
+  [headerArea, payloadArea, jwtArea]);
 
   const handleSecretKey = ($event: any) => {
     setSecretKey($event.target.value);
@@ -76,6 +81,11 @@ const JsonWebToken = (props: Props) => {
 
   const handlePayloadArea = ($event: any) => {
     setPayloadArea($event.target.value);
+  };
+
+  const handleIsAutoDetect = ($event: any) => {
+    const checkedAutoDetect = $event.target.checked;
+    console.log("handle auto detect", checkedAutoDetect);
   };
 
   const handleSelectOptionAlgorithm = ($event: any) => {
@@ -115,10 +125,20 @@ const JsonWebToken = (props: Props) => {
       setIsError(true);
       setErrorMessage(`Error Payload! : ${error.message}`);
     }
+  };
 
-    // if (isEncodedSecret) {
-    //   secret = jose.base64url.encode(secretKey);
-    // }
+  const onDecoded = async () => {
+    try {
+      // deepcode ignore JwtDecodeMethod: <please specify a reason of ignoring this>
+      const decodedPayload = jose.decodeJwt(jwtArea);
+      const decodedHeaders = jose.decodeProtectedHeader(jwtArea);
+      console.log("decoded ->", decodedPayload);
+
+      setPayloadArea(JSON.stringify(decodedPayload, null, 2));
+      setHeaderArea(JSON.stringify(decodedHeaders, null, 2));
+    } catch (error) {
+      console.log("error decoded ->", error);
+    }
   };
 
   // const handleEncodeArea = (event$: any) => {
@@ -168,10 +188,6 @@ const JsonWebToken = (props: Props) => {
   //   const secret: any = event$.target.value;
   //   setSecretKey(secret);
   // };
-
-  const onDecode = () => {
-    decodeJWT();
-  };
 
   const base64Url = (source: any) => {
     let encodedSource = CryptoJS.enc.Base64.stringify(source);
@@ -348,7 +364,7 @@ const JsonWebToken = (props: Props) => {
               rounded-md 
               shadow-sm
               hover:bg-teal-400"
-              onClick={onEncoded}
+              onClick={onDecoded}
             >
               Decoded
               <FaAngleRight
@@ -405,6 +421,7 @@ const JsonWebToken = (props: Props) => {
                 dark:border-gray-600
               "
                 defaultChecked={true}
+                onChange={handleIsAutoDetect}
               />
               <label
                 htmlFor="labelAutoGenerate"
@@ -449,14 +466,14 @@ const JsonWebToken = (props: Props) => {
           items-center
           "
           >
-            <span className="text-md font-medium-text-gray dark:text-gray-300">
-              {algorithm.algorithm}
+            <span className="text-md font-medium-text-gray dark:text-gray-300 mr-4">
+               {algorithm.algorithm} + 
             </span>
             <input
               type="input"
               id="secret"
               placeholder="Enter your secret..."
-              className=" h-10 border rounded-sm border-solid border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              className=" h-10 border rounded-md border-solid border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
               onChange={handleSecretKey}
             />
           </section>
@@ -504,6 +521,7 @@ const JsonWebToken = (props: Props) => {
             name="payload"
             id="payload"
             rows={8}
+            value={payloadArea}
             className="
             block 
             p-4        
