@@ -19,6 +19,21 @@ import {
 
 type Props = {};
 
+interface IAlgorithm {
+  alg: string;
+  typ: string;
+}
+
+const initialJwtValue = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+    eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkV4YW1wbGUgSldUIiwiaWF0IjoxNTE2MjM5MDIyfQ.
+    HncDT1ysNqeX8wRJnu9qvHXySrjTqzxWAxNPgUZt3f8`;
+
+const initialHeaderValue = JSON.stringify(
+  { alg: "HS256", typ: "JWT" },
+  null,
+  2
+);
+
 const JsonWebToken = (props: Props) => {
   const encodeReducer = useSelector(encodeSelector);
   const decodeReducer = useSelector(decodeSelector);
@@ -38,26 +53,14 @@ const JsonWebToken = (props: Props) => {
   const [selected, setSelected] = useState(options[0].value);
   const [isEncodedSecret, setIsEncodedSecret] = useState(false);
   const [algorithm, setAlgorithm] = useState(algorithms[0]);
-  const [jwtArea, setJwtArea] = useState("");
-  const [headerArea, setHeaderArea] = useState(
-    JSON.stringify({ alg: "HS256", typ: "JWT" }, null, 2)
-  );
+  const [jwtArea, setJwtArea] = useState(initialJwtValue);
+  const [headerArea, setHeaderArea] = useState(initialHeaderValue);
   const [payloadArea, setPayloadArea] = useState("");
   const [secretKey, setSecretKey] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
-  const handleSelectOption = ($event: any) => {
-    // setSelected($event.target.value);
-    // dispatch(encodeToken({ result: "", isError: false, messageError: "" }));
-    // dispatch(
-    //   decodeToken({
-    //     result: { algorithm: "", decodeText: "" },
-    //     isError: false,
-    //     messageError: "",
-    //   })
-    // );
-  };
+  useEffect(() => {}, []);
 
   const handleSecretKey = ($event: any) => {
     setSecretKey($event.target.value);
@@ -78,11 +81,13 @@ const JsonWebToken = (props: Props) => {
   const handleSelectOptionAlgorithm = ($event: any) => {
     const getAlgorithm = algorithms[$event.target.value];
     setAlgorithm(getAlgorithm!);
+    setHeaderArea(
+      JSON.stringify({ alg: getAlgorithm.alg, typ: getAlgorithm.typ }, null, 2)
+    );
   };
 
   const onEncoded = async () => {
     try {
-      // const headerObject = JSON.parse(headerArea);
       const payloadObject = JSON.parse(payloadArea);
       let secret: any;
 
@@ -102,8 +107,11 @@ const JsonWebToken = (props: Props) => {
         setJwtArea(jwt);
         setHeaderArea(JSON.stringify({ alg: alg, typ: typ }, null, 2));
       }
+      if (isError) {
+        setIsError(false);
+        setErrorMessage("");
+      }
     } catch (error: any) {
-      console.log("error json ->", error.message);
       setIsError(true);
       setErrorMessage(`Error Payload! : ${error.message}`);
     }
@@ -277,30 +285,26 @@ const JsonWebToken = (props: Props) => {
         ></textarea>
       </section>
       <section className="flex-initial w-80">
-        <div className="flex h-[98vh]">
-          <div className="m-auto">
+        <div className="flex flex-col h-[98vh]">
+          <div className="basis-1/4  items-end m-auto">
             {isError ? (
-              <div className="mb-12">
-                <div className="p-4 bg-red-200 border border-1 border-red-500">
+              <div>
+                <div className="p-4 bg-red-200 border border-1  border-red-500">
                   <span className="font-bold text-red-600  items-center">
                     {errorMessage}
                   </span>
                 </div>
               </div>
             ) : null}
+          </div>
+          <div className="basis-1/2 items-center m-auto">
             <div className="mb-3">
               <label
                 htmlFor="algorithm"
-                className="text-lg items-center mr-2 font-medium text-gray-800 dark:text-gray-300"
+                className="text-lg  mr-2 font-medium text-gray-800 dark:text-gray-300"
               >
                 Alg:
               </label>
-              {/* <input
-              type="text"
-              id="alg"
-              className="border border-solid border-gray-300 p-1 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-            /> */}
-
               <select
                 title="alg"
                 name="alg"
