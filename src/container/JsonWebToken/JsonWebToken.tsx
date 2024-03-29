@@ -52,6 +52,7 @@ const JsonWebToken = (props: Props) => {
 
   const [selected, setSelected] = useState(options[0].value);
   const [isEncodedSecret, setIsEncodedSecret] = useState(false);
+  const [autoDetect, setAutoDetect] = useState(false);
   const [algorithm, setAlgorithm] = useState(algorithms[0]);
   const [jwtArea, setJwtArea] = useState(initialJwtValue);
   const [headerArea, setHeaderArea] = useState(initialHeaderValue);
@@ -61,11 +62,9 @@ const JsonWebToken = (props: Props) => {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    if (isEncodedSecret) { 
-      
+    if (isEncodedSecret) {
     }
-  }, 
-  [headerArea, payloadArea, jwtArea]);
+  }, [headerArea, payloadArea, jwtArea]);
 
   const handleSecretKey = ($event: any) => {
     setSecretKey($event.target.value);
@@ -84,9 +83,12 @@ const JsonWebToken = (props: Props) => {
   };
 
   const handleIsAutoDetect = ($event: any) => {
-    const checkedAutoDetect = $event.target.checked;
-    console.log("handle auto detect", checkedAutoDetect);
+    setAutoDetect($event.target.checked);
   };
+
+  const handleEncodedSecret = ($event: any) => { 
+    
+  }
 
   const handleSelectOptionAlgorithm = ($event: any) => {
     const getAlgorithm = algorithms[$event.target.value];
@@ -467,7 +469,7 @@ const JsonWebToken = (props: Props) => {
           "
           >
             <span className="text-md font-medium-text-gray dark:text-gray-300 mr-4">
-               {algorithm.algorithm} + 
+              {algorithm.algorithm} +
             </span>
             <input
               type="input"
