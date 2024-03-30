@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
 import CryptoJS from "crypto-js";
 import { Base64 } from "js-base64";
 import { useSelector } from "react-redux";
@@ -28,11 +28,8 @@ interface IAlgorithm {
 const initialJwtValue: any =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkV4YW1wbGUgSldUIiwiaWF0IjoxNTE2MjM5MDIyfQ.HncDT1ysNqeX8wRJnu9qvHXySrjTqzxWAxNPgUZt3f8";
 
-const initialHeaderValue = JSON.stringify(
-  { alg: "HS256", typ: "JWT" },
-  null,
-  2
-);
+const initialPayload: any = JSON.stringify({});
+const initialHeaders: any = JSON.stringify({});
 
 const JsonWebToken = (props: Props) => {
   const encodeReducer = useSelector(encodeSelector);
@@ -50,48 +47,43 @@ const JsonWebToken = (props: Props) => {
     { name: "HS512", alg: "HS512", typ: "JWT", algorithm: "HMACSHA512" },
   ];
 
-  const [selected, setSelected] = useState(options[0].value);
-  const [isEncodedSecret, setIsEncodedSecret] = useState(false);
-  const [autoDetect, setAutoDetect] = useState(false);
   const [algorithm, setAlgorithm] = useState(algorithms[0]);
   const [jwtArea, setJwtArea] = useState(initialJwtValue);
-  const [headerArea, setHeaderArea] = useState(initialHeaderValue);
-  const [payloadArea, setPayloadArea] = useState("");
+  const [headerArea, setHeaderArea] = useState(initialPayload);
+  const [payloadArea, setPayloadArea] = useState(initialHeaders);
   const [secretKey, setSecretKey] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [encodedSecret, setEncodedSecret] = useState(false);
 
-  useEffect(() => {
-    if (isEncodedSecret) {
-    }
-  }, [headerArea, payloadArea, jwtArea]);
-
-  const handleSecretKey = ($event: any) => {
-    setSecretKey($event.target.value);
+  const handleSecretKey = ($event: SyntheticEvent<EventTarget>) => {
+    const secret = ($event.target as HTMLInputElement).value;
+    setSecretKey(secret);
   };
 
-  const handleJwtArea = ($event: any) => {
-    setJwtArea($event.target.value);
+  const handleJwtArea = ($event: SyntheticEvent<EventTarget>) => {
+    const jwt = ($event.target as HTMLInputElement).value;
+    setJwtArea(jwt);
   };
 
-  const handleHeadersArea = ($event: any) => {
-    setHeaderArea($event.target.value);
+  const handleHeadersArea = ($event: SyntheticEvent<EventTarget>) => {
+    const headers = ($event.target as HTMLInputElement).value;
+    setHeaderArea(headers);
   };
 
-  const handlePayloadArea = ($event: any) => {
-    setPayloadArea($event.target.value);
+  const handlePayloadArea = ($event: SyntheticEvent<EventTarget>) => {
+    const payload = ($event.target as HTMLInputElement).value;
+    setPayloadArea(payload);
   };
 
-  const handleIsAutoDetect = ($event: any) => {
-    setAutoDetect($event.target.checked);
+  const handleEncodedSecretKey = ($event: SyntheticEvent<EventTarget>) => {
+    const payload = ($event.target as HTMLInputElement).checked;
+    setEncodedSecret(payload);
   };
 
-  const handleEncodedSecret = ($event: any) => { 
-    
-  }
-
-  const handleSelectOptionAlgorithm = ($event: any) => {
-    const getAlgorithm = algorithms[$event.target.value];
+  const handleSelectOptionAlgorithm = ($event: SyntheticEvent<EventTarget>) => {
+    const index: any = ($event.target as HTMLInputElement).value;
+    const getAlgorithm = algorithms[index];
     setAlgorithm(getAlgorithm!);
     setHeaderArea(
       JSON.stringify({ alg: getAlgorithm.alg, typ: getAlgorithm.typ }, null, 2)
@@ -103,25 +95,30 @@ const JsonWebToken = (props: Props) => {
       const payloadObject = JSON.parse(payloadArea);
       let secret: any;
 
-      if (isEncodedSecret) {
+      if (encodedSecret) {
         const encodedSecret = jose.base64url.encode(secretKey);
         secret = new TextEncoder().encode(encodedSecret);
       } else {
         secret = new TextEncoder().encode(secretKey);
       }
 
-      const alg = algorithm.alg;
-      const typ = algorithm.typ;
-      if (typeof payloadObject === "object") {
-        const jwt = await new jose.SignJWT(payloadObject)
-          .setProtectedHeader({ alg, typ })
-          .sign(secret);
-        setJwtArea(jwt);
-        setHeaderArea(JSON.stringify({ alg: alg, typ: typ }, null, 2));
-      }
-      if (isError) {
-        setIsError(false);
-        setErrorMessage("");
+      if (!!secretKey) {
+        const alg = algorithm.alg;
+        const typ = algorithm.typ;
+        if (typeof payloadObject === "object") {
+          const jwt = await new jose.SignJWT(payloadObject)
+            .setProtectedHeader({ alg, typ })
+            .sign(secret);
+          setJwtArea(jwt);
+          setHeaderArea(JSON.stringify({ alg: alg, typ: typ }, null, 2));
+        }
+        if (isError) {
+          setIsError(false);
+          setErrorMessage("");
+        }
+      } else {
+        setIsError(true);
+        setErrorMessage(`Error Secret! : Please input your secret key`);
       }
     } catch (error: any) {
       setIsError(true);
@@ -135,11 +132,15 @@ const JsonWebToken = (props: Props) => {
       const decodedPayload = jose.decodeJwt(jwtArea);
       const decodedHeaders = jose.decodeProtectedHeader(jwtArea);
       console.log("decoded ->", decodedPayload);
-
       setPayloadArea(JSON.stringify(decodedPayload, null, 2));
       setHeaderArea(JSON.stringify(decodedHeaders, null, 2));
-    } catch (error) {
-      console.log("error decoded ->", error);
+      if (isError) {
+        setIsError(false);
+        setErrorMessage("");
+      }
+    } catch (error: any) {
+      setIsError(true);
+      setErrorMessage(`Error Decoded! : ${error.message}`);
     }
   };
 
@@ -405,38 +406,6 @@ const JsonWebToken = (props: Props) => {
               />
               Encoded
             </button>
-
-            <div className="mt-2">
-              <input
-                id="autoGenerate"
-                type="checkbox"
-                className="
-                w-4 
-                h-4 
-                text-blue-600 
-                bg-gray-100 
-                border-gray-300 rounded 
-              focus:ring-blue-500 
-              dark:focus:ring-blue-600 
-                dark:ring-offset-gray-800focus:ring-2
-                dark:bg-gray-700
-                dark:border-gray-600
-              "
-                defaultChecked={true}
-                onChange={handleIsAutoDetect}
-              />
-              <label
-                htmlFor="labelAutoGenerate"
-                className=" 
-                      ms-2
-                      text-lg 
-                      font-medium 
-                    text-gray-800 
-                    dark:text-gray-300"
-              >
-                Auto detect
-              </label>
-            </div>
           </div>
         </div>
       </section>
@@ -451,12 +420,13 @@ const JsonWebToken = (props: Props) => {
           <section
             className="
           flex
-          p-2 
+          flex-row
+          p-2
           w-full 
           text-md 
           text-gray-900 
           bg-gray-50 
-          h-[9vh] border 
+          h-[15vh] border 
           border-gray-300 
           border-solid 
           rounded-md
@@ -468,16 +438,68 @@ const JsonWebToken = (props: Props) => {
           items-center
           "
           >
-            <span className="text-md font-medium-text-gray dark:text-gray-300 mr-4">
-              {algorithm.algorithm} +
-            </span>
-            <input
-              type="input"
-              id="secret"
-              placeholder="Enter your secret..."
-              className=" h-10 border rounded-md border-solid border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-              onChange={handleSecretKey}
-            />
+            <section className="flex flex-col">
+              <div>
+                <span className="text-md font-medium-text-gray dark:text-white mr-4">
+                  {algorithm.algorithm} (
+                </span>
+              </div>
+              <div className="ml-4">
+                <span className="text-md font-medium-text-gray dark:text-white mr-4">
+                  <span className="text-[#FB2576]">
+                    base64UrlEncoded(header)
+                  </span>{" "}
+                  + "." +{" "}
+                  <span className="text-[#C147E9]">
+                    base64UrlEncoded(payload)
+                  </span>{" "}
+                  ,
+                </span>
+              </div>
+              <div className="ml-4">
+                <input
+                  type="input"
+                  id="secret"
+                  placeholder="Enter your secret..."
+                  className=" h-10 p-2 border rounded-md border-solid border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  onChange={handleSecretKey}
+                />{" "}
+                )
+              </div>
+              <div>
+                <div className="mt-2">
+                  <input
+                    id="autoGenerate"
+                    type="checkbox"
+                    className="
+                w-4 
+                h-4 
+                text-blue-600 
+                bg-gray-100 
+                border-gray-300 rounded 
+              focus:ring-blue-500 
+              dark:focus:ring-blue-600 
+                dark:ring-offset-gray-800focus:ring-2
+                dark:bg-gray-700
+                dark:border-gray-600
+              "
+                    onChange={handleEncodedSecretKey}
+                    defaultChecked={encodedSecret}
+                  />
+                  <label
+                    htmlFor="labelAutoGenerate"
+                    className=" 
+                      ms-2
+                      text-lg 
+                      font-medium 
+                    text-gray-800 
+                    dark:text-gray-300"
+                  >
+                   Secret base64 encoded
+                  </label>
+                </div>
+              </div>
+            </section>
           </section>
 
           <label
@@ -498,7 +520,7 @@ const JsonWebToken = (props: Props) => {
             text-md
             text-gray-900
             bg-gray-50
-            h-[38vh]
+            h-[35vh]
             rounded-md
             border
             mb-3
@@ -531,7 +553,7 @@ const JsonWebToken = (props: Props) => {
             text-md
             text-gray-900
             bg-gray-50
-            h-[38vh]
+            h-[35vh]
             rounded-md
             border
             border-gray-300
