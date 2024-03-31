@@ -194,11 +194,13 @@ const Base64Image = (props: Props) => {
                 text-gray-900 
                   text-md 
                   w-full 
-                  p-2 
+                  p-2
+                  shadow-md 
                 dark:bg-gray-700 
                 dark:border-gray-600 
                 dark:placeholder-gray-400 
                 dark:text-white"
+                  
                 ></textarea>
               </div>
             </div>
@@ -220,9 +222,10 @@ const Base64Image = (props: Props) => {
               font-medium 
               leading-6 
               text-white 
-              dark:text-gray-200 
+              dark:text-gray-200
+              dark:bg-[#1E5128] 
               whitespace-no-wrap 
-              bg-lime-500 
+              bg-[#4E9F3D] 
               rounded-md 
               shadow-sm 
               hover:bg-lime-400"

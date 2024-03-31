@@ -80,4 +80,5 @@ pre {
 .base64input { 
     min-height: 200px;
     overflow-wrap: break-word;
+    overflow: inherit;
 }

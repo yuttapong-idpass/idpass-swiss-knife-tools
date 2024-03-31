@@ -242,7 +242,7 @@ const IdCardGenerator = (props: Props) => {
   const onVerifyIdCard = () => {
     if (verifyIdCard()) {
       setVerify("success");
-    } else { 
+    } else {
       setVerify("fail");
     }
   };
@@ -410,7 +410,7 @@ const IdCardGenerator = (props: Props) => {
                 <h1 className="text-xl font-bold text-gray-900">
                   หมายเลขบัตรประชาชน : {result}{" "}
                 </h1>
-                {(!!verify && verify === 'success') ? (
+                {!!verify && verify === "success" ? (
                   <span className="text-green-500">
                     {" "}
                     <img
@@ -421,7 +421,7 @@ const IdCardGenerator = (props: Props) => {
                   </span>
                 ) : (
                   <>
-                    {!!verify && verify === 'fail' ? (
+                    {!!verify && verify === "fail" ? (
                       <>
                         <span className="text-red-500">
                           {" "}

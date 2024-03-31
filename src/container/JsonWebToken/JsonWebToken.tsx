@@ -56,6 +56,13 @@ const JsonWebToken = (props: Props) => {
   const [isError, setIsError] = useState(false);
   const [encodedSecret, setEncodedSecret] = useState(false);
 
+
+  useEffect(() => { 
+    onDecoded();
+  }, []);
+
+
+
   const handleSecretKey = ($event: SyntheticEvent<EventTarget>) => {
     const secret = ($event.target as HTMLInputElement).value;
     setSecretKey(secret);
@@ -291,6 +298,7 @@ const JsonWebToken = (props: Props) => {
             text-gray-900
             bg-gray-50
             h-[94vh]
+            shadow-md
             rounded-md
             border
             border-gray-300
@@ -436,6 +444,7 @@ const JsonWebToken = (props: Props) => {
           dark:placeholder-gary-400
           dark:text-white
           items-center
+          shadow-md
           "
           >
             <section className="flex flex-col">
@@ -523,6 +532,7 @@ const JsonWebToken = (props: Props) => {
             h-[35vh]
             rounded-md
             border
+            shadow-md
             mb-3
             border-gray-300
             border-solid
@@ -554,6 +564,7 @@ const JsonWebToken = (props: Props) => {
             text-gray-900
             bg-gray-50
             h-[35vh]
+            shadow-md
             rounded-md
             border
             border-gray-300

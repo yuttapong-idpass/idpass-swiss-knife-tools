@@ -38,12 +38,12 @@ function App() {
       icon: <BsKey size={20} />,
       link: "/jwt",
     },
-    {
-      name: "Thai id card random",
-      active: false,
-      icon: <BsPersonVcard size={20} />,
-      link: "/id-card-random",
-    },
+    // {
+    //   name: "Thai id card random",
+    //   active: false,
+    //   icon: <BsPersonVcard size={20} />,
+    //   link: "/id-card-random",
+    // },
   ];
 
   useEffect(() => {

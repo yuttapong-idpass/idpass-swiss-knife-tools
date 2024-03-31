@@ -1,10 +1,10 @@
 import { createContext, useContext, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import DarkLightToggle from "../DarkLightToggle/DarkLightToggle";
 
-import './SideBar.css';
+
 import Tools from '../../assets/images/tools.png';
+import './SideBar.css';
 
 type Props = {
   children: any;

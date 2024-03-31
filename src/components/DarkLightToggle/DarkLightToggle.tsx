@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { MdDarkMode } from "react-icons/md";
 import { ThemeContext } from "../../providers/ThemeProvider";
+import { MdLightMode, MdDarkMode } from "react-icons/md";
 
 import "./DarkLightToggle.css";
 type Props = {};
@@ -11,7 +11,9 @@ const DarkLightToggle = (props: Props) => {
   return (
     <div className="flex flex-row gap-4 justify-content items-center">
       <div>
-        <span className="text-gray-600 dark:text-gray-300">Light</span>
+        <span className="text-gray-600 dark:text-gray-300">
+          <MdLightMode size={20} />
+        </span>
       </div>
       <div className="toggle">
         <input
@@ -25,7 +27,9 @@ const DarkLightToggle = (props: Props) => {
         <label htmlFor="toggle"></label>
       </div>
       <div>
-        <span className="text-gray-600 dark:text-gray-300">Dark</span>
+        <span className="text-gray-600 dark:text-gray-300">
+          <MdDarkMode size={20} />
+        </span>
       </div>
     </div>
   );

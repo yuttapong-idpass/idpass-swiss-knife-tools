@@ -210,7 +210,7 @@ const JsonEditorOutput = (props: Props) => {
   };
   return (
     <div
-      className={`${toggleFullScreen ? "fullscreen" : "mt-3 mr-3"}`}
+      className={`${toggleFullScreen ? "fullscreen" : "mt-3 mr-3"} shadow-xl`}
       id="jsonEditorInput"
     >
       <ToastNotify />
