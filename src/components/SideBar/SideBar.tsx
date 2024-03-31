@@ -45,7 +45,7 @@ export default function Sidebar({ children }: Props) {
             </button>
           </div>
 
-          <SidebarContext.Provider value={{ expanded }}>
+          <SidebarContext.Provider value={ expanded }>
             <ul className="flex-1 px-3">{children}</ul>
           </SidebarContext.Provider>
 
@@ -77,7 +77,7 @@ export default function Sidebar({ children }: Props) {
 }
 
 export function SidebarItem({ icon, text, active, alert, link }: SidebarProps) {
-  const { expanded } = useContext(SidebarContext);
+  const  expanded  = useContext(SidebarContext);
   return (
     <li
       className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
