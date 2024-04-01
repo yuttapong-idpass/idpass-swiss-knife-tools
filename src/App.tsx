@@ -7,7 +7,7 @@ import Menu from "./container/Menu/Menu";
 import JsonPretty from "./container/JsonPretty/JsonPretty";
 import Base64Image from "./container/Base64Image/Base64Image";
 import JsonWebToken from "./container/JsonWebToken/JsonWebToken";
-import IdCardGenerator from "./container/IdCardGenerator/IdCardGenerator";
+import IdCardGenerator from "./container/RandomThaiIdCard/RandomThaiIdCard";
 import MockIdCard from "./container/MockIdCard/MockIdCard";
 import Sidebar, { SidebarItem } from "./components/SideBar/SideBar";
 
@@ -21,13 +21,13 @@ import JsonWebTokenIcon from "./assets/images/svg/json-web-token.svg";
 function App() {
   const menuList = [
     {
-      name: "Json pretty",
+      name: "JSON EDITOR",
       active: false,
       icon: <TbJson size={20} />,
       link: "/json-editor",
     },
     {
-      name: "Base64 to image",
+      name: "BASE 64 IMAGE",
       active: false,
       icon: <BsImage size={20} />,
       link: "/base64Image",
@@ -38,12 +38,12 @@ function App() {
       icon: <BsKey size={20} />,
       link: "/jwt",
     },
-    // {
-    //   name: "Thai id card random",
-    //   active: false,
-    //   icon: <BsPersonVcard size={20} />,
-    //   link: "/id-card-random",
-    // },
+    {
+      name: "RANDOM THAI ID CARD",
+      active: false,
+      icon: <BsPersonVcard size={20} />,
+      link: "/id-card-random",
+    },
   ];
 
   useEffect(() => {

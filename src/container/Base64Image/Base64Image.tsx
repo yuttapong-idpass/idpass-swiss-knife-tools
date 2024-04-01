@@ -136,7 +136,7 @@ const Base64Image = (props: Props) => {
                       mb-2 
                       text-lg 
                       font-medium 
-                    text-gray-800 
+                    text-gray-600 
                     dark:text-gray-300"
                 >
                   Base64 Image Decoded
@@ -146,7 +146,7 @@ const Base64Image = (props: Props) => {
                 <div>
                   <FaCopy
                     size={30}
-                    className="text-gray-800 hover:bg-gray-500 dark:text-gray-300 p-1"
+                    className="text-gray-600 hover:bg-gray-500 dark:text-gray-300 p-1"
                     title="Copy"
                     onClick={onCopyText}
                   />
@@ -154,7 +154,7 @@ const Base64Image = (props: Props) => {
                 <div>
                   <FaTrashCan
                     size={30}
-                    className="text-gray-800 hover:bg-gray-500 dark:text-gray-300 p-1"
+                    className="text-gray-600 hover:bg-gray-500 dark:text-gray-300 p-1"
                     title="Clear"
                     onClick={onClearText}
                   />
@@ -163,7 +163,7 @@ const Base64Image = (props: Props) => {
                   <label htmlFor="file-input">
                     <FaFolderOpen
                       size={30}
-                      className="text-gray-800 hover:bg-gray-500 dark:text-gray-300 p-1"
+                      className="text-gray-600 hover:bg-gray-500 dark:text-gray-300 p-1"
                       title="Upload file"
                     />
                   </label>
@@ -189,13 +189,15 @@ const Base64Image = (props: Props) => {
                   base64input
                   block
                 bg-gray-50 
-                  border 
+                  border
+                  border-solid 
                 border-gray-300 
-                text-gray-900 
+                text-gray-600 
                   text-md 
                   w-full 
-                  p-2
+                  p-4
                   shadow-md 
+                  rounded-md
                 dark:bg-gray-700 
                 dark:border-gray-600 
                 dark:placeholder-gray-400 
@@ -259,7 +261,7 @@ const Base64Image = (props: Props) => {
                       ms-2
                       text-lg 
                       font-medium 
-                    text-gray-800 
+                    text-gray-600 
                     dark:text-gray-300"
               >
                 Auto generate
@@ -305,7 +307,7 @@ const Base64Image = (props: Props) => {
                       mb-2 
                       text-lg 
                       font-medium 
-                    text-gray-800 
+                    text-gray-600 
                     dark:text-gray-300"
             >
               Preview Image
@@ -319,7 +321,7 @@ const Base64Image = (props: Props) => {
               mb-2 
               text-lg 
               font-medium 
-              text-gray-800 
+              text-gray-600 
               dark:text-gray-300"
               >
                 Dimensions : {description.width} x {description.height}
@@ -332,7 +334,7 @@ const Base64Image = (props: Props) => {
                 mb-2 
                 text-lg 
                 font-medium 
-              text-gray-800 
+              text-gray-600 
               dark:text-gray-300"
               >
                 Size: {description.size.toFixed(2)} Kb
@@ -441,7 +443,7 @@ const Base64Image = (props: Props) => {
     //               <nav className="p-3">
     //                 <div className="container flex flex-wrap items-center justify-between mx-auto">
     //                   <div className="flex items-center">
-    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
+    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-600 ">
     //                       OUTPUT
     //                     </span>
     //                   </div>
@@ -520,7 +522,7 @@ const Base64Image = (props: Props) => {
     //               <nav className="p-3">
     //                 <div className="container flex flex-wrap items-center justify-between mx-auto">
     //                   <div className="flex items-center">
-    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
+    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-600 ">
     //                       OUTPUT
     //                     </span>
     //                   </div>

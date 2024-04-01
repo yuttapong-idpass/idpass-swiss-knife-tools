@@ -19,11 +19,6 @@ import {
 
 type Props = {};
 
-interface IAlgorithm {
-  alg: string;
-  typ: string;
-}
-
 // deepcode ignore HardcodedNonCryptoSecret: <please specify a reason of ignoring this>
 const initialJwtValue: any =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkV4YW1wbGUgSldUIiwiaWF0IjoxNTE2MjM5MDIyfQ.HncDT1ysNqeX8wRJnu9qvHXySrjTqzxWAxNPgUZt3f8";
@@ -135,7 +130,6 @@ const JsonWebToken = (props: Props) => {
       // deepcode ignore JwtDecodeMethod: <please specify a reason of ignoring this>
       const decodedPayload = jose.decodeJwt(jwtArea);
       const decodedHeaders = jose.decodeProtectedHeader(jwtArea);
-      console.log("decoded ->", decodedPayload);
       setPayloadArea(JSON.stringify(decodedPayload, null, 2));
       setHeaderArea(JSON.stringify(decodedHeaders, null, 2));
       if (isError) {
@@ -155,7 +149,7 @@ const JsonWebToken = (props: Props) => {
           <div className="items-center">
             <label
               htmlFor="encoded"
-              className="text-lg font-medium text-gray-800 dark:text-gray-300"
+              className="text-lg font-medium text-gray-600 dark:text-gray-300"
             >
               Encoded
             </label>
@@ -173,7 +167,7 @@ const JsonWebToken = (props: Props) => {
             p-4        
             w-full
             text-md
-            text-gray-900
+            text-gray-600
             bg-gray-50
             h-[94vh]
             shadow-md
@@ -206,7 +200,7 @@ const JsonWebToken = (props: Props) => {
             <div className="mb-3">
               <label
                 htmlFor="algorithm"
-                className="text-lg  mr-2 font-medium text-gray-800 dark:text-gray-300"
+                className="text-lg  mr-2 font-medium text-gray-600 dark:text-gray-300"
               >
                 Alg:
               </label>
@@ -299,7 +293,7 @@ const JsonWebToken = (props: Props) => {
         <div className="flex flex-col">
           <label
             htmlFor="secret"
-            className="text-lg font-medium text-gray-800 dark:text-gray-300"
+            className="text-lg font-medium text-gray-600 dark:text-gray-300"
           >
             Secret
           </label>
@@ -311,7 +305,7 @@ const JsonWebToken = (props: Props) => {
           p-2
           w-full 
           text-md 
-          text-gray-900 
+          text-gray-600 
           bg-gray-50 
           h-[15vh] border 
           border-gray-300 
@@ -355,7 +349,7 @@ const JsonWebToken = (props: Props) => {
                 )
               </div>
               <div>
-                <div className="mt-2">
+                <div className="mt-2 flex-center items-center">
                   <input
                     id="autoGenerate"
                     type="checkbox"
@@ -380,7 +374,8 @@ const JsonWebToken = (props: Props) => {
                       ms-2
                       text-lg 
                       font-medium 
-                    text-gray-800 
+                      align-self-center
+                    text-gray-600 
                     dark:text-gray-300"
                   >
                     Secret base64 encoded
@@ -392,7 +387,7 @@ const JsonWebToken = (props: Props) => {
 
           <label
             htmlFor="headers"
-            className="text-lg font-medium text-gray-800 dark:text-gray-300"
+            className="text-lg font-medium text-gray-600 dark:text-gray-300"
           >
             Headers
           </label>
@@ -426,7 +421,7 @@ const JsonWebToken = (props: Props) => {
         <div>
           <label
             htmlFor="payload"
-            className="mb-2 text-lg font-medium text-gray-800 dark:text-gray-300"
+            className="mb-2 text-lg font-medium text-gray-600 dark:text-gray-300"
           >
             Payload
           </label>
@@ -499,7 +494,7 @@ const JsonWebToken = (props: Props) => {
     //               <nav className="p-3">
     //                 <div className="container flex flex-wrap items-center justify-between mx-auto">
     //                   <div className="flex items-center">
-    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
+    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-600 ">
     //                       ENCODED
     //                     </span>
     //                   </div>
@@ -610,7 +605,7 @@ const JsonWebToken = (props: Props) => {
     //               <nav className="p-3">
     //                 <div className="container flex flex-wrap items-center justify-between mx-auto">
     //                   <div className="flex items-center">
-    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
+    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-600 ">
     //                       RESULT
     //                     </span>
     //                   </div>
@@ -694,7 +689,7 @@ const JsonWebToken = (props: Props) => {
     //                 <nav className="p-3">
     //                   <div className="container flex flex-wrap items-center justify-between mx-auto">
     //                     <div className="flex items-center">
-    //                       <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
+    //                       <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-600 ">
     //                         DECODED
     //                       </span>
     //                     </div>
@@ -772,7 +767,7 @@ const JsonWebToken = (props: Props) => {
     //                 <nav className="p-3">
     //                   <div className="container flex flex-wrap items-center justify-between mx-auto">
     //                     <div className="flex items-center">
-    //                       <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-800 ">
+    //                       <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-600 ">
     //                         RESULT
     //                       </span>
     //                     </div>
