@@ -19,3 +19,8 @@
     overflow: inherit;
     color: #C147E9;
 }
+
+
+.secret-area { 
+    overflow: auto;
+}

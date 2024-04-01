@@ -56,12 +56,9 @@ const JsonWebToken = (props: Props) => {
   const [isError, setIsError] = useState(false);
   const [encodedSecret, setEncodedSecret] = useState(false);
 
-
-  useEffect(() => { 
+  useEffect(() => {
     onDecoded();
   }, []);
-
-
 
   const handleSecretKey = ($event: SyntheticEvent<EventTarget>) => {
     const secret = ($event.target as HTMLInputElement).value;
@@ -149,125 +146,6 @@ const JsonWebToken = (props: Props) => {
       setIsError(true);
       setErrorMessage(`Error Decoded! : ${error.message}`);
     }
-  };
-
-  // const handleEncodeArea = (event$: any) => {
-  //   const encode: any = event$.target.value;
-
-  //   if (!!encode) {
-  //     try {
-  //       let setting = JSON.parse(encode);
-  //       setEncode(setting);
-  //       dispatch(
-  //         encodeToken({
-  //           result: "",
-  //           isError: false,
-  //           messageError: "",
-  //         })
-  //       );
-  //     } catch (error) {
-  //       dispatch(
-  //         encodeToken({
-  //           result: "",
-  //           isError: true,
-  //           messageError: String(error),
-  //         })
-  //       );
-  //     }
-  //   } else {
-  //     dispatch(
-  //       encodeToken({
-  //         result: "",
-  //         isError: false,
-  //         messageError: "",
-  //       })
-  //     );
-  //   }
-  // };
-
-  // const handleDecodeArea = (event$: any) => {
-  //   const decoded: any = event$.target.value;
-  //   try {
-  //     setDecode(decoded);
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  // };
-
-  // const handleSecretArea = (event$: any) => {
-  //   const secret: any = event$.target.value;
-  //   setSecretKey(secret);
-  // };
-
-  const base64Url = (source: any) => {
-    let encodedSource = CryptoJS.enc.Base64.stringify(source);
-    encodedSource = encodedSource.replace(/=+$/, "");
-    encodedSource = encodedSource.replace(/\+/g, "-");
-    encodedSource = encodedSource.replace(/\//g, "_");
-    return encodedSource;
-  };
-
-  const encodeJWT = () => {
-    // const header = {
-    //   alg: "HS256",
-    //   typ: "JWT",
-    // };
-    // const header = {
-    //   alg: algorithm,
-    //   typ: "JWT",
-    // };
-    // const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
-    // const encodeHeader = base64Url(stringifiedHeader);
-    // const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(encode));
-    // const encodedData = base64Url(stringifiedData);
-    // const token = encodeHeader + "." + encodedData;
-    // let signature;
-    // if (algorithm === "HS256") {
-    //   signature = CryptoJS.HmacSHA256(token, secretKey);
-    // } else if (algorithm === "HS384") {
-    //   signature = CryptoJS.HmacSHA384(token, secretKey);
-    // } else if (algorithm === "HS512") {
-    //   signature = CryptoJS.HmacSHA512(token, secretKey);
-    // }
-    // const base64Signature = base64Url(signature);
-    // const jwt = token + "." + base64Signature;
-    // dispatch(encodeToken({ result: jwt, isError: false, messageError: "" }));
-  };
-
-  const decodeJWT = () => {
-    // let algorithm = decode.split(".")[0];
-    // let base64Payload = decode.split(".")[1];
-    // try {
-    // const wordsAlgorithm = CryptoJS.enc.Base64.parse(algorithm);
-    // const textAlgorithm = CryptoJS.enc.Utf8.stringify(wordsAlgorithm);
-    // const wordsBase64 = CryptoJS.enc.Base64.parse(base64Payload);
-    // const textBase64 = CryptoJS.enc.Utf8.stringify(wordsBase64);
-    // dispatch(
-    //   decodeToken({
-    //     result: { algorithm: textAlgorithm, decodeText: textBase64 },
-    //     isError: false,
-    //     messageError: "",
-    //   })
-    // );
-    //   const decodeAlgorithm = Base64.decode(algorithm);
-    //   const decodePayload = Base64.decode(base64Payload);
-    //   dispatch(
-    //     decodeToken({
-    //       result: { algorithm: decodeAlgorithm, decodeText: decodePayload },
-    //       isError: false,
-    //       messageError: "",
-    //     })
-    //   );
-    // } catch (error) {
-    //   console.error("json web token error -->", error);
-    //   dispatch(
-    //     decodeToken({
-    //       result: { algorithm: "", decodeText: "" },
-    //       isError: true,
-    //       messageError: String(error),
-    //     })
-    //   );
-    // }
   };
 
   return (
@@ -429,6 +307,7 @@ const JsonWebToken = (props: Props) => {
             className="
           flex
           flex-row
+          secret-area
           p-2
           w-full 
           text-md 
@@ -504,7 +383,7 @@ const JsonWebToken = (props: Props) => {
                     text-gray-800 
                     dark:text-gray-300"
                   >
-                   Secret base64 encoded
+                    Secret base64 encoded
                   </label>
                 </div>
               </div>
