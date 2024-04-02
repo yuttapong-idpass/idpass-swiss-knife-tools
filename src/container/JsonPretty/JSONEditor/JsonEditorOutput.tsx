@@ -216,7 +216,7 @@ const JsonEditorOutput = (props: Props) => {
       <ToastNotify />
       <div
         className={
-          "flex justify-between p-2 gap-2 w-full h-10 text-gray-300 bg-[#041C32] dark:bg-[#5C469C] "
+          "flex justify-between p-2 gap-2 w-full h-10 text-[#ffffff] bg-[#007ac7] dark:bg-[#007ac7] "
         }
       >
         <div>Output Panel</div>
@@ -226,7 +226,7 @@ const JsonEditorOutput = (props: Props) => {
               <label htmlFor="file-input">
                 <FaFolderOpen
                   size={23}
-                  className="hover:bg-gray-500"
+                  className="hover:bg-[#00adff]"
                   title="Upload file"
                 />
               </label>
@@ -241,7 +241,7 @@ const JsonEditorOutput = (props: Props) => {
           <div>
             <FaSave
               size={23}
-              className="hover:bg-gray-500"
+              className="hover:bg-[#00adff]"
               title="Save file"
               onClick={onClickSaveJsonFile}
             />
@@ -249,7 +249,7 @@ const JsonEditorOutput = (props: Props) => {
           <div>
             <FaCopy
               size={23}
-              className="hover:bg-gray-500"
+              className="hover:bg-[#00adff]"
               title="Copy to clipboard"
               onClick={onCopyToClipBoard}
             />
@@ -258,13 +258,13 @@ const JsonEditorOutput = (props: Props) => {
             {toggleFullScreen ? (
               <FaMinimize
                 size={23}
-                className="hover:bg-gray-500"
+                className="hover:bg-[#00adff]"
                 title="Minimize"
               />
             ) : (
               <FaMaximize
                 size={23}
-                className="hover:bg-gray-500"
+                className="hover:bg-[#00adff]"
                 title="Maximize"
               />
             )}

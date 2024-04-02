@@ -8,15 +8,15 @@ module.exports = {
     extend: {
       colors: {
         dark: {
-          elem: '#2b3945',
-          bg: '#252525',
-          text: '#808080'
+          elem: '#222222',
+          bg: '#121212',
+          text: 'rgba(255,255,255,0.87)'
         },
         light: {
-          elem: '#ffff',
-          bg: '#fafafa',
-          text: '#111517'
-        }
+          elem: '#fafafa',
+          bg: '#f0f2f5',
+          text: 'rgba(0,0,0,0.87)'
+        },
       }
     },
   },

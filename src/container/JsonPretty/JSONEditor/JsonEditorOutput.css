@@ -179,11 +179,11 @@ div.jsoneditor-value.jsoneditor-invalid {
 }
 
 .input-json {
-  --jse-theme-color: #04293A;
-  --jse-theme-color-highlight: #605683;
+  --jse-theme-color: #00adff;
+  --jse-theme-color-highlight: #0092e1;
 }
 
 .jse-theme-dark {
-  --jse-theme-color: #8E73EF;
-  --jse-theme-color-highlight: #605683;
+  --jse-theme-color: #00adff;
+  --jse-theme-color-highlight: #0092e1;
 }

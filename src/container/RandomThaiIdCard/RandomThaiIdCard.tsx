@@ -275,12 +275,37 @@ const IdCardGenerator = (props: Props) => {
               rounded-lg 
               bg-gray-50
               text-gray-600
+              dark:bg-gray-700
+              dark:border-gray-600
+              dark:text-white
               "
           >
             <div className="grid place-items-center">
               <div className="p-3">
                 <div className="container flex flex-wrap items-center mx-auto">
-                  xx
+                  <input
+                    type="text"
+                    id="idCard"
+                    name="idCard"
+                    className="
+                    block
+                    bg-gray-50
+                    border
+                    border-solid
+                    border-gray-300
+                    text-gray-600
+                    text-md
+                    min-w-[200px]
+                    max-w-[400px]
+                    p-2
+                    shadow-md
+                    rounded-md
+                    dark:bg-gray-700
+                    dark:border-gray-600
+                    dark:placeholder-gray-400
+                    dark:text-white
+                    "
+                  />
                 </div>
               </div>
             </div>

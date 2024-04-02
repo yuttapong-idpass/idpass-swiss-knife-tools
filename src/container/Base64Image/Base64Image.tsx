@@ -136,8 +136,8 @@ const Base64Image = (props: Props) => {
                       mb-2 
                       text-lg 
                       font-medium 
-                    text-gray-600 
-                    dark:text-gray-300"
+                    text-[#333333] 
+                    dark:text-[#dedede]"
                 >
                   Base64 Image Decoded
                 </label>
@@ -146,7 +146,7 @@ const Base64Image = (props: Props) => {
                 <div>
                   <FaCopy
                     size={30}
-                    className="text-gray-600 hover:bg-gray-500 dark:text-gray-300 p-1"
+                    className="text-[#333333] hover:bg-gray-500 dark:text-[#dedede] p-1"
                     title="Copy"
                     onClick={onCopyText}
                   />
@@ -154,7 +154,7 @@ const Base64Image = (props: Props) => {
                 <div>
                   <FaTrashCan
                     size={30}
-                    className="text-gray-600 hover:bg-gray-500 dark:text-gray-300 p-1"
+                    className="text-[#333333] hover:bg-gray-500 dark:text-[#dedede] p-1"
                     title="Clear"
                     onClick={onClearText}
                   />
@@ -163,7 +163,7 @@ const Base64Image = (props: Props) => {
                   <label htmlFor="file-input">
                     <FaFolderOpen
                       size={30}
-                      className="text-gray-600 hover:bg-gray-500 dark:text-gray-300 p-1"
+                      className="text-[#333333] hover:bg-gray-500 dark:text-[#dedede] p-1"
                       title="Upload file"
                     />
                   </label>
@@ -192,7 +192,7 @@ const Base64Image = (props: Props) => {
                   border
                   border-solid 
                 border-gray-300 
-                text-gray-600 
+                text-[#333333] 
                   text-md 
                   w-full 
                   p-4
@@ -223,14 +223,13 @@ const Base64Image = (props: Props) => {
               text-base 
               font-medium 
               leading-6 
-              text-white 
-              dark:text-gray-200
-              dark:bg-[#1E5128] 
+              text-[#f8f8f8] 
+              dark:bg-[#75ba4a] 
+              bg-[#45b400] 
               whitespace-no-wrap 
-              bg-[#4E9F3D] 
               rounded-md 
               shadow-sm 
-              hover:bg-lime-400"
+              hover:bg-[#60cd18]"
                 onClick={generateImage}
               >
                 Generate Image
@@ -243,14 +242,10 @@ const Base64Image = (props: Props) => {
                 className="
                 w-4 
                 h-4 
-                text-blue-600 
-                bg-gray-100 
-                border-gray-300 rounded 
-              focus:ring-blue-500 
-              dark:focus:ring-blue-600 
-                dark:ring-offset-gray-800focus:ring-2
-                dark:bg-gray-700
-                dark:border-gray-600
+                  text-[#f8f8f8]
+                bg-[#0092e1] 
+                dark:[#00adff]
+                rounded 
               "
                 defaultChecked={true}
                 onChange={handleCheckBoxAutoGenerate}
@@ -261,8 +256,8 @@ const Base64Image = (props: Props) => {
                       ms-2
                       text-lg 
                       font-medium 
-                    text-gray-600 
-                    dark:text-gray-300"
+                    text-[#333333] 
+                    dark:text-[#dedede]"
               >
                 Auto generate
               </label>
@@ -280,14 +275,12 @@ const Base64Image = (props: Props) => {
               text-base 
               font-medium 
               leading-6 
-              dark:text-gray-200 
               whitespace-no-wrap 
-              text-white
-              bg-sky-600 
+              text-[#f8f8f8]
+              bg-[#0092e1] 
+                dark:[#00adff]
               rounded-md 
               shadow-sm 
-              hover:bg-sky-400
-              hover:text-sky-200  
               "
                 download="fromBase64Image.png"
                 href={textArea}
@@ -307,8 +300,8 @@ const Base64Image = (props: Props) => {
                       mb-2 
                       text-lg 
                       font-medium 
-                    text-gray-600 
-                    dark:text-gray-300"
+                    text-[#333333] 
+                    dark:text-[#dedede]"
             >
               Preview Image
             </label>
@@ -321,8 +314,8 @@ const Base64Image = (props: Props) => {
               mb-2 
               text-lg 
               font-medium 
-              text-gray-600 
-              dark:text-gray-300"
+              text-[#333333] 
+              dark:text-[#dedede]"
               >
                 Dimensions : {description.width} x {description.height}
               </label>
@@ -334,8 +327,8 @@ const Base64Image = (props: Props) => {
                 mb-2 
                 text-lg 
                 font-medium 
-              text-gray-600 
-              dark:text-gray-300"
+              text-[#333333] 
+              dark:text-[#dedede]"
               >
                 Size: {description.size.toFixed(2)} Kb
               </label>
@@ -443,7 +436,7 @@ const Base64Image = (props: Props) => {
     //               <nav className="p-3">
     //                 <div className="container flex flex-wrap items-center justify-between mx-auto">
     //                   <div className="flex items-center">
-    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-600 ">
+    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-[#333333] ">
     //                       OUTPUT
     //                     </span>
     //                   </div>
@@ -522,7 +515,7 @@ const Base64Image = (props: Props) => {
     //               <nav className="p-3">
     //                 <div className="container flex flex-wrap items-center justify-between mx-auto">
     //                   <div className="flex items-center">
-    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-gray-600 ">
+    //                     <span className="self-center text-xl font-bold whitespace-nowrap dark:text-[#333333] ">
     //                       OUTPUT
     //                     </span>
     //                   </div>
