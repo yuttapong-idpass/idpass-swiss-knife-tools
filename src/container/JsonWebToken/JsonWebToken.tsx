@@ -307,7 +307,7 @@ const JsonWebToken = (props: Props) => {
           text-[#333333] 
           bg-gray-50 
           h-[15vh] border 
-          border-gray-300 
+          border-[/0.09] 
           border-solid 
           rounded-md
           mb-3
@@ -342,7 +342,12 @@ const JsonWebToken = (props: Props) => {
                   type="input"
                   id="secret"
                   placeholder="Enter your secret..."
-                  className=" h-10 p-2 border rounded-md border-solid border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-[#d3d3d3]"
+                  className=" h-10 p-2 border rounded-md border-solid 
+                  border-[/0.0.9] 
+                  dark:bg-[#222222] 
+                  dark:border-[/0.09] 
+                  dark:placeholder-gray-400 
+                  dark:text-[#d3d3d3]"
                   onChange={handleSecretKey}
                 />{" "}
                 )

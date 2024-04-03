@@ -4,14 +4,90 @@
 
 
 body {
-  font-family: 'Kanit', sans-serif;
+  font-family: 'chakrapetchMedium', sans-serif;
 }
 
-@font-face {
+/* @font-face {
   font-family: "Kanit";
   src: local("Kanit"),
    url("./assets/fonts/Kanit-Medium.ttf") format("truetype");
   font-weight: bold;
-  }
+  } */
+
+@font-face {
+  font-family: chakrapetchBold;
+  src: local('chakrapetchBold'),
+    url('./assets/fonts/ChakraPetch-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
 
 
+@font-face {
+  font-family: chakrapetchBoldItalic;
+  src: local('chakrapetchBoldItalic'),
+    url('./assets/fonts/ChakraPetch-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: chakrapetchBoldItalic;
+  src: local('chakrapetchBoldItalic'),
+    url('./assets/fonts/ChakraPetch-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: chakrapetchItalic;
+  src: local('chakrapetchBoldItalic'),
+    url('./assets/fonts/ChakraPetch-Italic.ttf') format('truetype');
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: chakrapetchLight;
+  src: local('chakrapetchLight'),
+    url('./assets/fonts/ChakraPetch-Light.ttf') format('truetype');
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: chakrapetchLightItalic;
+  src: local('chakrapetchLightItalic'),
+    url('./assets/fonts/ChakraPetch-LightItalic.ttf') format('truetype');
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: chakrapetchMedium;
+  src: local('chakrapetchMedium'),
+    url('./assets/fonts/ChakraPetch-Medium.ttf') format('truetype');
+  font-weight: medium;
+}
+
+@font-face {
+  font-family: chakrapetchMediumItalic;
+  src: local('chakrapetchMediumItalic'),
+    url('./assets/fonts/ChakraPetch-MediumItalic.ttf') format('truetype');
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: chakrapetchRegular;
+  src: local('chakrapetchRegular'),
+    url('./assets/fonts/ChakraPetch-Regular.ttf') format('truetype');
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: chakrapetchSemiBold;
+  src: local('chakrapetchSemiBold'),
+    url('./assets/fonts/ChakraPetch-Semi.ttf') format('truetype');
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: chakrapetchSemiBoldItalic;
+  src: local('chakrapetchSemiBoldItalic'),
+    url('./assets/fonts/ChakraPetch-Italic.ttf') format('truetype');
+  font-weight: lighter;
+}
