@@ -12,6 +12,8 @@ import "./assets/fonts/ChakraPetch-MediumItalic.ttf";
 import "./assets/fonts/ChakraPetch-Regular.ttf";
 import "./assets/fonts/ChakraPetch-SemiBold.ttf";
 import "./assets/fonts/ChakraPetch-SemiBoldItalic.ttf";
+
+
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import ThemeProvider from "./providers/ThemeProvider";
