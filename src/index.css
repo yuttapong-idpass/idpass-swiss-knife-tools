@@ -8,13 +8,33 @@ body {
   font-family: 'chakrapetchMedium', sans-serif;
 }
 
+:root {
+  --color-surface-100: #121212;
+  --color-surface-200: #282828;
+  --color-surface-300: #3f3f3f;
+  --color-surface-400: #575757;
+  --color-surface-500: #717171;
+  --color-surface-600: #8b8b8b;
+
+  --color-purple-100: #673ab7;
+  --color-purple-200: #7a4fbf;
+  --color-purple-300: #8c64c8;
+  --color-purple-400: #9d79d0;
+  --color-purple-500: #ae8fd8;
+  --color-purple-600: #bfa5e0;
+}
+
 
 .dark {
-  --color-bg-primary: #2d3748;
-  --color-bg-secondary: #283141;
+  --color-bg-primary: #121212;
+  --color-bg-secondary: #282828;
   --color-text-primary: #f7fafc;
   --color-text-secondary: #e2e8f0;
   --color-text-accent: #81e6d9;
+  --color-bg-success: #99ca5f;
+  --color-bg-warning: #ffed58;
+  --color-bg-error: #ef4873;
+  --color-bg-information: #50a1f5;
 }
 
 .light {
@@ -23,7 +43,13 @@ body {
   --color-text-primary: #2d3748;
   --color-text-secondary: #4a5568;
   --color-text-accent: #2b6cb0;
+  --color-bg-success: #8bc34a;
+  --color-bg-warning: #ffeb3b;
+  --color-bg-error: #e91e63;
+  --color-bg-information: #2196f3;
 }
+
+
 
 /* @font-face {
   font-family: "Kanit";

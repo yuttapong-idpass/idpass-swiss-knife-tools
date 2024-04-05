@@ -21,11 +21,11 @@ type SidebarProps = {
 const SidebarContext = createContext(false);
 
 export default function Sidebar({ children }: Props) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   return (
     <>
-      <aside className="h-screen test-sticky">
-        <nav className="h-full flex flex-col bg-white dark:bg-dark-bg border-r border-[#000] shadow-sm">
+      <aside className="h-screen test-sticky bg-secondary">
+        <nav className="h-full flex flex-col shadow-sm border-r dark:border-primary">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               title="logo"
@@ -35,7 +35,7 @@ export default function Sidebar({ children }: Props) {
               }`}
             />
 
-            {expanded ? <span className="text-gray-600 dark:text-[#FABD40]">IDPASS TOOLS</span> : null}
+            {expanded ? <span className="text-primary dark:text-warning">IDPASS TOOLS</span> : null}
 
             <button
               onClick={() => setExpanded((curr) => !curr)}
@@ -49,7 +49,7 @@ export default function Sidebar({ children }: Props) {
             <ul className="flex-1 px-3">{children}</ul>
           </SidebarContext.Provider>
 
-          <div className="border-t border-[#000] flex p-3">
+          <div className="border-t dark:border-primary flex p-3">
             {/* <img
               title="profile"
               src={profile}
@@ -83,7 +83,7 @@ export function SidebarItem({ icon, text, active, alert, link }: SidebarProps) {
       className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-gray-800"
-          : "hover:bg-[#808080] text-gray-600 dark:text-gray-300"
+          : "hover:bg-primary text-primary"
       }`}
     >
       {icon}

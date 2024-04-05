@@ -30,12 +30,12 @@ const JsonPretty = (props: Props) => {
   };
 
   return (
-    <div className="flex flex-row w-full gap-2">
+    <div className="flex flex-row w-full gap-2 bg-primary">
       <div className="flex-initial w-full">
         <JsonEditorInput onError={handleError} onChangeText={handleJsonInput} />
       </div>
       <div className="flex-initial w-80">
-        <div className="grid place-items-center h-[98vh]">
+        <div className="grid place-items-center h-[98vh] ">
           <div>
             <button
               title="Pretty json"
@@ -49,10 +49,10 @@ const JsonPretty = (props: Props) => {
               text-base 
               font-medium 
               leading-6 
-              text-white 
-              dark:text-gray-300 
+              text-[#ffffff] 
+              dark:text-dark-300
               whitespace-no-wrap 
-              bg-[#38b000] 
+              bg-success 
               rounded-md 
               shadow-sm 
               hover:bg-[#73DF5C]"

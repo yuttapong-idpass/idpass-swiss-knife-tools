@@ -143,13 +143,13 @@ const JsonWebToken = (props: Props) => {
   };
 
   return (
-    <main className="flex flex-row w-full gap-4 p-2">
+    <main className="flex flex-row w-full gap-4 p-2 bg-primary">
       <section className="flex-initial w-full">
         <div className="flex justify-between">
           <div className="items-center">
             <label
               htmlFor="encoded"
-              className="text-lg font-medium text-[#333333] dark:text-[#d3e3e3]"
+              className="text-lg font-medium text-primary"
             >
               Encoded
             </label>
@@ -167,18 +167,11 @@ const JsonWebToken = (props: Props) => {
             p-4        
             w-full
             text-md
-            text-[#333333]
-            bg-gray-50
+            text-primary
             h-[94vh]
             shadow-md
             rounded-md
-            border
-            border-gray-300
-            border-solid
-            dark:bg-gray-700
-            dark:border-gray-600
-            dark:placeholder-gray-400
-            dark:text-[#d3d3d3]
+            bg-secondary  
           "
           onChange={handleJwtArea}
         ></textarea>
@@ -200,7 +193,7 @@ const JsonWebToken = (props: Props) => {
             <div className="mb-3">
               <label
                 htmlFor="algorithm"
-                className="text-lg  mr-2 font-medium text-[#333333] dark:text-[#d3e3e3]"
+                className="text-lg mr-2 font-medium text-primary"
               >
                 Alg:
               </label>
@@ -208,16 +201,12 @@ const JsonWebToken = (props: Props) => {
                 title="alg"
                 name="alg"
                 id="alg"
-                className="border 
-                  border-solid 
+                className="
                   rounded-md
-                  border-gray-300 p-1 
-                  bg-gray-50 
-                  text-gray-900 
-                  dark:bg-gray-700 
-                  dark:border-gray-600 
-                  dark:placeholder-gray-400 
-                  dark:text-[#d3d3d3]"
+                  text-primary
+                  bg-secondary
+                  p-2
+                  "
                 onChange={handleSelectOptionAlgorithm}
               >
                 {algorithms.map((item, index) => (
@@ -228,8 +217,39 @@ const JsonWebToken = (props: Props) => {
               </select>
             </div>
             <button
-              title="Decoded"
+              title="Generate"
               className="              
+              inline-flex 
+              w-full 
+              text-center
+              items-center
+              justify-center 
+              pr-6
+              py-2 
+              text-base 
+              font-medium 
+              leading-6 
+              whitespace-no-wrap 
+              rounded-md 
+              shadow-sm
+              text-[#ffffff]
+              dark:text-dark-300
+              bg-[--color-purple-500]
+              hover:bg-[--color-purple-400]
+              "
+              onClick={onEncoded}
+            >
+              <FaAngleLeft
+                size={20}
+                className="dark:text-dark-300 text-[#ffffff] mr-2 text-center justify-center items-center"
+                title="Encoded"
+              />
+              Encoded
+            </button>
+            <button
+              title="Decoded"
+              className="    
+              mt-3          
               inline-flex 
               w-full 
               text-center
@@ -240,60 +260,31 @@ const JsonWebToken = (props: Props) => {
               text-base 
               font-medium 
               leading-6 
-             text-[#f8f8f8] 
-              whitespace-no-wrap 
-              bg-[#60cd18] 
+             text-[#ffffff] 
+              dark:text-dark-300
+             whitespace-no-wrap 
+              bg-success
+              hover:bg-[#99ca5f]
+              dark:hover:bg-[#8bc34a]
               rounded-md 
               shadow-sm
-              hover:bg-[#75ba4a]"
+
+              "
               onClick={onDecoded}
             >
               Decoded
               <FaAngleRight
-                size={15}
-                className="text-white dark:text-gray-200 ml-3 mt-1"
-                title="Encoded"
+                size={20}
+                className="text-[#ffffff] dark:text-dark-300 ml-2 text-center justify-center items-center"
+                title="Decoded"
               />
-            </button>
-            <button
-              title="Generate"
-              className="              
-              inline-flex 
-              w-full 
-              text-center
-              item-centers 
-              justify-center 
-              mt-3
-              pr-6
-              py-2 
-              text-base 
-              font-medium 
-              leading-6 
-              text-[#f8f8f8] 
-              whitespace-no-wrap 
-              bg-[#673ab6]
-              dark:bg-[#ad91dc] 
-              rounded-md 
-              shadow-sm
-              hover:bg-[#7e52cc]"
-              onClick={onEncoded}
-            >
-              <FaAngleLeft
-                size={15}
-                className="text-white dark:text-gray-200 mr-3 mt-1"
-                title="Encoded"
-              />
-              Encoded
             </button>
           </div>
         </div>
       </section>
       <section className="flex-initial flex-col w-full">
         <div className="flex flex-col">
-          <label
-            htmlFor="secret"
-            className="text-lg font-medium text-[#333333] dark:text-[#d3e3e3]"
-          >
+          <label htmlFor="secret" className="text-lg font-medium text-primary">
             Secret
           </label>
           <section
@@ -304,17 +295,11 @@ const JsonWebToken = (props: Props) => {
           p-2
           w-full 
           text-md 
-          text-[#333333] 
-          bg-gray-50 
-          h-[15vh] border 
-          border-[/0.09] 
-          border-solid 
+          text-primary
+          bg-secondary
+          h-[15vh] 
           rounded-md
           mb-3
-          dark:bg-gray-700 
-          dark:border-gray-600
-          dark:placeholder-gary-400
-          dark:text-[#d3d3d3]
           items-center
           shadow-md
           "

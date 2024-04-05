@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
+  darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
@@ -11,17 +11,30 @@ module.exports = {
       //     // text: 'rgba(255,255,255,0.87)'
       //   },
       //   light: {
-      //     // elem: '#fafafa',
-      //     // bg: '#f0f2f5',
-      //     // text: 'rgba(0,0,0,0.87)'
-      //     elem: "var(--color-bg-secondary)",
-      //     bg: "var(--color-bg-primary)",
-      //     text: "var(--color-text-primary)"
+
       //   },
       // },
+      colors: {
+        primary: "var(--color-bg-primary)",
+        secondary: "var(--color-bg-secondary)",
+        success: "var(--color-bg-success)",
+        warning: "var(--color-bg-warning)",
+        error: "var(--color-bg-error)",
+        information: "var(--color-bg-information)",
+        'dark-100': "var(--color-surface-100)",
+        'dark-200': "var(--color-surface-200)",
+        'dark-300': "var(--color-surface-300)",
+        'dark-400': "var(--color-surface-400)",
+        'dark-500': "var(--color-surface-500)",
+        'dark-600': "var(--color-surface-600)"
+      },
       backgroundColor: {
         primary: "var(--color-bg-primary)",
         secondary: "var(--color-bg-secondary)",
+        success: "var(--color-bg-success)",
+        warning: "var(--color-bg-warning)",
+        error: "var(--color-bg-error)",
+        information: "var(--color-bg-information)",
       },
       textColor: {
         accent: "var(--color-text-accent)",
