@@ -54,8 +54,12 @@ const JsonPretty = (props: Props) => {
               whitespace-no-wrap 
               bg-success 
               rounded-md 
-              shadow-sm 
-              hover:bg-[#73DF5C]"
+              shadow-sm
+              bg-lime-500
+              hover:bg-lime-400
+              dark:bg-lime-300
+              dark:hover:bg-lime-500
+              "
               onClick={onClickPretty}
             >
               Pretty

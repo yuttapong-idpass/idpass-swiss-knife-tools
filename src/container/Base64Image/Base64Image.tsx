@@ -216,14 +216,15 @@ const Base64Image = (props: Props) => {
               font-medium 
               leading-6 
               bg-success
-              hover:bg-[#99ca5f]
               whitespace-no-wrap 
               rounded-md 
               shadow-sm
               text-[#ffffff]
               dark:text-dark-300
-              dark:hover:bg-[#8bc34a]
-              
+              bg-lime-500
+              hover:bg-lime-400
+              dark:bg-lime-400
+              dark:hover:bg-lime-500
               " 
                 onClick={generateImage}
               >
@@ -238,8 +239,6 @@ const Base64Image = (props: Props) => {
                 w-4 
                 h-4 
                 text-primary
-                bg-[#0092e1] 
-                dark:[#00adff]
                 rounded 
               "
                 defaultChecked={true}
@@ -273,9 +272,10 @@ const Base64Image = (props: Props) => {
               whitespace-no-wrap 
               text-[#ffffff]
               dark:text-dark-300
-              bg-information
-              hover:bg-[#50a1f5]
-              dark:hover:bg-[#2196f3]
+              bg-sky-500
+              hover:bg-sky-400
+              dark:bg-blue-300
+              dark:hover:bg-blue-500
               rounded-md 
               shadow-sm 
               "

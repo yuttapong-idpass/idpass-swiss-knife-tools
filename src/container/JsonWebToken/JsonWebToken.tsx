@@ -233,9 +233,11 @@ const JsonWebToken = (props: Props) => {
               rounded-md 
               shadow-sm
               text-[#ffffff]
+              bg-purple-400
+                hover:bg-purple-400
+              dark:bg-purple-300
+              dark:hover:bg-purple-400
               dark:text-dark-300
-              bg-[--color-purple-500]
-              hover:bg-[--color-purple-400]
               "
               onClick={onEncoded}
             >
@@ -263,9 +265,10 @@ const JsonWebToken = (props: Props) => {
              text-[#ffffff] 
               dark:text-dark-300
              whitespace-no-wrap 
-              bg-success
-              hover:bg-[#99ca5f]
-              dark:hover:bg-[#8bc34a]
+              bg-lime-500
+              hover:bg-lime-400
+              dark:bg-lime-300
+              dark:hover:bg-lime-500
               rounded-md 
               shadow-sm
 
@@ -312,11 +315,21 @@ const JsonWebToken = (props: Props) => {
               </div>
               <div className="ml-4">
                 <span className="text-md font-medium-text-gray dark:text-[#d3d3d3] mr-4">
-                  <span className="text-[#FB2576]">
+                  <span
+                    className="
+                        text-rose-500
+                        dark:text-rose-300
+                      "
+                  >
                     base64UrlEncoded(header)
                   </span>{" "}
                   + "." +{" "}
-                  <span className="text-[#C147E9]">
+                  <span
+                    className="
+                    text-purple-500
+                    dark:text-purple-300
+                  "
+                  >
                     base64UrlEncoded(payload)
                   </span>{" "}
                   ,
@@ -327,12 +340,12 @@ const JsonWebToken = (props: Props) => {
                   type="input"
                   id="secret"
                   placeholder="Enter your secret..."
-                  className=" h-10 p-2 border rounded-md border-solid 
-                  border-[/0.0.9] 
-                  dark:bg-[#222222] 
-                  dark:border-[/0.09] 
-                  dark:placeholder-gray-400 
-                  dark:text-[#d3d3d3]"
+                  className=" h-10 
+                  p-2
+                  rounded-md
+                  shadow-md
+                  bg-primary 
+                  "
                   onChange={handleSecretKey}
                 />{" "}
                 )
@@ -343,17 +356,10 @@ const JsonWebToken = (props: Props) => {
                     id="autoGenerate"
                     type="checkbox"
                     className="
-                w-4 
-                h-4 
-                text-blue-600 
-                bg-gray-100 
-                border-gray-300 rounded 
-              focus:ring-blue-500 
-              dark:focus:ring-blue-600 
-                dark:ring-offset-gray-800focus:ring-2
-                dark:bg-gray-700
-                dark:border-gray-600
-              "
+                          w-4 
+                          h-4 
+                          text-primary
+                          "
                     onChange={handleEncodedSecretKey}
                     defaultChecked={encodedSecret}
                   />
@@ -376,7 +382,10 @@ const JsonWebToken = (props: Props) => {
 
           <label
             htmlFor="headers"
-            className="text-lg font-medium text-[#333333] dark:text-[#d3e3e3]"
+            className="text-lg 
+              font-medium 
+              text-primary
+              "
           >
             Headers
           </label>
@@ -390,19 +399,14 @@ const JsonWebToken = (props: Props) => {
             p-4        
             w-full
             text-md
-            text-gray-900
-            bg-gray-50
             h-[35vh]
             rounded-md
             border
             shadow-md
             mb-3
-            border-gray-300
-            border-solid
-            dark:bg-gray-700
-            dark:border-gray-600
-            dark:placeholder-gray-400
-            dark:text-[#d3d3d3]
+            bg-secondary
+            text-rose-500
+            dark:text-rose-300
           "
             onChange={handleHeadersArea}
           ></textarea>
@@ -410,7 +414,11 @@ const JsonWebToken = (props: Props) => {
         <div>
           <label
             htmlFor="payload"
-            className="mb-2 text-lg font-medium text-[#333333] dark:text-[#d3e3e3]"
+            className="mb-2 
+              text-lg 
+              font-medium 
+              text-primary
+              "
           >
             Payload
           </label>
@@ -424,18 +432,12 @@ const JsonWebToken = (props: Props) => {
             p-4        
             w-full
             text-md
-            text-gray-900
-            bg-gray-50
             h-[35vh]
             shadow-md
             rounded-md
-            border
-            border-gray-300
-            border-solid
-            dark:bg-gray-700
-            dark:border-gray-600
-            dark:placeholder-gray-400
-            dark:text-[#d3d3d3]
+            bg-secondary
+            text-purple-500
+            dark:text-purple-300
           "
             onChange={handlePayloadArea}
           ></textarea>

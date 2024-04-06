@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import SuccessImage from "../../assets/images/check.png";
 import FailImage from "../../assets/images/cross.png";
 import "./RandomThaiIdCard.css";
@@ -6,12 +6,12 @@ import "./RandomThaiIdCard.css";
 type Props = {};
 
 const IdCardGenerator = (props: Props) => {
-  const cardType = [
-    { name: "บัตรประชาชนคนไทย", value: "01" },
-    { name: "บัตรประชาชนคนต่างด้าว", value: "00" },
+  const cardTypes = [
+    { name: "บัตรประชาชนคนไทย", value: "thai" },
+    { name: "บัตรประชาชนคนต่างด้าว", value: "alien" },
   ];
 
-  const alienCardType = [
+  const alienGroupType = [
     {
       name: "กลุ่มคนเลขนำหน้า 00",
       value: "00",
@@ -127,30 +127,24 @@ const IdCardGenerator = (props: Props) => {
     },
   ];
 
-  const [showAlien, setShowAlien] = useState(false);
   const [sectorNumber, setSectorNumber] = useState(sectorNumbers[0].type);
-
-  const [getAlienType, setAlienType] = useState("00");
+  const [cardType, setCardType] = useState(cardTypes[0].value);
+  const [groupType, setGroupType] = useState("00");
   const [getSectorValue, setSectorNumberValue] = useState("00");
   const [result, setResult] = useState("0000000000000");
   const [verify, setVerify] = useState("");
 
-  const handleCardType = (event$: any) => {
-    const type = event$.target.value;
-    if (type === "00") {
-      setShowAlien(true);
-    } else {
-      setShowAlien(false);
-    }
+  const handleCardType = (event$: SyntheticEvent<EventTarget>) => {
+    const type = (event$.target as HTMLInputElement).value;
+    setCardType(type);
   };
 
-  const handleAlienCardType = (event$: any) => {
-    const alien = event$.target.value;
+  const handleAlienGroupType = (event$: SyntheticEvent<EventTarget>) => {
+    const alien = (event$.target as HTMLInputElement).value;
     const filterValue: any = sectorNumbers.find((values) => {
       return values.name === alien;
     });
-
-    setAlienType(alien);
+    setGroupType(alien);
     setSectorNumber(filterValue.type);
   };
 
@@ -166,15 +160,15 @@ const IdCardGenerator = (props: Props) => {
     let digit6 = 0;
     let digit7 = 0;
 
-    if (!showAlien) {
+    if (cardType === "thai") {
       digit1 = Math.floor(Math.random() * 9) + 1;
       digit2 = Math.floor(Math.random() * 10);
 
       digit6 = Math.floor(Math.random() * 10);
       digit7 = Math.floor(Math.random() * 10);
     } else {
-      digit1 = Number(getAlienType.charAt(0));
-      digit2 = Number(getAlienType.charAt(1));
+      digit1 = Number(groupType.charAt(0));
+      digit2 = Number(groupType.charAt(1));
 
       digit6 = Number(getSectorValue.charAt(0));
       digit7 = Number(getSectorValue.charAt(1));
@@ -236,7 +230,7 @@ const IdCardGenerator = (props: Props) => {
 
   const onRandomIdCard = () => {
     ransomIdCard();
-    setVerify("");
+    // setVerify("");
   };
 
   const onVerifyIdCard = () => {
@@ -248,7 +242,7 @@ const IdCardGenerator = (props: Props) => {
   };
 
   return (
-    <div className="p-4 place-items-center w-full h-screen">
+    <div className="p-4 place-items-center w-full h-screen bg-primary">
       <div className="flex flex-col">
         <div className="flex justify-between">
           {/* <div>Random thai id card</div> */}
@@ -258,8 +252,8 @@ const IdCardGenerator = (props: Props) => {
               mb-2 
               text-lg 
               font-medium 
-              text-gray-600 
-              dark:text-gray-300"
+              text-primary
+              "
           >
             Random thai id card
           </label>
@@ -269,44 +263,159 @@ const IdCardGenerator = (props: Props) => {
             className="block 
               p-4 
               w-full 
-              border 
-              border-solid
-              border-gray-300 
               rounded-lg 
-              bg-gray-50
-              text-gray-600
-              dark:bg-gray-700
-              dark:border-gray-600
-              dark:text-white
+              bg-secondary
               "
           >
-            <div className="grid place-items-center">
+            {/* <div className="grid place-items-center">
               <div className="p-3">
-                <div className="container flex flex-wrap items-center mx-auto">
-                  <input
-                    type="text"
-                    id="idCard"
-                    name="idCard"
-                    className="
+                <div className="container flex flex-row">
+                  <div>
+                    <label htmlFor="idCard">ประเภทบัตร</label>
+                    <input
+                      type="text"
+                      id="idCard"
+                      name="idCard"
+                      className="
                     block
-                    bg-gray-50
-                    border
-                    border-solid
-                    border-gray-300
-                    text-gray-600
                     text-md
                     min-w-[200px]
                     max-w-[400px]
                     p-2
                     shadow-md
                     rounded-md
-                    dark:bg-gray-700
-                    dark:border-gray-600
-                    dark:placeholder-gray-400
-                    dark:text-white
+                    text-primary
+                    bg-primary
                     "
-                  />
+                    />
+                  </div>
                 </div>
+              </div>
+              <div>xxx</div>
+            </div> */}
+
+            <div className="flex flex-col">
+              <div className="flex flex-row gap-4 self-center">
+                <div>
+                  <div>
+                    <label htmlFor="idCard" className="text-primary">
+                      ประเภทบัตร
+                    </label>
+                  </div>
+                  <div>
+                    <select
+                      title="cardType"
+                      name="cardType"
+                      id="cardType"
+                      className="
+                  rounded-md
+                  text-primary
+                  bg-primary
+                  p-2
+                  shadow-lg
+                  "
+                      onChange={handleCardType}
+                    >
+                      {cardTypes.map((type, index) => (
+                        <option key={index} value={type.value}>
+                          {type.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                {cardType === "alien" ? (
+                  <>
+                    <div>
+                      <div>
+                        <label htmlFor="sector1" className="text-primary">
+                          กลุ่มบุคคล
+                        </label>
+                      </div>
+                      <div>
+                        <select
+                          name="sector1"
+                          id="sector1"
+                          title="sector1"
+                          className="rounded-md
+                          text-primary
+                          bg-primary
+                          p-2
+                          shadow-lg
+                        "
+                          onChange={handleAlienGroupType}
+                        >
+                          {alienGroupType.map((group, index) => (
+                            <option key={index} value={group.value}>
+                              {group.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <label htmlFor="section2" className="text-primary">
+                          เลขประจำหลัก 6-7
+                        </label>
+                      </div>
+                      <div>
+                        <select
+                          name="sector2"
+                          id="sector2"
+                          title="sector2"
+                          className="
+                        rounded-md
+                        shadow-lg
+                        text-primary
+                        bg-primary
+                        p-2
+                        shadow-2
+                        "
+                          onChange={handleSectorNumber}
+                        >
+                          {sectorNumber.map((sector, index) => (
+                            <option key={index} value={sector.value}>
+                              {sector.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+              </div>
+              <div className="flex flex-row self-center mt-4 gap-4">
+                <div>
+                  <button
+                    title="Pretty json"
+                    className="
+                      inline-flex 
+                      w-full 
+                      item-centers 
+                      justify-center 
+                      px-4 
+                      py-2 
+                      text-base 
+                      font-medium 
+                      leading-6 
+                    text-[#ffffff] 
+                      dark:text-dark-300
+                      whitespace-no-wrap 
+                      bg-success 
+                      rounded-md 
+                      shadow-sm
+                    bg-teal-500
+                    hover:bg-teal-400
+                    dark:bg-teal-300
+                    dark:hover:bg-teal-500
+                      "
+                    // onClick={onClickPretty}
+                  >
+                    สุ่มเลขบัตร 
+                  </button>
+                </div>
+                <div>xxx</div>
               </div>
             </div>
           </div>

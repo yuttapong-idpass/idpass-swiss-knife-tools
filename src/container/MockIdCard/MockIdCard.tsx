@@ -465,8 +465,8 @@ const MockIdCard = (props: Props) => {
   };
 
   return (
-    <div className="p-4 place-items-center">
-      <div className="max-w-7xl mx-auto grid grid-cols-12 h-screen ">
+    <div className="p-4 place-items-center bg-primary">
+      <div className="max-w-7xl mx-auto grid grid-cols-12 h-screen bg-primary">
         <div className="col-span-12">
           <div>
             <div className="p-2">
@@ -481,9 +481,7 @@ const MockIdCard = (props: Props) => {
                     text-gray-900 
                     bg-gray-50 
                     rounded-lg 
-                    border 
-                    border-gray-300 
-                    border-dashed border-2 border-gray-300
+                  
                     "
                 >
                   <div className="grid place-items-center">
