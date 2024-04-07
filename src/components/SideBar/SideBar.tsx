@@ -2,9 +2,8 @@ import { createContext, useContext, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import DarkLightToggle from "../DarkLightToggle/DarkLightToggle";
 
-
-import Tools from '../../assets/images/tools.png';
-import './SideBar.css';
+import Tools from "../../assets/images/tools.png";
+import "./SideBar.css";
 
 type Props = {
   children: any;
@@ -35,7 +34,11 @@ export default function Sidebar({ children }: Props) {
               }`}
             />
 
-            {expanded ? <span className="text-primary dark:text-warning">IDPASS TOOLS</span> : null}
+            {expanded ? (
+              <span className="text-primary dark:text-warning font-bold">
+                IDPASS TOOLS
+              </span>
+            ) : null}
 
             <button
               onClick={() => setExpanded((curr) => !curr)}
@@ -45,7 +48,7 @@ export default function Sidebar({ children }: Props) {
             </button>
           </div>
 
-          <SidebarContext.Provider value={ expanded }>
+          <SidebarContext.Provider value={expanded}>
             <ul className="flex-1 px-3">{children}</ul>
           </SidebarContext.Provider>
 
@@ -77,7 +80,7 @@ export default function Sidebar({ children }: Props) {
 }
 
 export function SidebarItem({ icon, text, active, alert, link }: SidebarProps) {
-  const  expanded  = useContext(SidebarContext);
+  const expanded = useContext(SidebarContext);
   return (
     <li
       className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
@@ -86,13 +89,30 @@ export function SidebarItem({ icon, text, active, alert, link }: SidebarProps) {
           : "hover:bg-primary text-primary"
       }`}
     >
-      {icon}
       <span
         className={`overflow-hidden transition-all ${
-          expanded ? "w-52 ml-3" : "w-0"
+          expanded ? "w-52 ml-1" : "w-0"
         }`}
       >
-        {expanded ? text : ""}
+        <div className="flex flex-row justify-between">
+          <span className="self-start">{icon}</span>
+          <span>{expanded ? text : ""}</span>
+          <span>
+            <svg
+              sidebar-toggle-item
+              className="w-6 h-6"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </span>
+        </div>
       </span>
       {alert && (
         <div

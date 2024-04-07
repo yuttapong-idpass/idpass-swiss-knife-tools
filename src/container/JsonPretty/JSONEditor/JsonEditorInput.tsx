@@ -10,8 +10,6 @@ import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
 import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { ThemeContext } from "../../../providers/ThemeProvider";
-// import JSONEditor from "jsoneditor";
-// import "jsoneditor/dist/jsoneditor.css";
 import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
 import ToastNotify from "../../../components/ToastNotify/ToastNotify";
@@ -25,26 +23,6 @@ type Props = {
 const JsonEditorInput = (props: Props) => {
   const { theme, setTheme } = useContext(ThemeContext);
   const isDark = theme === "dark";
-
-  // let jsonEditorElementInput: any;
-  // const options: any = {
-  //   mode: "code",
-  //   modes: ["text", "code", "tree"],
-  //   indentation: 2,
-  //   onError: onError,
-  //   onChangeText: function ($event: any) {
-  //     onChangeText($event);
-  //     jsonEditorElementInput.refresh();
-  //   }
-  // };
-
-  // useEffect(() => {
-  // jsonEditorElementInput = new JSONEditor(container, options);
-  // jsonEditorElementInput.update(undefined);
-  // return () => {
-  //   jsonEditorElementInput.destroy();
-  // };
-  // }, []);
 
   const refContainer = useRef<HTMLDivElement>(null);
   const refEditor = useRef<JSONEditor | null>(null);

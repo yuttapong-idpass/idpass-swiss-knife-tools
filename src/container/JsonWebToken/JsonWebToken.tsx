@@ -347,7 +347,7 @@ const JsonWebToken = (props: Props) => {
                   bg-primary 
                   "
                   onChange={handleSecretKey}
-                />{" "}
+                />
                 )
               </div>
               <div>

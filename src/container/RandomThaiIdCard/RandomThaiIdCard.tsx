@@ -2,7 +2,8 @@ import React, { SyntheticEvent, useState } from "react";
 import SuccessImage from "../../assets/images/check.png";
 import FailImage from "../../assets/images/cross.png";
 import "./RandomThaiIdCard.css";
-
+import ToastNotify from "../../components/ToastNotify/ToastNotify";
+import { toast } from 'react-toastify';
 type Props = {};
 
 const IdCardGenerator = (props: Props) => {
@@ -230,22 +231,22 @@ const IdCardGenerator = (props: Props) => {
 
   const onRandomIdCard = () => {
     ransomIdCard();
-    // setVerify("");
   };
 
-  const onVerifyIdCard = () => {
-    if (verifyIdCard()) {
-      setVerify("success");
-    } else {
-      setVerify("fail");
+  const onCopyIdCard = async () => {
+    try {
+      await navigator.clipboard.writeText(result);
+      toast.success('Copies!')
+    } catch (error) {
+      console.log("error ->", error);
     }
   };
 
   return (
     <div className="p-4 place-items-center w-full h-screen bg-primary">
+      <ToastNotify />
       <div className="flex flex-col">
         <div className="flex justify-between">
-          {/* <div>Random thai id card</div> */}
           <label
             htmlFor="Random"
             className="block 
@@ -267,33 +268,6 @@ const IdCardGenerator = (props: Props) => {
               bg-secondary
               "
           >
-            {/* <div className="grid place-items-center">
-              <div className="p-3">
-                <div className="container flex flex-row">
-                  <div>
-                    <label htmlFor="idCard">ประเภทบัตร</label>
-                    <input
-                      type="text"
-                      id="idCard"
-                      name="idCard"
-                      className="
-                    block
-                    text-md
-                    min-w-[200px]
-                    max-w-[400px]
-                    p-2
-                    shadow-md
-                    rounded-md
-                    text-primary
-                    bg-primary
-                    "
-                    />
-                  </div>
-                </div>
-              </div>
-              <div>xxx</div>
-            </div> */}
-
             <div className="flex flex-col">
               <div className="flex flex-row gap-4 self-center">
                 <div>
@@ -387,6 +361,21 @@ const IdCardGenerator = (props: Props) => {
               </div>
               <div className="flex flex-row self-center mt-4 gap-4">
                 <div>
+                  <input
+                    type="input"
+                    id="secret"
+                    value={result}
+                    disabled={true}
+                    className=" h-10 
+                      p-2
+                      rounded-md
+                      shadow-md
+                      bg-primary 
+                      text-primary
+                  "
+                  />
+                </div>
+                <div>
                   <button
                     title="Pretty json"
                     className="
@@ -410,269 +399,45 @@ const IdCardGenerator = (props: Props) => {
                     dark:bg-teal-300
                     dark:hover:bg-teal-500
                       "
-                    // onClick={onClickPretty}
+                    onClick={onRandomIdCard}
                   >
-                    สุ่มเลขบัตร 
+                    สุ่มเลขบัตร
                   </button>
                 </div>
-                <div>xxx</div>
+                <div>
+                  <button
+                    title="Pretty json"
+                    className="
+                      inline-flex 
+                      w-full 
+                      item-centers 
+                      justify-center 
+                      px-4 
+                      py-2 
+                      text-base 
+                      font-medium 
+                      leading-6 
+                    text-[#ffffff] 
+                      dark:text-dark-300
+                      whitespace-no-wrap 
+                      rounded-md 
+                      shadow-sm
+                    bg-blue-500
+                    hover:bg-blue-400
+                    dark:bg-blue-300
+                    dark:hover:bg-blue-500
+                      "
+                    onClick={onCopyIdCard}
+                  >
+                    คัดลอก
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    // <div className="p-4 place-items-center">
-    //   <div className="max-w-7xl mx-auto grid grid-cols-12 h-screen">
-    //     <div className="col-span-12">
-    //       <div>
-    //         <div className="p-2">
-    //           <div>
-    //             <div
-    //               id="message"
-    //               className="
-    //                   block
-    //                   p-4
-    //                   w-full
-    //                   text-sm
-    //                   text-gray-900
-    //                   bg-gray-50
-    //                   rounded-lg
-    //                   border
-    //                   border-gray-300
-    //                   border-dashed border-2 border-gray-300
-    //                   "
-    //             >
-    //               <div className="grid place-items-center">
-    //                 <nav className="p-3">
-    //                   <div className="container flex flex-wrap items-center justify-between mx-auto">
-    //                     <div className="flex md:order-2">
-    //                       <ul className="flex flex-col mt-2 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent md:dark:bg-transparent ">
-    //                         <li>
-    //                           <h1 className="font-bold">
-    //                             <label
-    //                               htmlFor="large-input"
-    //                               className="block mb-2 text-sm  text-gray-900"
-    //                             >
-    //                               ประเภท :
-    //                             </label>
-    //                             <select
-    //                               className="inline-block
-    //                                           text-sm
-    //                                           px-3
-    //                                           py-2
-    //                                           leading-none
-    //                                           border
-    //                                           rounded
-    //                                           text-black
-    //                                           border-gray-800
-    //                                           hover:bg-white
-    //                                           mt-4
-    //                                           lg:mt-0"
-    //                               onChange={handleCardType}
-    //                             >
-    //                               {cardType.map((option) => (
-    //                                 <option
-    //                                   key={option.name}
-    //                                   value={option.value}
-    //                                 >
-    //                                   {option.name}
-    //                                 </option>
-    //                               ))}
-    //                             </select>
-    //                           </h1>
-    //                         </li>
-
-    //                         {showAlien ? (
-    //                           <>
-    //                             <li>
-    //                               <h1 className="font-bold">
-    //                                 <label
-    //                                   htmlFor="large-input"
-    //                                   className="block mb-2 text-sm  text-gray-900"
-    //                                 >
-    //                                   กลุ่มบุคคล :
-    //                                 </label>
-    //                                 <select
-    //                                   className="inline-block
-    //                                            text-sm
-    //                                            px-3
-    //                                            py-2
-    //                                            leading-none
-    //                                            border
-    //                                            rounded
-    //                                            text-black
-    //                                            border-gray-800
-    //                                            hover:bg-white
-    //                                            mt-4
-    //                                            lg:mt-0"
-    //                                   onChange={handleAlienCardType}
-    //                                 >
-    //                                   {alienCardType.map((option) => (
-    //                                     <option
-    //                                       key={option.name}
-    //                                       value={option.value}
-    //                                     >
-    //                                       {option.name}
-    //                                     </option>
-    //                                   ))}
-    //                                 </select>
-    //                               </h1>
-    //                             </li>
-
-    //                             <li>
-    //                               <h1 className="font-bold">
-    //                                 <label
-    //                                   htmlFor="large-input"
-    //                                   className="block mb-2 text-sm  text-gray-900"
-    //                                 >
-    //                                   เลขประจำหลักที่ 6-7 :
-    //                                 </label>
-    //                                 <select
-    //                                   className="inline-block
-    //                                               text-sm
-    //                                               px-3
-    //                                               py-2
-    //                                               leading-none
-    //                                               border
-    //                                               rounded
-    //                                               text-black
-    //                                               border-gray-800
-    //                                               hover:bg-white
-    //                                               mt-4
-    //                                               lg:mt-0"
-    //                                   onChange={handleSectorNumber}
-    //                                 >
-    //                                   {sectorNumber.map((option) => (
-    //                                     <option
-    //                                       key={option.name}
-    //                                       value={option.value}
-    //                                     >
-    //                                       {option.name}
-    //                                     </option>
-    //                                   ))}
-    //                                 </select>
-    //                               </h1>
-    //                             </li>
-    //                           </>
-    //                         ) : null}
-    //                       </ul>
-    //                     </div>
-    //                   </div>
-    //                 </nav>
-    //               </div>
-    //             </div>
-    //           </div>
-
-    //           <div
-    //             id="message"
-    //             className="
-    //                   mt-5
-    //                   block
-    //                   p-4
-    //                   w-full
-    //                   text-sm
-    //                   text-gray-900
-    //                   bg-gray-50
-    //                   rounded-lg
-    //                   border
-    //                   border-gray-300
-    //                   border-dashed border-2 border-gray-300
-    //                   grid place-items-center h-full mt-5
-    //                   "
-    //           >
-    //             <h1 className="text-xl font-bold text-gray-900">
-    //               หมายเลขบัตรประชาชน : {result}{" "}
-    //             </h1>
-    //             {!!verify && verify === "success" ? (
-    //               <span className="text-green-500">
-    //                 {" "}
-    //                 <img
-    //                   src={SuccessImage}
-    //                   className="h-5 w-5 image-verify"
-    //                 />{" "}
-    //                 เลขบัตรประชาชนถูกต้อง{" "}
-    //               </span>
-    //             ) : (
-    //               <>
-    //                 {!!verify && verify === "fail" ? (
-    //                   <>
-    //                     <span className="text-red-500">
-    //                       {" "}
-    //                       <img
-    //                         src={FailImage}
-    //                         className="h-5 w-5 image-verify"
-    //                       />{" "}
-    //                       เลขบัตรประชาชนไม่ถูกต้อง{" "}
-    //                     </span>
-    //                   </>
-    //                 ) : null}
-    //               </>
-    //             )}
-    //           </div>
-
-    //           <div>
-    //             <div className="grid place-items-center h-full mt-5">
-    //               <div className="inline-flex rounded-md shadow-sm">
-    //                 <button
-    //                   className="
-    //                     text-white
-    //                     bg-neutral-400
-    //                     bg-green-500
-    //                     hover:bg-[#FF9119]/80
-    //                     focus:ring-4
-    //                     focus:outline-none
-    //                     focus:ring-[#FF9119]/50
-    //                     font-medium
-    //                     rounded-lg
-    //                     text-sm
-    //                     px-5
-    //                     py-2.5
-    //                     text-center
-    //                     inline-flex
-    //                     items-center
-    //                     dark:hover:bg-[#FF9119]/80
-    //                     dark:focus:ring-[#FF9119]/40
-    //                     mr-1
-    //                     mb-1"
-    //                   onClick={onVerifyIdCard}
-    //                 >
-    //                   ตรวจสอบ
-    //                 </button>
-
-    //                 <button
-    //                   className="
-    //                     text-white
-    //                     bg-neutral-400
-    //                     bg-blue-500
-    //                     hover:bg-[#FF9119]/80
-    //                     focus:ring-4
-    //                     focus:outline-none
-    //                     focus:ring-[#FF9119]/50
-    //                     font-medium
-    //                     rounded-lg
-    //                     text-sm
-    //                     px-5
-    //                     py-2.5
-    //                     text-center
-    //                     inline-flex
-    //                     items-center
-    //                     dark:hover:bg-[#FF9119]/80
-    //                     dark:focus:ring-[#FF9119]/40
-    //                     mr-1
-    //                     mb-1"
-    //                   onClick={onRandomIdCard}
-    //                 >
-    //                   สุ่ม
-    //                 </button>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 

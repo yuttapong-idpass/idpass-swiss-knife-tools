@@ -39,7 +39,7 @@ function App() {
       link: "/jwt",
     },
     {
-      name: "RANDOM THAI ID CARD",
+      name: "RANDOM ID CARD",
       active: false,
       icon: <BsPersonVcard size={20} />,
       link: "/id-card-random",
