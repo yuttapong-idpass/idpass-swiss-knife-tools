@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Link, BrowserRouter, Navigate } from "react-router-dom";
 import { setupFirebase } from "./utils/firebase";
 import Home from "./container/Home/Home";
@@ -19,43 +19,73 @@ import { MdOutlineSecurity } from "react-icons/md";
 import JsonWebTokenIcon from "./assets/images/svg/json-web-token.svg";
 
 function App() {
-  const menuList = [
+  const [indexItem, setIndexItem] = useState(0);
+  const [activeItem, setActiveItem] = useState(false);
+  let menuList = [
     {
-      name: "JSON EDITOR",
-      active: false,
-      icon: <TbJson size={20} />,
-      link: "/json-editor",
+      title: "Crypto",
+      active: true,
+      menuLists: [
+        {
+          name: "JWT Parser",
+          icon: <BsKey size={20} />,
+          active: true,
+          link: "/json-editor",
+        },
+      ],
     },
     {
-      name: "BASE 64 IMAGE",
-      active: false,
-      icon: <BsImage size={20} />,
-      link: "/base64Image",
+      title: "Development",
+      active: true,
+      menuLists: [
+        {
+          name: "JSON EDITOR",
+          icon: <TbJson size={20} />,
+          active: true,
+          link: "/json-editor",
+        },
+      ],
     },
     {
-      name: "JWT",
-      active: false,
-      icon: <BsKey size={20} />,
-      link: "/jwt",
+      title: "Convertor",
+      active: true,
+      menuLists: [
+        {
+          name: "BASE64 IMAGE",
+          icon: <BsImage size={20} />,
+          active: true,
+          link: "/base64Image",
+        },
+      ],
     },
     {
-      name: "RANDOM ID CARD",
-      active: false,
-      icon: <BsPersonVcard size={20} />,
-      link: "/id-card-random",
+      title: "Generator",
+      active: true,
+      menuLists: [
+        {
+          name: "RANDOM ID CARD",
+          icon: <BsPersonVcard size={20} />,
+          link: "/id-card-random",
+        },
+      ],
     },
   ];
 
   useEffect(() => {
-    setupFirebase();
-  }, []);
+    // setupFirebase();
+  }, [activeItem, indexItem]);
 
+  const onActiveMenu = (active: boolean, idxItem: number) => {
+    setActiveItem(active);
+    setIndexItem(idxItem);
+    menuList[idxItem].active = active;
+    console.log(menuList);
+  };
   return (
     <>
       <div className="flex dark:bg-dark-bg">
-        <BrowserRouter>
+        {/* <BrowserRouter>
           <Sidebar>
-            {/* <hr className="my-3" /> */}
             {menuList.map((item, index) => (
               <Link to={item.link} key={index}>
                 <SidebarItem icon={item.icon} text={item.name} />
@@ -70,6 +100,22 @@ function App() {
             <Route path="/id-card-random" element={<IdCardGenerator />} />
             <Route path="/mock-up" element={<MockIdCard />} />
           </Routes>
+        </BrowserRouter> */}
+        <BrowserRouter>
+          <Sidebar>
+            {menuList.map((item, index) => (
+              <Link to={""} key={index}>
+                <SidebarItem
+                  title={item.title}
+                  active={item.active}
+                  menuLists={item.menuLists}
+                  indexItem={index}
+                  // onClick={onActiveMenu(index)}
+                  onHandlerActive={onActiveMenu}
+                />
+              </Link>
+            ))}
+          </Sidebar>
         </BrowserRouter>
       </div>
     </>
