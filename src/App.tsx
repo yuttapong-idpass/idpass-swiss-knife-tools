@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Link, BrowserRouter, Navigate } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
 import { setupFirebase } from "./utils/firebase";
 import Home from "./container/Home/Home";
 import Menu from "./container/Menu/Menu";
@@ -19,22 +19,9 @@ import { MdOutlineSecurity } from "react-icons/md";
 import JsonWebTokenIcon from "./assets/images/svg/json-web-token.svg";
 
 function App() {
-  const [indexItem, setIndexItem] = useState(0);
-  const [activeItem, setActiveItem] = useState(false);
   let menuList = [
     {
-      title: "Crypto",
-      active: true,
-      menuLists: [
-        {
-          name: "JWT Parser",
-          icon: <BsKey size={20} />,
-          active: true,
-          link: "/json-editor",
-        },
-      ],
-    },
-    {
+      id: 1,
       title: "Development",
       active: true,
       menuLists: [
@@ -47,6 +34,20 @@ function App() {
       ],
     },
     {
+      id: 2,
+      title: "Crypto",
+      active: true,
+      menuLists: [
+        {
+          name: "JWT Parser",
+          icon: <BsKey size={20} />,
+          active: true,
+          link: "/jwt",
+        },
+      ],
+    },
+    {
+      id: 3,
       title: "Convertor",
       active: true,
       menuLists: [
@@ -59,6 +60,7 @@ function App() {
       ],
     },
     {
+      id: 4,
       title: "Generator",
       active: true,
       menuLists: [
@@ -71,25 +73,41 @@ function App() {
     },
   ];
 
+  const [items, setItems] = useState(menuList);
+
   useEffect(() => {
     // setupFirebase();
-  }, [activeItem, indexItem]);
+  }, []);
 
-  const onActiveMenu = (active: boolean, idxItem: number) => {
-    setActiveItem(active);
-    setIndexItem(idxItem);
-    menuList[idxItem].active = active;
-    console.log(menuList);
+  const onActiveMenu = (idxItem: number) => {
+    console.log("idxItem", idxItem);
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === idxItem ? { ...item, active: !item.active } : item
+      )
+    );
   };
+
+  const onLinks = (link: string) => {
+    // <Link to={link}></Link>;
+    console.log('link ->', link);
+  };
+
   return (
     <>
       <div className="flex dark:bg-dark-bg">
-        {/* <BrowserRouter>
+        <BrowserRouter>
           <Sidebar>
-            {menuList.map((item, index) => (
-              <Link to={item.link} key={index}>
-                <SidebarItem icon={item.icon} text={item.name} />
-              </Link>
+            {items.map((item, index) => (
+              // deepcode ignore ReactMissingArrayKeys: <please specify a reason of ignoring this>
+              <SidebarItem
+                title={item.title}
+                active={item.active}
+                menuLists={item.menuLists}
+                keyNumber={item.id}
+                onLink={onLinks}
+                onHandlerActive={onActiveMenu}
+              />
             ))}
           </Sidebar>
           <Routes>
@@ -100,22 +118,6 @@ function App() {
             <Route path="/id-card-random" element={<IdCardGenerator />} />
             <Route path="/mock-up" element={<MockIdCard />} />
           </Routes>
-        </BrowserRouter> */}
-        <BrowserRouter>
-          <Sidebar>
-            {menuList.map((item, index) => (
-              <Link to={""} key={index}>
-                <SidebarItem
-                  title={item.title}
-                  active={item.active}
-                  menuLists={item.menuLists}
-                  indexItem={index}
-                  // onClick={onActiveMenu(index)}
-                  onHandlerActive={onActiveMenu}
-                />
-              </Link>
-            ))}
-          </Sidebar>
         </BrowserRouter>
       </div>
     </>
