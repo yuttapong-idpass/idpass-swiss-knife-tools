@@ -22,7 +22,7 @@ const JsonDiff = (props: Props) => {
   useEffect(() => {
     const good = { data: "data", sniper: "sniper" };
     const good2 = { data: "data", sniper: "good" };
-    const diffs = diff.diffLines(JSON.stringify(good), JSON.stringify(good2));
+    const diffs = diff.diffWords(JSON.stringify(good), JSON.stringify(good2));
     let color = "";
     let test: string[] = [];
 
