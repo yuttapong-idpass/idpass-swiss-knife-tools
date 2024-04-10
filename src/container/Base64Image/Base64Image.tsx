@@ -225,7 +225,7 @@ const Base64Image = (props: Props) => {
               hover:bg-lime-400
               dark:bg-lime-400
               dark:hover:bg-lime-500
-              " 
+              "
                 onClick={generateImage}
               >
                 Generate Image
@@ -334,10 +334,7 @@ const Base64Image = (props: Props) => {
         </div>
         <div className="flex place-items-center justify-center mt-4">
           {textArea ? (
-            <img
-              src={DOMPurify.sanitize(textArea)}
-              alt="result"
-            />
+            <img src={DOMPurify.sanitize(textArea)} alt="result" />
           ) : null}
         </div>
       </div>

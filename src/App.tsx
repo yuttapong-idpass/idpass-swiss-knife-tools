@@ -13,10 +13,11 @@ import Sidebar, { SidebarItem } from "./components/SideBar/SideBar";
 
 import { FaHome } from "react-icons/fa";
 import { TbJson } from "react-icons/tb";
-import { BsImage, BsPersonVcard, BsKey } from "react-icons/bs";
+import { BsImage, BsPersonVcard, BsKey, BsFileEarmarkDiff } from "react-icons/bs";
 import { MdOutlineSecurity } from "react-icons/md";
 
 import JsonWebTokenIcon from "./assets/images/svg/json-web-token.svg";
+import JsonDiff from "./container/JsonDiff/JsonDiff";
 
 function App() {
   let menuList = [
@@ -31,6 +32,12 @@ function App() {
           active: true,
           link: "/json-editor",
         },
+        { 
+          name: 'JSON DIFF',
+          icon: <BsFileEarmarkDiff size={20} />,
+          active: true,
+          link: '/json-diff'
+        }
       ],
     },
     {
@@ -113,6 +120,7 @@ function App() {
           <Routes>
             <Route path="/" element={<JsonPretty />} />
             <Route path="/json-editor" element={<JsonPretty />} />
+            <Route path="/json-diff" element={<JsonDiff />} />
             <Route path="/base64Image" element={<Base64Image />} />
             <Route path="/jwt" element={<JsonWebToken />} />
             <Route path="/id-card-random" element={<IdCardGenerator />} />

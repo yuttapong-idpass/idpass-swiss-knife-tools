@@ -142,10 +142,10 @@ export function SidebarItem(props: SidebarProps) {
         // </div>
         <>
           {props.active ? (
-            <div className={`w-full hover:bg-primary rounded-md`}>
+            <div className={`w-full`}>
               {props.menuLists.map((item: any, index: any) => (
                 <Link to={item.link} key={index}>
-                  <div className="flex flex-row p-4 text-primary">
+                  <div className="flex flex-row p-4 text-primary rounded-md hover:bg-primary">
                     <span className="flex-shrink-0">{item.icon}</span>
                     <span className="ml-3">{expanded ? item.name : ""}</span>
                   </div>
