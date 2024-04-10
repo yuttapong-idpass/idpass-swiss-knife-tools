@@ -27,13 +27,13 @@ function App() {
       active: true,
       menuLists: [
         {
-          name: "JSON EDITOR",
+          name: "Json Pretty",
           icon: <TbJson size={20} />,
           active: true,
           link: "/json-editor",
         },
         { 
-          name: 'JSON DIFF',
+          name: 'Json Diff',
           icon: <BsFileEarmarkDiff size={20} />,
           active: true,
           link: '/json-diff'
@@ -59,7 +59,7 @@ function App() {
       active: true,
       menuLists: [
         {
-          name: "BASE64 IMAGE",
+          name: "Base64 Image",
           icon: <BsImage size={20} />,
           active: true,
           link: "/base64Image",
@@ -72,7 +72,7 @@ function App() {
       active: true,
       menuLists: [
         {
-          name: "RANDOM ID CARD",
+          name: "Random Id Card",
           icon: <BsPersonVcard size={20} />,
           link: "/id-card-random",
         },
