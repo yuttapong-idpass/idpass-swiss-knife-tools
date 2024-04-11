@@ -1,0 +1,28 @@
+#input1 {
+    overflow: auto;
+}
+
+#input2 {
+    overflow: auto;
+}
+
+
+#result {
+    overflow: auto;
+}
+
+
+.json-diff-viewer tr .line-modify {
+    background-color: #3f3f3f !important;
+    color: #ffffff;
+    font-family: 'chakrapetchMedium';
+
+}
+
+.json-diff-viewer td .line-equal {
+    font-family: 'chakrapetchMedium';
+}
+
+.json-diff-viewer {
+    font-family: 'chakrapetchMedium';
+}
