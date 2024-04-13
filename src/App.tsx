@@ -114,6 +114,7 @@ function App() {
                 keyNumber={item.id}
                 onLink={onLinks}
                 onHandlerActive={onActiveMenu}
+                key={index}
               />
             ))}
           </Sidebar>
