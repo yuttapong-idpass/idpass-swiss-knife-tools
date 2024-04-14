@@ -4,11 +4,7 @@ import "./JsonDiff.css";
 import * as diff from "diff";
 
 // import { Differ } from 'json-diff-kit';
-
-import { Differ, Viewer } from "json-diff-kit";
-import type { DiffResult } from "json-diff-kit";
-
-import "json-diff-kit/dist/viewer.css";
+// import "json-diff-kit/dist/viewer.css";
 
 type Props = {};
 
@@ -20,26 +16,28 @@ interface IJsonDiff {
   remove: boolean | undefined;
 }
 
-let initialResult: [DiffResult[], DiffResult[]];
-const initialInput1: any = JSON.stringify({});
-const initialInput2: any = JSON.stringify({});
+// let initialResult: [DiffResult[], DiffResult[]];
+const initialInput1: any = '';
+const initialInput2: any = '';
+const initialDiff: IJsonDiff[] = [];
 
 const JsonDiff = (props: Props) => {
-  const d = new Differ({
-    detectCircular: true,
-    maxDepth: undefined,
-    showModifications: true,
-    arrayDiffMethod: "lcs",
-    ignoreCase: false,
-    recursiveEqual: true,
-  });
+  // const d = new Differ({
+  //   detectCircular: true,
+  //   maxDepth: undefined,
+  //   showModifications: true,
+  //   arrayDiffMethod: "lcs",
+  //   ignoreCase: false,
+  //   recursiveEqual: true,
+  // });
 
   const [color, setColor] = useState("");
-  const [diff, setDiff] = useState(d.diff("", ""));
+  // const [diff, setDiff] = useState(d.diff("", ""));
   const [input1, setInput1] = useState(initialInput1);
   const [input2, setInput2] = useState(initialInput2);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [diffData, setDiffData] = useState(initialDiff);
 
   // const differ = new Differ({
   //   detectCircular: true,
@@ -71,12 +69,68 @@ const JsonDiff = (props: Props) => {
   };
 
   const onCompare = () => {
-    try {
-      let diff = d.diff(JSON.parse(input1), JSON.parse(input2));
-      setDiff(diff);
+    setDiffData([]);
+    // try {
+    //   let diff = d.diff(JSON.parse(input1), JSON.parse(input2));
+    //   setDiff(diff);
 
-      setIsError(false);
-      setErrorMessage("");
+    //   setIsError(false);
+    //   setErrorMessage("");
+    // } catch (error) {
+    //   setIsError(true);
+    //   setErrorMessage("Invalid json");
+    // }
+
+    // const diffs = diff.diffJson(input1, input2);
+    // let span = null;
+    // let display = document.getElementById("display");
+    // let fragment = document.createDocumentFragment();
+
+    // diffs.forEach((part) => {
+    //   const color = part.added
+    //     ? "added-color"
+    //     : part.removed
+    //     ? "remove-color"
+    //     : "text-primary";
+
+    // const data = {
+    //   added: part.added,
+    //   count: part.count,
+    //   remove: part.removed,
+    //   value: part.value,
+    //   color: color,
+    // };
+
+    // span = document.createElement('span');
+    // span.style.color = color;
+    // span.appendChild(document.createTextNode(part.value));
+    // fragment.appendChild(span)
+    // });
+
+    // display?.appendChild(fragment);
+
+    try {
+      const diffs = diff.diffJson(JSON.parse(input1), JSON.parse(input2));
+      diffs.forEach((part) => {
+        const color = part.added
+          ? "added-color"
+          : part.removed
+          ? "remove-color"
+          : "text-primary";
+
+        const data = {
+          added: part.added,
+          count: part.count,
+          remove: part.removed,
+          value: part.value,
+          color: color,
+        };
+        setDiffData((prevItem: any) => [...prevItem, data]);
+
+        setIsError(false);
+        setErrorMessage('');
+
+      });
     } catch (error) {
       setIsError(true);
       setErrorMessage("Invalid json");
@@ -200,8 +254,8 @@ const JsonDiff = (props: Props) => {
           </label>
         </div>
         <div>
-          <div
-            id="result"
+          <pre
+            id="display"
             className="
               mt-3
               p-4
@@ -215,7 +269,7 @@ const JsonDiff = (props: Props) => {
               h-[43vh]
             "
           >
-            <Viewer 
+            {/* <Viewer 
                 diff={diff}  
                 indent={4}
                 lineNumbers={true}
@@ -225,8 +279,14 @@ const JsonDiff = (props: Props) => {
                   wordSeparator: " ",
                 }}
                 hideUnchangedLines={true}      
-                className="h-full" />
-          </div>
+                className="h-full" /> */}
+
+            {diffData.map((item, index) => (
+              <div key={index}>
+                <span className={`${item.color}`}>{item.value}</span>
+              </div>
+            ))}
+          </pre>
         </div>
       </div>
     </div>

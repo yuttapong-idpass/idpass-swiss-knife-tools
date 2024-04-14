@@ -1,9 +1,5 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
-import CryptoJS from "crypto-js";
-import { Base64 } from "js-base64";
 import { useSelector } from "react-redux";
-import { encodeToken, encodeSelector } from "../../store/slice/jwtTokenSlice";
-import { decodeToken, decodeSelector } from "../../store/slice/jwtTokenSlice";
 import { useAppDispatch } from "../../store/store";
 
 import * as jose from "jose";
@@ -27,10 +23,6 @@ const initialPayload: any = JSON.stringify({});
 const initialHeaders: any = JSON.stringify({});
 
 const JsonWebToken = (props: Props) => {
-  const encodeReducer = useSelector(encodeSelector);
-  const decodeReducer = useSelector(decodeSelector);
-  const dispatch = useAppDispatch();
-
   const options = [
     { value: "encode", text: "encode" },
     { value: "decode", text: "decode" },

@@ -7,9 +7,22 @@
 }
 
 
-#result {
+#display {
     overflow: auto;
+    word-wrap: break-word;
+    font-family: 'chakrapetchMedium';
 }
+
+.added-color { 
+    background-color: #eaf2c2;
+    color: #406619;
+}
+
+.remove-color { 
+    color: #b30000;
+    background-color: #fadad7;
+}
+
 
 
 .json-diff-viewer tr .line-modify {

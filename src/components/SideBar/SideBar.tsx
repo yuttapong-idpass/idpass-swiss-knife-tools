@@ -90,7 +90,7 @@ export function SidebarItem(props: SidebarProps) {
 
   return (
     <li
-      className={`relative flex flex-col items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group`}
+      className={`relative flex flex-col items-center py-1 px-1 my-1 font-medium rounded-md cursor-pointer transition-colors group`}
     >
       <button
         title="Button"
@@ -145,7 +145,7 @@ export function SidebarItem(props: SidebarProps) {
             <div className={`w-full`}>
               {props.menuLists.map((item: any, index: any) => (
                 <Link to={item.link} key={index}>
-                  <div className="flex flex-row p-4 text-primary rounded-md hover:bg-primary">
+                  <div className="flex flex-row p-2 text-primary rounded-md hover:bg-primary">
                     <span className="flex-shrink-0">{item.icon}</span>
                     <span className="ml-3">{expanded ? item.name : ""}</span>
                   </div>
