@@ -11,9 +11,14 @@ import IdCardGenerator from "./container/RandomThaiIdCard/RandomThaiIdCard";
 import MockIdCard from "./container/MockIdCard/MockIdCard";
 import Sidebar, { SidebarItem } from "./components/SideBar/SideBar";
 
-import { FaHome } from "react-icons/fa";
+import { FaHome, FaBarcode } from "react-icons/fa";
 import { TbJson } from "react-icons/tb";
-import { BsImage, BsPersonVcard, BsKey, BsFileEarmarkDiff } from "react-icons/bs";
+import {
+  BsImage,
+  BsPersonVcard,
+  BsKey,
+  BsFileEarmarkDiff,
+} from "react-icons/bs";
 import { MdOutlineSecurity } from "react-icons/md";
 
 import JsonWebTokenIcon from "./assets/images/svg/json-web-token.svg";
@@ -32,12 +37,18 @@ function App() {
           active: true,
           link: "/json-editor",
         },
-        { 
-          name: 'Json Diff',
+        {
+          name: "Json Diff",
           icon: <BsFileEarmarkDiff size={20} />,
           active: true,
-          link: '/json-diff'
-        }
+          link: "/json-diff",
+        },
+        {
+          name: "Barcode Generator",
+          icon: <FaBarcode size={20} />,
+          active: true,
+          link: "/barcode-generator",
+        },
       ],
     },
     {
@@ -97,7 +108,7 @@ function App() {
 
   const onLinks = (link: string) => {
     // <Link to={link}></Link>;
-    console.log('link ->', link);
+    console.log("link ->", link);
   };
 
   return (
