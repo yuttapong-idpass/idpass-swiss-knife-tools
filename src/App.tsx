@@ -23,6 +23,7 @@ import { MdOutlineSecurity } from "react-icons/md";
 
 import JsonWebTokenIcon from "./assets/images/svg/json-web-token.svg";
 import JsonDiff from "./container/JsonDiff/JsonDiff";
+import BarCodeGenerator from "./container/BarCodeGenerator/BarCodeGenerator";
 
 function App() {
   let menuList = [
@@ -42,12 +43,6 @@ function App() {
           icon: <BsFileEarmarkDiff size={20} />,
           active: true,
           link: "/json-diff",
-        },
-        {
-          name: "Barcode Generator",
-          icon: <FaBarcode size={20} />,
-          active: true,
-          link: "/barcode-generator",
         },
       ],
     },
@@ -86,6 +81,12 @@ function App() {
           name: "Random Id Card",
           icon: <BsPersonVcard size={20} />,
           link: "/id-card-random",
+        },
+        {
+          name: "Barcode",
+          icon: <FaBarcode size={20} />,
+          active: true,
+          link: "/barcode-generator",
         },
       ],
     },
@@ -137,6 +138,7 @@ function App() {
             <Route path="/jwt" element={<JsonWebToken />} />
             <Route path="/id-card-random" element={<IdCardGenerator />} />
             <Route path="/mock-up" element={<MockIdCard />} />
+            <Route path="/barcode-generator" element={<BarCodeGenerator />} />
           </Routes>
         </BrowserRouter>
       </div>

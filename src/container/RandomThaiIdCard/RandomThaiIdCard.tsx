@@ -3,7 +3,7 @@ import SuccessImage from "../../assets/images/check.png";
 import FailImage from "../../assets/images/cross.png";
 import "./RandomThaiIdCard.css";
 import ToastNotify from "../../components/ToastNotify/ToastNotify";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 type Props = {};
 
 const IdCardGenerator = (props: Props) => {
@@ -236,7 +236,7 @@ const IdCardGenerator = (props: Props) => {
   const onCopyIdCard = async () => {
     try {
       await navigator.clipboard.writeText(result);
-      toast.success('Copies!')
+      toast.success("Copies!");
     } catch (error) {
       console.log("error ->", error);
     }
@@ -362,7 +362,7 @@ const IdCardGenerator = (props: Props) => {
               <div className="flex flex-row self-center mt-4 gap-4">
                 <div>
                   <input
-                    type="input"
+                    type="text"
                     id="secret"
                     value={result}
                     disabled={true}
@@ -401,7 +401,7 @@ const IdCardGenerator = (props: Props) => {
                       "
                     onClick={onRandomIdCard}
                   >
-                    สุ่มเลขบัตร
+                    Random 
                   </button>
                 </div>
                 <div>
@@ -429,7 +429,7 @@ const IdCardGenerator = (props: Props) => {
                       "
                     onClick={onCopyIdCard}
                   >
-                    คัดลอก
+                   Copy 
                   </button>
                 </div>
               </div>
