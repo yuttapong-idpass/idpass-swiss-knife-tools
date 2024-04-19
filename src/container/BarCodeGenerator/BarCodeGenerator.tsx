@@ -1,11 +1,17 @@
 import JsBarcode from "jsbarcode";
 import React, { SyntheticEvent, useEffect, useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 type Props = {};
 
+interface IForm {
+  barcodeType: string;
+  barcodeText: string;
+}
+
 const BarCodeGenerator = (props: Props) => {
   const barcodeTypes = [
-    { name: "code128", value: "code128", example: "Hi" },
+    { name: "code128", value: "code128", example: "ABC-1234" },
     { name: "ean13", value: "ean13", example: "1234567890128" },
     { name: "ean8", value: "ean8", example: "12345670" },
     { name: "ean5", value: "ean5", example: "12345" },
@@ -17,6 +23,12 @@ const BarCodeGenerator = (props: Props) => {
     { name: "pharmacode", value: "pharmacode", example: "12345" },
   ];
 
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<IForm>();
   const [barcodeType, setBarCodeType] = useState(barcodeTypes[0].value);
   const [example, setExample] = useState("ABC-1234");
   const [barcodeInput, setBarCodeInput] = useState("ABC-1234");
@@ -28,10 +40,17 @@ const BarCodeGenerator = (props: Props) => {
     );
 
     const getValueExample = barcodeTypes[indexExample].example;
-
     setExample(getValueExample);
     setBarCodeInput(getValueExample);
     setBarCodeType(type);
+  };
+
+  const onSubmit: SubmitHandler<IForm> = (data) => {
+    setValue('barcodeText', 'Good');
+    console.log('data ->', data);
+    // setBarCodeInput(data.barcodeText);
+    // setBarCodeType(data.barcodeType);
+    // renderBarCode();
   };
 
   const handleBarCodeInput = (event$: SyntheticEvent<EventTarget>) => {
@@ -57,47 +76,72 @@ const BarCodeGenerator = (props: Props) => {
   }, [example]);
 
   return (
-    <div className="w-full bg-primary p-4 flex flex-col gap-2">
-      <div className="row-end-1">
-        <label htmlFor="BarCode" className="text-lg font-medium text-primary">
-          Barcode Generator
-        </label>
-      </div>
-      <div className="flex flex-col rounded-md row-end-1 justify-items-center w-full bg-secondary p-4">
-        <div className="flex flex-col gap-6 place-items-center">
-          <div className="flex flex-row gap-2 w-full justify-center m-auto items-center">
-            <div>
-              <label
-                htmlFor="type"
-                className="text-lg mr-2 font-medium text-primary"
-              >
-                Type:
-              </label>
-              <select
-                name="type"
-                id="type"
-                className="rounded-md text-primary bg-primary p-2"
-                onChange={handleSelectBarCodeType}
-              >
-                {barcodeTypes.map((item, index) => (
-                  <option key={index} value={item.value}>
-                    {item.value}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <input
-                type="text"
-                value={barcodeInput}
-                className="rounded-md text-primary bg-primary p-2 shadow-lg"
-                onChange={handleBarCodeInput}
-              />
-            </div>
-            <div>
-              <button
-                title="Generate"
-                className="
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full bg-primary p-4 flex flex-col gap-2"
+    >
+      <div>
+        <div className="row-end-1">
+          <label htmlFor="BarCode" className="text-lg font-medium text-primary">
+            Barcode Generator
+          </label>
+        </div>
+        <div className="flex flex-col rounded-md row-end-1 justify-items-center w-full bg-secondary p-4">
+          <div className="flex flex-col gap-6 place-items-center">
+            <div className="flex flex-row gap-2 w-full justify-center">
+              <div>
+                <span className="text-primary p-2 text-lg font-medium">
+                  Type:
+                </span>
+              </div>
+              <div>
+                <select
+                  id="selectBarcodeType"
+                  className="rounded-md relative text-primary bg-primary p-2 shadow-lg"
+                  {...register("barcodeType", {
+                    required: true,
+                    onChange: (e) => {
+                      handleSelectBarCodeType(e);
+                    },
+                  })}
+                >
+                  {barcodeTypes.map((item, index) => (
+                    <option key={index} value={item.value}>
+                      {item.value}
+                    </option>
+                  ))}
+                </select>
+                {errors.barcodeType?.type === "required" && (
+                  <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                    Invalid username field !
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={barcodeInput}
+                    placeholder="Input barcode..."
+                    className="rounded-md relative text-primary bg-primary p-2 shadow-lg"
+                    {...register("barcodeText", {
+                      required: true,
+                      onChange: (e) => {
+                        handleBarCodeInput(e);
+                      },
+                    })}
+                  />
+                </div>
+                {errors.barcodeText?.type === "required" && (
+                  <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                    Please input barcode text !
+                  </span>
+                )}
+              </div>
+              <div>
+                <button
+                  title="Generate"
+                  className="
                       inline-flex 
                       w-full 
                       item-centers 
@@ -117,15 +161,15 @@ const BarCodeGenerator = (props: Props) => {
                     hover:bg-lime-400
                     dark:bg-lime-300
                     dark:hover:bg-lime-500"
-                onClick={onClickGenerateBarCode}
-              >
-                Generate
-              </button>
-            </div>
-            <div>
-              <button
-                title="Refresh"
-                className="
+                  // onClick={onClickGenerateBarCode}
+                >
+                  Generate
+                </button>
+              </div>
+              <div>
+                <button
+                  title="Refresh"
+                  className="
                       inline-flex 
                       w-full 
                       item-centers 
@@ -145,24 +189,25 @@ const BarCodeGenerator = (props: Props) => {
                     hover:bg-blue-400
                     dark:bg-blue-300
                     dark:hover:bg-blue-500"
-              >
-                Refresh
-              </button>
+                >
+                  Refresh
+                </button>
+              </div>
             </div>
-          </div>
-          <div>
-            <span className="text-primary text-lg">
-              Example Format: {example}{" "}
-            </span>
-          </div>
-          <div className="flex flex-cols">
             <div>
-              <svg id="barcode" />
+              <span className="text-primary text-lg">
+                Example Format: {example}{" "}
+              </span>
+            </div>
+            <div className="flex flex-cols">
+              <div>
+                <svg id="barcode" />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
