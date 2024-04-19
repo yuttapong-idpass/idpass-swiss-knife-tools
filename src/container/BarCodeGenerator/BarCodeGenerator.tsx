@@ -6,7 +6,8 @@ type Props = {};
 
 interface IForm {
   barcodeType: string;
-  barcodeText: string;
+  barcodeInput: string;
+  exampleFormat: string;
 }
 
 const BarCodeGenerator = (props: Props) => {
@@ -27,11 +28,21 @@ const BarCodeGenerator = (props: Props) => {
     register,
     handleSubmit,
     setValue,
+    getValues,
+    watch,
     formState: { errors },
-  } = useForm<IForm>();
-  const [barcodeType, setBarCodeType] = useState(barcodeTypes[0].value);
-  const [example, setExample] = useState("ABC-1234");
-  const [barcodeInput, setBarCodeInput] = useState("ABC-1234");
+  } = useForm<IForm>({
+    defaultValues: {
+      barcodeInput: "ABC-1234",
+      barcodeType: "code128",
+      exampleFormat: "ABC-1234",
+    },
+  });
+
+  const examples = watch("exampleFormat");
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const handleSelectBarCodeType = (event$: SyntheticEvent<EventTarget>) => {
     const type = (event$.target as HTMLInputElement).value;
@@ -40,40 +51,42 @@ const BarCodeGenerator = (props: Props) => {
     );
 
     const getValueExample = barcodeTypes[indexExample].example;
-    setExample(getValueExample);
-    setBarCodeInput(getValueExample);
-    setBarCodeType(type);
+    setValue("barcodeInput", getValueExample);
+    setValue("barcodeType", type);
+    setValue("exampleFormat", getValueExample);
   };
 
   const onSubmit: SubmitHandler<IForm> = (data) => {
-    setValue('barcodeText', 'Good');
-    console.log('data ->', data);
-    // setBarCodeInput(data.barcodeText);
-    // setBarCodeType(data.barcodeType);
-    // renderBarCode();
-  };
-
-  const handleBarCodeInput = (event$: SyntheticEvent<EventTarget>) => {
-    const value = (event$.target as HTMLInputElement).value;
-    setBarCodeInput(value);
-  };
-
-  const onClickGenerateBarCode = () => {
     renderBarCode();
   };
 
+  const errorStatus = (status: boolean, description: string = "") => {
+    if (status) {
+      setIsError(true);
+      setErrorMessage(description);
+    } else {
+      setIsError(false);
+      setErrorMessage("");
+    }
+  };
+
   const renderBarCode = () => {
-    JsBarcode("#barcode", barcodeInput, {
-      fontSize: 20,
-      background: "#ffffff",
-      lineColor: "#000000",
-      format: barcodeType,
-    });
+    errorStatus(false);
+    try {
+      JsBarcode("#barcode", getValues("barcodeInput"), {
+        fontSize: 20,
+        background: "#ffffff",
+        lineColor: "#000000",
+        format: getValues("barcodeType"),
+      });
+    } catch (error: any) {
+      errorStatus(true, error);
+    }
   };
 
   useEffect(() => {
     renderBarCode();
-  }, [example]);
+  }, [examples]);
 
   return (
     <form
@@ -121,18 +134,14 @@ const BarCodeGenerator = (props: Props) => {
                 <div className="relative">
                   <input
                     type="text"
-                    value={barcodeInput}
                     placeholder="Input barcode..."
                     className="rounded-md relative text-primary bg-primary p-2 shadow-lg"
-                    {...register("barcodeText", {
+                    {...register("barcodeInput", {
                       required: true,
-                      onChange: (e) => {
-                        handleBarCodeInput(e);
-                      },
                     })}
                   />
                 </div>
-                {errors.barcodeText?.type === "required" && (
+                {errors.barcodeInput?.type === "required" && (
                   <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
                     Please input barcode text !
                   </span>
@@ -194,15 +203,17 @@ const BarCodeGenerator = (props: Props) => {
                 </button>
               </div>
             </div>
-            <div>
-              <span className="text-primary text-lg">
-                Example Format: {example}{" "}
-              </span>
-            </div>
-            <div className="flex flex-cols">
+            <div className="flex flex-col">
               <div>
                 <svg id="barcode" />
               </div>
+            </div>
+            <div>
+              {isError && (
+                <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                  {errorMessage} 
+                </span>
+              )}
             </div>
           </div>
         </div>
