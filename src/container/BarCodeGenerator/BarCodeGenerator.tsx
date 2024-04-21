@@ -170,7 +170,6 @@ const BarCodeGenerator = (props: Props) => {
                     hover:bg-lime-400
                     dark:bg-lime-300
                     dark:hover:bg-lime-500"
-                  // onClick={onClickGenerateBarCode}
                 >
                   Generate
                 </button>
