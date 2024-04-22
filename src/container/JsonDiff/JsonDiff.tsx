@@ -2,7 +2,6 @@ import React, { SyntheticEvent, useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import "./JsonDiff.css";
-
 import * as diff from "diff";
 
 // import { Differ } from 'json-diff-kit';
@@ -21,24 +20,13 @@ interface IJsonDiff {
 interface IForm {
   input1: string;
   input2: string;
-  resultInput: any[];
 }
 
-// let initialResult: [DiffResult[], DiffResult[]];
 const initialInput1: any = "";
 const initialInput2: any = "";
 const initialDiff: IJsonDiff[] = [];
 
 const JsonDiff = (props: Props) => {
-  // const d = new Differ({
-  //   detectCircular: true,
-  //   maxDepth: undefined,
-  //   showModifications: true,
-  //   arrayDiffMethod: "lcs",
-  //   ignoreCase: false,
-  //   recursiveEqual: true,
-  // });
-
   const {
     register,
     handleSubmit,
@@ -49,28 +37,15 @@ const JsonDiff = (props: Props) => {
   } = useForm<IForm>();
 
   const [color, setColor] = useState("");
-  // const [input1, setInput1] = useState(initialInput1);
-  // const [input2, setInput2] = useState(initialInput2);
-  // const [isError, setIsError] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState("");
   const [diffData, setDiffData] = useState(initialDiff);
-  const resultArrays: any[] = watch("resultInput");
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {}, []);
-  // const handleInput1 = ($event: SyntheticEvent<EventTarget>) => {
-  //   const input1 = ($event.target as HTMLInputElement).value;
-  //   setInput1(input1);
-  // };
-
-  // const handleInput2 = ($event: SyntheticEvent<EventTarget>) => {
-  //   const input2 = ($event.target as HTMLInputElement).value;
-  //   setInput2(input2);
-  // };
-
   const onDiffJson = () => {
     setDiffData([]);
     try {
-      const diffs = diff.diffJson(getValues("input1"), getValues("input2"));
+      const diffs = diff.diffJson(JSON.parse(getValues("input1")), JSON.parse(getValues("input2")));
       diffs.forEach((part) => {
         const color = part.added
           ? "added-color"
@@ -85,19 +60,18 @@ const JsonDiff = (props: Props) => {
           color: color,
         };
         setDiffData((prevItem: any) => [...prevItem, data]);
+        setIsError(false);
+        setErrorMessage('')
       });
     } catch (error) {
-      // setIsError(true);
-      // setErrorMessage("Invalid json");
-      console.log("error", error);
+      setIsError(true);
+      setErrorMessage("Invalid json");
     }
   };
 
   const onSubmit: SubmitHandler<IForm> = (data) => {
     setValue("input1", data.input1);
     setValue("input2", data.input2);
-
-    console.log("sss");
     onDiffJson();
   };
 
@@ -143,7 +117,7 @@ const JsonDiff = (props: Props) => {
           <div className="flex-initial w-80">
             <div className="flex flex-col h-[45vh]">
               <div className="basis-1/4 items-end m-auto">
-                {/* {isError ? (
+                {isError ? (
                   <div>
                     <div className="p-4 bg-red-200 border border-1 border-red-500">
                       <span className="font-bold text-red-600 items-center">
@@ -151,7 +125,7 @@ const JsonDiff = (props: Props) => {
                       </span>
                     </div>
                   </div>
-                ) : null} */}
+                ) : null}
               </div>
               <div className="basis-1/2  items-end m-auto">
                 <button
@@ -175,7 +149,6 @@ const JsonDiff = (props: Props) => {
               dark:hover:bg-cyan-400
               dark:text-dark-300
               "
-                  // onClick={onCompare}
                 >
                   Compare
                 </button>
@@ -209,7 +182,6 @@ const JsonDiff = (props: Props) => {
             rounded-md
             bg-secondary  
           "
-                // onChange={handleInput2}
                 {...register("input2", {
                   required: true,
                 })}
