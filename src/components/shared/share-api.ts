@@ -1,4 +1,3 @@
-import { IGeolocation } from "../../model/geolocation.model";
 import http from "../shared/http-common";
 
 
@@ -19,7 +18,7 @@ class sharedService {
     }
 
     public getIpAddress(): any {
-        return http.get<any>('http://ip-api.com/json');
+        return http.get<any>('https://api.ipify.org?format=json');
     }
 
 
