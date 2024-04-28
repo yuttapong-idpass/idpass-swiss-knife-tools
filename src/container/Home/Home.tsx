@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import JsonPretty from "../JsonPretty/JsonPretty";
-import FromBase64 from "../Base64Image/Base64Image";
-import JWTEncodeDecode from "../JsonWebToken/JsonWebToken";
 
 import JSONImage from "../../assets/images/json.png";
 import Base64Image from "../../assets/images/base-64.png";
@@ -113,7 +110,7 @@ const Home = (props: Props) => {
                   type="button"
                   className="font-bold text-neutral-700 text-white w-72 h-32 rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 mb-2 bg-gray-300"
                 >
-                  <img className="w-14 h-14 mr-2 -ml-1" src={item.image} />
+                  <img title="name" className="w-14 h-14 mr-2 -ml-1" src={item.image} />
                   <span className="text-2xl">{item.name}</span>
                 </button>
               </div>
