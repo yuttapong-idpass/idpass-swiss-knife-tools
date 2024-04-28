@@ -1,3 +1,4 @@
+import { IGeolocation } from "../../model/geolocation.model";
 import http from "../shared/http-common";
 
 
@@ -16,6 +17,13 @@ class sharedService {
     public getAllTumbol(): any { 
         return http.get<any>('/kongvut/thai-province-data/master/api_tambon.json');
     }
+
+    public getIpAddress(): any {
+        return http.get<any>('http://ip-api.com/json');
+    }
+
+
+
 }
 
 

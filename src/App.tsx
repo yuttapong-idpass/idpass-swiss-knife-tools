@@ -4,11 +4,7 @@ import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
 import { setupFirebase } from "./utils/firebase";
 import Home from "./container/Home/Home";
 import Menu from "./container/Menu/Menu";
-import JsonPretty from "./container/JsonPretty/JsonPretty";
-import Base64Image from "./container/Base64Image/Base64Image";
-import JsonWebToken from "./container/JsonWebToken/JsonWebToken";
-import IdCardGenerator from "./container/RandomThaiIdCard/RandomThaiIdCard";
-import MockIdCard from "./container/MockIdCard/MockIdCard";
+import IdCardGenerator from "./container/Generator/RandomThaiIdCard/RandomThaiIdCard";
 import Sidebar, { SidebarItem } from "./components/SideBar/SideBar";
 
 import { FaHome, FaBarcode } from "react-icons/fa";
@@ -19,11 +15,16 @@ import {
   BsKey,
   BsFileEarmarkDiff,
 } from "react-icons/bs";
-import { MdOutlineSecurity } from "react-icons/md";
+import { TbNetwork } from "react-icons/tb";
 
 import JsonWebTokenIcon from "./assets/images/svg/json-web-token.svg";
-import JsonDiff from "./container/JsonDiff/JsonDiff";
-import BarCodeGenerator from "./container/BarCodeGenerator/BarCodeGenerator";
+import BarCodeGenerator from "./container/Generator/BarCodeGenerator/BarCodeGenerator";
+import JsonPretty from "./container/Development/JsonPretty/JsonPretty";
+import Base64Image from "./container/Convertor/Base64Image/Base64Image";
+import JsonWebToken from "./container/Crypto/JsonWebToken/JsonWebToken";
+// import MockIdCard from "./container/Development/MockIdCard/MockIdCard";
+import JsonDiff from "./container/Development/JsonDiff/JsonDiff";
+import PublicIP from "./container/Network/PublicIP";
 
 function App() {
   let menuList = [
@@ -90,6 +91,19 @@ function App() {
         },
       ],
     },
+    {
+      id: 5,
+      title: "Network",
+      active: true,
+      menuLists: [
+        {
+          name: "My IP Address",
+          icon: <TbNetwork size={20} />,
+          active: true,
+          link: "/public-ip",
+        },
+      ],
+    },
   ];
 
   const [items, setItems] = useState(menuList);
@@ -137,8 +151,9 @@ function App() {
             <Route path="/base64Image" element={<Base64Image />} />
             <Route path="/jwt" element={<JsonWebToken />} />
             <Route path="/id-card-random" element={<IdCardGenerator />} />
-            <Route path="/mock-up" element={<MockIdCard />} />
+            {/* <Route path="/mock-up" element={<MockIdCard />} /> */}
             <Route path="/barcode-generator" element={<BarCodeGenerator />} />
+            <Route path="/public-ip" element={<PublicIP />}></Route>
           </Routes>
         </BrowserRouter>
       </div>

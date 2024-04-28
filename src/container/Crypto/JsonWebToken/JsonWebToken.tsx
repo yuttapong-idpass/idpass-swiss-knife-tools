@@ -1,6 +1,6 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../store/store";
+import { useAppDispatch } from "../../../store/store";
 
 import * as jose from "jose";
 
@@ -339,7 +339,7 @@ const JsonWebToken = (props: Props) => {
                   bg-primary 
                   "
                   onChange={handleSecretKey}
-                />
+                /> {" "}
                 )
               </div>
               <div>

@@ -3,10 +3,10 @@ import DOMPurify from "dompurify";
 import CopyToClipboardImage from "../../assets/images/documents.png";
 import "./Base64Image.css";
 import { useSelector } from "react-redux";
-import { IDescription } from "../../store/slice/Base64Slice";
+import { IDescription } from "../../../store/slice/Base64Slice";
 
 import { FaFolderOpen, FaTrashCan, FaCopy } from "react-icons/fa6";
-import ToastNotify from "../../components/ToastNotify/ToastNotify";
+import ToastNotify from "../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
 type Props = {};
 
@@ -43,7 +43,7 @@ const Base64Image = (props: Props) => {
     const images = new Image();
     let base64String: any = base64Text;
     let imageData: any;
-    let mimeType = base64Text.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/);
+    let mimeType = base64Text.match(new RegExp(/[^:]\w+\/[\w-+\d.]+(?=;|,)/));
     if (!!base64String) {
       if (mimeType) {
         if (mimeType[0] === "image/svg+xml") {

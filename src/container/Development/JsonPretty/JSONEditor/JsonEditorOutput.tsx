@@ -1,29 +1,23 @@
-import React, {
-  createRef,
-  useEffect,
-  useState,
-  useContext,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { saveAs } from "file-saver";
 import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
 import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
-import { ThemeContext } from "../../../providers/ThemeProvider";
+import { ThemeContext } from "../../../../providers/ThemeProvider";
 import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
-import ToastNotify from "../../../components/ToastNotify/ToastNotify";
-import "./JsonEditorInput.css";
+import "./JsonEditorOutput.css";
+import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
+
 type Props = {
-  onChangeText: any;
+  text: any;
   onError: any;
 };
 
-const JsonEditorInput = (props: Props) => {
+const JsonEditorOutput = (props: Props) => {
   const { theme, setTheme } = useContext(ThemeContext);
   const isDark = theme === "dark";
-
   const refContainer = useRef<HTMLDivElement>(null);
   const refEditor = useRef<JSONEditor | null>(null);
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
@@ -33,11 +27,11 @@ const JsonEditorInput = (props: Props) => {
     refEditor.current = new JSONEditor({
       target: refContainer.current!,
       props: {
-        onChange(content: any, previousContent, status) {
-          props.onChangeText(JSON.parse(content.text));
+        onChange(content: any, previousContent, { contentErrors }) {
+          console.log("content errors", contentErrors);
         },
-        onError(error: Error) {
-          props.onError(error);
+        onError(err: Error) {
+          props.onError(err);
         },
         mode: Mode.text,
       },
@@ -54,7 +48,13 @@ const JsonEditorInput = (props: Props) => {
   useEffect(() => {
     // update props
     if (refEditor.current) {
-      refEditor.current.updateProps(props);
+      if (typeof props.text === "string") {
+        refEditor.current.update({ text: props.text });
+      }
+
+      if (typeof props.text === "object") {
+        refEditor.current.update({ json: props.text });
+      }
     }
   }, [props]);
 
@@ -73,10 +73,10 @@ const JsonEditorInput = (props: Props) => {
     } else {
       reader.onload = () => {
         refEditor.current?.update({ json: JSON.parse(reader.result) });
-        props.onChangeText(refEditor.current?.get());
+        // props.onChangeText(refEditor.current?.get());
       };
       reader.readAsText($event.target.files[0]);
-      $event.target.value = null; 
+      $event.target.value = "";
     }
   };
 
@@ -116,30 +116,29 @@ const JsonEditorInput = (props: Props) => {
     try {
       const getCurrentValue: any = refEditor.current?.get();
       if (!!getCurrentValue.text) {
-        await navigator.clipboard.writeText(getCurrentValue?.text);
+        await navigator.clipboard.writeText(getCurrentValue.text);
       }
 
       if (!!getCurrentValue.json) {
-        await navigator.clipboard.writeText(JSON.stringify(getCurrentValue?.json, null, 4));
+        await navigator.clipboard.writeText(JSON.stringify(getCurrentValue.json, null, 4));
       }
       toast.success("Copies!");
     } catch (error) {
-      console.log("error -> ", error);
+      console.log("error ->", error);
     }
   };
-
   return (
     <div
-      className={`${toggleFullScreen ? "fullscreen" : "mt-3 ml-3"} shadow-xl`}
+      className={`${toggleFullScreen ? "fullscreen" : "mt-3 mr-3"} shadow-xl`}
       id="jsonEditorInput"
     >
       <ToastNotify />
       <div
         className={
-          "flex justify-between p-2 gap-2 w-full h-10  text-[#ffffff] bg-[#007ac7] dark:bg-[#007ac7] "
+          "flex justify-between p-2 gap-2 w-full h-10 text-[#ffffff] bg-[#007ac7] dark:bg-[#007ac7] "
         }
       >
-        <div>Input Panel</div>
+        <div>Output Panel</div>
         <div className="flex gap-3">
           <div>
             <div className="image-upload">
@@ -201,4 +200,4 @@ const JsonEditorInput = (props: Props) => {
   );
 };
 
-export default JsonEditorInput;
+export default JsonEditorOutput;

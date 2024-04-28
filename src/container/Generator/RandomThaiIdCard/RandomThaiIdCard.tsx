@@ -2,7 +2,7 @@ import React, { SyntheticEvent, useState } from "react";
 import SuccessImage from "../../assets/images/check.png";
 import FailImage from "../../assets/images/cross.png";
 import "./RandomThaiIdCard.css";
-import ToastNotify from "../../components/ToastNotify/ToastNotify";
+import ToastNotify from "../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
 type Props = {};
 
