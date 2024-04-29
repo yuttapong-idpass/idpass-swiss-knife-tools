@@ -9,6 +9,7 @@ import DarkLightToggle from "../DarkLightToggle/DarkLightToggle";
 import { Link } from "react-router-dom";
 
 import Tools from "../../assets/images/tools.png";
+import BeeTools from "../../assets/images/bee.png";
 import "./SideBar.css";
 
 type Props = {
@@ -36,16 +37,21 @@ export default function Sidebar({ children }: Props) {
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               title="logo"
-              src={Tools}
+              src={BeeTools}
               className={`overflow-hidden transition-all ${
                 expanded ? "w-12" : "w-0"
               }`}
             />
 
             {expanded ? (
-              <span className="text-primary dark:text-warning font-bold">
-                IDPASS TOOLS
-              </span>
+              <div>
+                <span className="text-primary dark:text-warning text-lg font-bold">
+                  Buzz Tools
+                </span>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  tools for developer
+                </p>
+              </div>
             ) : null}
 
             <button
