@@ -16,6 +16,7 @@ import {
   BsFileEarmarkDiff,
 } from "react-icons/bs";
 import { TbNetwork } from "react-icons/tb";
+import { TbFileTypeXml } from "react-icons/tb";
 
 import JsonWebTokenIcon from "./assets/images/svg/json-web-token.svg";
 import BarCodeGenerator from "./container/Generator/BarCodeGenerator/BarCodeGenerator";
@@ -25,6 +26,7 @@ import JsonWebToken from "./container/Crypto/JsonWebToken/JsonWebToken";
 // import MockIdCard from "./container/Development/MockIdCard/MockIdCard";
 import JsonDiff from "./container/Development/JsonDiff/JsonDiff";
 import PublicIP from "./container/Network/PublicIP";
+import XMLJson from "./container/Development/XMLJson/XMLJson";
 
 function App() {
   let menuList = [
@@ -37,13 +39,19 @@ function App() {
           name: "Json Pretty",
           icon: <TbJson size={20} />,
           active: true,
-          link: "/json-editor",
+          link: "/json-pretty",
         },
         {
           name: "Json Diff",
           icon: <BsFileEarmarkDiff size={20} />,
           active: true,
           link: "/json-diff",
+        },
+        {
+          name: "XML To Json",
+          icon: <TbFileTypeXml size={20} />,
+          active: true,
+          link: "/xml-pretty",
         },
       ],
     },
@@ -146,8 +154,9 @@ function App() {
           </Sidebar>
           <Routes>
             <Route path="/" element={<JsonPretty />} />
-            <Route path="/json-editor" element={<JsonPretty />} />
+            <Route path="/json-pretty" element={<JsonPretty />} />
             <Route path="/json-diff" element={<JsonDiff />} />
+            <Route path="/xml-pretty" element={<XMLJson />} />
             <Route path="/base64Image" element={<Base64Image />} />
             <Route path="/jwt" element={<JsonWebToken />} />
             <Route path="/id-card-random" element={<IdCardGenerator />} />

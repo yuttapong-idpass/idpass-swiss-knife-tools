@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import sharedService from "../../components/shared/share-api";
 
 import "./PublicIP.css";
+import Loading from "../../components/Loading/Loading";
 
 const initialIp = {
   ip: "",
@@ -43,7 +44,8 @@ const PublicIP = () => {
                   </>
                 ) : (
                   <>
-                    <span className="loader"></span>
+                    <Loading>
+                    </Loading>
                   </>
                 )}
               </div>
