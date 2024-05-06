@@ -3,6 +3,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 import "./JsonDiff.css";
 import * as diff from "diff";
+import ReactCodeMirror from "@uiw/react-codemirror";
+import { githubDark } from "@uiw/codemirror-themes-all";
+import { xmlLanguage } from "@codemirror/lang-xml";
 
 // import { Differ } from 'json-diff-kit';
 // import "json-diff-kit/dist/viewer.css";
@@ -39,13 +42,16 @@ const JsonDiff = (props: Props) => {
   const [color, setColor] = useState("");
   const [diffData, setDiffData] = useState(initialDiff);
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {}, []);
   const onDiffJson = () => {
     setDiffData([]);
     try {
-      const diffs = diff.diffJson(JSON.parse(getValues("input1")), JSON.parse(getValues("input2")));
+      const diffs = diff.diffJson(
+        JSON.parse(getValues("input1")),
+        JSON.parse(getValues("input2"))
+      );
       diffs.forEach((part) => {
         const color = part.added
           ? "added-color"
@@ -61,7 +67,7 @@ const JsonDiff = (props: Props) => {
         };
         setDiffData((prevItem: any) => [...prevItem, data]);
         setIsError(false);
-        setErrorMessage('')
+        setErrorMessage("");
       });
     } catch (error) {
       setIsError(true);

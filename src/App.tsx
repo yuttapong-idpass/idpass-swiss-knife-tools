@@ -1,13 +1,12 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
-import { setupFirebase } from "./utils/firebase";
 import Home from "./container/Home/Home";
 import Menu from "./container/Menu/Menu";
 import IdCardGenerator from "./container/Generator/RandomThaiIdCard/RandomThaiIdCard";
 import Sidebar, { SidebarItem } from "./components/SideBar/SideBar";
 
-import { FaHome, FaBarcode } from "react-icons/fa";
+import { FaBarcode } from "react-icons/fa";
 import { TbJson } from "react-icons/tb";
 import {
   BsImage,
@@ -16,9 +15,9 @@ import {
   BsFileEarmarkDiff,
 } from "react-icons/bs";
 import { TbNetwork } from "react-icons/tb";
-import { TbFileTypeXml } from "react-icons/tb";
+import { PiBracketsCurly } from "react-icons/pi";
+import { PiBracketsAngleBold } from "react-icons/pi";
 
-import JsonWebTokenIcon from "./assets/images/svg/json-web-token.svg";
 import BarCodeGenerator from "./container/Generator/BarCodeGenerator/BarCodeGenerator";
 import JsonPretty from "./container/Development/JsonPretty/JsonPretty";
 import Base64Image from "./container/Convertor/Base64Image/Base64Image";
@@ -27,6 +26,7 @@ import JsonWebToken from "./container/Crypto/JsonWebToken/JsonWebToken";
 import JsonDiff from "./container/Development/JsonDiff/JsonDiff";
 import PublicIP from "./container/Network/PublicIP";
 import XMLJson from "./container/Development/XMLJson/XMLJson";
+import XMLPretty from "./container/Development/XMLPretty/XMLPretty";
 
 function App() {
   let menuList = [
@@ -49,10 +49,16 @@ function App() {
         },
         {
           name: "XML To Json",
-          icon: <TbFileTypeXml size={20} />,
+          icon: <PiBracketsCurly size={20} />,
           active: true,
-          link: "/xml-pretty",
+          link: "/xml-to-json",
         },
+        {
+          name: 'XML Pretty',
+          icon: <PiBracketsAngleBold size={20} />,
+          active: true,
+          link: '/xml-pretty'
+        }
       ],
     },
     {
@@ -156,7 +162,8 @@ function App() {
             <Route path="/" element={<JsonPretty />} />
             <Route path="/json-pretty" element={<JsonPretty />} />
             <Route path="/json-diff" element={<JsonDiff />} />
-            <Route path="/xml-pretty" element={<XMLJson />} />
+            <Route path="/xml-to-json" element={<XMLJson />} />
+            <Route path="/xml-pretty" element={<XMLPretty />} />
             <Route path="/base64Image" element={<Base64Image />} />
             <Route path="/jwt" element={<JsonWebToken />} />
             <Route path="/id-card-random" element={<IdCardGenerator />} />
