@@ -59,16 +59,19 @@ export default function XMLPretty({}: Props) {
   return (
     <section className="w-full p-2 gap-2 bg-primary">
       <ToastNotify />
-      <div className="grid grid-cols-7">
+      <p className="text-xl font-bold underline underline-offset-1 text-primary">
+        XML Pretty 
+      </p>
+      <div className="grid grid-cols-7 mt-5">
         <div className="col-span-3">
           <div className="flex flex-col">
             <div>
-              <span className="text-lg font-medium text-primary">Input</span>
+              <span className="text-md font-bold text-primary">Input</span>
             </div>
             <div>
               <ReactCodeMirror
                 value={input}
-                height="95vh"
+                height="90vh"
                 theme={isDark ? githubDark : githubLight}
                 extensions={[xmlLanguage]}
                 onChange={handleInput}
@@ -78,7 +81,7 @@ export default function XMLPretty({}: Props) {
           </div>
         </div>
         <div className="col-span-1">
-          <div className="grid place-items-center h-[95vh]">
+          <div className="grid place-items-center h-[90vh]">
             <div>
               <button
                 title="xml pretty"
@@ -93,12 +96,12 @@ export default function XMLPretty({}: Props) {
         <div className="col-span-3">
           <div className="flex flex-col">
             <div>
-              <span className="text-lg font-medium text-primary">Output</span>
+              <span className="text-md font-bold text-primary">Output</span>
             </div>
             <div>
               <ReactCodeMirror
                 value={output}
-                height="95vh"
+                height="90vh"
                 theme={isDark ? githubDark : githubLight}
                 extensions={[xmlLanguage]}
                 onChange={handleOutput}
