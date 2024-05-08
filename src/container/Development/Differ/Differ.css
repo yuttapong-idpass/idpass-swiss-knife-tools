@@ -13,12 +13,12 @@
     font-family: 'chakrapetchMedium';
 }
 
-.added-color { 
+.added-color {
     background-color: #eaf2c2;
     color: #406619;
 }
 
-.remove-color { 
+.remove-color {
     color: #b30000;
     background-color: #fadad7;
 }
@@ -38,4 +38,25 @@
 
 .json-diff-viewer {
     font-family: 'chakrapetchMedium';
+}
+
+
+.font-style {
+    font-family: 'chakrapetchMedium';
+}
+
+/* .cm-editor.cm-focused {
+    outline: 2px solid cyan
+} */
+
+.cm-editor .cm-content {
+    font-family: 'chakrapetchMedium'
+}
+
+.code-panel { 
+    overflow: auto;
+}
+
+.holder { 
+    display: flex;
 }

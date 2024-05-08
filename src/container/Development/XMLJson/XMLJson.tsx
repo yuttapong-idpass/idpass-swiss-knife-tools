@@ -73,7 +73,7 @@ const XMLJson = (props: Props) => {
                 height="90vh"
                 theme={isDark ? githubDark : githubLight}
                 extensions={[xmlLanguage]}
-                className="shadow-lg border border-1 dark:border-0"
+                className="shadow-lg text-base border border-1 dark:border-0"
                 onChange={handleInput}
               />
             </div>
@@ -103,7 +103,7 @@ const XMLJson = (props: Props) => {
                 height="90vh"
                 theme={isDark ? githubDark : githubLight}
                 extensions={[jsonLanguage]}
-                className="shadow-lg border border-1 dark:border-0"
+                className="shadow-lg text-base border border-1 dark:border-0"
                 onChange={handleOutput}
               />
             </div>

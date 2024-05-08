@@ -23,7 +23,7 @@ import JsonPretty from "./container/Development/JsonPretty/JsonPretty";
 import Base64Image from "./container/Convertor/Base64Image/Base64Image";
 import JsonWebToken from "./container/Crypto/JsonWebToken/JsonWebToken";
 // import MockIdCard from "./container/Development/MockIdCard/MockIdCard";
-import JsonDiff from "./container/Development/JsonDiff/JsonDiff";
+import Differ from "./container/Development/Differ/Differ";
 import PublicIP from "./container/Network/PublicIP";
 import XMLJson from "./container/Development/XMLJson/XMLJson";
 import XMLPretty from "./container/Development/XMLPretty/XMLPretty";
@@ -42,10 +42,10 @@ function App() {
           link: "/json-pretty",
         },
         {
-          name: "Json Diff",
+          name: "Differ",
           icon: <BsFileEarmarkDiff size={20} />,
           active: true,
-          link: "/json-diff",
+          link: "/differ",
         },
         {
           name: "XML To Json",
@@ -161,7 +161,7 @@ function App() {
           <Routes>
             <Route path="/" element={<JsonPretty />} />
             <Route path="/json-pretty" element={<JsonPretty />} />
-            <Route path="/json-diff" element={<JsonDiff />} />
+            <Route path="/differ" element={<Differ />} />
             <Route path="/xml-to-json" element={<XMLJson />} />
             <Route path="/xml-pretty" element={<XMLPretty />} />
             <Route path="/base64Image" element={<Base64Image />} />

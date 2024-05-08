@@ -75,7 +75,7 @@ export default function XMLPretty({}: Props) {
                 theme={isDark ? githubDark : githubLight}
                 extensions={[xmlLanguage]}
                 onChange={handleInput}
-                className="test-wrap shadow-lg border border-1 dark:border-0"
+                className="test-wrap text-base shadow-lg border border-1 dark:border-0"
               />
             </div>
           </div>
@@ -105,7 +105,7 @@ export default function XMLPretty({}: Props) {
                 theme={isDark ? githubDark : githubLight}
                 extensions={[xmlLanguage]}
                 onChange={handleOutput}
-                className="test-wrap shadow-lg border border-1 dark:border-0"
+                className="test-wrap text-base shadow-lg border border-1 dark:border-0"
               />
             </div>
           </div>
