@@ -155,8 +155,9 @@ export default function Differ(props: Props) {
           <div className="bg-secondary mt-2 h-[45vh] code-panel">
             {diffData.map((item: any, index: any) => (
               <pre className="flex flex-row" key={index}>
-                <span className={`text-primary p-2 border-r-2`}>{index}</span>
-                <span className={`${item.color} p-2`}>{item.value}</span>
+                {/* <span className={`text-primary p-2 border-r-2`}>{index}</span>
+                <span className={`${item.color} p-2`}>{item.value}</span> */}
+                <TextWithLineNumbers text={item.value}/>
               </pre>
             ))}
           </div>

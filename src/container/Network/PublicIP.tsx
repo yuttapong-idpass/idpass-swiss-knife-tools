@@ -44,8 +44,7 @@ const PublicIP = () => {
                   </>
                 ) : (
                   <>
-                    <Loading>
-                    </Loading>
+                    <Loading />
                   </>
                 )}
               </div>
