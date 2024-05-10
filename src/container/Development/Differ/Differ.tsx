@@ -41,10 +41,14 @@ export default function Differ(props: Props) {
 
   const [firstPanel, setFirstPanel] = useState("");
   const [secondPanel, setSecondPanel] = useState("");
+  const [result, setResult] = useState("");
   const [color, setColor] = useState("");
   const [diffData, setDiffData] = useState(initialDiff);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+  }, []);
 
   const onDiffJson = () => {
     setDiffData([]);
@@ -91,6 +95,43 @@ export default function Differ(props: Props) {
     },
     [secondPanel]
   );
+
+  function renderLineNumbers(pre: any) {
+    var offsetTop = window
+      .getComputedStyle(pre, null)
+      .getPropertyValue("padding-top");
+
+    pre.classList.add("line-numbers-code");
+
+    // Add class after clone
+    var wrapper = document.createElement("pre");
+    wrapper.classList.add("line-numbers-wrapper");
+
+    // Create line numbers
+    var lines = pre.innerHTML.split("\n");
+
+    if (lines[lines.length - 1] === "</code>") {
+      var closingTag = lines.pop();
+      lines[lines.length - 1] += closingTag;
+    }
+
+    wrapper.innerHTML =
+      "<code>" +
+      lines
+        .map(function (_: any, i: any) {
+          return padLeft(i + 1 + "│", 4);
+        })
+        .join("\n") +
+      "</code>";
+    pre.style.top = offsetTop; // Offset clone by whatever padding you have set in app
+
+    pre.parentNode.replaceChild(wrapper, pre);
+    wrapper.appendChild(pre);
+  }
+
+  function padLeft(str: any, l: any) {
+    return Array(l - str.length + 1).join(" ") + str;
+  }
 
   return (
     <section className="w-full p-2 gap-2 bg-primary">
@@ -153,13 +194,9 @@ export default function Differ(props: Props) {
         </div>
         <div className="row-span-1">
           <div className="bg-secondary mt-2 h-[45vh] code-panel">
-            {diffData.map((item: any, index: any) => (
-              <pre className="flex flex-row" key={index}>
-                {/* <span className={`text-primary p-2 border-r-2`}>{index}</span>
-                <span className={`${item.color} p-2`}>{item.value}</span> */}
-                <TextWithLineNumbers text={item.value}/>
-              </pre>
-            ))}
+            <pre>
+              <code>{diffData.map((data: any, index: number) => (<p key={index}>{data.value}</p>))}</code>
+            </pre>
           </div>
           {/* {diffData.map((item: any, index: any) => (
             <div key={index}>
@@ -211,19 +248,17 @@ export default function Differ(props: Props) {
   );
 }
 
-
-const TextWithLineNumbers = ({ text }: any) => { 
-  const lines = text.split('\n');
+const TextWithLineNumbers = ({ text }: any) => {
+  const lines = text.split("\n");
 
   return (
     <div>
       {lines.map((line: any, index: any) => (
         <div key={index}>
-          <span>{ index + 1}</span>
+          <span>{index + 1}</span>
           <span>{line}</span>
         </div>
       ))}
     </div>
-  )
-
-}
+  );
+};
