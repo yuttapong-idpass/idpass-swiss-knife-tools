@@ -15,6 +15,7 @@ import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
 import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
 import "./JsonEditorInput.css";
 import { toast } from "react-toastify";
+
 type Props = {
   onChangeText: any;
   onError: any;
@@ -23,7 +24,6 @@ type Props = {
 const JsonEditorInput = (props: Props) => {
   const { theme, setTheme } = useContext(ThemeContext);
   const isDark = theme === "dark";
-
   const refContainer = useRef<HTMLDivElement>(null);
   const refEditor = useRef<JSONEditor | null>(null);
   const [toggleFullScreen, setToggleFullScreen] = useState(false);

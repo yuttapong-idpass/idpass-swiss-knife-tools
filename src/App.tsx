@@ -27,6 +27,7 @@ import Differ from "./container/Development/Differ/Differ";
 import PublicIP from "./container/Network/PublicIP";
 import XMLJson from "./container/Development/XMLJson/XMLJson";
 import XMLPretty from "./container/Development/XMLPretty/XMLPretty";
+import Testing from "./container/Development/Testing/Testing";
 
 function App() {
   let menuList = [
@@ -58,6 +59,12 @@ function App() {
           icon: <PiBracketsAngleBold size={20} />,
           active: true,
           link: '/xml-pretty'
+        },
+        {
+          name: 'Developer DeBUG PAGE',
+          icon: <PiBracketsAngleBold size={20} />,
+          active: true,
+          link: '/debug'
         }
       ],
     },
@@ -160,6 +167,7 @@ function App() {
           </Sidebar>
           <Routes>
             <Route path="/" element={<JsonPretty />} />
+            <Route path="/debug" element={<Testing />} />
             <Route path="/json-pretty" element={<JsonPretty />} />
             <Route path="/differ" element={<Differ />} />
             <Route path="/xml-to-json" element={<XMLJson />} />

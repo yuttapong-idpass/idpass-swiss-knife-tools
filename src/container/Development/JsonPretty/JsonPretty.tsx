@@ -1,6 +1,7 @@
 import React, { createRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../../store/store";
+// import { useAppDispatch } from "../../../store/store";
+// import useJsonPrettyStore from "../../../store/jsonPrettyStore";
 import "./JsonPretty.css";
 
 import JsonEditorInput from "./JSONEditor/JsonEditorInput";
@@ -13,14 +14,15 @@ const JsonPretty = (props: Props) => {
   const [inputJson, setInputJson] = useState(undefined);
   const [outputJson, setOutputJson] = useState(undefined);
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const handleJsonInput = (text: any) => {
-    setInputJson(text);
+    // setInputJson(text);
+    console.log('text', text);
+    // inputStore({ ['xxx']: 'xxx' });
   };
 
   const handleError = (text: any) => {};
-
   const onClickPretty = () => {
     try {
       setOutputJson(inputJson);
