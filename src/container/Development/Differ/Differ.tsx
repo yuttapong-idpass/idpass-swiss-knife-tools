@@ -47,8 +47,7 @@ export default function Differ(props: Props) {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const onDiffJson = () => {
     setDiffData([]);
@@ -195,7 +194,13 @@ export default function Differ(props: Props) {
         <div className="row-span-1">
           <div className="bg-secondary mt-2 h-[45vh] code-panel">
             <pre>
-              <code>{diffData.map((data: any, index: number) => (<p key={index}>{data.value}</p>))}</code>
+              <code>
+                {diffData.map((data: any, index: number) => (
+                  <div>
+                    <p key={index}>{data.value}</p>
+                  </div>
+                ))}
+              </code>
             </pre>
           </div>
           {/* {diffData.map((item: any, index: any) => (
@@ -247,18 +252,3 @@ export default function Differ(props: Props) {
     </section>
   );
 }
-
-const TextWithLineNumbers = ({ text }: any) => {
-  const lines = text.split("\n");
-
-  return (
-    <div>
-      {lines.map((line: any, index: any) => (
-        <div key={index}>
-          <span>{index + 1}</span>
-          <span>{line}</span>
-        </div>
-      ))}
-    </div>
-  );
-};

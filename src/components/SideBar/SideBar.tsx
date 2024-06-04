@@ -153,7 +153,7 @@ export function SidebarItem(props: SidebarProps) {
                 <Link to={item.link} key={index}>
                   <div className="flex flex-row p-2 text-primary rounded-md hover:bg-primary">
                     <span className="flex-shrink-0">{item.icon}</span>
-                    <span className="ml-3">{expanded ? item.name : ""}</span>
+                    <span className="ml-3 text-sm">{expanded ? item.name : ""}</span>
                   </div>
                 </Link>
               ))}
