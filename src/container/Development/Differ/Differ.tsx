@@ -71,6 +71,7 @@ export default function Differ(props: Props) {
         value: part.value,
         color: color,
       };
+
       setDiffData((prevItem: any) => [...prevItem, data]);
       setIsError(false);
       setErrorMessage("");
@@ -94,43 +95,6 @@ export default function Differ(props: Props) {
     },
     [secondPanel]
   );
-
-  function renderLineNumbers(pre: any) {
-    var offsetTop = window
-      .getComputedStyle(pre, null)
-      .getPropertyValue("padding-top");
-
-    pre.classList.add("line-numbers-code");
-
-    // Add class after clone
-    var wrapper = document.createElement("pre");
-    wrapper.classList.add("line-numbers-wrapper");
-
-    // Create line numbers
-    var lines = pre.innerHTML.split("\n");
-
-    if (lines[lines.length - 1] === "</code>") {
-      var closingTag = lines.pop();
-      lines[lines.length - 1] += closingTag;
-    }
-
-    wrapper.innerHTML =
-      "<code>" +
-      lines
-        .map(function (_: any, i: any) {
-          return padLeft(i + 1 + "│", 4);
-        })
-        .join("\n") +
-      "</code>";
-    pre.style.top = offsetTop; // Offset clone by whatever padding you have set in app
-
-    pre.parentNode.replaceChild(wrapper, pre);
-    wrapper.appendChild(pre);
-  }
-
-  function padLeft(str: any, l: any) {
-    return Array(l - str.length + 1).join(" ") + str;
-  }
 
   return (
     <section className="w-full p-2 gap-2 bg-primary">
@@ -192,8 +156,8 @@ export default function Differ(props: Props) {
           </div>
         </div>
         <div className="row-span-1">
-          <div className="bg-secondary mt-2 h-[45vh] code-panel">
-            <pre>
+          <div className="mt-2 h-[45vh]">
+            {/* <pre>
               <code>
                 {diffData.map((data: any, index: number) => (
                   <div>
@@ -201,7 +165,56 @@ export default function Differ(props: Props) {
                   </div>
                 ))}
               </code>
-            </pre>
+            </pre> */}
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="col-span-2 bg-secondary h-[45vh] code-panel">
+                {diffData.map((item: any, index: number) => (
+                  <pre className="flex flex-row" key={index}>
+                    {/* <span className={`text-primary p-2 border-r-2`}>
+                      {index}
+                    </span> */}
+                    {/* <span className={`${item.remove ? "remove-color" : ""} text-primary p-2`}>
+                      { !item.added && item.value }
+                    </span> */}
+                    {!item.remove && (
+                      <>
+                        <span className={`p-2 border-r-2 ${ item.added ? 'added-color' : 'text-primary' }`}>
+                          { item.added ? '+' : ' ' }
+                        </span>
+                        <span
+                          className={`${
+                            item.added ? "added-color" : "text-primary"
+                          } p-2`}
+                        >
+                          {item.value}
+                        </span>
+                      </>
+                    )}
+                  </pre>
+                ))}
+              </div>
+              {/* <div className="col-span-1 bg-secondary h-[45vh] code-panel">
+                {diffData.map((item: any, index: number) => (
+                  <pre className="flex flex-row" key={index}>
+                    {!item.added && (
+                      <>
+                        <span className={`p-2 border-r-2 ${ item.remove ? 'remove-color' : 'text-primary' }`}>
+                          { item.remove ? '-' : ' ' }
+                        </span>
+                        <span
+                          className={`${
+                            item.remove ? "remove-color" : "text-primary"
+                          } p-2`}
+                        >
+                          {item.value}
+                        </span>
+                      </>
+                    )}
+                  </pre>
+                ))}
+              </div> */}
+            </div>
           </div>
           {/* {diffData.map((item: any, index: any) => (
             <div key={index}>
