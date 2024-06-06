@@ -120,7 +120,9 @@ const JsonEditorOutput = (props: Props) => {
       }
 
       if (!!getCurrentValue.json) {
-        await navigator.clipboard.writeText(JSON.stringify(getCurrentValue.json, null, 4));
+        await navigator.clipboard.writeText(
+          JSON.stringify(getCurrentValue.json, null, 4)
+        );
       }
       toast.success("Copies!");
     } catch (error) {
@@ -191,7 +193,7 @@ const JsonEditorOutput = (props: Props) => {
         </div>
       </div>
       <div
-        className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${
+        className={`${toggleFullScreen ? "h-screen" : "h-[87vh]"} ${
           isDark ? "jse-theme-dark" : "input-json"
         }`}
         ref={refContainer}

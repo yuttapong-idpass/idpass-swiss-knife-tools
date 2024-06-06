@@ -14,6 +14,7 @@ import {
   BsKey,
   BsFileEarmarkDiff,
 } from "react-icons/bs";
+import { CgDebug } from "react-icons/cg";
 import { TbNetwork } from "react-icons/tb";
 import { PiBracketsCurly } from "react-icons/pi";
 import { PiBracketsAngleBold } from "react-icons/pi";
@@ -62,7 +63,7 @@ function App() {
         },
         {
           name: 'Developer DeBUG PAGE',
-          icon: <PiBracketsAngleBold size={20} />,
+          icon: <CgDebug size={20} />,
           active: true,
           link: '/debug'
         }

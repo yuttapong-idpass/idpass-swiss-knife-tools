@@ -1,6 +1,5 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../../store/store";
 
 import * as jose from "jose";
 
@@ -23,6 +22,8 @@ const initialPayload: any = JSON.stringify({});
 const initialHeaders: any = JSON.stringify({});
 
 const JsonWebToken = (props: Props) => {
+
+
   const options = [
     { value: "encode", text: "encode" },
     { value: "decode", text: "decode" },

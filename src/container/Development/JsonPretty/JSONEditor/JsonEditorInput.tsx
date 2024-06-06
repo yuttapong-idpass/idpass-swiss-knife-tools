@@ -192,7 +192,7 @@ const JsonEditorInput = (props: Props) => {
         </div>
       </div>
       <div
-        className={`${toggleFullScreen ? "h-screen" : "h-[93vh]"} ${
+        className={`${toggleFullScreen ? "h-screen" : "h-[87vh]"} ${
           isDark ? "jse-theme-dark" : "input-json"
         }`}
         ref={refContainer}
