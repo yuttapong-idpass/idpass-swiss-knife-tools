@@ -183,7 +183,7 @@ export default function Differ(props: Props) {
                     className="inline-flex w-full items-center justify-center px-4 py-2 text-base font-medium text-[#ffffff] dark:text-dark-300 whitespace-no-wrap bg-success rounded-md shadow-sm bg-lime-500 hover:bg-lime-400 dark:bg-lime-300 dark:hover:bg-lime-500"
                     onClick={onDiffJson}
                   >
-                    Pretty
+                    Compare 
                   </button>
                 </div>
               </div>
@@ -210,29 +210,59 @@ export default function Differ(props: Props) {
         </div>
         <div className="row-span-1">
           <div className="mt-2 h-[45vh]">
-            {/* <pre>
-              <code>
-                {diffData.map((data: any, index: number) => (
-                  <div>
-                    <p key={index}>{data.value}</p>
-                  </div>
-                ))}
-              </code>
-            </pre> */}
-
             <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-1 h-[45vh]">
-                    { resultDiff.map((data, index) => (
+              <div className="col-span-1 h-[45vh] code-panel bg-secondary">
+                <div className="flex flex-row">
+                  <div className={`p-2 ${ resultDiff.length && 'border-r-2'}`}>
+                    {Array.from(Array(removeCount), (e, i) => (
+                      <p className="text-primary">{i + 1}</p>
+                    ))}
+                  </div>
+                  <div className="p-2">
+                    {resultDiff.map((data, index) => (
                       <pre className="flex flex-row" key={index}>
-                        <span className="border-r-2 p-2">
-                          {/* {[...Array(1)].map((e, i) => (
-                            <span>{i}</span>
-                          ))} */}
-                        </span>
+                        <code>
+                          {!data.added && (
+                            <span
+                              className={`${
+                                data.remove ? "remove-color" : "text-primary"
+                              }`}
+                            >
+                              {data.value}
+                            </span>
+                          )}
+                        </code>
                       </pre>
-                    )) }
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="col-span-1 h-[45vh]">xxxx</div>
+              <div className="col-span-1 h-[45vh] code-panel bg-secondary">
+                <div className="flex flex-row">
+                  <div className={`p-2 ${ resultDiff.length && 'border-r-2'}`}>
+                    {Array.from(Array(addedCount), (e, i) => (
+                      <p className="text-primary">{i + 1}</p>
+                    ))}
+                  </div>
+                  <div className="p-2">
+                    {resultDiff.map((data, index) => (
+                      <pre className="flex flex-row" key={index}>
+                        <code>
+                          {!data.remove && (
+                            <span
+                              className={`${
+                                data.added ? "added-color" : "text-primary"
+                              }`}
+                            >
+                              {data.value}
+                            </span>
+                          )}
+                        </code>
+                      </pre>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           {/* {diffData.map((item: any, index: any) => (
