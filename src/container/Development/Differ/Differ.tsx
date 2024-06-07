@@ -12,6 +12,7 @@ import * as diff from "diff";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { githubDark, githubLight } from "@uiw/codemirror-themes-all";
 import { ThemeContext } from "../../../providers/ThemeProvider";
+import useDiffStore from "../../../store/differStore";
 
 // import { Differ } from 'json-diff-kit';
 // import "json-diff-kit/dist/viewer.css";
@@ -41,7 +42,9 @@ export default function Differ(props: Props) {
 
   const [firstPanel, setFirstPanel] = useState("");
   const [secondPanel, setSecondPanel] = useState("");
-  const [result, setResult] = useState("");
+  const [addedCount, setAddedCount] = useState(0);
+  const [removeCount, setRemoveCount] = useState(0);
+  const [resultDiff, setResultDiff] = useState(initialDiff);
   const [color, setColor] = useState("");
   const [diffData, setDiffData] = useState(initialDiff);
   const [isError, setIsError] = useState(false);
@@ -52,34 +55,84 @@ export default function Differ(props: Props) {
   const onDiffJson = () => {
     setDiffData([]);
     // try {
-    const diffs = diff.diffJson(
-      // JSON.parse(firstPanel),
-      // JSON.parse(secondPanel)
-      firstPanel,
-      secondPanel
-    );
-    diffs.forEach((part) => {
+    const diffs = diff.diffJson(firstPanel, secondPanel);
+
+    let sumAddedLine: number = 0;
+    let sumRemoveLine: number = 0;
+
+    // diffs.forEach((part) => {
+    //   const color = part.added
+    //     ? "added-color"
+    //     : part.removed
+    //     ? "remove-color"
+    //     : "text-primary";
+
+    //   if (part.added) {
+    //     sumAddedLine += part.count!;
+    //   }
+
+    //   if (part.removed) {
+    //     sumRemoveLine += part.count!;
+    //   }
+
+    //   if (color === "text-primary") {
+    //     sumAddedLine += part.count!;
+    //     sumRemoveLine += part.count!;
+    //   }
+
+    //   const data = {
+    //     added: part.added,
+    //     count: part.count,
+    //     remove: part.removed,
+    //     value: part.value,
+    //     color: color,
+    //   };
+
+    //   // setDiffData((prevItem: any) => [...prevItem, data]);
+
+    //   // setIsError(false);
+    //   // setErrorMessage("");
+    // });
+    // } catch (error) {
+    //   setIsError(true);
+    //   setErrorMessage("Invalid json");
+    // }
+    const mapDiff = diffs.map((part, index) => {
       const color = part.added
         ? "added-color"
         : part.removed
         ? "remove-color"
         : "text-primary";
-      const data = {
+
+      if (part.added) {
+        sumAddedLine += part.count!;
+      }
+
+      if (part.removed) {
+        sumRemoveLine += part.count!;
+      }
+
+      if (color === "text-primary") {
+        sumAddedLine += part.count!;
+        sumRemoveLine += part.count!;
+      }
+
+      return {
         added: part.added,
         count: part.count,
         remove: part.removed,
         value: part.value,
         color: color,
       };
-
-      setDiffData((prevItem: any) => [...prevItem, data]);
-      setIsError(false);
-      setErrorMessage("");
     });
-    // } catch (error) {
-    //   setIsError(true);
-    //   setErrorMessage("Invalid json");
-    // }
+
+    setAddedCount(sumAddedLine);
+    setRemoveCount(sumRemoveLine);
+    setResultDiff(mapDiff);
+
+    console.log("mapDiff", mapDiff);
+    console.log("sum count add", sumAddedLine);
+    console.log("sum count remove", sumRemoveLine);
   };
 
   const handleFirst = useCallback(
@@ -168,52 +221,18 @@ export default function Differ(props: Props) {
             </pre> */}
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-2 bg-secondary h-[45vh] code-panel">
-                {diffData.map((item: any, index: number) => (
-                  <pre className="flex flex-row" key={index}>
-                    {/* <span className={`text-primary p-2 border-r-2`}>
-                      {index}
-                    </span> */}
-                    {/* <span className={`${item.remove ? "remove-color" : ""} text-primary p-2`}>
-                      { !item.added && item.value }
-                    </span> */}
-                    {!item.remove && (
-                      <>
-                        <span className={`p-2 border-r-2 ${ item.added ? 'added-color' : 'text-primary' }`}>
-                          { item.added ? '+' : ' ' }
+              <div className="col-span-1 h-[45vh]">
+                    { resultDiff.map((data, index) => (
+                      <pre className="flex flex-row" key={index}>
+                        <span className="border-r-2 p-2">
+                          {/* {[...Array(1)].map((e, i) => (
+                            <span>{i}</span>
+                          ))} */}
                         </span>
-                        <span
-                          className={`${
-                            item.added ? "added-color" : "text-primary"
-                          } p-2`}
-                        >
-                          {item.value}
-                        </span>
-                      </>
-                    )}
-                  </pre>
-                ))}
+                      </pre>
+                    )) }
               </div>
-              {/* <div className="col-span-1 bg-secondary h-[45vh] code-panel">
-                {diffData.map((item: any, index: number) => (
-                  <pre className="flex flex-row" key={index}>
-                    {!item.added && (
-                      <>
-                        <span className={`p-2 border-r-2 ${ item.remove ? 'remove-color' : 'text-primary' }`}>
-                          { item.remove ? '-' : ' ' }
-                        </span>
-                        <span
-                          className={`${
-                            item.remove ? "remove-color" : "text-primary"
-                          } p-2`}
-                        >
-                          {item.value}
-                        </span>
-                      </>
-                    )}
-                  </pre>
-                ))}
-              </div> */}
+              <div className="col-span-1 h-[45vh]">xxxx</div>
             </div>
           </div>
           {/* {diffData.map((item: any, index: any) => (

@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 type Props = {
   onChangeText: any;
   onError: any;
+  text?: any
 };
 
 const JsonEditorInput = (props: Props) => {
@@ -54,7 +55,14 @@ const JsonEditorInput = (props: Props) => {
   useEffect(() => {
     // update props
     if (refEditor.current) {
-      refEditor.current.updateProps(props);
+      // refEditor.current.updateProps(props);
+      if (typeof props.text === 'string') {
+        refEditor.current.update({ text: props.text });
+      }
+
+      // if (typeof props.text === 'object') { 
+      //   refEditor.current.update({ json: props.text });        
+      // }
     }
   }, [props]);
 
