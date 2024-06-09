@@ -28,6 +28,7 @@ body {
   --color-bg-warning: #ffed58;
   --color-bg-error: #ef4873;
   --color-bg-information: #50a1f5;
+  --color-button-primary: #FCBA28;
 }
 
 .light {
@@ -40,9 +41,8 @@ body {
   --color-bg-warning: #ffeb3b;
   --color-bg-error: #e91e63;
   --color-bg-information: #2196f3;
+  --color-button-primary: #7b5ea7;
 }
-
-
 
 /* @font-face {
   font-family: "Kanit";

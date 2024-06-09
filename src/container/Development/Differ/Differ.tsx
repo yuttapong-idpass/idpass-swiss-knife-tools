@@ -60,43 +60,6 @@ export default function Differ(props: Props) {
     let sumAddedLine: number = 0;
     let sumRemoveLine: number = 0;
 
-    // diffs.forEach((part) => {
-    //   const color = part.added
-    //     ? "added-color"
-    //     : part.removed
-    //     ? "remove-color"
-    //     : "text-primary";
-
-    //   if (part.added) {
-    //     sumAddedLine += part.count!;
-    //   }
-
-    //   if (part.removed) {
-    //     sumRemoveLine += part.count!;
-    //   }
-
-    //   if (color === "text-primary") {
-    //     sumAddedLine += part.count!;
-    //     sumRemoveLine += part.count!;
-    //   }
-
-    //   const data = {
-    //     added: part.added,
-    //     count: part.count,
-    //     remove: part.removed,
-    //     value: part.value,
-    //     color: color,
-    //   };
-
-    //   // setDiffData((prevItem: any) => [...prevItem, data]);
-
-    //   // setIsError(false);
-    //   // setErrorMessage("");
-    // });
-    // } catch (error) {
-    //   setIsError(true);
-    //   setErrorMessage("Invalid json");
-    // }
     const mapDiff = diffs.map((part, index) => {
       const color = part.added
         ? "added-color"
@@ -129,10 +92,6 @@ export default function Differ(props: Props) {
     setAddedCount(sumAddedLine);
     setRemoveCount(sumRemoveLine);
     setResultDiff(mapDiff);
-
-    console.log("mapDiff", mapDiff);
-    console.log("sum count add", sumAddedLine);
-    console.log("sum count remove", sumRemoveLine);
   };
 
   const handleFirst = useCallback(
@@ -152,12 +111,12 @@ export default function Differ(props: Props) {
   return (
     <section className="w-full p-2 gap-2 bg-primary">
       <p className="text-xl font-bold underline underline-offset-1 text-primary">
-        Code Differ
+        Differ
       </p>
       <div className="grid grid-rows-2 mt-5">
         <div className="row-span-1 h-[40vh]">
-          <div className="grid grid-cols-7">
-            <div className="col-span-3">
+          <div className="grid grid-cols-9">
+            <div className="col-span-4">
               <div className="flex flex-col">
                 <div>
                   <span className="text-md font-bold text-primary">
@@ -167,7 +126,7 @@ export default function Differ(props: Props) {
                 <div>
                   <ReactCodeMirror
                     value={firstPanel}
-                    height="40vh"
+                    height="45vh"
                     theme={isDark ? githubDark : githubLight}
                     onChange={handleFirst}
                     className="shadow-lg border border-1 dark:border-0 text-base"
@@ -180,15 +139,29 @@ export default function Differ(props: Props) {
                 <div>
                   <button
                     title="xml pretty"
-                    className="inline-flex w-full items-center justify-center px-4 py-2 text-base font-medium text-[#ffffff] dark:text-dark-300 whitespace-no-wrap bg-success rounded-md shadow-sm bg-lime-500 hover:bg-lime-400 dark:bg-lime-300 dark:hover:bg-lime-500"
+                    className="inline-flex 
+                    w-full items-center 
+                    justify-center 
+                    px-4 
+                    py-2 
+                    text-base 
+                    font-bold 
+                    whitespace-no-wrap  
+                    rounded-md 
+                    shadow-sm
+                    bg-violet-400
+                    text-white
+                    dark:bg-yellow-500
+                    dark:text-[#2d3748]
+                    "
                     onClick={onDiffJson}
                   >
-                    Compare 
+                    Find Diff
                   </button>
                 </div>
               </div>
             </div>
-            <div className="col-span-3">
+            <div className="col-span-4">
               <div className="flex flex-col">
                 <div>
                   <span className="text-md font-bold text-primary">
@@ -198,7 +171,7 @@ export default function Differ(props: Props) {
                 <div>
                   <ReactCodeMirror
                     value={secondPanel}
-                    height="40vh"
+                    height="45vh"
                     theme={isDark ? githubDark : githubLight}
                     onChange={handleSecond}
                     className="shadow-lg text-base border border-1 dark:border-0"
@@ -209,11 +182,14 @@ export default function Differ(props: Props) {
           </div>
         </div>
         <div className="row-span-1">
-          <div className="mt-2 h-[45vh]">
-            <div className="grid grid-cols-2 gap-3">
+          <p className="text-md font-bold text-primary mt-2">
+            Result
+          </p>
+          <div className="h-[45vh]">
+            <div className="grid grid-cols-2">
               <div className="col-span-1 h-[45vh] code-panel bg-secondary">
                 <div className="flex flex-row">
-                  <div className={`p-2 ${ resultDiff.length && 'border-r-2'}`}>
+                  <div className={`p-2 ${resultDiff.length && "border-r-2"}`}>
                     {Array.from(Array(removeCount), (e, i) => (
                       <p className="text-primary">{i + 1}</p>
                     ))}
@@ -239,7 +215,7 @@ export default function Differ(props: Props) {
               </div>
               <div className="col-span-1 h-[45vh] code-panel bg-secondary">
                 <div className="flex flex-row">
-                  <div className={`p-2 ${ resultDiff.length && 'border-r-2'}`}>
+                  <div className={`p-2 ${resultDiff.length && "border-r-2"}`}>
                     {Array.from(Array(addedCount), (e, i) => (
                       <p className="text-primary">{i + 1}</p>
                     ))}
@@ -265,50 +241,6 @@ export default function Differ(props: Props) {
               </div>
             </div>
           </div>
-          {/* {diffData.map((item: any, index: any) => (
-            <div key={index}>
-              <span className={`${item.color}`}>{item.value}</span>
-            </div>
-          ))} */}
-          {/* <div className="holder">
-            <div>
-              <pre id="lines"></pre>
-            </div>
-            <div>
-              <pre id="code">
-                {diffData.map((item: any, index: any) => (
-                  <div key={index}>
-                    <span className={`${item.color}`}>
-                      {item.value}
-                    </span>
-                  </div>
-                ))}
-              </pre>
-            </div>
-          </div> */}
-          {/* <div className="flex flex-col">
-            <div>
-              <span className="text-md font-bold text-primary">Result</span>
-            </div>
-            <div className="bg-secondary code-panel">
-              <div className="holder">
-                <div className={` ${ diffData.length > 0 ? 'border-r-2' : '' } text-primary h-[44vh] p-2 `}>
-                  {diffData.map((item: any, index: any) => (
-                    <pre id="lines" className="" key={index}>
-                      {index + 1}
-                    </pre>
-                  ))}
-                </div>
-                <div className="p-2">
-                  {diffData.map((item: any, index: any) => (
-                    <pre id="lines" className={`${item.color}`} key={index}>
-                      {item.value}
-                    </pre>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </section>

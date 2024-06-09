@@ -13,17 +13,13 @@
 
 
 .input-json {
-  --jse-theme-color: #00adff;
-  --jse-theme-color-highlight: #0092e1;
+  --jse-theme-color: #2d3748;
+  --jse-theme-color-highlight: #ffffff;
+  --jse-menu-color: #a78bfa;
 }
 
 .jse-theme-dark {
-  --jse-theme-color: #00adff;
-  --jse-theme-color-highlight: #0092e1;
+  --jse-theme-color: #2d3748;
+  --jse-theme-color-highlight: #ffffff;
+  --jse-menu-color: #fcba28;
 }
-
-
-/* .jse-text-mode { 
-  --jse-font-size-mono: 16px;
-  --jse-font-family-mono: 'chakrapetchMedium'
-} */

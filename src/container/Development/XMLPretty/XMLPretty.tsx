@@ -60,10 +60,10 @@ export default function XMLPretty({}: Props) {
     <section className="w-full p-2 gap-2 bg-primary">
       <ToastNotify />
       <p className="text-xl font-bold underline underline-offset-1 text-primary">
-        XML Pretty 
+        XML Pretty
       </p>
-      <div className="grid grid-cols-7 mt-5">
-        <div className="col-span-3">
+      <div className="grid grid-cols-9 mt-5">
+        <div className="col-span-4">
           <div className="flex flex-col">
             <div>
               <span className="text-md font-bold text-primary">Input</span>
@@ -85,15 +85,22 @@ export default function XMLPretty({}: Props) {
             <div>
               <button
                 title="xml pretty"
-                className="inline-flex w-full items-center justify-center px-4 py-2 text-base font-medium text-[#ffffff] dark:text-dark-300 whitespace-no-wrap bg-success rounded-md shadow-sm bg-lime-500 hover:bg-lime-400 dark:bg-lime-300 dark:hover:bg-lime-500"
+                className="inline-flex w-full items-center justify-center px-4 py-2 text-base font-bold  
+                whitespace-no-wrap 
+                rounded-md shadow-sm 
+                bg-violet-400
+                text-white
+                dark:bg-yellow-500
+                dark:text-[#2d3748]
+                "
                 onClick={onPrettyXml}
               >
-                Pretty
+                Format
               </button>
             </div>
           </div>
         </div>
-        <div className="col-span-3">
+        <div className="col-span-4">
           <div className="flex flex-col">
             <div>
               <span className="text-md font-bold text-primary">Output</span>

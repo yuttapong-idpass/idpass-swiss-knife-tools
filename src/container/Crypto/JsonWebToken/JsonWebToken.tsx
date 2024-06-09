@@ -22,8 +22,6 @@ const initialPayload: any = JSON.stringify({});
 const initialHeaders: any = JSON.stringify({});
 
 const JsonWebToken = (props: Props) => {
-
-
   const options = [
     { value: "encode", text: "encode" },
     { value: "decode", text: "decode" },
@@ -220,23 +218,25 @@ const JsonWebToken = (props: Props) => {
               pr-6
               py-2 
               text-base 
-              font-medium 
+              font-bold 
               leading-6 
               whitespace-no-wrap 
               rounded-md 
               shadow-sm
-              text-[#ffffff]
-              bg-purple-400
-                hover:bg-purple-400
-              dark:bg-purple-300
-              dark:hover:bg-purple-400
-              dark:text-dark-300
+              bg-violet-400
+              text-white
+                dark:text-[#2d3748]
               "
               onClick={onEncoded}
             >
               <FaAngleLeft
                 size={20}
-                className="dark:text-dark-300 text-[#ffffff] mr-2 text-center justify-center items-center"
+                className="
+                dark:text-[#2d3748] 
+                  text-white
+                  mr-2 text-center 
+                  justify-center 
+                  items-center"
                 title="Encoded"
               />
               Encoded
@@ -253,25 +253,27 @@ const JsonWebToken = (props: Props) => {
               pl-6
               py-2 
               text-base 
-              font-medium 
+              font-bold 
               leading-6 
-             text-[#ffffff] 
-              dark:text-dark-300
-             whitespace-no-wrap 
-              bg-lime-500
-              hover:bg-lime-400
-              dark:bg-lime-300
-              dark:hover:bg-lime-500
+              whitespace-no-wrap 
               rounded-md 
               shadow-sm
-
+              bg-yellow-500
+              dark:text-[#2d3748]
+              text-white
               "
               onClick={onDecoded}
             >
               Decoded
               <FaAngleRight
                 size={20}
-                className="text-[#ffffff] dark:text-dark-300 ml-2 text-center justify-center items-center"
+                className="
+                text-white
+                dark:text-[#2d3748] 
+                  dark:text-dark-300 
+                  ml-2 
+                  text-center 
+                  justify-center items-center"
                 title="Decoded"
               />
             </button>
@@ -340,7 +342,7 @@ const JsonWebToken = (props: Props) => {
                   bg-primary 
                   "
                   onChange={handleSecretKey}
-                /> {" "}
+                />{" "}
                 )
               </div>
               <div>
@@ -392,7 +394,7 @@ const JsonWebToken = (props: Props) => {
             p-4        
             w-full
             text-md
-            h-[35vh]
+            h-[15vh]
             rounded-md
             border
             shadow-md
@@ -425,7 +427,7 @@ const JsonWebToken = (props: Props) => {
             p-4        
             w-full
             text-md
-            h-[35vh]
+            h-[55vh]
             shadow-md
             rounded-md
             bg-secondary

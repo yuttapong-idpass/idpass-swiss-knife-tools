@@ -11,13 +11,3 @@
 .image-upload>input {
   display: none;
 }
-
-.input-json {
-  --jse-theme-color: #00adff;
-  --jse-theme-color-highlight: #0092e1;
-}
-
-/* .jse-theme-dark {
-  --jse-theme-color: #00adff;
-  --jse-theme-color-highlight: #0092e1;
-} */

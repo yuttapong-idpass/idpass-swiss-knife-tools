@@ -59,11 +59,14 @@ const XMLJson = (props: Props) => {
       <p className="text-xl font-bold underline underline-offset-1 text-primary">
         XML To JSON
       </p>
-      <div className="grid grid-cols-7 mt-5">
-        <div className="col-span-3">
+      <div className="grid grid-cols-9 mt-5">
+        <div className="col-span-4">
           <div className="flex flex-col w-full">
             <div>
-              <span className="text-md font-semibold text-[#ffffff]">
+              <span className="
+                text-md 
+                font-semibold 
+                text-primary">
                 Input
               </span>
             </div>
@@ -83,8 +86,20 @@ const XMLJson = (props: Props) => {
           <div className="grid place-items-center h-[90vh]">
             <div>
               <button
-                title="xml pretty"
-                className="inline-flex w-full items-center justify-center px-4 py-2 text-base font-medium text-[#ffffff] dark:text-dark-300 whitespace-no-wrap bg-success rounded-md shadow-sm bg-lime-500 hover:bg-lime-400 dark:bg-lime-300 dark:hover:bg-lime-500"
+                title="xmlJson"
+                className="inline-flex w-full items-center justify-center px-4 py-2 
+                text-base 
+                font-bold 
+                text-primary 
+                whitespace-no-wrap 
+                bg-success 
+                rounded-md 
+                shadow-sm 
+                bg-violet-400
+                text-white
+                dark:bg-yellow-500
+                dark:text-[#2d3748]
+                "
                 onClick={onConvertToJson}
               >
                 Convert
@@ -92,7 +107,7 @@ const XMLJson = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className="col-span-3">
+        <div className="col-span-4">
           <div className="flex flex-col">
             <div>
               <span className="text-md font-semibold text-primary">Output</span>

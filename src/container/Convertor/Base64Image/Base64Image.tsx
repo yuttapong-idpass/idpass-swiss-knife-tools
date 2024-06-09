@@ -3,7 +3,6 @@ import DOMPurify from "dompurify";
 import CopyToClipboardImage from "../../assets/images/documents.png";
 import "./Base64Image.css";
 import { useSelector } from "react-redux";
-import { IDescription } from "../../../store/slice/Base64Slice";
 
 import { FaFolderOpen, FaTrashCan, FaCopy } from "react-icons/fa6";
 import ToastNotify from "../../../components/ToastNotify/ToastNotify";
@@ -84,7 +83,7 @@ const Base64Image = (props: Props) => {
     const sizeInBytes: number =
       4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
     const sizeInKb: number = sizeInBytes / 1024;
-    const data: IDescription = {
+    const data: any = {
       size: sizeInKb,
       height: description.height,
       width: description.width,
@@ -213,18 +212,15 @@ const Base64Image = (props: Props) => {
               px-4
               py-4 
               text-base 
-              font-medium 
+              font-bold 
               leading-6 
               bg-success
               whitespace-no-wrap 
               rounded-md 
               shadow-sm
-              text-[#ffffff]
-              dark:text-dark-300
-              bg-lime-500
-              hover:bg-lime-400
-              dark:bg-lime-400
-              dark:hover:bg-lime-500
+              text-white
+              bg-yellow-500
+              dark:text-[#2d3748]
               "
                 onClick={generateImage}
               >
@@ -267,15 +263,12 @@ const Base64Image = (props: Props) => {
               px-4
               py-4 
               text-base 
-              font-medium 
+              font-bold 
               leading-6 
               whitespace-no-wrap 
-              text-[#ffffff]
-              dark:text-dark-300
-              bg-sky-500
-              hover:bg-sky-400
-              dark:bg-blue-300
-              dark:hover:bg-blue-500
+              text-white
+              dark:text-[#2d3748]
+              bg-green-500              
               rounded-md 
               shadow-sm 
               "

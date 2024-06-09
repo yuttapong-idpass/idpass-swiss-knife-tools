@@ -131,13 +131,17 @@ const JsonEditorOutput = (props: Props) => {
   };
   return (
     <div
-      className={`${toggleFullScreen ? "fullscreen" : "mt-3 mr-3"} shadow-xl`}
+      className={`${toggleFullScreen ? "fullscreen" : "mt-3"} shadow-xl`}
       id="jsonEditorInput"
     >
       <ToastNotify />
       <div
         className={
-          "flex justify-between p-2 gap-2 w-full h-10 text-[#ffffff] bg-[#007ac7] dark:bg-[#007ac7] "
+          `flex justify-between p-2 gap-2 w-full h-10 
+          text-[#2d3748]
+          bg-violet-400
+          dark:bg-yellow-500
+          `
         }
       >
         <div>Output Panel</div>
