@@ -12,6 +12,8 @@ import {
   FaAngleRight,
 } from "react-icons/fa6";
 
+import { BiSolidRightArrow, BiSolidLeftArrow } from "react-icons/bi";
+
 type Props = {};
 
 // deepcode ignore HardcodedNonCryptoSecret: <please specify a reason of ignoring this>
@@ -167,15 +169,20 @@ const JsonWebToken = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className="col-span-1">
+        <div className="col-span-1 p-2">
           <div className="grid place-items-center h-[90vh]">
             <div className="grid grid-rows-3 gap-3">
               <div>
                 <span className="text-lg font-bold text-primary mr-2">
-                  Alg: 
+                  Alg:
                 </span>
-                <select name="alg" id="alg" title="alg" className="rounded-md text-primary bg-secondary p-2"
-                onChange={handleSelectOptionAlgorithm}>
+                <select
+                  name="alg"
+                  id="alg"
+                  title="alg"
+                  className="rounded-md text-primary bg-secondary p-2"
+                  onChange={handleSelectOptionAlgorithm}
+                >
                   {algorithms.map((item, index) => (
                     <option key={index} value={item.alg}>
                       {item.alg}
@@ -183,8 +190,137 @@ const JsonWebToken = (props: Props) => {
                   ))}
                 </select>
               </div>
-              <div> </div>
-              <div>xxxxx</div>
+              <div>
+                <button
+                  title="xml pretty"
+                  className="inline-flex 
+                  w-full items-center 
+                  justify-center 
+                  px-4 
+                  py-2 
+                  text-base 
+                  font-bold 
+                  whitespace-no-wrap  
+                  rounded-md 
+                  shadow-sm
+                  text-white
+                  bg-yellow-500
+                  dark:text-[#2d3748]
+                  "
+                  onClick={onEncoded}
+                >
+                  <span className="ml-2">Decoded</span>
+                  <BiSolidRightArrow
+                    size={17}
+                    className="
+                      ml-1
+                      text-white
+                      dark:text-[#2d3748]"
+                  />
+                </button>
+              </div>
+              <div>
+                <button
+                  title="xml pretty"
+                  className="inline-flex 
+                  w-full items-center 
+                  justify-center 
+                  px-4 
+                  py-2 
+                  text-base 
+                  font-bold 
+                  whitespace-no-wrap  
+                  rounded-md 
+                  shadow-sm
+                  text-white
+                  bg-violet-400
+                  dark:text-[#2d3748]
+                  "
+                  onClick={onEncoded}
+                >
+                  <BiSolidLeftArrow
+                    size={17}
+                    className="
+                    mr-1
+                    text-white
+                    dark:text-[#2d3748]
+                  "
+                  />
+                  <span className="mr-2">Encoded</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-span-4">
+          <div className="flex flex-col">
+            <div>
+              <span className="text-md font-bold text-primary">Secret</span>
+            </div>
+            <div className="flex flex-row secret-area p-4 w-full text-md text-primary bg-secondary h-[20vh] rounded-md mb-3 items-center shadow-md">
+              <div className="flex flex-col">
+                <span
+                  className="
+                    text-md 
+                    font-medium 
+                    text-primary 
+                    mr-4
+                    "
+                >
+                  {algorithm.algorithm} (
+                </span>
+                <span
+                  className="
+                      text-md 
+                      font-bold 
+                      text-rose-500
+                      dark:text-rose-300
+                      mr-4
+                      "
+                >
+                  base64UrlEncoded(header) + . +
+                </span>
+                <span
+                  className="
+                        text-md
+                        font-bold
+                        text-yellow-600
+                        dark:text-yellow-500
+                        mr-4
+                      "
+                >
+                  base64UrlEncoded(payload),
+                </span>
+                <div>
+                  <input
+                    type="input"
+                    id="secret"
+                    className="h-10 p-2 rounded-md shadow-md bg-primary"
+                    onChange={handleSecretKey}
+                  />{" "}
+                  )
+                </div>
+                <div className="mt-2 items-center flex-center">
+                  <input
+                    type="checkbox"
+                    id="secretEncoded"
+                    className="w-4 h-4 text-primary"
+                    onChange={handleEncodedSecretKey}
+                    defaultChecked={encodedSecret}
+                  />
+                  <span
+                    className="
+                    ml-2
+                    text-md
+                    font-bold
+                    text-primary
+                    align-self-center
+                  "
+                  >
+                    Secret base64 encoded
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
