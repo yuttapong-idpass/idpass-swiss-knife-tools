@@ -1,0 +1,14 @@
+.overflow-panel { 
+    overflow: auto;
+    word-break: break-all;
+
+}
+
+.test-wrap { 
+    text-wrap: wrap;
+}
+
+.cm-theme { 
+  font-size: 14px;
+  font-family: 'chakrapetchMedium';  
+}

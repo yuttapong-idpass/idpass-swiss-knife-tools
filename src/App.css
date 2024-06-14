@@ -39,3 +39,14 @@
 .read-the-docs {
   color: #888;
 } */
+
+
+.button-dark-mode {
+  color: #2d3748;
+  background-color: #fcba28;
+}
+
+.button-light-mode {
+  color: #f7fafc;
+  background-color: #7b5ea6;
+}

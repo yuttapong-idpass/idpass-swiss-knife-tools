@@ -1,0 +1,24 @@
+/* .text-output {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    border: none;
+    outline: none;
+} */
+
+#encoded { 
+    overflow: inherit;
+    /* border: 1px solid black; */
+}
+
+#headers {
+    overflow: inherit;
+}
+
+#payload { 
+    overflow: inherit;
+}
+
+
+.secret-area { 
+    overflow: auto;
+}

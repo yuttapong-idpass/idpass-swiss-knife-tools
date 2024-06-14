@@ -1,0 +1,194 @@
+/* Container holding the image and the text */
+.container {
+    position: relative;
+    text-align: center;
+    color: black;
+}
+
+/* Bottom left text */
+.bottom-left {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+}
+
+/* Top left text */
+.top-left {
+    /* position: absolute;
+    top: 8px;
+    left: 16px; */
+    position: absolute;
+    top: 50px;
+    left: 270px;
+}
+
+/* Top left text */
+.top-left-name {
+    /* position: absolute;
+    top: 8px;
+    left: 16px; */
+    position: absolute;
+    top: 103px;
+    left: 180px;
+}
+
+
+.top-left-first-name-en {
+    /* position: absolute;
+    top: 8px;
+    left: 16px; */
+    position: absolute;
+    top: 133px;
+    left: 280px;
+}
+
+
+.top-left-last-name-en {
+    position: absolute;
+    top: 161px;
+    left: 318px;
+}
+
+
+
+/* Top right text */
+.top-right {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+}
+
+/* Bottom right text */
+.bottom-right {
+    position: absolute;
+    bottom: 37px;
+    right: 13px;
+  }
+
+/* Centered text */
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.position-address { 
+    position: absolute;
+    bottom: 114px;
+    left: 113px;
+    word-wrap: break-word
+}
+
+.position-address-province { 
+    position: absolute;
+    bottom: 90px;
+    left: 80px;
+    word-wrap: break-word;
+}
+
+.position-birth-date { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-25%, -15%);
+}
+
+.position-expire-date { 
+    position: absolute;
+    bottom: 67px;
+    right: 182px;
+}
+
+.position-expire-date-en { 
+    position: absolute;
+    bottom: 32px;
+    right: 184px;
+}
+
+
+
+.position-issue-date { 
+    position: absolute;
+    bottom: 68px;
+    left: 81px;
+}
+
+.position-issue-date-en { 
+    position: absolute;
+    bottom: 31px;
+    left: 81px;
+}
+
+.position-birth-of-date { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(25%, 98%);
+}
+
+.position-birth-of-date-en { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(25%, 98%);
+}
+
+.position-region { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-96%, 212%);
+
+}
+
+
+.id-card-font {
+    font-family: "DilleniaUPC";
+    src: local("DilleniaUPC"),
+    url("./assets/fonts/DilleniaUPC-Bold.ttf") format("truetype");
+}
+
+
+.en-name { 
+    color: #2d32ae;
+    font-family: "DilleniaUPC";
+    src: local("DilleniaUPC"),
+    url("./assets/fonts/DilleniaUPC-Bold.ttf") format("truetype");
+}
+
+
+.names { 
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.birth-date { 
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.numbers { 
+    font-size: 33px;
+    font-weight: bold;
+}
+
+.birth-date-large { 
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+.birth-date-large-en { 
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+.image-preview { 
+    width: 146px;
+    height: 178px;
+}
+
+
