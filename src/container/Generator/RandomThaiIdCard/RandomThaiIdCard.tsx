@@ -385,23 +385,19 @@ const IdCardGenerator = (props: Props) => {
                       justify-center 
                       px-4 
                       py-2 
-                      text-base 
-                      font-medium 
+                      font-bold 
                       leading-6 
-                    text-[#ffffff] 
-                      dark:text-dark-300
                       whitespace-no-wrap 
                       bg-success 
                       rounded-md 
                       shadow-sm
-                    bg-teal-500
-                    hover:bg-teal-400
-                    dark:bg-teal-300
-                    dark:hover:bg-teal-500
+                      text-white
+                      bg-yellow-500
+                      dark:text-[#2d3748]
                       "
                     onClick={onRandomIdCard}
                   >
-                    Random 
+                    Random
                   </button>
                 </div>
                 <div>
@@ -414,22 +410,18 @@ const IdCardGenerator = (props: Props) => {
                       justify-center 
                       px-4 
                       py-2 
-                      text-base 
-                      font-medium 
+                      font-bold 
                       leading-6 
-                    text-[#ffffff] 
-                      dark:text-dark-300
                       whitespace-no-wrap 
                       rounded-md 
                       shadow-sm
-                    bg-blue-500
-                    hover:bg-blue-400
-                    dark:bg-blue-300
-                    dark:hover:bg-blue-500
+                      text-white
+                      bg-violet-400
+                      dark:text-[#2d3748]
                       "
                     onClick={onCopyIdCard}
                   >
-                   Copy 
+                    Copy
                   </button>
                 </div>
               </div>

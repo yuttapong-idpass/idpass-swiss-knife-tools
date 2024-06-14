@@ -207,7 +207,7 @@ const JsonWebToken = (props: Props) => {
                   bg-yellow-500
                   dark:text-[#2d3748]
                   "
-                  onClick={onEncoded}
+                  onClick={onDecoded}
                 >
                   <span className="ml-2">Decoded</span>
                   <BiSolidRightArrow
@@ -323,314 +323,57 @@ const JsonWebToken = (props: Props) => {
               </div>
             </div>
           </div>
+          <div className=" flex flex-col">
+            <span className="text-md font-bold text-primary">Headers</span>
+            <textarea
+              name="headers"
+              title="headers"
+              id="headers"
+              rows={8}
+              className="
+                block
+                p-4
+                w-full
+                text-md
+                h-[15vh]
+                rounded-md
+                border
+                shadow-md
+                mb-3
+                bg-secondary
+                text-rose-500
+                dark:text-rose-300
+                "
+              value={headerArea}
+              onChange={handleHeadersArea}
+            ></textarea>
+          </div>
+          <div>
+            <div>
+              <span className="text-md font-bold text-primary">Payload</span>
+              <textarea
+                name="payload"
+                id="payload"
+                className="
+                  block 
+                  p-4 
+                  w-full 
+                  text-md 
+                  shadow-md 
+                  rounded-md 
+                  bg-secondary
+                  h-[47vh] 
+                  text-yellow-600
+                  dark:text-yellow-500
+                  "
+                value={payloadArea}
+                onChange={handlePayloadArea}
+              ></textarea>
+            </div>
+          </div>
         </div>
       </section>
     </main>
-    // <main className="flex flex-row w-full gap-4 p-2 bg-primary">
-    //   <section className="flex-initial w-full">
-    //     <div className="flex justify-between">
-    //       <div className="items-center">
-    //         <label
-    //           htmlFor="encoded"
-    //           className="text-lg font-medium text-primary"
-    //         >
-    //           Encoded
-    //         </label>
-    //       </div>
-    //       <div className="flex flex-row"></div>
-    //     </div>
-    //     <textarea
-    //       name="encoded"
-    //       id="encoded"
-    //       value={jwtArea}
-    //       rows={8}
-    //       placeholder="Enter your token here..."
-    //       className="
-    //         block
-    //         p-4
-    //         w-full
-    //         text-md
-    //         text-primary
-    //         h-[94vh]
-    //         shadow-md
-    //         rounded-md
-    //         bg-secondary
-    //       "
-    //       onChange={handleJwtArea}
-    //     ></textarea>
-    //   </section>
-    //   <section className="flex-initial w-80">
-    //     <div className="flex flex-col h-[98vh]">
-    //       <div className="basis-1/4  items-end m-auto">
-    //         {isError ? (
-    //           <div>
-    //             <div className="p-4 bg-red-200 border border-1  border-red-500">
-    //               <span className="font-bold text-red-600  items-center">
-    //                 {errorMessage}
-    //               </span>
-    //             </div>
-    //           </div>
-    //         ) : null}
-    //       </div>
-    //       <div className="basis-1/2 items-center m-auto">
-    //         <div className="mb-3">
-    //           <label
-    //             htmlFor="algorithm"
-    //             className="text-lg mr-2 font-medium text-primary"
-    //           >
-    //             Alg:
-    //           </label>
-    //           <select
-    //             title="alg"
-    //             name="alg"
-    //             id="alg"
-    //             className="
-    //               rounded-md
-    //               text-primary
-    //               bg-secondary
-    //               p-2
-    //               "
-    //             onChange={handleSelectOptionAlgorithm}
-    //           >
-    //             {algorithms.map((item, index) => (
-    //               <option key={index} value={index}>
-    //                 {item.alg}
-    //               </option>
-    //             ))}
-    //           </select>
-    //         </div>
-    //         <button
-    //           title="Generate"
-    //           className="
-    //           inline-flex
-    //           w-full
-    //           text-center
-    //           items-center
-    //           justify-center
-    //           pr-6
-    //           py-2
-    //           text-base
-    //           font-bold
-    //           leading-6
-    //           whitespace-no-wrap
-    //           rounded-md
-    //           shadow-sm
-    //           bg-violet-400
-    //           text-white
-    //             dark:text-[#2d3748]
-    //           "
-    //           onClick={onEncoded}
-    //         >
-    //           <FaAngleLeft
-    //             size={20}
-    //             className="
-    //             dark:text-[#2d3748]
-    //               text-white
-    //               mr-2 text-center
-    //               justify-center
-    //               items-center"
-    //             title="Encoded"
-    //           />
-    //           Encoded
-    //         </button>
-    //         <button
-    //           title="Decoded"
-    //           className="
-    //           mt-3
-    //           inline-flex
-    //           w-full
-    //           text-center
-    //           items-center
-    //           justify-center
-    //           pl-6
-    //           py-2
-    //           text-base
-    //           font-bold
-    //           leading-6
-    //           whitespace-no-wrap
-    //           rounded-md
-    //           shadow-sm
-    //           bg-yellow-500
-    //           dark:text-[#2d3748]
-    //           text-white
-    //           "
-    //           onClick={onDecoded}
-    //         >
-    //           Decoded
-    //           <FaAngleRight
-    //             size={20}
-    //             className="
-    //             text-white
-    //             dark:text-[#2d3748]
-    //               dark:text-dark-300
-    //               ml-2
-    //               text-center
-    //               justify-center items-center"
-    //             title="Decoded"
-    //           />
-    //         </button>
-    //       </div>
-    //     </div>
-    //   </section>
-    //   <section className="flex-initial flex-col w-full">
-    //     <div className="flex flex-col">
-    //       <label htmlFor="secret" className="text-lg font-medium text-primary">
-    //         Secret
-    //       </label>
-    //       <section
-    //         className="
-    //       flex
-    //       flex-row
-    //       secret-area
-    //       p-2
-    //       w-full
-    //       text-md
-    //       text-primary
-    //       bg-secondary
-    //       h-[15vh]
-    //       rounded-md
-    //       mb-3
-    //       items-center
-    //       shadow-md
-    //       "
-    //       >
-    //         <section className="flex flex-col">
-    //           <div>
-    //             <span className="text-md font-medium-text-gray dark:text-[#d3d3d3] mr-4">
-    //               {algorithm.algorithm} (
-    //             </span>
-    //           </div>
-    //           <div className="ml-4">
-    //             <span className="text-md font-medium-text-gray dark:text-[#d3d3d3] mr-4">
-    //               <span
-    //                 className="
-    //                     text-rose-500
-    //                     dark:text-rose-300
-    //                   "
-    //               >
-    //                 base64UrlEncoded(header)
-    //               </span>{" "}
-    //               + "." +{" "}
-    //               <span
-    //                 className="
-    //                 text-purple-500
-    //                 dark:text-purple-300
-    //               "
-    //               >
-    //                 base64UrlEncoded(payload)
-    //               </span>{" "}
-    //               ,
-    //             </span>
-    //           </div>
-    //           <div className="ml-4">
-    //             <input
-    //               type="input"
-    //               id="secret"
-    //               placeholder="Enter your secret..."
-    //               className=" h-10
-    //               p-2
-    //               rounded-md
-    //               shadow-md
-    //               bg-primary
-    //               "
-    //               onChange={handleSecretKey}
-    //             />{" "}
-    //             )
-    //           </div>
-    //           <div>
-    //             <div className="mt-2 flex-center items-center">
-    //               <input
-    //                 id="autoGenerate"
-    //                 type="checkbox"
-    //                 className="
-    //                       w-4
-    //                       h-4
-    //                       text-primary
-    //                       "
-    //                 onChange={handleEncodedSecretKey}
-    //                 defaultChecked={encodedSecret}
-    //               />
-    //               <label
-    //                 htmlFor="labelAutoGenerate"
-    //                 className="
-    //                   ms-2
-    //                   text-lg
-    //                   font-medium
-    //                   align-self-center
-    //                 text-[#333333]
-    //                 dark:text-[#d3e3e3]"
-    //               >
-    //                 Secret base64 encoded
-    //               </label>
-    //             </div>
-    //           </div>
-    //         </section>
-    //       </section>
-
-    //       <label
-    //         htmlFor="headers"
-    //         className="text-lg
-    //           font-medium
-    //           text-primary
-    //           "
-    //       >
-    //         Headers
-    //       </label>
-    //       <textarea
-    //         name="headers"
-    //         id="headers"
-    //         rows={8}
-    //         value={headerArea}
-    //         className="
-    //         block
-    //         p-4
-    //         w-full
-    //         text-md
-    //         h-[15vh]
-    //         rounded-md
-    //         border
-    //         shadow-md
-    //         mb-3
-    //         bg-secondary
-    //         text-rose-500
-    //         dark:text-rose-300
-    //       "
-    //         onChange={handleHeadersArea}
-    //       ></textarea>
-    //     </div>
-    //     <div>
-    //       <label
-    //         htmlFor="payload"
-    //         className="mb-2
-    //           text-lg
-    //           font-medium
-    //           text-primary
-    //           "
-    //       >
-    //         Payload
-    //       </label>
-    //       <textarea
-    //         name="payload"
-    //         id="payload"
-    //         rows={8}
-    //         value={payloadArea}
-    //         className="
-    //         block
-    //         p-4
-    //         w-full
-    //         text-md
-    //         h-[55vh]
-    //         shadow-md
-    //         rounded-md
-    //         bg-secondary
-    //         text-purple-500
-    //         dark:text-purple-300
-    //       "
-    //         onChange={handlePayloadArea}
-    //       ></textarea>
-    //     </div>
-    //   </section>
-    // </main>
   );
 };
 
