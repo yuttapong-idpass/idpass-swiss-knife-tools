@@ -76,7 +76,7 @@ function App() {
           link: "/jwt",
         },
         {
-          name: "URL Encode/Decoded",
+          name: "Encode/Decoded",
           icon: <LuBinary size={20} />,
           active: true,
           link: "/encoded-decoded",
