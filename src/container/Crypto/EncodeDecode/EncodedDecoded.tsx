@@ -4,45 +4,36 @@ import { BiSolidRightArrow, BiSolidLeftArrow } from "react-icons/bi";
 import { encoded, decoded } from "../../../store/slice/URLEncodeSlice";
 import { useAppDispatch } from "../../../store/store";
 
-import "./UrlEncoded.css";
+import "./EncodedDecoded.css";
 
 type Props = {};
 
-const UrlEncoded = (props: Props) => {
+const EncodedDecoded = (props: Props) => {
   const dispatch = useAppDispatch();
 
   const [encodedText, setEncodedText] = useState("");
   const [decodedText, setDecodedText] = useState("");
 
-  const handleEncoded = ($event: SyntheticEvent<EventTarget>) => {
-    const encodedTextArea = ($event.target as HTMLInputElement).value;
-    setEncodedText(encodedTextArea);
+  const handleEncodedText = ($event: SyntheticEvent<EventTarget>) => {
+    const plainTextArea = ($event.target as HTMLInputElement).value;
+    setEncodedText(plainTextArea);
   };
 
-  const handleDecoded = ($event: SyntheticEvent<EventTarget>) => {
-    const decodedTextArea = ($event.target as HTMLInputElement).value;
-    setDecodedText(decodedTextArea);
+  const handleDecodedText = ($event: SyntheticEvent<EventTarget>) => {
+    const resultTextArea = ($event.target as HTMLInputElement).value;
+    setDecodedText(resultTextArea);
   };
 
   const URLEncoded = () => {
-    dispatch(encoded({ encoded: encodedText, decoded: decodedText }));
+    const encodeURI = encodeURIComponent(decodedText);
+    setEncodedText(encodeURI);
+    dispatch(encoded({ encoded: encodeURI, decoded: decodedText }));
   };
 
   const URLDecoded = () => {
-    dispatch(decoded({ encoded: encodedText, decoded: decodedText }));
-  };
-
-  const isValidURL = (url: string) => {
-    const urlPattern = new RegExp(
-      "^(https?:\\/\\/)?" + // protocol (optional)
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path (optional)
-        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string (optional)
-        "(\\#[-a-z\\d_]*)?$",
-      "i" // fragment locator (optional)
-    );
-    return !!urlPattern.test(url);
+    const decodeURI = decodeURIComponent(encodedText);
+    setDecodedText(decodeURI);
+    dispatch(encoded({ encoded: encodedText, decoded: decodeURI }));
   };
 
   return (
@@ -54,12 +45,14 @@ const UrlEncoded = (props: Props) => {
         <div className="col-span-4">
           <div className="flex flex-col">
             <div>
-              <span className="text-md font-bold text-primary">Encoded</span>
+              <span className="text-md font-bold text-primary">
+                Decoded Text
+              </span>
               <textarea
-                name="encoded"
-                id="encoded"
-                value={encodedText}
-                placeholder="Enter your URL here..."
+                name="decoded"
+                id="decoded"
+                value={decodedText}
+                placeholder="Enter your text here..."
                 className="
                   block
                   p-4
@@ -71,7 +64,7 @@ const UrlEncoded = (props: Props) => {
                   rounded-md
                   bg-secondary
                 "
-                onChange={handleEncoded}
+                onChange={handleDecodedText}
               />
             </div>
           </div>
@@ -98,7 +91,7 @@ const UrlEncoded = (props: Props) => {
                   "
                   onClick={URLEncoded}
                 >
-                  <span className="ml-2">Decoded</span>
+                  <span className="ml-2">Encoded</span>
                   <BiSolidRightArrow
                     size={17}
                     className="
@@ -135,7 +128,7 @@ const UrlEncoded = (props: Props) => {
                     dark:text-[#2d3748]
                   "
                   />
-                  <span className="mr-2">Encoded</span>
+                  <span className="mr-2">Decoded</span>
                 </button>
               </div>
             </div>
@@ -144,12 +137,14 @@ const UrlEncoded = (props: Props) => {
         <div className="col-span-4">
           <div className="flex flex-col">
             <div>
-              <span className="text-md font-bold text-primary">Decoded</span>
+              <span className="text-md font-bold text-primary">
+                Encoded Text
+              </span>
               <textarea
-                name="decoded"
-                id="decoded"
-                value={decodedText}
-                placeholder="Enter your URL here..."
+                name="encoded"
+                id="encoded"
+                value={encodedText}
+                placeholder="Enter your text here..."
                 className="
                   block
                   p-4
@@ -161,7 +156,7 @@ const UrlEncoded = (props: Props) => {
                   rounded-md
                   bg-secondary
                 "
-                onChange={handleDecoded}
+                onChange={handleEncodedText}
               />
             </div>
           </div>
@@ -171,4 +166,4 @@ const UrlEncoded = (props: Props) => {
   );
 };
 
-export default UrlEncoded;
+export default EncodedDecoded;

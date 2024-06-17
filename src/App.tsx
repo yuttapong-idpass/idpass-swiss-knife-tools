@@ -29,7 +29,7 @@ import Differ from "./container/Development/Differ/Differ";
 import XMLJson from "./container/Development/XMLJson/XMLJson";
 import XMLPretty from "./container/Development/XMLPretty/XMLPretty";
 import Testing from "./container/Development/Testing/Testing";
-import UrlEncoded from "./container/Crypto/UrlEncode/UrlEncoded";
+import EncodedDecoded from "./container/Crypto/EncodeDecode/EncodedDecoded";
 
 function App() {
   let menuList = [
@@ -79,7 +79,7 @@ function App() {
           name: "URL Encode/Decoded",
           icon: <LuBinary size={20} />,
           active: true,
-          link: "/url-encoded-decoded",
+          link: "/encoded-decoded",
         },
       ],
     },
@@ -164,7 +164,7 @@ function App() {
             <Route path="/jwt" element={<JsonWebToken />} />
             <Route path="/id-card-random" element={<IdCardGenerator />} />
             <Route path="/barcode" element={<BarCodeGenerator />} />
-            <Route path="/url-encoded-decoded" element={<UrlEncoded />} />
+            <Route path="/encoded-decoded" element={<EncodedDecoded />} />
             {/* <Route path="/mock-up" element={<MockIdCard />} /> */}
           </Routes>
         </BrowserRouter>
