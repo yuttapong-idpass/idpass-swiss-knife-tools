@@ -45,15 +45,10 @@ export default function Differ(props: Props) {
   const [addedCount, setAddedCount] = useState(0);
   const [removeCount, setRemoveCount] = useState(0);
   const [resultDiff, setResultDiff] = useState(initialDiff);
-  const [color, setColor] = useState("");
-  const [diffData, setDiffData] = useState(initialDiff);
-  const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {}, []);
 
   const onDiffJson = () => {
-    setDiffData([]);
     // try {
     const diffs = diff.diffJson(firstPanel, secondPanel);
 
@@ -182,9 +177,7 @@ export default function Differ(props: Props) {
           </div>
         </div>
         <div className="row-span-1">
-          <p className="text-md font-bold text-primary mt-2">
-            Result
-          </p>
+          <p className="text-md font-bold text-primary mt-2">Result</p>
           <div className="h-[45vh]">
             <div className="grid grid-cols-2">
               <div className="col-span-1 h-[45vh] code-panel bg-secondary">

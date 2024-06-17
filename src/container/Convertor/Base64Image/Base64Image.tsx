@@ -33,8 +33,8 @@ const Base64Image = (props: Props) => {
       };
       reader.readAsDataURL($event.target.files[0]);
       $event.target.value = null;
-    } catch (error) {
-      console.log("error ->", error);
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
@@ -190,7 +190,7 @@ const Base64Image = (props: Props) => {
               </div>
             </div>
             <div className="flex flex-col flex-initial w-1/4">
-              <div className="flex mt-10 ml-3 flex-col gap-4 items-center justify-center">
+              <div className="flex mt-10 ml-3 flex-col gap-4">
                 <button
                   title="generate"
                   id="generate"

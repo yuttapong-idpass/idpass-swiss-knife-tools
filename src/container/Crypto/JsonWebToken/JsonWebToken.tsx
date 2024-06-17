@@ -1,19 +1,13 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
 import { useSelector } from "react-redux";
-
 import * as jose from "jose";
 
+import { toast } from "react-toastify";
 import ErrorImage from "../../assets/images/cross.png";
-import "./JsonWebToken.css";
-import {
-  FaArrowRight,
-  FaArrowLeft,
-  FaAngleLeft,
-  FaAngleRight,
-} from "react-icons/fa6";
 
 import { BiSolidRightArrow, BiSolidLeftArrow } from "react-icons/bi";
-
+import ToastNotify from "../../../components/ToastNotify/ToastNotify";
+import "./JsonWebToken.css";
 type Props = {};
 
 // deepcode ignore HardcodedNonCryptoSecret: <please specify a reason of ignoring this>
@@ -40,8 +34,6 @@ const JsonWebToken = (props: Props) => {
   const [headerArea, setHeaderArea] = useState(initialPayload);
   const [payloadArea, setPayloadArea] = useState(initialHeaders);
   const [secretKey, setSecretKey] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isError, setIsError] = useState(false);
   const [encodedSecret, setEncodedSecret] = useState(false);
 
   useEffect(() => {
@@ -104,17 +96,11 @@ const JsonWebToken = (props: Props) => {
           setJwtArea(jwt);
           setHeaderArea(JSON.stringify({ alg: alg, typ: typ }, null, 2));
         }
-        if (isError) {
-          setIsError(false);
-          setErrorMessage("");
-        }
       } else {
-        setIsError(true);
-        setErrorMessage(`Error Secret! : Please input your secret key`);
+        toast.error("Secret Error: Please input your secret key!");
       }
     } catch (error: any) {
-      setIsError(true);
-      setErrorMessage(`Error Payload! : ${error.message}`);
+      toast.error('Encoded Error: ' + error.message);
     }
   };
 
@@ -125,18 +111,14 @@ const JsonWebToken = (props: Props) => {
       const decodedHeaders = jose.decodeProtectedHeader(jwtArea);
       setPayloadArea(JSON.stringify(decodedPayload, null, 2));
       setHeaderArea(JSON.stringify(decodedHeaders, null, 2));
-      if (isError) {
-        setIsError(false);
-        setErrorMessage("");
-      }
     } catch (error: any) {
-      setIsError(true);
-      setErrorMessage(`Error Decoded! : ${error.message}`);
+      toast.error('Decoded Error: ' + error.message);
     }
   };
 
   return (
     <main className="w-full p-2  gap-2 bg-primary">
+      <ToastNotify />
       <p className="text-xl font-bold underline underline-offset-1 text-primary">
         JWT Parser
       </p>
