@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice, combineReducers } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import { RootState } from '../store.ts';
 
 // type jwtTokenState = {
 //     encode: string;

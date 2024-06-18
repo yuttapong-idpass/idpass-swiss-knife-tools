@@ -95,11 +95,14 @@ const BarCodeGenerator = (props: Props) => {
     >
       <div>
         <div className="row-end-1">
-          <label htmlFor="BarCode" className="text-lg font-medium text-primary">
+          {/* <label htmlFor="BarCode" className="text-lg font-medium text-primary">
             Barcode Generator
-          </label>
+          </label> */}
+          <p className="text-xl font-bold underline underline-offset-1 text-primary">
+            Barcode Generator
+          </p>
         </div>
-        <div className="flex flex-col rounded-md row-end-1 justify-items-center w-full bg-secondary p-4">
+        <div className="flex flex-col rounded-md row-end-1 justify-items-center w-full bg-secondary p-4 mt-5">
           <div className="flex flex-col gap-6 place-items-center">
             <div className="flex flex-row gap-2 w-full justify-center">
               <div>
@@ -160,16 +163,13 @@ const BarCodeGenerator = (props: Props) => {
                       text-base 
                       font-medium 
                       leading-6 
-                    text-[#ffffff] 
-                      dark:text-dark-300
                       whitespace-no-wrap 
                       bg-success 
                       rounded-md 
                       shadow-sm
-                    bg-lime-500
-                    hover:bg-lime-400
-                    dark:bg-lime-300
-                    dark:hover:bg-lime-500"
+                      text-white
+                      bg-yellow-500
+                      dark:text-[#2d3748]"
                 >
                   Generate
                 </button>
@@ -187,16 +187,14 @@ const BarCodeGenerator = (props: Props) => {
                       text-base 
                       font-medium 
                       leading-6 
-                    text-[#ffffff] 
-                      dark:text-dark-300
                       whitespace-no-wrap 
                       bg-success 
                       rounded-md 
                       shadow-sm
-                    bg-blue-500
-                    hover:bg-blue-400
-                    dark:bg-blue-300
-                    dark:hover:bg-blue-500"
+                      text-white
+                      bg-violet-400
+                      dark:text-[#2d3748]
+                      "
                 >
                   Refresh
                 </button>
@@ -210,7 +208,7 @@ const BarCodeGenerator = (props: Props) => {
             <div>
               {isError && (
                 <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-                  {errorMessage} 
+                  {errorMessage}
                 </span>
               )}
             </div>

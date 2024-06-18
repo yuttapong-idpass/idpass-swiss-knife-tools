@@ -1,6 +1,4 @@
 import React, { SyntheticEvent, useState } from "react";
-import SuccessImage from "../../assets/images/check.png";
-import FailImage from "../../assets/images/cross.png";
 import "./RandomThaiIdCard.css";
 import ToastNotify from "../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
@@ -133,7 +131,6 @@ const IdCardGenerator = (props: Props) => {
   const [groupType, setGroupType] = useState("00");
   const [getSectorValue, setSectorNumberValue] = useState("00");
   const [result, setResult] = useState("0000000000000");
-  const [verify, setVerify] = useState("");
 
   const handleCardType = (event$: SyntheticEvent<EventTarget>) => {
     const type = (event$.target as HTMLInputElement).value;
@@ -237,8 +234,8 @@ const IdCardGenerator = (props: Props) => {
     try {
       await navigator.clipboard.writeText(result);
       toast.success("Copies!");
-    } catch (error) {
-      console.log("error ->", error);
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
@@ -247,17 +244,9 @@ const IdCardGenerator = (props: Props) => {
       <ToastNotify />
       <div className="flex flex-col">
         <div className="flex justify-between">
-          <label
-            htmlFor="Random"
-            className="block 
-              mb-2 
-              text-lg 
-              font-medium 
-              text-primary
-              "
-          >
-            Random thai id card
-          </label>
+          <p className="text-xl font-bold underline underline-offset-1 text-primary">
+            Random thai ID Card
+          </p>
         </div>
         <div>
           <div
@@ -266,6 +255,7 @@ const IdCardGenerator = (props: Props) => {
               w-full 
               rounded-lg 
               bg-secondary
+              mt-5
               "
           >
             <div className="flex flex-col">
@@ -385,23 +375,19 @@ const IdCardGenerator = (props: Props) => {
                       justify-center 
                       px-4 
                       py-2 
-                      text-base 
-                      font-medium 
+                      font-bold 
                       leading-6 
-                    text-[#ffffff] 
-                      dark:text-dark-300
                       whitespace-no-wrap 
                       bg-success 
                       rounded-md 
                       shadow-sm
-                    bg-teal-500
-                    hover:bg-teal-400
-                    dark:bg-teal-300
-                    dark:hover:bg-teal-500
+                      text-white
+                      bg-yellow-500
+                      dark:text-[#2d3748]
                       "
                     onClick={onRandomIdCard}
                   >
-                    Random 
+                    Random
                   </button>
                 </div>
                 <div>
@@ -414,22 +400,18 @@ const IdCardGenerator = (props: Props) => {
                       justify-center 
                       px-4 
                       py-2 
-                      text-base 
-                      font-medium 
+                      font-bold 
                       leading-6 
-                    text-[#ffffff] 
-                      dark:text-dark-300
                       whitespace-no-wrap 
                       rounded-md 
                       shadow-sm
-                    bg-blue-500
-                    hover:bg-blue-400
-                    dark:bg-blue-300
-                    dark:hover:bg-blue-500
+                      text-white
+                      bg-violet-400
+                      dark:text-[#2d3748]
                       "
                     onClick={onCopyIdCard}
                   >
-                   Copy 
+                    Copy
                   </button>
                 </div>
               </div>

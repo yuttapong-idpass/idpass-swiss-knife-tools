@@ -18,6 +18,7 @@ import { CgDebug } from "react-icons/cg";
 import { TbNetwork } from "react-icons/tb";
 import { PiBracketsCurly } from "react-icons/pi";
 import { PiBracketsAngleBold } from "react-icons/pi";
+import { LuBinary } from "react-icons/lu";
 
 import BarCodeGenerator from "./container/Generator/BarCodeGenerator/BarCodeGenerator";
 import JsonPretty from "./container/Development/JsonPretty/JsonPretty";
@@ -25,10 +26,10 @@ import Base64Image from "./container/Convertor/Base64Image/Base64Image";
 import JsonWebToken from "./container/Crypto/JsonWebToken/JsonWebToken";
 // import MockIdCard from "./container/Development/MockIdCard/MockIdCard";
 import Differ from "./container/Development/Differ/Differ";
-import PublicIP from "./container/Network/PublicIP";
 import XMLJson from "./container/Development/XMLJson/XMLJson";
 import XMLPretty from "./container/Development/XMLPretty/XMLPretty";
 import Testing from "./container/Development/Testing/Testing";
+import EncodedDecoded from "./container/Crypto/EncodeDecode/EncodedDecoded";
 
 function App() {
   let menuList = [
@@ -56,17 +57,11 @@ function App() {
           link: "/xml-to-json",
         },
         {
-          name: 'XML Pretty',
+          name: "XML Pretty",
           icon: <PiBracketsAngleBold size={20} />,
           active: true,
-          link: '/xml-pretty'
+          link: "/xml-pretty",
         },
-        {
-          name: 'Developer DeBUG PAGE',
-          icon: <CgDebug size={20} />,
-          active: true,
-          link: '/debug'
-        }
       ],
     },
     {
@@ -79,6 +74,12 @@ function App() {
           icon: <BsKey size={20} />,
           active: true,
           link: "/jwt",
+        },
+        {
+          name: "Encode/Decoded",
+          icon: <LuBinary size={20} />,
+          active: true,
+          link: "/encoded-decoded",
         },
       ],
     },
@@ -109,20 +110,7 @@ function App() {
           name: "Barcode",
           icon: <FaBarcode size={20} />,
           active: true,
-          link: "/barcode-generator",
-        },
-      ],
-    },
-    {
-      id: 5,
-      title: "Network",
-      active: true,
-      menuLists: [
-        {
-          name: "My IP Address",
-          icon: <TbNetwork size={20} />,
-          active: true,
-          link: "/public-ip",
+          link: "/barcode",
         },
       ],
     },
@@ -168,7 +156,6 @@ function App() {
           </Sidebar>
           <Routes>
             <Route path="/" element={<JsonPretty />} />
-            <Route path="/debug" element={<Testing />} />
             <Route path="/json-pretty" element={<JsonPretty />} />
             <Route path="/differ" element={<Differ />} />
             <Route path="/xml-to-json" element={<XMLJson />} />
@@ -176,9 +163,9 @@ function App() {
             <Route path="/base64Image" element={<Base64Image />} />
             <Route path="/jwt" element={<JsonWebToken />} />
             <Route path="/id-card-random" element={<IdCardGenerator />} />
+            <Route path="/barcode" element={<BarCodeGenerator />} />
+            <Route path="/encoded-decoded" element={<EncodedDecoded />} />
             {/* <Route path="/mock-up" element={<MockIdCard />} /> */}
-            <Route path="/barcode-generator" element={<BarCodeGenerator />} />
-            <Route path="/public-ip" element={<PublicIP />}></Route>
           </Routes>
         </BrowserRouter>
       </div>

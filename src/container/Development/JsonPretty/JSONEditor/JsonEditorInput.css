@@ -16,10 +16,12 @@
   --jse-theme-color: #2d3748;
   --jse-theme-color-highlight: #ffffff;
   --jse-menu-color: #a78bfa;
+  --jse-delimiter-color: #2e3748;
 }
 
 .jse-theme-dark {
   --jse-theme-color: #2d3748;
   --jse-theme-color-highlight: #ffffff;
   --jse-menu-color: #fcba28;
+  --jse-delimiter-color: #ffffff;
 }

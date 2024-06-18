@@ -11,6 +11,7 @@ import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
 
 type Props = {
+  onChangeText: any;
   text: any;
   onError: any;
 };
@@ -29,6 +30,7 @@ const JsonEditorOutput = (props: Props) => {
       props: {
         onChange(content: any, previousContent, { contentErrors }) {
           console.log("content errors", contentErrors);
+          props.onChangeText(JSON.parse(content.text));
         },
         onError(err: Error) {
           props.onError(err);
@@ -136,13 +138,11 @@ const JsonEditorOutput = (props: Props) => {
     >
       <ToastNotify />
       <div
-        className={
-          `flex justify-between p-2 gap-2 w-full h-10 
+        className={`flex justify-between p-2 gap-2 w-full h-10 
           text-[#2d3748]
           bg-violet-400
           dark:bg-yellow-500
-          `
-        }
+          `}
       >
         <div>Output Panel</div>
         <div className="flex gap-3">

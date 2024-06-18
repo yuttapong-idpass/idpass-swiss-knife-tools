@@ -15,15 +15,15 @@ import "./assets/fonts/ChakraPetch-SemiBoldItalic.ttf";
 
 
 import { Provider } from "react-redux";
-// import { store } from "./store/store";
+import { store } from "./store/store";
 import ThemeProvider from "./providers/ThemeProvider";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-  // <Provider store={store}>
+  <Provider store={store}>
     <ThemeProvider>
       <App />
     </ThemeProvider>
-  // </Provider>
+  </Provider>
   // </React.StrictMode>
 );

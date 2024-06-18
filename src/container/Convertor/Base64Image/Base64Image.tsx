@@ -33,8 +33,8 @@ const Base64Image = (props: Props) => {
       };
       reader.readAsDataURL($event.target.files[0]);
       $event.target.value = null;
-    } catch (error) {
-      console.log("error ->", error);
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
@@ -122,216 +122,132 @@ const Base64Image = (props: Props) => {
   };
 
   return (
-    <div className="flex flex-col w-full p-4 bg-primary">
+    <main className="w-full p-2 gap-2 bg-primary">
       <ToastNotify />
-      <div className="flex flex-row">
-        <div className="flex-initial w-full">
-          <div className="flex flex-col">
-            <div className="flex flex-row w-full justify-between">
-              <div>
-                <label
-                  htmlFor="base64"
-                  className="block 
-                      mb-2 
-                      text-lg 
-                      font-medium 
-                      text-primary
-                      "
-                >
-                  Base64 Image Decoded
-                </label>
-              </div>
-              <div className="flex flex-row gap-2">
-                <div>
+      <p className="text-xl font-bold underline underline-offset-1 text-primary">
+        Base 64 Image
+      </p>
+      <div className="grid grid-cols-2 mt-5">
+        <div className="col-span-2">
+          <div className="flex flex-row">
+            <div className="flex flex-col flex-initial w-3/4">
+              <div className="flex flex-row w-full justify-between">
+                <span className="text-md font-bold text-primary">Input</span>
+                <div className="flex flex-row gap-2 mb-2">
                   <FaCopy
+                    title="copy"
+                    id="copy"
                     size={30}
-                    className="text-primary hover:bg-gray-500 p-1"
-                    title="Copy"
+                    className="text-primary p-1"
                     onClick={onCopyText}
                   />
-                </div>
-                <div>
                   <FaTrashCan
+                    title="trash"
+                    id="trash"
                     size={30}
-                    className="text-primary hover:bg-gray-500  p-1"
-                    title="Clear"
+                    className="text-primary p-1"
                     onClick={onClearText}
                   />
-                </div>
-                <div className="image-upload">
-                  <label htmlFor="file-input">
-                    <FaFolderOpen
-                      size={30}
-                      className="text-primary hover:bg-gray-500 p-1"
-                      title="Upload file"
+
+                  <div className="image-upload">
+                    <label htmlFor="file-input">
+                      <FaFolderOpen
+                        title="trash"
+                        id="trash"
+                        size={30}
+                        className="text-primary p-1"
+                        onClick={onClearText}
+                      />
+                    </label>
+                    <input
+                      type="file"
+                      id="file-input"
+                      accept=".jpg,.jpeg,.png,.gif"
+                      onChange={onUploadFileImage}
                     />
-                  </label>
-                  <input
-                    type="file"
-                    id="file-input"
-                    accept=".jpg,.jpeg,.png,.gif"
-                    onChange={onUploadFileImage}
-                  />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col w-full">
-              <div className="control">
+              <div className="w-full">
                 <textarea
                   name="base64"
-                  id="base64Area"
+                  id="base64"
                   rows={8}
+                  className="
+                    break-word 
+                    base64input 
+                    block 
+                    bg-secondary 
+                    text-primary 
+                    text-md 
+                    w-full 
+                    p-4 
+                    shadow-md 
+                    rounded-md"
                   value={base64Text}
                   onChange={handleTextArea}
-                  className="
-                  break-words
-                  base64input
-                  block
-                  bg-secondary
-                  text-primary 
-                  text-md 
-                  w-full 
-                  p-4
-                  shadow-md 
-                  rounded-md"
                 ></textarea>
               </div>
             </div>
+            <div className="flex flex-col flex-initial w-1/4">
+              <div className="flex mt-10 ml-3 flex-col gap-4">
+                <button
+                  title="generate"
+                  id="generate"
+                  className="w-full item-centers justify-center px-4 py-4 font-bold leading-6 rounded-md shadow-sm text-white dark:text-[#2d3748] bg-yellow-500"
+                  onClick={generateImage}
+                >
+                  Generate Image
+                </button>
+
+                <div>
+                  <input
+                    type="checkbox"
+                    id="autoGenerate"
+                    className="w-4 h-4 text-primary rounded"
+                    defaultChecked={true}
+                    onChange={handleCheckBoxAutoGenerate}
+                  />
+                  <span className="ms-2 text-lg font-medium text-primary">
+                    Auto Generate
+                  </span>
+                </div>
+
+                <a
+                  title="download"
+                  id="download"
+                  className="w-full item-centers text-center justify-center px-4 py-4 font-bold leading-6 rounded-md shadow-sm text-white dark:text-[#2d3748] bg-violet-400"
+                  download="fromBase64Image.png"
+                  href={textArea}
+                >
+                  Download Image
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="flex-initial w-1/4">
-          <div className="flex mt-10 ml-6 mr-6 flex-col items-center justify-center">
-            <div className="w-full">
-              <button
-                title="Generate"
-                className="              
-              inline-flex 
-              w-full 
-              item-centers 
-              justify-center 
-              px-4
-              py-4 
-              text-base 
-              font-bold 
-              leading-6 
-              bg-success
-              whitespace-no-wrap 
-              rounded-md 
-              shadow-sm
-              text-white
-              bg-yellow-500
-              dark:text-[#2d3748]
-              "
-                onClick={generateImage}
-              >
-                Generate Image
-              </button>
+        <div className="col-span-4 mt-4">
+          <div className="flex flex-col">
+            <div className="flex flex-row w-full justify-between">
+              <span className="text-md font-bold text-primary">Output</span>
+              <div className="flex gap-4">
+                <span className="mb-2 text-lg font-bold text-primary">
+                  Dimension: {description.width} x {description.height}
+                </span>
+                <span className="mb-2 text-lg font-bold text-primary">
+                  Size: {description.size.toFixed(2)} Kb
+                </span>
+              </div>
             </div>
-            <div className="mt-2 w-full">
-              <input
-                id="autoGenerate"
-                type="checkbox"
-                className="
-                w-4 
-                h-4 
-                text-primary
-                rounded 
-              "
-                defaultChecked={true}
-                onChange={handleCheckBoxAutoGenerate}
-              />
-              <label
-                htmlFor="labelAutoGenerate"
-                className=" 
-                      ms-2
-                      text-lg 
-                      font-medium 
-                      text-primary
-                      "
-              >
-                Auto generate
-              </label>
-            </div>
-            <div className="mt-2 w-full">
-              <a
-                title="Generate"
-                className="              
-              inline-flex 
-              w-full 
-              item-centers 
-              justify-center 
-              px-4
-              py-4 
-              text-base 
-              font-bold 
-              leading-6 
-              whitespace-no-wrap 
-              text-white
-              dark:text-[#2d3748]
-              bg-green-500              
-              rounded-md 
-              shadow-sm 
-              "
-                download="fromBase64Image.png"
-                href={textArea}
-              >
-                Download Image
-              </a>
+            <div className="flex place-items-center justify-center mt-4">
+              {textArea ? (
+                <img alt="result" src={DOMPurify.sanitize(textArea)} />
+              ) : null}
             </div>
           </div>
         </div>
       </div>
-      <div className="w-full mt-6">
-        <div className="flex justify-between">
-          <div>
-            <label
-              htmlFor="base64"
-              className=" 
-                      mb-2 
-                      text-lg 
-                      font-medium 
-                      text-primary
-                      "
-            >
-              Preview Image
-            </label>
-          </div>
-          <div className="flex gap-4">
-            <div>
-              <label
-                htmlFor="base64"
-                className=" 
-              mb-2 
-              text-lg 
-              font-medium 
-              text-primary
-              "
-              >
-                Dimensions : {description.width} x {description.height}
-              </label>
-            </div>
-            <div>
-              <label
-                htmlFor="base64"
-                className=" 
-                mb-2 
-                text-lg 
-                font-medium 
-                text-primary
-              "
-              >
-                Size: {description.size.toFixed(2)} Kb
-              </label>
-            </div>
-          </div>
-        </div>
-        <div className="flex place-items-center justify-center mt-4">
-          {textArea ? (
-            <img src={DOMPurify.sanitize(textArea)} alt="result" />
-          ) : null}
-        </div>
-      </div>
-    </div>
+    </main>
   );
 };
 
