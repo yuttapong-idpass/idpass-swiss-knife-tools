@@ -12,7 +12,6 @@ import * as diff from "diff";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { githubDark, githubLight } from "@uiw/codemirror-themes-all";
 import { ThemeContext } from "../../../providers/ThemeProvider";
-import useDiffStore from "../../../store/differStore";
 
 // import { Differ } from 'json-diff-kit';
 // import "json-diff-kit/dist/viewer.css";
