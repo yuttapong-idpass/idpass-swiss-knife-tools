@@ -1,10 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState} from '../store';
 
-
 type EncodedDecodedState = {
-    encoded: string
-    decoded: string
+    encoded: string;
+    decoded: string;
 }
 
 const initialEncodedDecoded: EncodedDecodedState = {
@@ -12,7 +11,7 @@ const initialEncodedDecoded: EncodedDecodedState = {
     decoded: ''
 }
 
-const urlEncodedDecoded = createSlice({
+const encodedDecoded = createSlice({
     name: 'URLEncodedDecoded',
     initialState:  initialEncodedDecoded,
     reducers: {
@@ -25,8 +24,8 @@ const urlEncodedDecoded = createSlice({
     }
 });
 
-export const { encoded, decoded } = urlEncodedDecoded.actions;
+export const { encoded, decoded } = encodedDecoded.actions;
 export const encodedDecodedSelector = (store: RootState) => store.encodedDecodedReducer;
-export default urlEncodedDecoded.reducer; 
+export default encodedDecoded.reducer; 
 
 

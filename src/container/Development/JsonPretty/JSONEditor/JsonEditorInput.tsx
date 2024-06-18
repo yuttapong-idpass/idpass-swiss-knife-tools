@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 type Props = {
   onChangeText: any;
   onError: any;
-  text?: any
+  text?: any;
 };
 
 const JsonEditorInput = (props: Props) => {
@@ -55,14 +55,13 @@ const JsonEditorInput = (props: Props) => {
   useEffect(() => {
     // update props
     if (refEditor.current) {
-      // refEditor.current.updateProps(props);
-      if (typeof props.text === 'string') {
+      if (typeof props.text === "string") {
         refEditor.current.update({ text: props.text });
       }
 
-      // if (typeof props.text === 'object') { 
-      //   refEditor.current.update({ json: props.text });        
-      // }
+      if (typeof props.text === "object") {
+        refEditor.current.update({ json: props.text });
+      }
     }
   }, [props]);
 
@@ -84,7 +83,7 @@ const JsonEditorInput = (props: Props) => {
         props.onChangeText(refEditor.current?.get());
       };
       reader.readAsText($event.target.files[0]);
-      $event.target.value = null; 
+      $event.target.value = null;
     }
   };
 
@@ -128,7 +127,9 @@ const JsonEditorInput = (props: Props) => {
       }
 
       if (!!getCurrentValue.json) {
-        await navigator.clipboard.writeText(JSON.stringify(getCurrentValue?.json, null, 4));
+        await navigator.clipboard.writeText(
+          JSON.stringify(getCurrentValue?.json, null, 4)
+        );
       }
       toast.success("Copies!");
     } catch (error) {
@@ -143,22 +144,17 @@ const JsonEditorInput = (props: Props) => {
     >
       <ToastNotify />
       <div
-        className={
-          `flex justify-between p-2 gap-2 w-full h-10  
+        className={`flex justify-between p-2 gap-2 w-full h-10  
           text-[#2d3748] 
           bg-violet-400
-          dark:bg-yellow-500`
-        }
+          dark:bg-yellow-500`}
       >
         <div>Input Panel</div>
         <div className="flex gap-3">
           <div>
             <div className="image-upload">
               <label htmlFor="file-input">
-                <FaFolderOpen
-                  size={23}
-                  title="Upload file"
-                />
+                <FaFolderOpen size={23} title="Upload file" />
               </label>
               <input
                 id="file-input"
@@ -169,11 +165,7 @@ const JsonEditorInput = (props: Props) => {
             </div>
           </div>
           <div>
-            <FaSave
-              size={23}
-              title="Save file"
-              onClick={onClickSaveJsonFile}
-            />
+            <FaSave size={23} title="Save file" onClick={onClickSaveJsonFile} />
           </div>
           <div>
             <FaCopy
@@ -184,15 +176,9 @@ const JsonEditorInput = (props: Props) => {
           </div>
           <div onClick={onClickMaximize}>
             {toggleFullScreen ? (
-              <FaMinimize
-                size={23}
-                title="Minimize"
-              />
+              <FaMinimize size={23} title="Minimize" />
             ) : (
-              <FaMaximize
-                size={23}
-                title="Maximize"
-              />
+              <FaMaximize size={23} title="Maximize" />
             )}
           </div>
         </div>

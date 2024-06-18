@@ -1,12 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import urlEncodedDecodedReducer from './slice/URLEncodeSlice';
-
+import encodedDecodedReducer from './slice/enCodeSlice';
 
 const reducer = {
-    urlEncodedDecodedReducer
+    encodedDecodedReducer
 }
-
 
 export const store = configureStore({
     reducer,

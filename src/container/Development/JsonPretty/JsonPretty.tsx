@@ -1,24 +1,24 @@
 import React, { createRef, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../../store/store";
-// import useJsonPrettyStore from "../../../store/jsonPrettyStore";
 import "./JsonPretty.css";
 
 import JsonEditorInput from "./JSONEditor/JsonEditorInput";
 import JsonEditorOutput from "./JSONEditor/JsonEditorOutput";
-import _ from "lodash";
 type Props = {};
 
 const JsonPretty = (props: Props) => {
-  const dispatch = useAppDispatch();
+  const [inputText, setInputText] = useState("");
+  const [outputText, setOutputText] = useState("");
 
+  const handleJsonInput = (text: string) => {
+    setInputText(text);
+  };
 
-  const handleJsonInput = (text: any) => {
-    
+  const handleJsonOutput = (text: string) => {
+    setOutputText(text);
   };
 
   const onClickPretty = () => {
-
+    setOutputText(inputText);
   };
 
   const handleError = (text: any) => {};
@@ -59,7 +59,11 @@ const JsonPretty = (props: Props) => {
           </div>
         </div>
         <div className="col-span-4">
-          <JsonEditorOutput text={''} onError={handleError} />
+          <JsonEditorOutput
+            text={outputText}
+            onError={handleError}
+            onChangeText={handleJsonOutput}
+          />
         </div>
       </div>
     </main>
