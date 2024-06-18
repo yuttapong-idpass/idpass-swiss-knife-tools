@@ -72,8 +72,15 @@ export default function Sidebar({ children }: Props) {
                 expanded ? "w-52 ml-3" : "w-0"
               } `}
             >
-              <div className="leading-4">
-                <DarkLightToggle />
+              <div className="flex flex-row leading-4 gap-4 justify-center place-items-center">
+                <div>
+                  <span className="text-md  text-primary">
+                    v.1.5.1-beta.1
+                  </span>
+                </div>
+                <div >
+                  {/* <DarkLightToggle /> */}
+                </div>
               </div>
             </div>
           </div>
@@ -153,7 +160,9 @@ export function SidebarItem(props: SidebarProps) {
                 <Link to={item.link} key={index}>
                   <div className="flex flex-row p-2 text-primary rounded-md hover:bg-primary">
                     <span className="flex-shrink-0">{item.icon}</span>
-                    <span className="ml-3 text-sm">{expanded ? item.name : ""}</span>
+                    <span className="ml-3 text-sm">
+                      {expanded ? item.name : ""}
+                    </span>
                   </div>
                 </Link>
               ))}

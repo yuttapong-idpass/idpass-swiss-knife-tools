@@ -138,7 +138,7 @@ function App() {
 
   return (
     <>
-      <div className="flex dark:bg-dark-bg">
+      <div className="flex flex-row dark:bg-dark-bg">
         <BrowserRouter>
           <Sidebar>
             {items.map((item, index) => (
