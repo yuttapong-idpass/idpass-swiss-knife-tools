@@ -5,7 +5,11 @@
 
 
 body {
-  font-family: 'chakrapetchMedium', sans-serif;
+  font-family: 'NotoSansThaiRegular', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
 }
 
 :root {
@@ -44,6 +48,27 @@ body {
   --color-button-primary: #7b5ea7;
 }
 
+
+.headers-text-gradient-dark {
+  /* color: linear-gradient(to top left,#5433FF,#20BDFF,#A5FECB); */
+  font-size: 20px;
+  font-family: 'NotoSansThaiExtraBold', sans-serif;
+  background: -webkit-linear-gradient(to top left, #ffe259, #ffa751);
+  background: linear-gradient(to top left,#e65c00,#F9D423);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.headers-text-gradient-light { 
+  /* color: linear-gradient(to top left,#5433FF,#20BDFF,#A5FECB); */
+  font-size: 20px;
+  font-family: 'NotoSansThaiExtraBold', sans-serif;
+  background: -webkit-linear-gradient(to top left,#5433FF,#20BDFF,#A5FECB);;
+  background: linear-gradient(to top left,#5433FF,#20BDFF,#A5FECB);;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* @font-face {
   font-family: "Kanit";
   src: local("Kanit"),
@@ -53,79 +78,64 @@ body {
 
 
 @font-face {
-  font-family: chakrapetchBold;
-  src: local('chakrapetchBold'),
-    url('./assets/fonts/ChakraPetch-Bold.ttf') format('truetype');
-  font-weight: bold;
-}
-
-
-@font-face {
-  font-family: chakrapetchBoldItalic;
-  src: local('chakrapetchBoldItalic'),
-    url('./assets/fonts/ChakraPetch-BoldItalic.ttf') format('truetype');
+  font-family: NotoSansThaiBlack;
+  src: local(''),
+    url('./assets/fonts/NotoSansThai-Black.ttf') format('truetype');
   font-weight: bold;
 }
 
 @font-face {
-  font-family: chakrapetchBoldItalic;
-  src: local('chakrapetchBoldItalic'),
-    url('./assets/fonts/ChakraPetch-BoldItalic.ttf') format('truetype');
+  font-family: NotoSansThaiBold;
+  src: local(''),
+    url('./assets/fonts/NotoSansThai-Bold.ttf') format('truetype');
   font-weight: bold;
 }
 
 @font-face {
-  font-family: chakrapetchItalic;
-  src: local('chakrapetchBoldItalic'),
-    url('./assets/fonts/ChakraPetch-Italic.ttf') format('truetype');
-  font-weight: lighter;
+  font-family: NotoSansThaiExtraBold;
+  src: local(''),
+    url('./assets/fonts/NotoSansThai-ExtraBold.ttf') format('truetype');
+  font-weight: bold;
 }
 
 @font-face {
-  font-family: chakrapetchLight;
-  src: local('chakrapetchLight'),
-    url('./assets/fonts/ChakraPetch-Light.ttf') format('truetype');
-  font-weight: lighter;
+  font-family: NotoSansThaiExtraLight;
+  src: local(''),
+    url('./assets/fonts/NotoSansThai-ExtraLight.ttf') format('truetype');
+  font-weight: bold;
 }
 
 @font-face {
-  font-family: chakrapetchLightItalic;
-  src: local('chakrapetchLightItalic'),
-    url('./assets/fonts/ChakraPetch-LightItalic.ttf') format('truetype');
-  font-weight: lighter;
+  font-family: NotoSansThaiLight;
+  src: local(''),
+    url('./assets/fonts/NotoSansThai-Light.ttf') format('truetype');
+  font-weight: bold;
 }
 
 @font-face {
-  font-family: chakrapetchMedium;
-  src: local('chakrapetchMedium'),
-    url('./assets/fonts/ChakraPetch-Medium.ttf') format('truetype');
-  font-weight: medium;
+  font-family: NotoSansThaiMedium;
+  src: local(''),
+    url('./assets/fonts/NotoSansThai-Medium.ttf') format('truetype');
+  font-weight: bold;
 }
 
 @font-face {
-  font-family: chakrapetchMediumItalic;
-  src: local('chakrapetchMediumItalic'),
-    url('./assets/fonts/ChakraPetch-MediumItalic.ttf') format('truetype');
-  font-weight: lighter;
+  font-family: NotoSansThaiRegular;
+  src: local(''),
+    url('./assets/fonts/NotoSansThai-Regular.ttf') format('truetype');
+  font-weight: bold;
 }
 
 @font-face {
-  font-family: chakrapetchRegular;
-  src: local('chakrapetchRegular'),
-    url('./assets/fonts/ChakraPetch-Regular.ttf') format('truetype');
-  font-weight: lighter;
+  font-family: NotoSansThaiSemiBold;
+  src: local(''),
+    url('./assets/fonts/NotoSansThai-SemiBold.ttf') format('truetype');
+  font-weight: bold;
 }
 
 @font-face {
-  font-family: chakrapetchSemiBold;
-  src: local('chakrapetchSemiBold'),
-    url('./assets/fonts/ChakraPetch-Semi.ttf') format('truetype');
-  font-weight: lighter;
-}
-
-@font-face {
-  font-family: chakrapetchSemiBoldItalic;
-  src: local('chakrapetchSemiBoldItalic'),
-    url('./assets/fonts/ChakraPetch-Italic.ttf') format('truetype');
-  font-weight: lighter;
+  font-family: NotoSansThaiThin;
+  src: local(''),
+    url('./assets/fonts/NotoSansThai-Thin.ttf') format('truetype');
+  font-weight: bold;
 }

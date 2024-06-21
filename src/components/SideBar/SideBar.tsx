@@ -79,7 +79,7 @@ export default function Sidebar({ children }: Props) {
                   </span>
                 </div>
                 <div >
-                  {/* <DarkLightToggle /> */}
+                  <DarkLightToggle />
                 </div>
               </div>
             </div>
