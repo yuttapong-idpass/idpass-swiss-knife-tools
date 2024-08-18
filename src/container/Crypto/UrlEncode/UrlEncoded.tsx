@@ -46,7 +46,7 @@ const UrlEncoded = (props: Props) => {
   };
 
   return (
-    <main className="w-full p-2 gap-2 bg-primary">
+    <main className="w-full p-2 gap-2">
       <p className="text-xl font-bold underline underline-offset-1 text-primary">
         URL Encoded/Decoded
       </p>

@@ -54,7 +54,7 @@ const XMLJson = (props: Props) => {
   };
 
   return (
-    <section className="w-full p-2 gap-2 bg-primary">
+    <section className="w-full p-2 gap-2">
       <ToastNotify />
       <p className="text-xl font-bold underline underline-offset-1 text-primary">
         XML To JSON

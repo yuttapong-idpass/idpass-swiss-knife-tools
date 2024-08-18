@@ -12,17 +12,22 @@ import "./assets/fonts/NotoSansThai-Regular.ttf";
 import "./assets/fonts/NotoSansThai-SemiBold.ttf";
 import "./assets/fonts/NotoSansThai-Thin.ttf";
 
-
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import ThemeProvider from "./providers/ThemeProvider";
+import { NextUIProvider } from "@nextui-org/react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-  <Provider store={store}>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
-  </Provider>
+  <NextUIProvider>
+    <NextThemesProvider attribute="class" defaultTheme="dark">
+      <Provider store={store}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    </NextThemesProvider>
+  </NextUIProvider>
   // </React.StrictMode>
 );

@@ -117,7 +117,7 @@ const JsonWebToken = (props: Props) => {
   };
 
   return (
-    <main className="w-full p-2  gap-2 bg-primary">
+    <main className="w-full p-2  gap-2">
       <ToastNotify />
       <p className="text-xl font-bold underline underline-offset-1 text-primary">
         JWT Parser
@@ -277,7 +277,7 @@ const JsonWebToken = (props: Props) => {
                   <input
                     type="input"
                     id="secret"
-                    className="h-10 p-2 rounded-md shadow-md bg-primary"
+                    className="h-10 p-2 rounded-md shadow-md"
                     onChange={handleSecretKey}
                   />{" "}
                   )

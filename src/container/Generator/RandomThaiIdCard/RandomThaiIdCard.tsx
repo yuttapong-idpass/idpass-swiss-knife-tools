@@ -240,7 +240,7 @@ const IdCardGenerator = (props: Props) => {
   };
 
   return (
-    <div className="p-4 place-items-center w-full h-screen bg-primary">
+    <div className="p-4 place-items-center w-full h-screen">
       <ToastNotify />
       <div className="flex flex-col">
         <div className="flex justify-between">
@@ -274,7 +274,6 @@ const IdCardGenerator = (props: Props) => {
                       className="
                   rounded-md
                   text-primary
-                  bg-primary
                   p-2
                   shadow-lg
                   "
@@ -303,7 +302,6 @@ const IdCardGenerator = (props: Props) => {
                           title="sector1"
                           className="rounded-md
                           text-primary
-                          bg-primary
                           p-2
                           shadow-lg
                         "
@@ -332,7 +330,6 @@ const IdCardGenerator = (props: Props) => {
                         rounded-md
                         shadow-lg
                         text-primary
-                        bg-primary
                         p-2
                         shadow-2
                         "
@@ -360,7 +357,6 @@ const IdCardGenerator = (props: Props) => {
                       p-2
                       rounded-md
                       shadow-md
-                      bg-primary 
                       text-primary
                   "
                   />

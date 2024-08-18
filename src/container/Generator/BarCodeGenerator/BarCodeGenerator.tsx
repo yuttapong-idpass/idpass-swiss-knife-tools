@@ -91,7 +91,7 @@ const BarCodeGenerator = (props: Props) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full bg-primary p-4 flex flex-col gap-2"
+      className="w-full p-4 flex flex-col gap-2"
     >
       <div>
         <div className="row-end-1">
@@ -113,7 +113,7 @@ const BarCodeGenerator = (props: Props) => {
               <div>
                 <select
                   id="selectBarcodeType"
-                  className="rounded-md relative text-primary bg-primary p-2 shadow-lg"
+                  className="rounded-md relative text-primary p-2 shadow-lg"
                   {...register("barcodeType", {
                     required: true,
                     onChange: (e) => {
@@ -138,7 +138,7 @@ const BarCodeGenerator = (props: Props) => {
                   <input
                     type="text"
                     placeholder="Input barcode..."
-                    className="rounded-md relative text-primary bg-primary p-2 shadow-lg"
+                    className="rounded-md relative text-primary p-2 shadow-lg"
                     {...register("barcodeInput", {
                       required: true,
                     })}

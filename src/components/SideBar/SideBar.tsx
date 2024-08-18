@@ -7,6 +7,7 @@ import {
 } from "react-icons/fa";
 import DarkLightToggle from "../DarkLightToggle/DarkLightToggle";
 import { Link } from "react-router-dom";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 
 import Tools from "../../assets/images/tools.png";
 import BeeTools from "../../assets/images/bee.png";
@@ -32,8 +33,8 @@ export default function Sidebar({ children }: Props) {
 
   return (
     <>
-      <aside className="h-screen test-sticky bg-secondary">
-        <nav className="h-full flex flex-col shadow-sm border-r dark:border-primary overflow-y-auto">
+      <aside className="h-screen test-sticky bg-content2">
+        <nav className="h-full flex flex-col shadow-sm border-rd border-default-100 overflow-y-auto">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               title="logo"
@@ -45,10 +46,10 @@ export default function Sidebar({ children }: Props) {
 
             {expanded ? (
               <div>
-                <span className="text-primary dark:text-warning text-lg font-bold">
+                <span className="text-default-800 dark:text-warning text-lg font-extrabold">
                   Buzz Tools
                 </span>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                <p className="text-default-800 text-sm">
                   tools for developer
                 </p>
               </div>
@@ -56,7 +57,7 @@ export default function Sidebar({ children }: Props) {
 
             <button
               onClick={() => setExpanded((curr) => !curr)}
-              className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+              className="p-1.5 rounded-lg bg-content4"
             >
               {expanded ? <FaChevronLeft /> : <FaChevronRight />}
             </button>
@@ -66,7 +67,7 @@ export default function Sidebar({ children }: Props) {
             <ul className="flex-1 px-3">{children}</ul>
           </SidebarContext.Provider>
 
-          <div className="border-t dark:border-primary flex p-3">
+          <div className="border-t dark:border-default-100 flex p-3">
             <div
               className={`flex justify-center items-center overflow-hidden transition-all ${
                 expanded ? "w-52 ml-3" : "w-0"
@@ -74,7 +75,7 @@ export default function Sidebar({ children }: Props) {
             >
               <div className="flex flex-row leading-4 gap-4 justify-center place-items-center">
                 <div>
-                  <span className="text-md  text-primary">
+                  <span className="text-md  text-default-800">
                     v.1.5.1-beta.1
                   </span>
                 </div>
@@ -131,34 +132,12 @@ export function SidebarItem(props: SidebarProps) {
         </div>
       </button>
       {expanded ? (
-        // <div
-        //   className={`w-full p-3 rounded-md ${
-        //     props.active ? "hover:bg-primary" : ""
-        //   }`}
-        // >
-        //   {props.active ? (
-        //     <div
-        //       className={`overflow-hidden transition-all ${
-        //         expanded ? "w-52 ml-1" : "w-0"
-        //       } flex flex-row w-full text-primary ml-4`}
-        //     >
-        //       {props.menuLists.map((item: any, index: any) => (
-        //         <Link to={item.link} key={index}>
-        //           <div className="flex flex-row p-2" key={index}>
-        //             <span className="flex-shrink-0">{item.icon}</span>
-        //             <span className="ml-3">{expanded ? item.name : ""}</span>
-        //           </div>
-        //         </Link>
-        //       ))}
-        //     </div>
-        //   ) : null}
-        // </div>
         <>
           {props.active ? (
             <div className={`w-full`}>
               {props.menuLists.map((item: any, index: any) => (
                 <Link to={item.link} key={index}>
-                  <div className="flex flex-row p-2 text-primary rounded-md hover:bg-primary">
+                  <div className="flex flex-row p-2 text-default-800 rounded-md">
                     <span className="flex-shrink-0">{item.icon}</span>
                     <span className="ml-3 text-sm">
                       {expanded ? item.name : ""}

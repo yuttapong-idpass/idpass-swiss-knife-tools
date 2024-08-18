@@ -5,7 +5,7 @@
 
 
 body {
-  font-family: 'NotoSansThaiRegular', sans-serif;
+  font-family: 'NotoSansThaiMedium', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   font-variation-settings:
@@ -79,63 +79,60 @@ body {
 
 @font-face {
   font-family: NotoSansThaiBlack;
-  src: local(''),
+  src: local('Noto'),
     url('./assets/fonts/NotoSansThai-Black.ttf') format('truetype');
-  font-weight: bold;
 }
 
 @font-face {
   font-family: NotoSansThaiBold;
-  src: local(''),
+  src: local('Noto-bold'),
     url('./assets/fonts/NotoSansThai-Bold.ttf') format('truetype');
-  font-weight: bold;
 }
 
 @font-face {
   font-family: NotoSansThaiExtraBold;
-  src: local(''),
+  src: local('Noto-extra-bold'),
     url('./assets/fonts/NotoSansThai-ExtraBold.ttf') format('truetype');
-  font-weight: bold;
 }
 
 @font-face {
   font-family: NotoSansThaiExtraLight;
-  src: local(''),
+  src: local('Noto-extra-light'),
     url('./assets/fonts/NotoSansThai-ExtraLight.ttf') format('truetype');
   font-weight: bold;
 }
 
 @font-face {
   font-family: NotoSansThaiLight;
-  src: local(''),
+  src: local('Noto-light'),
     url('./assets/fonts/NotoSansThai-Light.ttf') format('truetype');
   font-weight: bold;
 }
 
 @font-face {
   font-family: NotoSansThaiMedium;
-  src: local(''),
+  src: local('Noto-medium'),
     url('./assets/fonts/NotoSansThai-Medium.ttf') format('truetype');
   font-weight: bold;
 }
 
 @font-face {
   font-family: NotoSansThaiRegular;
-  src: local(''),
+  src: local('Noto-regular'),
     url('./assets/fonts/NotoSansThai-Regular.ttf') format('truetype');
   font-weight: bold;
 }
 
 @font-face {
   font-family: NotoSansThaiSemiBold;
-  src: local(''),
+  src: local('Noto-semi-bold'),
     url('./assets/fonts/NotoSansThai-SemiBold.ttf') format('truetype');
   font-weight: bold;
 }
 
 @font-face {
   font-family: NotoSansThaiThin;
-  src: local(''),
+  src: local('Not-thin'),
     url('./assets/fonts/NotoSansThai-Thin.ttf') format('truetype');
   font-weight: bold;
 }

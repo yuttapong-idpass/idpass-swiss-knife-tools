@@ -5,6 +5,8 @@ import Home from "./container/Home/Home";
 import Menu from "./container/Menu/Menu";
 import IdCardGenerator from "./container/Generator/RandomThaiIdCard/RandomThaiIdCard";
 import Sidebar, { SidebarItem } from "./components/SideBar/SideBar";
+import { Accordion, AccordionItem } from "@nextui-org/react";
+
 
 import { FaBarcode } from "react-icons/fa";
 import { TbJson } from "react-icons/tb";
@@ -142,7 +144,6 @@ function App() {
         <BrowserRouter>
           <Sidebar>
             {items.map((item, index) => (
-              // deepcode ignore ReactMissingArrayKeys: <please specify a reason of ignoring this>
               <SidebarItem
                 title={item.title}
                 active={item.active}
