@@ -11,9 +11,11 @@ import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
 
 type Props = {
-  onChangeText: any;
-  text: any;
-  onError: any;
+  // onChangeText: any;
+  // text: any;
+  // onError: any;
+  content: any;
+  readOnly: boolean;
 };
 
 const JsonEditorOutput = (props: Props) => {
@@ -65,7 +67,10 @@ const JsonEditorOutput = (props: Props) => {
     console.log("create editor", refContainer.current);
     refEditor.current = new JSONEditor({
       target: refContainer.current!,
-      props: {},
+      props: {
+        readOnly: true,
+        mode: Mode.text
+      },
     });
 
     return () => {

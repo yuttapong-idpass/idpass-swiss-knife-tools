@@ -4,30 +4,31 @@ import "./JsonPretty.css";
 
 import JsonEditorInput from "./JSONEditor/JsonEditorInput";
 import JsonEditorOutput from "./JSONEditor/JsonEditorOutput";
-type Props = {};
+import { useAppDispatch } from "../../../store/store";
+import { useSelector } from "react-redux";
+import { jsonPrettySelector, setJson } from "../../../store/slice/jsonPrettySlice";
+type Props = {
+};
 
 const JsonPretty = (props: Props) => {
-  const [inputText, setInputText] = useState("");
-  const [outputText, setOutputText] = useState("");
-  const [content, setContent] = useState({
-    json: {
-      greeting: "Hello World",
-      color: "#ff3e00",
-      ok: true,
-      values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    },
-    text: undefined,
-  });
+  const dispatch = useAppDispatch();
+  const jsonPrettyReducer: any = useSelector(jsonPrettySelector);
+
+
+  const [inputText, setInputText] = useState({ json: undefined, text: undefined });
+  const [outputText, setOutputText] = useState({ json: undefined, text: undefined });
   const handleJsonInput = (text: any) => {
-    // setInputText(text);
+    setInputText(text);
+    console.log('text', text);
   };
 
   const handleJsonOutput = (text: string) => {
-    setOutputText(text);
+    // setOutputText(text);
+    
   };
 
-  const onClickPretty = () => {
-    setOutputText(inputText);
+  const onSetJsonPretty = () => {
+      dispatch(setJson({ data: inputText }))
   };
 
   const handleError = (text: any) => {};
@@ -50,6 +51,7 @@ const JsonPretty = (props: Props) => {
                 className="text-default-50"
                 color="warning"
                 radius="sm"
+                onClick={onSetJsonPretty}
               >
                 Format
               </Button>
@@ -58,9 +60,8 @@ const JsonPretty = (props: Props) => {
         </div>
         <div className="col-span-4">
           <JsonEditorOutput
-            // text={outputText}
-            // onError={handleError}
-            // onChangeText={handleJsonOutput}
+            content={jsonPrettyReducer.data.data}
+            readOnly={true}
           />
         </div>
       </div>
