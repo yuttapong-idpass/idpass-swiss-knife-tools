@@ -4,16 +4,18 @@ import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
 import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { ThemeContext } from "../../../../providers/ThemeProvider";
-import "vanilla-jsoneditor/themes/jse-theme-dark.css";
+// import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
 import "./JsonEditorOutput.css";
 import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
 
 type Props = {
-  onChangeText: any;
-  text: any;
-  onError: any;
+  // onChangeText: any;
+  // text: any;
+  // onError: any;
+  content: any;
+  readOnly: boolean;
 };
 
 const JsonEditorOutput = (props: Props) => {
@@ -23,40 +25,69 @@ const JsonEditorOutput = (props: Props) => {
   const refEditor = useRef<JSONEditor | null>(null);
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
 
+  // useEffect(() => {
+  //   //create editor
+  //   refEditor.current = new JSONEditor({
+  //     target: refContainer.current!,
+  //     props: {
+  //       onChange(content: any, previousContent, { contentErrors }) {
+  //         console.log("content errors", contentErrors);
+  //         props.onChangeText(JSON.parse(content.text));
+  //       },
+  //       onError(err: Error) {
+  //         props.onError(err);
+  //       },
+  //       mode: Mode.text,
+  //     },
+  //   });
+
+  //   return () => {
+  //     if (refEditor.current) {
+  //       refEditor.current.destroy();
+  //       refEditor.current = null;
+  //     }
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   // update props
+  //   if (refEditor.current) {
+  //     if (typeof props.text === "string") {
+  //       refEditor.current.update({ text: props.text });
+  //     }
+
+  //     if (typeof props.text === "object") {
+  //       refEditor.current.update({ json: props.text });
+  //     }
+  //   }
+  // }, [props]);
+
   useEffect(() => {
-    //create editor
+    // create editor
+    console.log("create editor", refContainer.current);
     refEditor.current = new JSONEditor({
       target: refContainer.current!,
       props: {
-        onChange(content: any, previousContent, { contentErrors }) {
-          console.log("content errors", contentErrors);
-          props.onChangeText(JSON.parse(content.text));
-        },
-        onError(err: Error) {
-          props.onError(err);
-        },
-        mode: Mode.text,
+        readOnly: true,
+        mode: Mode.text
       },
     });
 
     return () => {
+      // destroy editor
       if (refEditor.current) {
+        console.log("destroy editor");
         refEditor.current.destroy();
         refEditor.current = null;
       }
     };
   }, []);
 
+  // update props
   useEffect(() => {
-    // update props
     if (refEditor.current) {
-      if (typeof props.text === "string") {
-        refEditor.current.update({ text: props.text });
-      }
-
-      if (typeof props.text === "object") {
-        refEditor.current.update({ json: props.text });
-      }
+      console.log("update props", props);
+      refEditor.current.updateProps(props);
     }
   }, [props]);
 
@@ -139,7 +170,6 @@ const JsonEditorOutput = (props: Props) => {
       <ToastNotify />
       <div
         className={`flex justify-between p-2 gap-2 w-full h-10 
-          text-[#2d3748]
           bg-violet-400
           dark:bg-yellow-500
           `}

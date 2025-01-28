@@ -35,12 +35,14 @@ const JsonEditorInput = (props: Props) => {
       target: refContainer.current!,
       props: {
         onChange(content: any, previousContent, status) {
-          props.onChangeText(JSON.parse(content.text));
+          props.onChangeText(content);
         },
         onError(error: Error) {
           props.onError(error);
         },
         mode: Mode.text,
+        mainMenuBar: false,
+        navigationBar: false,
       },
     });
 
@@ -51,19 +53,6 @@ const JsonEditorInput = (props: Props) => {
       }
     };
   }, []);
-
-  useEffect(() => {
-    // update props
-    if (refEditor.current) {
-      if (typeof props.text === "string") {
-        refEditor.current.update({ text: props.text });
-      }
-
-      if (typeof props.text === "object") {
-        refEditor.current.update({ json: props.text });
-      }
-    }
-  }, [props]);
 
   const onClickMaximize = () => {
     setToggleFullScreen(!toggleFullScreen);
@@ -145,9 +134,10 @@ const JsonEditorInput = (props: Props) => {
       <ToastNotify />
       <div
         className={`flex justify-between p-2 gap-2 w-full h-10  
-          text-[#2d3748] 
-          bg-violet-400
-          dark:bg-yellow-500`}
+          bg-warning
+          dark:text-default-50
+          text-default-800
+          `}
       >
         <div>Input Panel</div>
         <div className="flex gap-3">

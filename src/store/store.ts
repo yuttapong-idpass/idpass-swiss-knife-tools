@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import encodedDecodedReducer from './slice/enCodeSlice';
+import jsonPrettyReducer from './slice/jsonPrettySlice';
 
 const reducer = {
-    encodedDecodedReducer
+    encodedDecodedReducer,
+    jsonPrettyReducer
 }
 
 export const store = configureStore({
