@@ -14,20 +14,14 @@ import "./assets/fonts/NotoSansThai-Thin.ttf";
 
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import ThemeProvider from "./providers/ThemeProvider";
-import { NextUIProvider } from "@nextui-org/react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProvider } from "./providers/ThemeProvider";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-  <NextUIProvider>
-    <NextThemesProvider attribute="class" defaultTheme="dark">
-      <Provider store={store}>
-        <ThemeProvider>
-          <App />
-        </ThemeProvider>
-      </Provider>
-    </NextThemesProvider>
-  </NextUIProvider>
+  <Provider store={store}>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <App />
+    </ThemeProvider>
+  </Provider>
   // </React.StrictMode>
 );

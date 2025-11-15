@@ -3,7 +3,6 @@ import { saveAs } from "file-saver";
 import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
 import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
-import { ThemeContext } from "../../../../providers/ThemeProvider";
 // import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
 import "./JsonEditorOutput.css";
@@ -19,8 +18,6 @@ type Props = {
 };
 
 const JsonEditorOutput = (props: Props) => {
-  const { theme, setTheme } = useContext(ThemeContext);
-  const isDark = theme === "dark";
   const refContainer = useRef<HTMLDivElement>(null);
   const refEditor = useRef<JSONEditor | null>(null);
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
@@ -227,9 +224,7 @@ const JsonEditorOutput = (props: Props) => {
         </div>
       </div>
       <div
-        className={`${toggleFullScreen ? "h-screen" : "h-[87vh]"} ${
-          isDark ? "jse-theme-dark" : "input-json"
-        }`}
+        className={`${toggleFullScreen ? "h-screen" : "h-[87vh]"}`}
         ref={refContainer}
       />
     </div>

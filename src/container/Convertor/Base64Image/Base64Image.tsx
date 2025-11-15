@@ -194,7 +194,7 @@ const Base64Image = (props: Props) => {
                 <button
                   title="generate"
                   id="generate"
-                  className="w-full item-centers justify-center px-4 py-4 font-bold leading-6 rounded-md shadow-sm text-white dark:text-[#2d3748] bg-yellow-500"
+                  className="w-full item-centers justify-center px-4 py-4 font-bold leading-6 rounded-md shadow-xs text-white dark:text-[#2d3748] bg-yellow-500"
                   onClick={generateImage}
                 >
                   Generate Image
@@ -204,7 +204,7 @@ const Base64Image = (props: Props) => {
                   <input
                     type="checkbox"
                     id="autoGenerate"
-                    className="w-4 h-4 text-primary rounded"
+                    className="w-4 h-4 text-primary rounded-sm"
                     defaultChecked={true}
                     onChange={handleCheckBoxAutoGenerate}
                   />
@@ -216,7 +216,7 @@ const Base64Image = (props: Props) => {
                 <a
                   title="download"
                   id="download"
-                  className="w-full item-centers text-center justify-center px-4 py-4 font-bold leading-6 rounded-md shadow-sm text-white dark:text-[#2d3748] bg-violet-400"
+                  className="w-full item-centers text-center justify-center px-4 py-4 font-bold leading-6 rounded-md shadow-xs text-white dark:text-[#2d3748] bg-violet-400"
                   download="fromBase64Image.png"
                   href={textArea}
                 >

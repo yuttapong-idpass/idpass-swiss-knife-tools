@@ -166,7 +166,7 @@ const BarCodeGenerator = (props: Props) => {
                       whitespace-no-wrap 
                       bg-success 
                       rounded-md 
-                      shadow-sm
+                      shadow-xs
                       text-white
                       bg-yellow-500
                       dark:text-[#2d3748]"
@@ -190,7 +190,7 @@ const BarCodeGenerator = (props: Props) => {
                       whitespace-no-wrap 
                       bg-success 
                       rounded-md 
-                      shadow-sm
+                      shadow-xs
                       text-white
                       bg-violet-400
                       dark:text-[#2d3748]

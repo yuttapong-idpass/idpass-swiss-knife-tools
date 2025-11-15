@@ -1,7 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ThemeContext } from "../../providers/ThemeProvider";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
-import { useTheme } from 'next-themes'; 
 
 import "./DarkLightToggle.css";
 type Props = {};
@@ -14,15 +12,12 @@ const DarkLightToggle = (props: Props) => {
 
   const [ mounted, setMounted ] = useState(false);
   // const [ toggle, setToggle ] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark";
 
   useEffect(() => { 
     setMounted(true);
   }, []);
 
   const toggleTheme = () => { 
-      setTheme(isDark ? 'light' : 'dark')   
   }
 
   return (
@@ -52,7 +47,6 @@ const DarkLightToggle = (props: Props) => {
     
     <div className="flex flex-row gap-4">
       <button className="text-default-800" onClick={toggleTheme}>
-        {isDark ? <MdLightMode size={30} /> : <MdDarkMode size={30} />}
       </button>
     </div>
   );

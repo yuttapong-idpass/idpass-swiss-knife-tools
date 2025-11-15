@@ -91,7 +91,7 @@ const UrlEncoded = (props: Props) => {
                   font-bold 
                   whitespace-no-wrap  
                   rounded-md 
-                  shadow-sm
+                  shadow-xs
                   text-white
                   bg-yellow-500
                   dark:text-[#2d3748]
@@ -120,7 +120,7 @@ const UrlEncoded = (props: Props) => {
                   font-bold 
                   whitespace-no-wrap  
                   rounded-md 
-                  shadow-sm
+                  shadow-xs
                   text-white
                   bg-violet-400
                   dark:text-[#2d3748]

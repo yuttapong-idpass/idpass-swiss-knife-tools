@@ -1,5 +1,4 @@
 import React, { useCallback, useState, useContext } from "react";
-import { ThemeContext } from "../../../providers/ThemeProvider";
 import { xmlLanguage } from "@codemirror/lang-xml";
 import { githubDark, githubLight } from "@uiw/codemirror-themes-all";
 import { toast } from "react-toastify";
@@ -13,9 +12,6 @@ import ToastNotify from "../../../components/ToastNotify/ToastNotify";
 type Props = {};
 
 export default function XMLPretty({}: Props) {
-  const { theme } = useContext(ThemeContext);
-  const isDark = theme === "dark";
-
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
 
@@ -72,10 +68,9 @@ export default function XMLPretty({}: Props) {
               <ReactCodeMirror
                 value={input}
                 height="90vh"
-                theme={isDark ? githubDark : githubLight}
                 extensions={[xmlLanguage]}
                 onChange={handleInput}
-                className="test-wrap text-base shadow-lg border border-1 dark:border-0"
+                className="test-wrap text-base shadow-lg border border dark:border-0"
               />
             </div>
           </div>
@@ -87,7 +82,7 @@ export default function XMLPretty({}: Props) {
                 title="xml pretty"
                 className="inline-flex w-full items-center justify-center px-4 py-2 text-base font-bold  
                 whitespace-no-wrap 
-                rounded-md shadow-sm 
+                rounded-md shadow-xs 
                 bg-violet-400
                 text-white
                 dark:bg-yellow-500
@@ -109,10 +104,9 @@ export default function XMLPretty({}: Props) {
               <ReactCodeMirror
                 value={output}
                 height="90vh"
-                theme={isDark ? githubDark : githubLight}
                 extensions={[xmlLanguage]}
                 onChange={handleOutput}
-                className="test-wrap text-base shadow-lg border border-1 dark:border-0"
+                className="test-wrap text-base shadow-lg border border dark:border-0"
               />
             </div>
           </div>

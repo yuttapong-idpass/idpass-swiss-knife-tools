@@ -7,7 +7,6 @@ import {
 } from "react-icons/fa";
 import DarkLightToggle from "../DarkLightToggle/DarkLightToggle";
 import { Link } from "react-router-dom";
-import { Accordion, AccordionItem } from "@nextui-org/react";
 
 import Tools from "../../assets/images/tools.png";
 import BeeTools from "../../assets/images/bee.png";
@@ -34,7 +33,7 @@ export default function Sidebar({ children }: Props) {
   return (
     <>
       <aside className="h-screen test-sticky bg-content2">
-        <nav className="h-full flex flex-col shadow-sm border-rd border-default-100 overflow-y-auto">
+        <nav className="h-full flex flex-col shadow-xs border-rd border-default-100 overflow-y-auto">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               title="logo"
@@ -114,13 +113,13 @@ export function SidebarItem(props: SidebarProps) {
         } flex items-center`}
         onClick={() => onCollapse(props.keyNumber)}
       >
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <span className="text-gray-600 dark:text-gray-400 text-xs">
             {props.title}
           </span>
         </div>
         <span className="flex-1 ml-3"></span>
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           {props.active ? (
             <FaAngleDown
               className="text-gray-600 dark:text-gray-400"
@@ -138,7 +137,7 @@ export function SidebarItem(props: SidebarProps) {
               {props.menuLists.map((item: any, index: any) => (
                 <Link to={item.link} key={index}>
                   <div className="flex flex-row p-2 text-default-800 rounded-md">
-                    <span className="flex-shrink-0">{item.icon}</span>
+                    <span className="shrink-0">{item.icon}</span>
                     <span className="ml-3 text-sm">
                       {expanded ? item.name : ""}
                     </span>

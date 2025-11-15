@@ -1386,7 +1386,7 @@ import React, { useEffect, useState } from "react";
 
 //               <div>
 //                 <div className="grid place-items-center h-full mt-5">
-//                   <div className="inline-flex rounded-md shadow-sm">
+//                   <div className="inline-flex rounded-md shadow-xs">
 //                     <button
 //                       className="
 //                       text-white 
@@ -1394,7 +1394,7 @@ import React, { useEffect, useState } from "react";
 //                       bg-green-500 
 //                       hover:bg-[#FF9119]/80 
 //                       focus:ring-4 
-//                       focus:outline-none 
+//                       focus:outline-hidden 
 //                       focus:ring-[#FF9119]/50 
 //                       font-medium 
 //                       rounded-lg 

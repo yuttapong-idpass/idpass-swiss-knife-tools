@@ -9,7 +9,6 @@ import "./XMLJson.css";
 import xml2js from "xml2js";
 import ToastNotify from "../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
-import { ThemeContext } from "../../../providers/ThemeProvider";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { githubDark, githubLight } from "@uiw/codemirror-themes-all";
 import { xmlLanguage } from "@codemirror/lang-xml";
@@ -18,9 +17,6 @@ import { jsonLanguage } from "@codemirror/lang-json";
 type Props = {};
 
 const XMLJson = (props: Props) => {
-  const { theme } = useContext(ThemeContext);
-  const isDark = theme === "dark";
-
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
 
@@ -74,9 +70,8 @@ const XMLJson = (props: Props) => {
               <ReactCodeMirror
                 value={input}
                 height="90vh"
-                theme={isDark ? githubDark : githubLight}
                 extensions={[xmlLanguage]}
-                className="shadow-lg text-base border border-1 dark:border-0"
+                className="shadow-lg text-base border border dark:border-0"
                 onChange={handleInput}
               />
             </div>
@@ -94,7 +89,7 @@ const XMLJson = (props: Props) => {
                 whitespace-no-wrap 
                 bg-success 
                 rounded-md 
-                shadow-sm 
+                shadow-xs 
                 bg-violet-400
                 text-white
                 dark:bg-yellow-500
@@ -116,9 +111,8 @@ const XMLJson = (props: Props) => {
               <ReactCodeMirror
                 value={output}
                 height="90vh"
-                theme={isDark ? githubDark : githubLight}
                 extensions={[jsonLanguage]}
-                className="shadow-lg text-base border border-1 dark:border-0"
+                className="shadow-lg text-base border border dark:border-0"
                 onChange={handleOutput}
               />
             </div>

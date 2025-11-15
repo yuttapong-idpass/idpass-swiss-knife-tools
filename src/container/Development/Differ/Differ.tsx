@@ -11,7 +11,6 @@ import "./Differ.css";
 import * as diff from "diff";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { githubDark, githubLight } from "@uiw/codemirror-themes-all";
-import { ThemeContext } from "../../../providers/ThemeProvider";
 
 // import { Differ } from 'json-diff-kit';
 // import "json-diff-kit/dist/viewer.css";
@@ -36,9 +35,6 @@ const initialInput2: any = "";
 const initialDiff: IDiffer[] = [];
 
 export default function Differ(props: Props) {
-  const { theme } = useContext(ThemeContext);
-  const isDark = theme === "dark";
-
   const [firstPanel, setFirstPanel] = useState("");
   const [secondPanel, setSecondPanel] = useState("");
   const [addedCount, setAddedCount] = useState(0);
@@ -121,9 +117,8 @@ export default function Differ(props: Props) {
                   <ReactCodeMirror
                     value={firstPanel}
                     height="45vh"
-                    theme={isDark ? githubDark : githubLight}
                     onChange={handleFirst}
-                    className="shadow-lg border border-1 dark:border-0 text-base"
+                    className="shadow-lg border border dark:border-0 text-base"
                   />
                 </div>
               </div>
@@ -142,7 +137,7 @@ export default function Differ(props: Props) {
                     font-bold 
                     whitespace-no-wrap  
                     rounded-md 
-                    shadow-sm
+                    shadow-xs
                     bg-violet-400
                     text-white
                     dark:bg-yellow-500
@@ -166,9 +161,8 @@ export default function Differ(props: Props) {
                   <ReactCodeMirror
                     value={secondPanel}
                     height="45vh"
-                    theme={isDark ? githubDark : githubLight}
                     onChange={handleSecond}
-                    className="shadow-lg text-base border border-1 dark:border-0"
+                    className="shadow-lg text-base border border dark:border-0"
                   />
                 </div>
               </div>
