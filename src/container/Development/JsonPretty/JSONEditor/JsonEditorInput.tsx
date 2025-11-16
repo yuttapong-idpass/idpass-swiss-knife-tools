@@ -200,7 +200,7 @@ const JsonEditorInput = (props: Props) => {
     <div className={`${toggleFullScreen ? "fullscreen" : "mt-3"}`} id="jsonEditorInput">
       <div className="flex flex-col justify-between p-2 gap-2 w-full h-10 h-[87vh]">
         <div className="flex flex-row  p-2 gap-2 h-10 justify-between">
-          <span>Input json</span>
+          <span>INPUT</span>
           <div>
             <ButtonGroup>
               <Button variant="secondary" size="default">
