@@ -4,8 +4,7 @@ import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
 import Home from "./container/Home/Home";
 import Menu from "./container/Menu/Menu";
 import IdCardGenerator from "./container/Generator/RandomThaiIdCard/RandomThaiIdCard";
-import Sidebar, { SidebarItem } from "./components/SideBar/SideBar";
-
+// import Sidebar, { SidebarItem } from "./components/SideBar/SideBar";
 
 import { FaBarcode } from "react-icons/fa";
 import { TbJson } from "react-icons/tb";
@@ -31,6 +30,8 @@ import XMLJson from "./container/Development/XMLJson/XMLJson";
 import XMLPretty from "./container/Development/XMLPretty/XMLPretty";
 import Testing from "./container/Development/Testing/Testing";
 import EncodedDecoded from "./container/Crypto/EncodeDecode/EncodedDecoded";
+import SideBarMenu from "./components/SidebarMenu/SideBarMenu";
+import { Sidebar, SidebarContent, SidebarProvider } from "./components/ui/sidebar";
 
 function App() {
   let menuList = [
@@ -141,7 +142,7 @@ function App() {
     <>
       <div className="flex flex-row dark:bg-dark-bg">
         <BrowserRouter>
-          <Sidebar>
+          {/* <Sidebar>
             {items.map((item, index) => (
               <SidebarItem
                 title={item.title}
@@ -153,20 +154,23 @@ function App() {
                 key={index}
               />
             ))}
-          </Sidebar>
-          <Routes>
-            <Route path="/" element={<JsonPretty />} />
-            <Route path="/json-pretty" element={<JsonPretty />} />
-            <Route path="/differ" element={<Differ />} />
-            <Route path="/xml-to-json" element={<XMLJson />} />
-            <Route path="/xml-pretty" element={<XMLPretty />} />
-            <Route path="/base64Image" element={<Base64Image />} />
-            <Route path="/jwt" element={<JsonWebToken />} />
-            <Route path="/id-card-random" element={<IdCardGenerator />} />
-            <Route path="/barcode" element={<BarCodeGenerator />} />
-            <Route path="/encoded-decoded" element={<EncodedDecoded />} />
-            {/* <Route path="/mock-up" element={<MockIdCard />} /> */}
-          </Routes>
+          </Sidebar> */}
+          <SidebarProvider>
+            <SideBarMenu />
+            <Routes>
+              <Route path="/" element={<JsonPretty />} />
+              <Route path="/json-pretty" element={<JsonPretty />} />
+              <Route path="/differ" element={<Differ />} />
+              <Route path="/xml-to-json" element={<XMLJson />} />
+              <Route path="/xml-pretty" element={<XMLPretty />} />
+              <Route path="/base64Image" element={<Base64Image />} />
+              <Route path="/jwt" element={<JsonWebToken />} />
+              <Route path="/id-card-random" element={<IdCardGenerator />} />
+              <Route path="/barcode" element={<BarCodeGenerator />} />
+              <Route path="/encoded-decoded" element={<EncodedDecoded />} />
+              {/* <Route path="/mock-up" element={<MockIdCard />} /> */}
+            </Routes>
+          </SidebarProvider>
         </BrowserRouter>
       </div>
     </>
