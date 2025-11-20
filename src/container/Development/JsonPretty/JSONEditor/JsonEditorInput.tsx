@@ -6,14 +6,10 @@ import React, {
   useRef,
 } from "react";
 import { saveAs } from "file-saver";
-import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
-import { FaSave, FaEraser } from "react-icons/fa";
-import { MdOutlineDeleteForever } from "react-icons/md";
 import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
 import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
 import "./JsonEditorInput.css";
-import { toast } from "react-toastify";
 
 import Editor, { useMonaco, loader } from "@monaco-editor/react";
 import {
@@ -145,6 +141,28 @@ const JsonEditorInput = (props: Props) => {
     // }
   };
 
+  // const handleEditorWillMount = (monaco: any) => {
+  //   // defineTheme(themeName, themeData)
+  //   monaco.editor.defineTheme("my-cool-theme", {
+  //     base: "vs-dark", // inherit from 'vs', 'vs-dark', or 'hc-black'
+  //     inherit: true,
+  //     rules: [
+  //       { token: "comment", foreground: "6272a4", fontStyle: "italic" },
+  //       { token: "keyword", foreground: "ff79c6" },
+  //       { token: "identifier", foreground: "f8f8f2" },
+  //       { token: "string", foreground: "f1fa8c" },
+  //     ],
+  //     colors: {
+  //       "editor.background": "#282a36",
+  //       "editor.foreground": "#f8f8f2",
+  //       "editor.lineHighlightBackground": "#44475a",
+  //       "editorCursor.foreground": "#f8f8f2",
+  //       "editor.selectionBackground": "#44475a",
+  //       "editor.inactiveSelectionBackground": "#44475a50",
+  //     },
+  //   });
+  // };
+
   return (
     // <div
     //   className={`${toggleFullScreen ? "fullscreen" : "mt-3"} shadow-xl`}
@@ -197,8 +215,12 @@ const JsonEditorInput = (props: Props) => {
     //     ref={refContainer}
     //   />
     // </div>
-    <div className={`${toggleFullScreen ? "fullscreen" : "mt-3"}`} id="jsonEditorInput">
-      <div className="flex flex-col justify-between p-2 gap-2 w-full h-10 h-[87vh]">
+
+    <div
+      className={`${toggleFullScreen ? "fullscreen" : "mt-3"}`}
+      id="jsonEditorInput"
+    >
+      <div className="flex flex-col justify-between gap-2 w-full h-10 h-[87vh]">
         <div className="flex flex-row  p-2 gap-2 h-10 justify-between">
           <span>INPUT</span>
           <div>
@@ -224,6 +246,7 @@ const JsonEditorInput = (props: Props) => {
         <Editor
           defaultLanguage="json"
           defaultValue=""
+          // beforeMount={handleEditorWillMount}
           theme="vs-dark"
           options={{
             formatOnPaste: true,

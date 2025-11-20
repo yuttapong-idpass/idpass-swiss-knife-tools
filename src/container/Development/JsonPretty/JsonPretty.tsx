@@ -41,38 +41,28 @@ const JsonPretty = (props: Props) => {
   const handleError = (text: any) => {};
 
   return (
-    <main className="w-full p-2 gap-2 ">
+    <main className="w-full p-3 gap-2">
       <p className="text-xl font-extrabold text-default-800">Json Pretty</p>
-      <div className="grid grid-cols-9 mt-3">
-        <div className="col-span-4">
+      <div className="flex flex-row justify-content items-center">
+        <div className="w-full md:flex-1 p-4">
           <JsonEditorInput
             onError={handleError}
             onChangeText={handleJsonInput}
           />
         </div>
-        <div className="col-span-1">
-          <div className="grid place-items-center h-[92vh]">
-            {/* <div>
-              <Button
-                variant="shadow"
-                className="text-default-50"
-                color="warning"
-                radius="sm"
-                onClick={onSetJsonPretty}
-              >
-                Format
-              </Button> */}
-            <Button variant="outline" size="lg">
-              Format <ArrowRight /> 
-            </Button>
-          </div>
+
+        <div className="w-full md:w-32 p-4">
+          <Button variant="outline" size="lg">
+            Format <ArrowRight />
+          </Button>
         </div>
-      </div>
-      <div className="col-span-4">
-        <JsonEditorOutput
-          content={jsonPrettyReducer.data.data}
-          readOnly={true}
-        />
+
+        <div className="w-full md:flex-1 p-4">
+          <JsonEditorOutput
+            content={jsonPrettyReducer.data.data}
+            readOnly={true}
+          />
+        </div>
       </div>
     </main>
   );

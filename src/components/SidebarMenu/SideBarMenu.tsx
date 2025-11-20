@@ -12,17 +12,9 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  useSidebar,
 } from "../ui/sidebar";
-import {
-  ChevronDown,
-  FileBraces,
-  FileCode,
-  FileCodeCorner,
-  FileCodeCornerIcon,
-  KeyRound,
-  Shuffle,
-  Wrench,
-} from "lucide-react";
+import { ChevronUp, KeyRound, Shuffle, Wrench } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -115,6 +107,7 @@ let menuList = [
 ];
 
 export default function SideBarMenu() {
+  const { state } = useSidebar();
   return (
     <Sidebar>
       <SidebarContent>
@@ -127,7 +120,8 @@ export default function SideBarMenu() {
                   <SidebarMenuItem key={menu.title}>
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton>
-                        <span>{menu.title}</span> 
+                        <span>{menu.title}</span>
+                        <ChevronUp className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
@@ -144,6 +138,9 @@ export default function SideBarMenu() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        xxx
+      </SidebarFooter>
     </Sidebar>
   );
 }

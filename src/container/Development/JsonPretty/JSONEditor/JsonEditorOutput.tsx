@@ -8,6 +8,20 @@ import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
 import "./JsonEditorOutput.css";
 import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+} from "@/components/ui/button-group";
+import { Button } from "@/components/ui/button";
+import {
+  Copy,
+  FolderOpen,
+  ListTree,
+  Maximize2,
+  Save,
+  Type,
+} from "lucide-react";
+import { Editor } from "@monaco-editor/react";
 
 type Props = {
   // onChangeText: any;
@@ -23,46 +37,47 @@ const JsonEditorOutput = (props: Props) => {
   const editorRef = useRef<any>(null);
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
   const [error, setError] = useState("");
+  const [code, setCode] = useState({});
 
   useEffect(() => {}, []);
 
-  function handleMount(editor: any, monaco: any) {
-    editorRef.current = editor;
+  // function handleMount(editor: any, monaco: any) {
+  //   editorRef.current = editor;
 
-    editor.onDidChangeModelContent(() => {
-      const value = editor.getValue();
+  //   editor.onDidChangeModelContent(() => {
+  //     const value = editor.getValue();
 
-      if (value === "") {
-        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
-        setError("");
-        return;
-      }
+  //     if (value === "") {
+  //       monaco.editor.setModelMarkers(editor.getModel(), "json", []);
+  //       setError("");
+  //       return;
+  //     }
 
-      try {
-        console.log("value", value);
-        JSON.parse(value);
+  //     try {
+  //       console.log("value", value);
+  //       JSON.parse(value);
 
-        // Clear markers if valid
-        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
-        setError("");
-      } catch (err: any) {
-        // Show red underline
-        monaco.editor.setModelMarkers(editor.getModel(), "json", [
-          {
-            startLineNumber: 1,
-            startColumn: 1,
-            endLineNumber: 1,
-            endColumn: 1,
-            message: err.message,
-            severity: monaco.MarkerSeverity.Error,
-          },
-        ]);
+  //       // Clear markers if valid
+  //       monaco.editor.setModelMarkers(editor.getModel(), "json", []);
+  //       setError("");
+  //     } catch (err: any) {
+  //       // Show red underline
+  //       monaco.editor.setModelMarkers(editor.getModel(), "json", [
+  //         {
+  //           startLineNumber: 1,
+  //           startColumn: 1,
+  //           endLineNumber: 1,
+  //           endColumn: 1,
+  //           message: err.message,
+  //           severity: monaco.MarkerSeverity.Error,
+  //         },
+  //       ]);
 
-        // Show visible error message
-        setError(err.message);
-      }
-    });
-  }
+  //       // Show visible error message
+  //       setError(err.message);
+  //     }
+  //   });
+  // }
   // useEffect(() => {
   //   // create editor
   //   console.log("create editor", refContainer.current);
@@ -164,6 +179,53 @@ const JsonEditorOutput = (props: Props) => {
   //   }
   // };
 
+  function handleMount(editor: any, monaco: any) {
+    editorRef.current = editor;
+
+    editor.onDidChangeModelContent(() => {
+      const value = editor.getValue();
+
+      if (value === "") {
+        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
+        setError("");
+        return;
+      }
+
+      try {
+        console.log("value", value);
+        JSON.parse(value);
+
+        // Clear markers if valid
+        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
+        setError("");
+      } catch (err: any) {
+        // Show red underline
+        monaco.editor.setModelMarkers(editor.getModel(), "json", [
+          {
+            startLineNumber: 1,
+            startColumn: 1,
+            endLineNumber: 1,
+            endColumn: 1,
+            message: err.message,
+            severity: monaco.MarkerSeverity.Error,
+          },
+        ]);
+
+        // Show visible error message
+        setError(err.message);
+      }
+    });
+  }
+
+  const jsonString = JSON.stringify(
+    { pretty: { data: { data: { data: "good " } } } },
+    null,
+    2
+  );
+
+  const onSetCode = () => {
+    setCode({ data: "data" });
+  };
   return (
     // <div
     //   className={`${toggleFullScreen ? "fullscreen" : "mt-3"} shadow-xl`}
@@ -233,11 +295,59 @@ const JsonEditorOutput = (props: Props) => {
     //     ref={refContainer}
     //   />
     // </div>
-    <div
-      className={`${toggleFullScreen ? "fullscreen" : "mt-3"}`}
-      id="jsonEditorOutput"
-    >
-      <div className="flex-flex-col justify-between p-2 gap-2 w-full h-10 h-[87vh]"></div>
+    <div className="full-screen">
+      <div className="flex flex-col justify-between p-2 gap-2 w-full h-10 h-[87vh]">
+        <div className="flex flex-row p-2 gap-2 h-10 justify-between">
+          <span>OUTPUT</span>
+          <div className="flex flex-row gap-2">
+            <div>
+              <ButtonGroup>
+                <Button variant="secondary" size="default">
+                  <Type />
+                </Button>
+                <ButtonGroupSeparator />
+                <Button variant="secondary" size="default">
+                  <ListTree />
+                </Button>
+              </ButtonGroup>
+            </div>
+            <div>
+              <ButtonGroup>
+                <Button variant="secondary" size="default">
+                  <FolderOpen />
+                </Button>
+                <ButtonGroupSeparator />
+                <Button variant="secondary" size="default">
+                  <Save />
+                </Button>
+                <ButtonGroupSeparator />
+                <Button variant="secondary" size="default">
+                  <Copy />
+                </Button>
+                <ButtonGroupSeparator />
+                <Button variant="secondary" size="default" onClick={onSetCode}>
+                  <Maximize2 />
+                </Button>
+              </ButtonGroup>
+            </div>
+          </div>
+        </div>
+        <Editor
+          defaultLanguage="json"
+          value={""}
+          // beforeMount={handleEditorWillMount}
+          theme="vs-dark"
+          options={{
+            formatOnPaste: true,
+            formatOnType: true,
+            minimap: {
+              enabled: false,
+            },
+          }}
+          onMount={handleMount}
+        ></Editor>
+        <span>{error}</span>
+      </div>
     </div>
   );
 };
