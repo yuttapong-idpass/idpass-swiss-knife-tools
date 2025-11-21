@@ -5,6 +5,7 @@ import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 // import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
+import { JsonEditor } from 'json-edit-react'
 import "./JsonEditorOutput.css";
 import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
@@ -14,14 +15,18 @@ import {
 } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import {
+  ArrowDownAZ,
   Copy,
   FolderOpen,
   ListTree,
   Maximize2,
   Save,
+  Search,
   Type,
 } from "lucide-react";
 import { Editor } from "@monaco-editor/react";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Separator } from "@/components/ui/separator";
 
 type Props = {
   // onChangeText: any;
@@ -226,6 +231,12 @@ const JsonEditorOutput = (props: Props) => {
   const onSetCode = () => {
     setCode({ data: "data" });
   };
+
+  const showFindWidget = () => {
+    // Trigger the standard "Find" action
+    editorRef.current?.trigger("source", "actions.find");
+  };
+
   return (
     // <div
     //   className={`${toggleFullScreen ? "fullscreen" : "mt-3"} shadow-xl`}
@@ -295,21 +306,36 @@ const JsonEditorOutput = (props: Props) => {
     //     ref={refContainer}
     //   />
     // </div>
-    <div className="full-screen">
-      <div className="flex flex-col justify-between p-2 gap-2 w-full h-10 h-[87vh]">
+    <div
+      className={`${toggleFullScreen ? "fullscreen" : "mt-3"}`}
+      id="jsonEditorOutput"
+    >
+      <div className="flex flex-col justify-between gap-2 w-full h-10 h-[87vh]">
         <div className="flex flex-row p-2 gap-2 h-10 justify-between">
           <span>OUTPUT</span>
-          <div className="flex flex-row gap-2">
-            <div>
-              <ButtonGroup>
-                <Button variant="secondary" size="default">
+          <div className="flex flex-row gap-2 justify-center items-center">
+            <div className="flex flex-row gap-2">
+              <ToggleGroup type="single" variant="outline" defaultValue="text">
+                <ToggleGroupItem value="text" aria-label="Toggle text">
                   <Type />
-                </Button>
-                <ButtonGroupSeparator />
-                <Button variant="secondary" size="default">
+                </ToggleGroupItem>
+                <ToggleGroupItem value="tree" aria-label="Toggle tree">
                   <ListTree />
-                </Button>
-              </ButtonGroup>
+                </ToggleGroupItem>
+              </ToggleGroup>
+
+              <ToggleGroup type="single" variant="outline" defaultValue="sort">
+                <ToggleGroupItem value="sort" aria-label="Toggle sort" disabled>
+                  <ArrowDownAZ />
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="search"
+                  aria-label="Toggle search"
+                  onClick={showFindWidget}
+                >
+                  <Search />
+                </ToggleGroupItem>
+              </ToggleGroup>
             </div>
             <div>
               <ButtonGroup>

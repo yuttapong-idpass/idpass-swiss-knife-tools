@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
+  SidebarMenuSubButton,
   SidebarMenuSubItem,
   useSidebar,
 } from "../ui/sidebar";
@@ -20,6 +21,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../ui/collapsible";
+import { Link } from "react-router-dom";
 
 export interface ISideBarMenuProps {
   children: React.ReactNode;
@@ -127,7 +129,13 @@ export default function SideBarMenu() {
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {menu?.menuLists?.map((list) => (
-                          <SidebarMenuSubItem>{list.name}</SidebarMenuSubItem>
+                          <Link to={list?.link} key={list?.name}>
+                            <SidebarMenuSubItem>
+                              <SidebarMenuSubButton>
+                                {list.name}
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          </Link>
                         ))}
                       </SidebarMenuSub>
                     </CollapsibleContent>
@@ -138,9 +146,7 @@ export default function SideBarMenu() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        xxx
-      </SidebarFooter>
+      <SidebarFooter>xxx</SidebarFooter>
     </Sidebar>
   );
 }

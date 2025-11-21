@@ -223,7 +223,7 @@ const JsonEditorInput = (props: Props) => {
       <div className="flex flex-col justify-between gap-2 w-full h-10 h-[87vh]">
         <div className="flex flex-row  p-2 gap-2 h-10 justify-between">
           <span>INPUT</span>
-          <div>
+          <div className="flex flex-row gap-2 justify-center items-center">
             <ButtonGroup>
               <Button variant="secondary" size="default">
                 <FolderOpen />

@@ -42,22 +42,22 @@ const JsonPretty = (props: Props) => {
 
   return (
     <main className="w-full p-3 gap-2">
-      <p className="text-xl font-extrabold text-default-800">Json Pretty</p>
-      <div className="flex flex-row justify-content items-center">
-        <div className="w-full md:flex-1 p-4">
+      <p className="text-xl font-extrabold text-default-800">JSON Format</p>
+      <div className="grid grid-cols-9 items-center">
+        <div className="w-full col-span-4 p-4">
           <JsonEditorInput
             onError={handleError}
             onChangeText={handleJsonInput}
           />
         </div>
 
-        <div className="w-full md:w-32 p-4">
-          <Button variant="outline" size="lg">
+        <div className="w-full flex col-span-1 p-4 justify-center">
+          <Button variant="secondary" size="lg" className="hover:bg-gray-200 hover:text-black">
             Format <ArrowRight />
           </Button>
         </div>
 
-        <div className="w-full md:flex-1 p-4">
+        <div className="w-full col-span-4 p-4">
           <JsonEditorOutput
             content={jsonPrettyReducer.data.data}
             readOnly={true}
