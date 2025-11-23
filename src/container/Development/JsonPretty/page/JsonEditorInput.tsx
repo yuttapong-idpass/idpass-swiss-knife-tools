@@ -143,11 +143,6 @@ const JsonEditorInput = (props: Props) => {
   //     }
   //   });
   // }
-
-  const onFullScreen = () => {
-    setToggleFullScreen(!toggleFullScreen);
-  };
-
   const onOpenFileClick = () => {
     fileInputRef.current?.click();
   };
@@ -167,13 +162,11 @@ const JsonEditorInput = (props: Props) => {
     const reader = new FileReader();
     if (!file) return;
     const detectedLanguage = getLanguageFromExtension(file.name);
-
     console.log("language --->", detectedLanguage);
-
     reader.onload = (e) => {
       const content = e.target?.result;
       if (typeof content === "string") {
-        console.log("data", content);
+        jsonEditorRef.current.update({ json: JSON.parse(content) });
       }
     };
     reader.readAsText(file);
@@ -201,23 +194,6 @@ const JsonEditorInput = (props: Props) => {
     } catch (error) {}
   };
 
-  const onCopyToClipBoard = async () => {
-    // try {
-    //   const getCurrentValue: any = refEditor.current?.get();
-    //   if (!!getCurrentValue.text) {
-    //     await navigator.clipboard.writeText(getCurrentValue?.text);
-    //   }
-    //   if (!!getCurrentValue.json) {
-    //     await navigator.clipboard.writeText(
-    //       JSON.stringify(getCurrentValue?.json, null, 4)
-    //     );
-    //   }
-    //   toast.success("Copies!");
-    // } catch (error) {
-    //   console.log("error -> ", error);
-    // }
-  };
-
   const onHandleCopyToClipBoard = async () => {
     try {
       const getCurrentValue: any = jsonEditorRef.current?.get();
@@ -237,18 +213,6 @@ const JsonEditorInput = (props: Props) => {
     } catch (error) {
       console.log("error -> ", error);
     }
-    //   const getCurrentValue: any = editorRef.current?.getValue();
-    //   console.log("getCurrentValue", getCurrentValue);
-    //   if (!!getCurrentValue) {
-    //     await navigator.clipboard.writeText(getCurrentValue);
-    //   }
-    //   setIsCopied(true);
-    //   setTimeout(() => {
-    //     setIsCopied(false);
-    //   }, 2000);
-    // } catch (error) {
-    //   console.log("error -> ", error);
-    // }
   };
 
   // const handleEditorWillMount = (monaco: any) => {
@@ -326,12 +290,9 @@ const JsonEditorInput = (props: Props) => {
     //   />
     // </div>
 
-    <div
-      className={`${toggleFullScreen ? "fullscreen" : "mt-3"}`}
-      id="jsonEditorInput"
-    >
+    <div className="mt-2" id="jsonEditorInput">
       <div className="flex flex-col justify-between gap-2 w-full h-10 h-[87vh]">
-        <div className="flex flex-row  p-2 gap-2 h-10 justify-between">
+        <div className="flex flex-row gap-2 h-10 justify-between">
           <span>INPUT</span>
           <div className="flex flex-row gap-2 justify-center items-center">
             <span className="text-xs text-green-500">

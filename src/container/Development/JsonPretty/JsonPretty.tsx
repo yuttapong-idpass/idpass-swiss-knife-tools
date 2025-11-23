@@ -41,10 +41,10 @@ const JsonPretty = (props: Props) => {
   const handleError = (text: any) => {};
 
   return (
-    <main className="w-full p-3 gap-2">
+    <main className="w-full p-2 gap-2">
       <p className="text-xl font-extrabold text-default-800">JSON Format</p>
       <div className="grid grid-cols-9 items-center">
-        <div className="w-full col-span-4 p-4">
+        <div className="w-full col-span-4 p-2">
           <JsonEditorInput
             onError={handleError}
             onChangeText={handleJsonInput}
