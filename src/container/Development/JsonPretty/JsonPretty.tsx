@@ -1,8 +1,8 @@
 import React, { createRef, useEffect, useState } from "react";
 import "./JsonPretty.css";
 
-import JsonEditorInput from "./JSONEditor/JsonEditorInput";
-import JsonEditorOutput from "./JSONEditor/JsonEditorOutput";
+import JsonEditorInput from "./page/JsonEditorInput";
+import JsonEditorOutput from "./page/JsonEditorOutput";
 import { useAppDispatch } from "../../../store/store";
 import { useSelector } from "react-redux";
 import {
@@ -52,7 +52,11 @@ const JsonPretty = (props: Props) => {
         </div>
 
         <div className="w-full flex col-span-1 p-4 justify-center">
-          <Button variant="secondary" size="lg" className="hover:bg-gray-200 hover:text-black">
+          <Button
+            variant="secondary"
+            size="lg"
+            className="hover:bg-gray-200 hover:text-black"
+          >
             Format <ArrowRight />
           </Button>
         </div>

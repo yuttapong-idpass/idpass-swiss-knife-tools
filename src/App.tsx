@@ -31,7 +31,11 @@ import XMLPretty from "./container/Development/XMLPretty/XMLPretty";
 import Testing from "./container/Development/Testing/Testing";
 import EncodedDecoded from "./container/Crypto/EncodeDecode/EncodedDecoded";
 import SideBarMenu from "./components/SidebarMenu/SideBarMenu";
-import { Sidebar, SidebarContent, SidebarProvider } from "./components/ui/sidebar";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarProvider,
+} from "./components/ui/sidebar";
 
 function App() {
   let menuList = [

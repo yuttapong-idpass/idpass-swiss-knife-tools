@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@codemirror/lang-xml": "^6.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@headlessui/react": "^2.1.2",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-collapsible": "^1.1.12",
@@ -25,6 +26,7 @@
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.17.7",
     "@types/node": "^24.10.0",
+    "@types/wicg-file-system-access": "^2023.10.7",
     "@uiw/codemirror-extensions-langs": "^4.23.0",
     "@uiw/codemirror-themes-all": "^4.23.0",
     "@uiw/react-codemirror": "^4.23.0",
@@ -52,7 +54,7 @@
     "react-toastify": "^10.0.5",
     "styled-components": "^6.1.12",
     "tailwind-merge": "^3.4.0",
-    "vanilla-jsoneditor": "^0.23.8",
+    "vanilla-jsoneditor": "^3.10.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {

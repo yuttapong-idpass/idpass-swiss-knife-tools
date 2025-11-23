@@ -5,7 +5,7 @@ import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 // import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
-import { JsonEditor } from 'json-edit-react'
+import { JsonEditor } from "json-edit-react";
 import "./JsonEditorOutput.css";
 import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
 import { toast } from "react-toastify";
@@ -41,6 +41,7 @@ const JsonEditorOutput = (props: Props) => {
   // const refEditor = useRef<JSONEditor | null>(null);
   const editorRef = useRef<any>(null);
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
+  const [toggleMode, setToggleMode] = useState("text");
   const [error, setError] = useState("");
   const [code, setCode] = useState({});
 
@@ -114,6 +115,10 @@ const JsonEditorOutput = (props: Props) => {
 
   const onClickMaximize = () => {
     setToggleFullScreen(!toggleFullScreen);
+  };
+
+  const onSetMode = (mode: string) => {
+    setToggleMode(mode);
   };
 
   // const onClickUploadTextFile = ($event: any) => {
@@ -233,79 +238,10 @@ const JsonEditorOutput = (props: Props) => {
   };
 
   const showFindWidget = () => {
-    // Trigger the standard "Find" action
     editorRef.current?.trigger("source", "actions.find");
   };
 
   return (
-    // <div
-    //   className={`${toggleFullScreen ? "fullscreen" : "mt-3"} shadow-xl`}
-    //   id="jsonEditorInput"
-    // >
-    //   <ToastNotify />
-    //   <div
-    //     className={`flex justify-between p-2 gap-2 w-full h-10
-    //       bg-violet-400
-    //       dark:bg-yellow-500
-    //       `}
-    //   >
-    //     <div>Output Panel</div>
-    //     <div className="flex gap-3">
-    //       <div>
-    //         <div className="image-upload">
-    //           <label htmlFor="file-input">
-    //             <FaFolderOpen
-    //               size={23}
-    //               className="hover:bg-[#00adff]"
-    //               title="Upload file"
-    //             />
-    //           </label>
-    //           <input
-    //             id="file-input"
-    //             type="file"
-    //             accept=".json,.txt"
-    //             onChange={onClickUploadTextFile}
-    //           />
-    //         </div>
-    //       </div>
-    //       <div>
-    //         <FaSave
-    //           size={23}
-    //           className="hover:bg-[#00adff]"
-    //           title="Save file"
-    //           onClick={onClickSaveJsonFile}
-    //         />
-    //       </div>
-    //       <div>
-    //         <FaCopy
-    //           size={23}
-    //           className="hover:bg-[#00adff]"
-    //           title="Copy to clipboard"
-    //           onClick={onCopyToClipBoard}
-    //         />
-    //       </div>
-    //       <div onClick={onClickMaximize}>
-    //         {toggleFullScreen ? (
-    //           <FaMinimize
-    //             size={23}
-    //             className="hover:bg-[#00adff]"
-    //             title="Minimize"
-    //           />
-    //         ) : (
-    //           <FaMaximize
-    //             size={23}
-    //             className="hover:bg-[#00adff]"
-    //             title="Maximize"
-    //           />
-    //         )}
-    //       </div>
-    //     </div>
-    //   </div>
-    //   <div
-    //     className={`${toggleFullScreen ? "h-screen" : "h-[87vh]"}`}
-    //     ref={refContainer}
-    //   />
-    // </div>
     <div
       className={`${toggleFullScreen ? "fullscreen" : "mt-3"}`}
       id="jsonEditorOutput"
@@ -316,10 +252,18 @@ const JsonEditorOutput = (props: Props) => {
           <div className="flex flex-row gap-2 justify-center items-center">
             <div className="flex flex-row gap-2">
               <ToggleGroup type="single" variant="outline" defaultValue="text">
-                <ToggleGroupItem value="text" aria-label="Toggle text">
+                <ToggleGroupItem
+                  value="text"
+                  aria-label="Toggle text"
+                  onClick={() => onSetMode("text")}
+                >
                   <Type />
                 </ToggleGroupItem>
-                <ToggleGroupItem value="tree" aria-label="Toggle tree">
+                <ToggleGroupItem
+                  value="tree"
+                  aria-label="Toggle tree"
+                  onClick={() => onSetMode("tree")}
+                >
                   <ListTree />
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -358,10 +302,10 @@ const JsonEditorOutput = (props: Props) => {
             </div>
           </div>
         </div>
-        <Editor
+
+        {/* <Editor
           defaultLanguage="json"
           value={""}
-          // beforeMount={handleEditorWillMount}
           theme="vs-dark"
           options={{
             formatOnPaste: true,
@@ -371,7 +315,26 @@ const JsonEditorOutput = (props: Props) => {
             },
           }}
           onMount={handleMount}
-        ></Editor>
+        ></Editor> */}
+
+        {toggleMode === "text" ? (
+          <Editor
+            defaultLanguage="json"
+            value={""}
+            theme="vs-dark"
+            options={{
+              formatOnPaste: true,
+              formatOnType: true,
+              minimap: {
+                enabled: false,
+              },
+            }}
+            onMount={handleMount}
+          ></Editor>
+        ) : (
+          <JsonEditor className="w-full h-full" data={{ data: "data" }} />
+        )}
+
         <span>{error}</span>
       </div>
     </div>

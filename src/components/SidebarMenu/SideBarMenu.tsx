@@ -118,7 +118,11 @@ export default function SideBarMenu() {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuList.map((menu) => (
-                <Collapsible defaultOpen className="group/collapsible">
+                <Collapsible
+                  defaultOpen
+                  className="group/collapsible"
+                  key={menu.id}
+                >
                   <SidebarMenuItem key={menu.title}>
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton>
@@ -128,14 +132,14 @@ export default function SideBarMenu() {
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                       <SidebarMenuSub>
-                        {menu?.menuLists?.map((list) => (
-                          <Link to={list?.link} key={list?.name}>
-                            <SidebarMenuSubItem>
-                              <SidebarMenuSubButton>
+                        {menu.menuLists.map((list: any, idx: number) => (
+                          <SidebarMenuSubItem key={list.name}>
+                            <SidebarMenuSubButton asChild>
+                              <Link to={list.link} key={idx}>
                                 {list.name}
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          </Link>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
                         ))}
                       </SidebarMenuSub>
                     </CollapsibleContent>

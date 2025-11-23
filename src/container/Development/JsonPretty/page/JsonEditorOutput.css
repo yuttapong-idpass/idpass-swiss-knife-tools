@@ -11,3 +11,8 @@
 .image-upload>input {
   display: none;
 }
+
+
+jer-editor-container {
+  border: none !important;
+}
