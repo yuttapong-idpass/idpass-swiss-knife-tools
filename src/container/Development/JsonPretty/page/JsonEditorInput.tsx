@@ -23,6 +23,7 @@ import {
   faCopy,
   faMaximize,
 } from "@fortawesome/free-solid-svg-icons";
+import useJsonFormatStore from "@/store/useJsonFormatStore";
 
 type Props = {
   onChangeText: any;
@@ -38,6 +39,8 @@ const JsonEditorInput = (props: Props) => {
 
   const refContainer = useRef<HTMLDivElement>(null);
   const jsonEditorRef = useRef<any>(null);
+
+  const { setData } = useJsonFormatStore();
 
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -55,7 +58,8 @@ const JsonEditorInput = (props: Props) => {
             { contentErrors, patchResult }: any
           ) => {
             // Call the parent onChange handler
-            console.log('data', updatedContent);
+            console.log("data", updatedContent);
+            setData({ text: updatedContent });
           },
           onRenderMenu: (items: any, context: any) => {
             //disable tree and table mode
