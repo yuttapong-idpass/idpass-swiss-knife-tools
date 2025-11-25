@@ -1,16 +1,12 @@
 import React, { SyntheticEvent, useState } from "react";
 
 import { BiSolidRightArrow, BiSolidLeftArrow } from "react-icons/bi";
-import { encoded, decoded } from "../../../store/slice/enCodeSlice";
-import { useAppDispatch } from "../../../store/store";
 
 import "./EncodedDecoded.css";
 
 type Props = {};
 
 const EncodedDecoded = (props: Props) => {
-  const dispatch = useAppDispatch();
-
   const [encodedText, setEncodedText] = useState("");
   const [decodedText, setDecodedText] = useState("");
 
@@ -27,13 +23,11 @@ const EncodedDecoded = (props: Props) => {
   const URLEncoded = () => {
     const encodeURI = encodeURIComponent(decodedText);
     setEncodedText(encodeURI);
-    dispatch(encoded({ encoded: encodeURI, decoded: decodedText }));
   };
 
   const URLDecoded = () => {
     const decodeURI = decodeURIComponent(encodedText);
     setDecodedText(decodeURI);
-    dispatch(encoded({ encoded: encodedText, decoded: decodeURI }));
   };
 
   return (

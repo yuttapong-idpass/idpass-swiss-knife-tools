@@ -55,6 +55,7 @@ const JsonEditorInput = (props: Props) => {
             { contentErrors, patchResult }: any
           ) => {
             // Call the parent onChange handler
+            console.log('data', updatedContent);
           },
           onRenderMenu: (items: any, context: any) => {
             //disable tree and table mode

@@ -55,7 +55,8 @@
     "styled-components": "^6.1.12",
     "tailwind-merge": "^3.4.0",
     "vanilla-jsoneditor": "^3.10.0",
-    "xml2js": "^0.6.2"
+    "xml2js": "^0.6.2",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.17",

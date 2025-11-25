@@ -13,15 +13,12 @@ import "./assets/fonts/NotoSansThai-SemiBold.ttf";
 import "./assets/fonts/NotoSansThai-Thin.ttf";
 
 import { Provider } from "react-redux";
-import { store } from "./store/store";
 import { ThemeProvider } from "./providers/ThemeProvider";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-  <Provider store={store}>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <App />
-    </ThemeProvider>
-  </Provider>
+  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <App />
+  </ThemeProvider>
   // </React.StrictMode>
 );

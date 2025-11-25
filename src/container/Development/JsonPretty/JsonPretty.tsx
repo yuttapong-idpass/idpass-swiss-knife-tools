@@ -3,20 +3,11 @@ import "./JsonPretty.css";
 
 import JsonEditorInput from "./page/JsonEditorInput";
 import JsonEditorOutput from "./page/JsonEditorOutput";
-import { useAppDispatch } from "../../../store/store";
-import { useSelector } from "react-redux";
-import {
-  jsonPrettySelector,
-  setJson,
-} from "../../../store/slice/jsonPrettySlice";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 type Props = {};
 
 const JsonPretty = (props: Props) => {
-  const dispatch = useAppDispatch();
-  const jsonPrettyReducer: any = useSelector(jsonPrettySelector);
-
   const [inputText, setInputText] = useState({
     json: undefined,
     text: undefined,
@@ -35,7 +26,7 @@ const JsonPretty = (props: Props) => {
   };
 
   const onSetJsonPretty = () => {
-    dispatch(setJson({ data: inputText }));
+    // dispatch(setJson({ data: inputText }));
   };
 
   const handleError = (text: any) => {};
@@ -62,10 +53,7 @@ const JsonPretty = (props: Props) => {
         </div>
 
         <div className="w-full col-span-4 p-4">
-          <JsonEditorOutput
-            content={jsonPrettyReducer.data.data}
-            readOnly={true}
-          />
+          <JsonEditorOutput content={outputText} readOnly={true} />
         </div>
       </div>
     </main>
