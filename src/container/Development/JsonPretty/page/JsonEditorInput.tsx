@@ -40,26 +40,29 @@ const JsonEditorInput = (props: Props) => {
   const refContainer = useRef<HTMLDivElement>(null);
   const jsonEditorRef = useRef<any>(null);
 
-  const { setData } = useJsonFormatStore();
+  // const { setData } = useJsonFormatStore();
 
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState("");
   useEffect(() => {
+    console.log("call useEffect");
     if (refContainer.current && !jsonEditorRef.current) {
       // Initialize
       jsonEditorRef.current = createJSONEditor({
         target: refContainer.current,
         props: {
           mode: "text",
+          content: {
+            text: JSON.stringify({ data: "data" }),
+          },
           onChange: (
             updatedContent: any,
             previousContent: any,
             { contentErrors, patchResult }: any
           ) => {
             // Call the parent onChange handler
-            console.log("data", updatedContent);
-            setData({ text: updatedContent });
+            // setData({ text: updatedContent });
           },
           onRenderMenu: (items: any, context: any) => {
             //disable tree and table mode
