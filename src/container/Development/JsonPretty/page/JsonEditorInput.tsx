@@ -1,20 +1,6 @@
-import React, {
-  createRef,
-  useEffect,
-  useState,
-  useContext,
-  useRef,
-} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import "./JsonEditorInput.css";
-
-import Editor, { useMonaco, loader } from "@monaco-editor/react";
-import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-} from "@/components/ui/button-group";
-import { Button } from "@/components/ui/button";
-import { Copy, FolderOpen, Maximize2, Save } from "lucide-react";
 import { createJSONEditor } from "vanilla-jsoneditor";
 import {
   faStar,
@@ -32,30 +18,22 @@ type Props = {
 };
 
 const JsonEditorInput = (props: Props) => {
-  // const refContainer = useRef<HTMLDivElement>(null);
-  // const refEditor = useRef<JSONEditor | null>(null);
-  const editorRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const refContainer = useRef<HTMLDivElement>(null);
   const jsonEditorRef = useRef<any>(null);
 
-  // const { setData } = useJsonFormatStore();
+  const { setInputData, getInputData }: any = useJsonFormatStore();
 
-  const [toggleFullScreen, setToggleFullScreen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState("");
+
   useEffect(() => {
-    console.log("call useEffect");
     if (refContainer.current && !jsonEditorRef.current) {
       // Initialize
       jsonEditorRef.current = createJSONEditor({
         target: refContainer.current,
         props: {
           mode: "text",
-          content: {
-            text: JSON.stringify({ data: "data" }),
-          },
           onChange: (
             updatedContent: any,
             previousContent: any,
@@ -63,12 +41,22 @@ const JsonEditorInput = (props: Props) => {
           ) => {
             // Call the parent onChange handler
             // setData({ text: updatedContent });
+            console.log("previous content", previousContent);
+            console.log("updated content", updatedContent);
+            console.log("contentErrors", contentErrors);
+            console.log("patchResult", patchResult);
+            setInputData(updatedContent);
           },
           onRenderMenu: (items: any, context: any) => {
+            console.log("items -->", items);
             //disable tree and table mode
             items = items.map((item: any) => {
-              if (item.text === "tree" || item?.text === "table") {
-                console.log("good text", item.text);
+              if (
+                item.text === "tree" ||
+                item?.text === "table" ||
+                item?.className === "jse-format" ||
+                item?.className === "jse-compact"
+              ) {
                 return {
                   ...item,
                   disabled: true,
@@ -109,11 +97,23 @@ const JsonEditorInput = (props: Props) => {
     }
 
     return () => {
-      if (editorRef.current) {
-        editorRef.current.destroy();
-        editorRef.current = null;
+      if (jsonEditorRef.current) {
+        jsonEditorRef.current.destroy();
+        jsonEditorRef.current = null;
       }
     };
+  }, []);
+
+  useEffect(() => {
+    console.log("input json data", getInputData());
+    const getJsonData = getInputData();
+    if (getJsonData.text) {
+      jsonEditorRef.current.update({ text: getJsonData.text });
+    }
+
+    if (getJsonData.json) {
+      jsonEditorRef.current.update({ json: getJsonData.json });
+    }
   }, []);
 
   // function handleMount(editor: any, monaco: any) {

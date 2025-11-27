@@ -4,7 +4,12 @@ import { FaMaximize, FaMinimize, FaCopy, FaFolderOpen } from "react-icons/fa6";
 import { FaSave, FaEraser } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 // import "vanilla-jsoneditor/themes/jse-theme-dark.css";
-import { JSONEditor, JSONEditorPropsOptional, Mode } from "vanilla-jsoneditor";
+import {
+  createJSONEditor,
+  JSONEditor,
+  JSONEditorPropsOptional,
+  Mode,
+} from "vanilla-jsoneditor";
 import { JsonEditor } from "json-edit-react";
 import "./JsonEditorOutput.css";
 import ToastNotify from "../../../../components/ToastNotify/ToastNotify";
@@ -27,6 +32,7 @@ import {
 import { Editor } from "@monaco-editor/react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Separator } from "@/components/ui/separator";
+import useJsonFormatStore from "@/store/useJsonFormatStore";
 
 type Props = {
   // onChangeText: any;
@@ -37,15 +43,55 @@ type Props = {
 };
 
 const JsonEditorOutput = (props: Props) => {
-  // const refContainer = useRef<HTMLDivElement>(null);
-  // const refEditor = useRef<JSONEditor | null>(null);
-  const editorRef = useRef<any>(null);
-  const [toggleFullScreen, setToggleFullScreen] = useState(false);
-  const [toggleMode, setToggleMode] = useState("text");
-  const [error, setError] = useState("");
-  const [code, setCode] = useState({});
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const refContainer = useRef<HTMLDivElement>(null);
+  const jsonEditorRef = useRef<any>(null);
 
-  useEffect(() => {}, []);
+  const [isCopied, setIsCopied] = useState(false);
+
+  const { setOutputData, getOutputData }: any = useJsonFormatStore();
+
+  useEffect(() => {
+    if (refContainer.current && !jsonEditorRef.current) {
+      jsonEditorRef.current = createJSONEditor({
+        target: refContainer.current,
+        props: {
+          mode: "text",
+          onChange: (
+            updateContent: any,
+            previousContent: any,
+            { contentErrors, patchResult }: any
+          ) => {
+            console.log("updateContent", updateContent);
+            console.log("previousContent", previousContent);
+            console.log("contentErrors", contentErrors);
+            console.log("patchResult", patchResult);
+          },
+          onRenderMenu: (items: any) => {
+            console.log("items", items);
+          },
+        },
+      });
+    }
+
+    return () => {
+      if (jsonEditorRef.current) {
+        jsonEditorRef.current.destroy();
+        jsonEditorRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const getJsonData = getOutputData();
+    if (getJsonData.text) {
+      jsonEditorRef.current?.update({ json: getJsonData.json });
+    }
+
+    if (getJsonData.json) {
+      jsonEditorRef.current?.update({ json: getJsonData.json });
+    }
+  }, []);
 
   // function handleMount(editor: any, monaco: any) {
   //   editorRef.current = editor;
@@ -113,13 +159,13 @@ const JsonEditorOutput = (props: Props) => {
   //   }
   // }, [props]);
 
-  const onClickMaximize = () => {
-    setToggleFullScreen(!toggleFullScreen);
-  };
+  // const onClickMaximize = () => {
+  //   setToggleFullScreen(!toggleFullScreen);
+  // };
 
-  const onSetMode = (mode: string) => {
-    setToggleMode(mode);
-  };
+  // const onSetMode = (mode: string) => {
+  //   setToggleMode(mode);
+  // };
 
   // const onClickUploadTextFile = ($event: any) => {
   //   // const fileUpload: any = $event.target.files[0];
@@ -189,153 +235,144 @@ const JsonEditorOutput = (props: Props) => {
   //   }
   // };
 
-  function handleMount(editor: any, monaco: any) {
-    editorRef.current = editor;
+  // function handleMount(editor: any, monaco: any) {
+  //   editorRef.current = editor;
 
-    editor.onDidChangeModelContent(() => {
-      const value = editor.getValue();
+  //   editor.onDidChangeModelContent(() => {
+  //     const value = editor.getValue();
 
-      if (value === "") {
-        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
-        setError("");
-        return;
-      }
+  //     if (value === "") {
+  //       monaco.editor.setModelMarkers(editor.getModel(), "json", []);
+  //       setError("");
+  //       return;
+  //     }
 
-      try {
-        console.log("value", value);
-        JSON.parse(value);
+  //     try {
+  //       console.log("value", value);
+  //       JSON.parse(value);
 
-        // Clear markers if valid
-        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
-        setError("");
-      } catch (err: any) {
-        // Show red underline
-        monaco.editor.setModelMarkers(editor.getModel(), "json", [
-          {
-            startLineNumber: 1,
-            startColumn: 1,
-            endLineNumber: 1,
-            endColumn: 1,
-            message: err.message,
-            severity: monaco.MarkerSeverity.Error,
-          },
-        ]);
+  //       // Clear markers if valid
+  //       monaco.editor.setModelMarkers(editor.getModel(), "json", []);
+  //       setError("");
+  //     } catch (err: any) {
+  //       // Show red underline
+  //       monaco.editor.setModelMarkers(editor.getModel(), "json", [
+  //         {
+  //           startLineNumber: 1,
+  //           startColumn: 1,
+  //           endLineNumber: 1,
+  //           endColumn: 1,
+  //           message: err.message,
+  //           severity: monaco.MarkerSeverity.Error,
+  //         },
+  //       ]);
 
-        // Show visible error message
-        setError(err.message);
-      }
-    });
-  }
+  //       // Show visible error message
+  //       setError(err.message);
+  //     }
+  //   });
+  // }
 
-  const jsonString = JSON.stringify(
-    { pretty: { data: { data: { data: "good " } } } },
-    null,
-    2
-  );
+  // const jsonString = JSON.stringify(
+  //   { pretty: { data: { data: { data: "good " } } } },
+  //   null,
+  //   2
+  // );
 
-  const onSetCode = () => {
-    setCode({ data: "data" });
+  // const onSetCode = () => {
+  //   setCode({ data: "data" });
+  // };
+
+  // const showFindWidget = () => {
+  //   editorRef.current?.trigger("source", "actions.find");
+  // };
+
+  const getLanguageFromExtension = (filename: string) => {
+    if (filename.endsWith(".json")) return "json";
+    if (filename.endsWith(".html")) return "html";
+    if (filename.endsWith(".css")) return "css";
+    if (filename.endsWith(".txt")) return "txt";
+    if (filename.endsWith(".ts") || filename.endsWith(".tsx"))
+      return "typescript";
+    return "javascript"; // default
   };
 
-  const showFindWidget = () => {
-    editorRef.current?.trigger("source", "actions.find");
+  const onHandleFileChange = ($event: any) => {
+    const file: any = $event.target.files[0];
+    const reader = new FileReader();
+    if (!file) return;
+    const detectedLanguage = getLanguageFromExtension(file.name);
+    console.log("language --->", detectedLanguage);
+    reader.onload = (e) => {
+      const content = e.target?.result;
+      if (typeof content === "string") {
+        jsonEditorRef.current.update({ json: JSON.parse(content) });
+      }
+    };
+    reader.readAsText(file);
   };
 
   return (
-    <div
-      className={`${toggleFullScreen ? "fullscreen" : "mt-3"}`}
-      id="jsonEditorOutput"
-    >
+    <div className="mt-2" id="jsonEditorInput">
       <div className="flex flex-col justify-between gap-2 w-full h-10 h-[87vh]">
-        <div className="flex flex-row p-2 gap-2 h-10 justify-between">
+        <div className="flex flex-row gap-2 h-10 justify-between">
           <span>OUTPUT</span>
           <div className="flex flex-row gap-2 justify-center items-center">
-            <div className="flex flex-row gap-2">
-              <ToggleGroup type="single" variant="outline" defaultValue="text">
-                <ToggleGroupItem
-                  value="text"
-                  aria-label="Toggle text"
-                  onClick={() => onSetMode("text")}
-                >
-                  <Type />
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  value="tree"
-                  aria-label="Toggle tree"
-                  onClick={() => onSetMode("tree")}
-                >
-                  <ListTree />
-                </ToggleGroupItem>
-              </ToggleGroup>
-
-              <ToggleGroup type="single" variant="outline" defaultValue="sort">
-                <ToggleGroupItem value="sort" aria-label="Toggle sort" disabled>
-                  <ArrowDownAZ />
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  value="search"
-                  aria-label="Toggle search"
-                  onClick={showFindWidget}
-                >
-                  <Search />
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-            <div>
-              <ButtonGroup>
-                <Button variant="secondary" size="default">
-                  <FolderOpen />
-                </Button>
-                <ButtonGroupSeparator />
-                <Button variant="secondary" size="default">
-                  <Save />
-                </Button>
-                <ButtonGroupSeparator />
-                <Button variant="secondary" size="default">
-                  <Copy />
-                </Button>
-                <ButtonGroupSeparator />
-                <Button variant="secondary" size="default" onClick={onSetCode}>
-                  <Maximize2 />
-                </Button>
-              </ButtonGroup>
-            </div>
+            <span className="text-xs text-green-500">
+              {isCopied ? "Copied!" : ""}
+            </span>
+            <input
+              id="file-input"
+              ref={fileInputRef}
+              type="file"
+              accept=".json,.txt"
+              onChange={onHandleFileChange}
+              className="hidden"
+            />
+            {/* <ButtonGroup>
+              <Button
+                variant="secondary"
+                size="default"
+                onClick={onOpenFileClick}
+              >
+                <FolderOpen />
+                <input
+                  id="file-input"
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".json,.txt"
+                  onChange={onHandleFileChange}
+                  className="hidden"
+                />
+              </Button>
+              <ButtonGroupSeparator />
+              <Button
+                variant="secondary"
+                size="default"
+                onClick={() => onSaveFile()}
+              >
+                <Save />
+              </Button>
+              <ButtonGroupSeparator />
+              <Button
+                variant="secondary"
+                size="default"
+                onClick={onHandleCopyToClipBoard}
+              >
+                <Copy />
+              </Button>
+              <ButtonGroupSeparator />
+              <Button variant="secondary" size="default" onClick={onFullScreen}>
+                <Maximize2 />
+              </Button>
+            </ButtonGroup> */}
           </div>
         </div>
-
-        {/* <Editor
-          defaultLanguage="json"
-          value={""}
-          theme="vs-dark"
-          options={{
-            formatOnPaste: true,
-            formatOnType: true,
-            minimap: {
-              enabled: false,
-            },
-          }}
-          onMount={handleMount}
-        ></Editor> */}
-
-        {toggleMode === "text" ? (
-          <Editor
-            defaultLanguage="json"
-            value={""}
-            theme="vs-dark"
-            options={{
-              formatOnPaste: true,
-              formatOnType: true,
-              minimap: {
-                enabled: false,
-              },
-            }}
-            onMount={handleMount}
-          ></Editor>
-        ) : (
-          <JsonEditor className="w-full h-full" data={{ data: "data" }} />
-        )}
-
-        <span>{error}</span>
+        <div
+          id="jsonEditorInput"
+          className="jse-theme-dark h-screen"
+          ref={refContainer}
+        ></div>
       </div>
     </div>
   );
