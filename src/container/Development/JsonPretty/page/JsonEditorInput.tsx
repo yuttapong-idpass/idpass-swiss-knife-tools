@@ -75,13 +75,6 @@ const JsonEditorInput = (props: Props) => {
               },
               {
                 type: "button",
-                title: "Save File",
-                className: "my-custom-button-class",
-                icon: faFloppyDisk,
-                onClick: () => onSaveFile(),
-              },
-              {
-                type: "button",
                 title: "Copy",
                 className: "my-custom-button-class",
                 icon: faCopy,
@@ -178,28 +171,6 @@ const JsonEditorInput = (props: Props) => {
       }
     };
     reader.readAsText(file);
-  };
-
-  const onSaveFile = async () => {
-    try {
-      const options = {
-        suggestedName: "untitled.txt",
-        types: [
-          {
-            description: "Text Files",
-            accept: {
-              "text/plain": [".txt"],
-            },
-          },
-        ],
-      };
-
-      // @ts-ignore
-      const fileHandle = await window.showSaveFilePicker(options);
-      const writable = await fileHandle.createWritable();
-      await writable.write("data in save to file");
-      await writable.close();
-    } catch (error) {}
   };
 
   const onHandleCopyToClipBoard = async () => {

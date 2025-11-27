@@ -33,6 +33,11 @@ import { Editor } from "@monaco-editor/react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Separator } from "@/components/ui/separator";
 import useJsonFormatStore from "@/store/useJsonFormatStore";
+import {
+  faCopy,
+  faFloppyDisk,
+  faFolder,
+} from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   // onChangeText: any;
@@ -69,7 +74,31 @@ const JsonEditorOutput = (props: Props) => {
             setOutputData(updateContent);
           },
           onRenderMenu: (items: any) => {
-            console.log("items", items);
+            const customMenu = [
+              {
+                type: "button",
+                title: "Open File",
+                className: "my-custom-button-class",
+                icon: faFolder,
+                onClick: () => onOpenFileClick(),
+              },
+              {
+                type: "button",
+                title: "Save File",
+                className: "my-custom-button-class",
+                icon: faFloppyDisk,
+                onClick: () => onSaveFile(),
+              },
+              {
+                type: "button",
+                title: "Copy",
+                className: "my-custom-button-class",
+                icon: faCopy,
+                onClick: () => onHandleCopyToClipBoard(),
+              },
+            ];
+            const newItems = [...items, ...customMenu];
+            return newItems;
           },
         },
       });
@@ -288,6 +317,10 @@ const JsonEditorOutput = (props: Props) => {
   //   editorRef.current?.trigger("source", "actions.find");
   // };
 
+  const onOpenFileClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const getLanguageFromExtension = (filename: string) => {
     if (filename.endsWith(".json")) return "json";
     if (filename.endsWith(".html")) return "html";
@@ -311,6 +344,49 @@ const JsonEditorOutput = (props: Props) => {
       }
     };
     reader.readAsText(file);
+  };
+
+  const onSaveFile = async () => {
+    try {
+      const options = {
+        suggestedName: "untitled.txt",
+        types: [
+          {
+            description: "Text Files",
+            accept: {
+              "text/plain": [".txt"],
+            },
+          },
+        ],
+      };
+
+      // @ts-ignore
+      const fileHandle = await window.showSaveFilePicker(options);
+      const writable = await fileHandle.createWritable();
+      await writable.write("data in save to file");
+      await writable.close();
+    } catch (error) {}
+  };
+
+  const onHandleCopyToClipBoard = async () => {
+    try {
+      const getCurrentValue: any = jsonEditorRef.current?.get();
+      console.log("getCurrentValue", getCurrentValue);
+      if (getCurrentValue.text) {
+        await navigator.clipboard.writeText(getCurrentValue.text);
+      }
+      if (getCurrentValue.json) {
+        await navigator.clipboard.writeText(
+          JSON.stringify(getCurrentValue.json, null, 4)
+        );
+      }
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.log("error -> ", error);
+    }
   };
 
   return (
