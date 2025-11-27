@@ -108,11 +108,11 @@ const JsonEditorInput = (props: Props) => {
     console.log("input json data", getInputData());
     const getJsonData = getInputData();
     if (getJsonData.text) {
-      jsonEditorRef.current.update({ text: getJsonData.text });
+      jsonEditorRef.current?.update({ text: getJsonData.text });
     }
 
     if (getJsonData.json) {
-      jsonEditorRef.current.update({ json: getJsonData.json });
+      jsonEditorRef.current?.update({ json: getJsonData.json });
     }
   }, []);
 

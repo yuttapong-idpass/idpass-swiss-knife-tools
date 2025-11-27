@@ -66,6 +66,7 @@ const JsonEditorOutput = (props: Props) => {
             console.log("previousContent", previousContent);
             console.log("contentErrors", contentErrors);
             console.log("patchResult", patchResult);
+            setOutputData(updateContent);
           },
           onRenderMenu: (items: any) => {
             console.log("items", items);
@@ -85,7 +86,7 @@ const JsonEditorOutput = (props: Props) => {
   useEffect(() => {
     const getJsonData = getOutputData();
     if (getJsonData.text) {
-      jsonEditorRef.current?.update({ json: getJsonData.json });
+      jsonEditorRef.current?.update({ text: getJsonData.text });
     }
 
     if (getJsonData.json) {
