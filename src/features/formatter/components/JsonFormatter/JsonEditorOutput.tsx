@@ -32,7 +32,7 @@ import {
 import { Editor } from "@monaco-editor/react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Separator } from "@/components/ui/separator";
-import useJsonFormatStore from "@/store/useJsonFormatStore";
+import useJsonFormatStore from "@/features/formatter/stores/useJsonFormatStore";
 import {
   faCopy,
   faFloppyDisk,

@@ -24,11 +24,13 @@ import {
   SidebarContent,
   SidebarProvider,
 } from "./components/ui/sidebar";
-import JsonFormatter from "./container/Formatter/JsonFormatter/JsonFormatter";
 import SideBarMenu from "./components/SidebarMenu/SideBarMenu";
-import TextCompare from "./container/Formatter/TextCompare/TextCompare";
-import XMLToJson from "./container/Formatter/XmlToJson/XMLJson";
-import XMLFormatter from "./container/Formatter/XmlFormatter/XMLFormatter";
+import TextCompare from "@/features/formatter/components/TextCompare/TextCompare";
+import XMLToJson from "@/container/Formatter/XmlToJson/XMLJson";
+import XMLFormatter from "@/container/Formatter/XmlFormatter/XMLFormatter";
+import JsonFormatter from "@/features/formatter/components/JsonFormatter/JsonFormatter";
+import ResultCompare from "./features/formatter/components/TextCompare/ResultCompare";
+import Differ from "./features/formatter/components/TextCompare/Differ";
 
 function App() {
   let menuList = [
@@ -157,7 +159,11 @@ function App() {
             <Routes>
               <Route path="/" element={<JsonFormatter />} />
               <Route path="/json-formatter" element={<JsonFormatter />} />
-              <Route path="/text-compare" element={<TextCompare />} />
+              <Route path="/text-compare" element={<TextCompare />}>
+                <Route index element={<Differ />} />
+                <Route path="differ" element={<Differ />} />
+                <Route path="result-compare" element={<ResultCompare />} />
+              </Route>
               <Route path="/xml-to-json" element={<XMLToJson />} />
               <Route path="/xml-formatter" element={<XMLFormatter />} />
               {/* <Route path="/base64Image" element={<Base64Image />} />

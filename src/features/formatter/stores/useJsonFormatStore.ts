@@ -17,7 +17,7 @@ interface JsonFormatStore {
 
 const useJsonFormatStore = create(
   devtools(
-    (set: any, get: any) => ({
+    (set: any, get: any): JsonFormatStore => ({
       inputJson: { text: "", json: undefined } as IJsonData,
       outputJson: { text: "", json: undefined } as IJsonData,
       setInputData: (data: IJsonData) => set({ inputJson: data }),

@@ -9,7 +9,7 @@ import {
   faCopy,
   faMaximize,
 } from "@fortawesome/free-solid-svg-icons";
-import useJsonFormatStore from "@/store/useJsonFormatStore";
+import useJsonFormatStore from "@/features/formatter/stores/useJsonFormatStore";
 
 const JsonEditorInput = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);

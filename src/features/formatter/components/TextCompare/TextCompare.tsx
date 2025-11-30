@@ -11,7 +11,7 @@ import "./TextCompare.css";
 import * as diff from "diff";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { githubDark, githubLight } from "@uiw/codemirror-themes-all";
-import { Button } from "@/components/ui/button";
+import { Outlet } from "react-router-dom";
 
 // import { Differ } from 'json-diff-kit';
 // import "json-diff-kit/dist/viewer.css";
@@ -36,6 +36,12 @@ const initialInput2: any = "";
 const initialDiff: IDiffer[] = [];
 
 const TextCompare = (props: Props) => {
+  const options = {
+    minimap: {
+      enabled: false,
+    },
+    fontSize: 14, // You can add other options here too
+  };
   // const [firstPanel, setFirstPanel] = useState("");
   // const [secondPanel, setSecondPanel] = useState("");
   // const [addedCount, setAddedCount] = useState(0);
@@ -222,26 +228,7 @@ const TextCompare = (props: Props) => {
   // );
   return (
     <main className="w-full p-2 gap-2">
-      <p className="text-xl font-extrabold text-default-800">Text Compare</p>
-      <div className="grid grid-cols-9 items-center">
-        <div className="w-full col-span-4 p-2">
-          <div className="mt-2">
-            <div className="flex flex-row gap-2 h-4 justify-between h-screen">
-              <span>Original text</span>
-            </div>
-          </div>
-        </div>
-        <div className="w-full flex col-span-1 p-4 justify-center">
-          <Button
-            variant="secondary"
-            size="lg"
-            className="hover:bg-gray-200 hover:text-black"
-          >
-            Find Diff
-          </Button>
-        </div>
-        <div className="w-full col-span-4 p-2">Modified text</div>
-      </div>
+      <Outlet />
     </main>
   );
 };

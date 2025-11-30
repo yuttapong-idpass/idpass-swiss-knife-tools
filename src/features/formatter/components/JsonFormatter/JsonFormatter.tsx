@@ -1,10 +1,10 @@
 import React, { createRef, useEffect, useState } from "react";
-import "./JsonFormatter.css";
-import JsonEditorInput from "./page/JsonEditorInput";
-import JsonEditorOutput from "./page/JsonEditorOutput";
+import "@/features/formatter/components/JsonFormatter/JsonFormatter.css";
+import JsonEditorInput from "./JsonEditorInput";
+import JsonEditorOutput from "./JsonEditorOutput";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import useJsonFormatStore from "@/store/useJsonFormatStore";
+import useJsonFormatStore from "@/features/formatter/stores/useJsonFormatStore";
 type Props = {};
 
 const JsonFormatter = (props: Props) => {
