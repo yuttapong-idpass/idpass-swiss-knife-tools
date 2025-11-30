@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import Editor from "@monaco-editor/react";
 import { useRef } from "react";
+import useTextCompareStore from "@/features/formatter/stores/useTextCompareStore";
 
 const Differ = () => {
   const editorRef = useRef(null);
+  const { setText }: any = useTextCompareStore();
   const options = {
     minimap: {
       enabled: false,
@@ -17,6 +19,7 @@ const Differ = () => {
     editor.onDidChangeModelContent(() => {
       const value = editor.getValue();
       console.log("originalTextRef.current --->", value);
+      setText(value);
     });
   }
 
@@ -25,6 +28,7 @@ const Differ = () => {
     editor.onDidChangeModelContent(() => {
       const value = editor.getValue();
       console.log("modifiedTextRef.current --->", value);
+      setText(value);
     });
   }
 
