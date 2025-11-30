@@ -16,62 +16,15 @@ const Differ = () => {
 
     editor.onDidChangeModelContent(() => {
       const value = editor.getValue();
-
-      if (value === "") {
-        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
-        return;
-      }
-
-      try {
-        JSON.parse(value);
-        // Clear markers if valid
-        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
-      } catch (err: any) {
-        // Show red underline
-        monaco.editor.setModelMarkers(editor.getModel(), "json", [
-          {
-            startLineNumber: 1,
-            startColumn: 1,
-            endLineNumber: 1,
-            endColumn: 1,
-            message: err.message,
-            severity: monaco.MarkerSeverity.Error,
-          },
-        ]);
-        // Show visible error message
-      }
+      console.log("originalTextRef.current --->", value);
     });
   }
 
   function handleModifiedTextMount(editor: any, monaco: any) {
     editorRef.current = editor;
-
     editor.onDidChangeModelContent(() => {
       const value = editor.getValue();
-
-      if (value === "") {
-        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
-        return;
-      }
-
-      try {
-        JSON.parse(value);
-        // Clear markers if valid
-        monaco.editor.setModelMarkers(editor.getModel(), "json", []);
-      } catch (err: any) {
-        // Show red underline
-        monaco.editor.setModelMarkers(editor.getModel(), "json", [
-          {
-            startLineNumber: 1,
-            startColumn: 1,
-            endLineNumber: 1,
-            endColumn: 1,
-            message: err.message,
-            severity: monaco.MarkerSeverity.Error,
-          },
-        ]);
-        // Show visible error message
-      }
+      console.log("modifiedTextRef.current --->", value);
     });
   }
 
