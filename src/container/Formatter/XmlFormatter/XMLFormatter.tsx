@@ -1,27 +1,22 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  SyntheticEvent,
-  useCallback,
-} from "react";
-import "./XMLJson.css";
-import xml2js from "xml2js";
-import ToastNotify from "../../../components/ToastNotify/ToastNotify";
-import { toast } from "react-toastify";
-import ReactCodeMirror from "@uiw/react-codemirror";
-import { githubDark, githubLight } from "@uiw/codemirror-themes-all";
+import React, { useCallback, useState, useContext } from "react";
 import { xmlLanguage } from "@codemirror/lang-xml";
-import { jsonLanguage } from "@codemirror/lang-json";
+import { githubDark, githubLight } from "@uiw/codemirror-themes-all";
+import { toast } from "react-toastify";
+
+import ReactCodeMirror from "@uiw/react-codemirror";
+import xml2js from "xml2js";
+
+import "./XMLFormatter.css";
+import ToastNotify from "../../../components/ToastNotify/ToastNotify";
 
 type Props = {};
 
-const XMLJson = (props: Props) => {
+const XMLFormatter = ({}: Props) => {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
 
   const handleInput = useCallback(
-    (value: any) => {
+    (value: any, viewUpdate: any) => {
       setInput(value);
     },
     [input]
@@ -34,15 +29,23 @@ const XMLJson = (props: Props) => {
     [output]
   );
 
-  const onConvertToJson = () => {
+  const onPrettyXml = () => {
     const parser = new xml2js.Parser();
     const removeNewLine = input.replace(/\\n/g, "");
     const removeSlash = removeNewLine.replace(/\\/g, "");
     const domParser = new DOMParser();
     const dom = domParser.parseFromString(removeSlash, "text/xml");
+
     if (dom.getElementsByTagName("parsererror").length <= 0) {
       parser.parseString(removeSlash.trim(), function (err: any, result: any) {
-        setOutput(JSON.stringify(result, null, 2));
+        const builder = new xml2js.Builder();
+        const prettyXml = builder.buildObject(result);
+        let lines = prettyXml.split("\n");
+        // remove one line, starting at the first position
+        lines.splice(0, 1);
+        // join the array back into a single string
+        let newText = lines.join("\n");
+        setOutput(newText);
       });
     } else {
       toast.error("XML Format error!");
@@ -53,26 +56,21 @@ const XMLJson = (props: Props) => {
     <section className="w-full p-2 gap-2">
       <ToastNotify />
       <p className="text-xl font-bold underline underline-offset-1 text-primary">
-        XML To JSON
+        XML Pretty
       </p>
       <div className="grid grid-cols-9 mt-5">
         <div className="col-span-4">
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col">
             <div>
-              <span className="
-                text-md 
-                font-semibold 
-                text-primary">
-                Input
-              </span>
+              <span className="text-md font-bold text-primary">Input</span>
             </div>
             <div>
               <ReactCodeMirror
                 value={input}
                 height="90vh"
                 extensions={[xmlLanguage]}
-                className="shadow-lg text-base border border dark:border-0"
                 onChange={handleInput}
+                className="test-wrap text-base shadow-lg border border dark:border-0"
               />
             </div>
           </div>
@@ -81,23 +79,18 @@ const XMLJson = (props: Props) => {
           <div className="grid place-items-center h-[90vh]">
             <div>
               <button
-                title="xmlJson"
-                className="inline-flex w-full items-center justify-center px-4 py-2 
-                text-base 
-                font-bold 
-                text-primary 
+                title="xml pretty"
+                className="inline-flex w-full items-center justify-center px-4 py-2 text-base font-bold  
                 whitespace-no-wrap 
-                bg-success 
-                rounded-md 
-                shadow-xs 
+                rounded-md shadow-xs 
                 bg-violet-400
                 text-white
                 dark:bg-yellow-500
                 dark:text-[#2d3748]
                 "
-                onClick={onConvertToJson}
+                onClick={onPrettyXml}
               >
-                Convert
+                Format
               </button>
             </div>
           </div>
@@ -105,15 +98,15 @@ const XMLJson = (props: Props) => {
         <div className="col-span-4">
           <div className="flex flex-col">
             <div>
-              <span className="text-md font-semibold text-primary">Output</span>
+              <span className="text-md font-bold text-primary">Output</span>
             </div>
             <div>
               <ReactCodeMirror
                 value={output}
                 height="90vh"
-                extensions={[jsonLanguage]}
-                className="shadow-lg text-base border border dark:border-0"
+                extensions={[xmlLanguage]}
                 onChange={handleOutput}
+                className="test-wrap text-base shadow-lg border border dark:border-0"
               />
             </div>
           </div>
@@ -123,4 +116,4 @@ const XMLJson = (props: Props) => {
   );
 };
 
-export default XMLJson;
+export default XMLFormatter;

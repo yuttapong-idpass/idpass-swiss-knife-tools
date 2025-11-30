@@ -39,15 +39,7 @@ import {
   faFolder,
 } from "@fortawesome/free-solid-svg-icons";
 
-type Props = {
-  // onChangeText: any;
-  // text: any;
-  // onError: any;
-  content: any;
-  readOnly: boolean;
-};
-
-const JsonEditorOutput = (props: Props) => {
+const JsonEditorOutput = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const refContainer = useRef<HTMLDivElement>(null);
   const jsonEditorRef = useRef<any>(null);
@@ -62,26 +54,12 @@ const JsonEditorOutput = (props: Props) => {
         target: refContainer.current,
         props: {
           mode: "text",
-          onChange: (
-            updateContent: any,
-            previousContent: any,
-            { contentErrors, patchResult }: any
-          ) => {
-            console.log("updateContent", updateContent);
-            console.log("previousContent", previousContent);
-            console.log("contentErrors", contentErrors);
-            console.log("patchResult", patchResult);
+          statusbar: true,
+          onChange: (updateContent: any) => {
             setOutputData(updateContent);
           },
           onRenderMenu: (items: any) => {
             const customMenu = [
-              {
-                type: "button",
-                title: "Open File",
-                className: "my-custom-button-class",
-                icon: faFolder,
-                onClick: () => onOpenFileClick(),
-              },
               {
                 type: "button",
                 title: "Save File",
@@ -114,14 +92,23 @@ const JsonEditorOutput = (props: Props) => {
 
   useEffect(() => {
     const getJsonData = getOutputData();
-    if (getJsonData.text) {
-      jsonEditorRef.current?.update({ text: getJsonData.text });
+    console.log("get data -->", getJsonData);
+    try {
+      if (getJsonData.text) {
+        jsonEditorRef.current?.update({
+          text: JSON.stringify(JSON.parse(getJsonData.text), null, 2),
+        });
+      }
+
+      if (getJsonData.json) {
+        jsonEditorRef.current?.update({ json: getJsonData.json });
+      }
+    } catch (error: any) {
+      console.log("error", error);
     }
 
-    if (getJsonData.json) {
-      jsonEditorRef.current?.update({ json: getJsonData.json });
-    }
-  }, []);
+    return () => {};
+  }, [getOutputData().text]);
 
   // function handleMount(editor: any, monaco: any) {
   //   editorRef.current = editor;
@@ -321,31 +308,6 @@ const JsonEditorOutput = (props: Props) => {
     fileInputRef.current?.click();
   };
 
-  const getLanguageFromExtension = (filename: string) => {
-    if (filename.endsWith(".json")) return "json";
-    if (filename.endsWith(".html")) return "html";
-    if (filename.endsWith(".css")) return "css";
-    if (filename.endsWith(".txt")) return "txt";
-    if (filename.endsWith(".ts") || filename.endsWith(".tsx"))
-      return "typescript";
-    return "javascript"; // default
-  };
-
-  const onHandleFileChange = ($event: any) => {
-    const file: any = $event.target.files[0];
-    const reader = new FileReader();
-    if (!file) return;
-    const detectedLanguage = getLanguageFromExtension(file.name);
-    console.log("language --->", detectedLanguage);
-    reader.onload = (e) => {
-      const content = e.target?.result;
-      if (typeof content === "string") {
-        jsonEditorRef.current.update({ json: JSON.parse(content) });
-      }
-    };
-    reader.readAsText(file);
-  };
-
   const onSaveFile = async () => {
     try {
       const options = {
@@ -363,9 +325,18 @@ const JsonEditorOutput = (props: Props) => {
       // @ts-ignore
       const fileHandle = await window.showSaveFilePicker(options);
       const writable = await fileHandle.createWritable();
-      await writable.write("data in save to file");
-      await writable.close();
-    } catch (error) {}
+      const getCurrentValue: any = jsonEditorRef.current?.get();
+      if (getCurrentValue.text) {
+        await writable.write(getCurrentValue.text);
+        await writable.close();
+      }
+      if (getCurrentValue.json) {
+        await writable.write(JSON.stringify(getCurrentValue.json, null, 4));
+        await writable.close();
+      }
+    } catch (error) {
+      console.log("save file error --->", error);
+    }
   };
 
   const onHandleCopyToClipBoard = async () => {
@@ -391,21 +362,13 @@ const JsonEditorOutput = (props: Props) => {
 
   return (
     <div className="mt-2" id="jsonEditorInput">
-      <div className="flex flex-col justify-between gap-2 w-full h-10 h-[87vh]">
-        <div className="flex flex-row gap-2 h-10 justify-between">
-          <span>OUTPUT</span>
+      <div className="flex flex-col justify-between gap-2 w-full">
+        <div className="flex flex-row gap-2 h-4 justify-between">
+          <span>Formatted Output</span>
           <div className="flex flex-row gap-2 justify-center items-center">
             <span className="text-xs text-green-500">
               {isCopied ? "Copied!" : ""}
             </span>
-            <input
-              id="file-input"
-              ref={fileInputRef}
-              type="file"
-              accept=".json,.txt"
-              onChange={onHandleFileChange}
-              className="hidden"
-            />
             {/* <ButtonGroup>
               <Button
                 variant="secondary"
@@ -447,7 +410,7 @@ const JsonEditorOutput = (props: Props) => {
         </div>
         <div
           id="jsonEditorInput"
-          className="jse-theme-dark h-screen"
+          className="jse-theme-dark h-[87vh]"
           ref={refContainer}
         ></div>
       </div>

@@ -11,13 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import useJsonFormatStore from "@/store/useJsonFormatStore";
 
-type Props = {
-  onChangeText: any;
-  onError: any;
-  text?: any;
-};
-
-const JsonEditorInput = (props: Props) => {
+const JsonEditorInput = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const refContainer = useRef<HTMLDivElement>(null);
   const jsonEditorRef = useRef<any>(null);
@@ -167,7 +161,10 @@ const JsonEditorInput = (props: Props) => {
     reader.onload = (e) => {
       const content = e.target?.result;
       if (typeof content === "string") {
-        jsonEditorRef.current.update({ json: JSON.parse(content) });
+        jsonEditorRef.current.update({
+          text: JSON.stringify(JSON.parse(content), null, 1),
+        });
+        setInputData({ text: JSON.stringify(JSON.parse(content), null, 1) });
       }
     };
     reader.readAsText(file);
@@ -270,9 +267,9 @@ const JsonEditorInput = (props: Props) => {
     // </div>
 
     <div className="mt-2" id="jsonEditorInput">
-      <div className="flex flex-col justify-between gap-2 w-full h-10 h-[87vh]">
-        <div className="flex flex-row gap-2 h-10 justify-between">
-          <span>INPUT</span>
+      <div className="flex flex-col justify-between gap-2 w-full">
+        <div className="flex flex-row gap-2 h-4 justify-between">
+          <span>RAW JSON</span>
           <div className="flex flex-row gap-2 justify-center items-center">
             <span className="text-xs text-green-500">
               {isCopied ? "Copied!" : ""}
@@ -326,7 +323,7 @@ const JsonEditorInput = (props: Props) => {
         </div>
         <div
           id="jsonEditorInput"
-          className="jse-theme-dark h-screen"
+          className="jse-theme-dark h-[87vh]"
           ref={refContainer}
         ></div>
       </div>

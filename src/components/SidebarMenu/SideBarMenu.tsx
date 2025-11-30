@@ -30,19 +30,19 @@ export interface ISideBarMenuProps {
 let menuList = [
   {
     id: 1,
-    title: "Development",
+    title: "Text & Format",
     active: true,
     icon: <Wrench size={30} />,
     menuLists: [
       {
-        name: "Json Pretty",
+        name: "JSON Formatter",
         active: true,
-        link: "/json-pretty",
+        link: "/json-formatter",
       },
       {
-        name: "Differ",
+        name: "Text Compare",
         active: true,
-        link: "/differ",
+        link: "/text-compare",
       },
       {
         name: "XML To Json",
@@ -50,15 +50,15 @@ let menuList = [
         link: "/xml-to-json",
       },
       {
-        name: "XML Pretty",
+        name: "XML Formatter",
         active: true,
-        link: "/xml-pretty",
+        link: "/xml-formatter",
       },
     ],
   },
   {
     id: 2,
-    title: "Crypto",
+    title: "Convert & Encoding",
     active: true,
     icon: <KeyRound size={30} />,
     menuLists: [

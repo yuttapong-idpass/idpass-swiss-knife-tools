@@ -19,23 +19,16 @@ import { TbNetwork } from "react-icons/tb";
 import { PiBracketsCurly } from "react-icons/pi";
 import { PiBracketsAngleBold } from "react-icons/pi";
 import { LuBinary } from "react-icons/lu";
-
-import BarCodeGenerator from "./container/Generator/BarCodeGenerator/BarCodeGenerator";
-import JsonPretty from "./container/Development/JsonPretty/JsonPretty";
-import Base64Image from "./container/Convertor/Base64Image/Base64Image";
-import JsonWebToken from "./container/Crypto/JsonWebToken/JsonWebToken";
-// import MockIdCard from "./container/Development/MockIdCard/MockIdCard";
-import Differ from "./container/Development/Differ/Differ";
-import XMLJson from "./container/Development/XMLJson/XMLJson";
-import XMLPretty from "./container/Development/XMLPretty/XMLPretty";
-import Testing from "./container/Development/Testing/Testing";
-import EncodedDecoded from "./container/Crypto/EncodeDecode/EncodedDecoded";
-import SideBarMenu from "./components/SidebarMenu/SideBarMenu";
 import {
   Sidebar,
   SidebarContent,
   SidebarProvider,
 } from "./components/ui/sidebar";
+import JsonFormatter from "./container/Formatter/JsonFormatter/JsonFormatter";
+import SideBarMenu from "./components/SidebarMenu/SideBarMenu";
+import TextCompare from "./container/Formatter/TextCompare/TextCompare";
+import XMLToJson from "./container/Formatter/XmlToJson/XMLJson";
+import XMLFormatter from "./container/Formatter/XmlFormatter/XMLFormatter";
 
 function App() {
   let menuList = [
@@ -162,16 +155,16 @@ function App() {
           <SidebarProvider>
             <SideBarMenu />
             <Routes>
-              <Route path="/" element={<JsonPretty />} />
-              <Route path="/json-pretty" element={<JsonPretty />} />
-              <Route path="/differ" element={<Differ />} />
-              <Route path="/xml-to-json" element={<XMLJson />} />
-              <Route path="/xml-pretty" element={<XMLPretty />} />
-              <Route path="/base64Image" element={<Base64Image />} />
+              <Route path="/" element={<JsonFormatter />} />
+              <Route path="/json-formatter" element={<JsonFormatter />} />
+              <Route path="/text-compare" element={<TextCompare />} />
+              <Route path="/xml-to-json" element={<XMLToJson />} />
+              <Route path="/xml-formatter" element={<XMLFormatter />} />
+              {/* <Route path="/base64Image" element={<Base64Image />} />
               <Route path="/jwt" element={<JsonWebToken />} />
               <Route path="/id-card-random" element={<IdCardGenerator />} />
               <Route path="/barcode" element={<BarCodeGenerator />} />
-              <Route path="/encoded-decoded" element={<EncodedDecoded />} />
+              <Route path="/encoded-decoded" element={<EncodedDecoded />} /> */}
               {/* <Route path="/mock-up" element={<MockIdCard />} /> */}
             </Routes>
           </SidebarProvider>
