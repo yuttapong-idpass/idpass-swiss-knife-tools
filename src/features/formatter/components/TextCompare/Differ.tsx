@@ -6,8 +6,8 @@ import useTextCompareStore from "@/features/formatter/stores/useTextCompareStore
 import { Eraser } from "lucide-react";
 
 const Differ = () => {
-  const editorOriginalTextRef = useRef(null);
-  const editorModifiedTextRef = useRef(null);
+  const editorOriginalTextRef = useRef<any>(null);
+  const editorModifiedTextRef = useRef<any>(null);
   const navigate = useNavigate();
   const {
     setOriginalText,
