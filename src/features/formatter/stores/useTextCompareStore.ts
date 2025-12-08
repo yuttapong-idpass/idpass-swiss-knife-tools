@@ -16,8 +16,8 @@ const useTextCompareStore = create(
         (set: any, get: any): TextCompareStore => ({
             originalText: "",
             modifiedText: "",
-            setOriginalText: (data: string) => set({ data }),
-            setModifiedText: (data: string) => set({ data }),
+            setOriginalText: (data: string) => set({ originalText: data }),
+            setModifiedText: (data: string) => set({ modifiedText: data }),
             getOriginalText: () => get().originalText,
             getModifiedText: () => get().modifiedText,
         }),
