@@ -1,0 +1,102 @@
+import { Button } from "@/components/ui/button";
+import { Editor } from "@monaco-editor/react";
+import { Trash } from "lucide-react";
+
+const JWTDecoder = () => {
+  const editorOptions = {
+    minimap: { enabled: false },
+    formatOnPaste: true,
+    formatOnType: true,
+    fontSize: 14,
+  };
+
+  return (
+    <main className="p-2 gap-2 w-full">
+      <p className="text-xl font-extrabold text-default-800">JWT Decoder</p>
+      <div className="grid grid-cols-9 items-center">
+        <div className="w-full col-span-4 p-2">
+          <div className="mt-2">
+            <div className="flex flex-col justify-between gap-2 w-full">
+              <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
+                <span>JWT</span>
+                <div className="flex flex-row gap-2 justify-center items-center">
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    className="hover:bg-gray-200 hover:text-black"
+                  >
+                    <Trash />
+                  </Button>
+                </div>
+              </div>
+              <div>
+                <Editor
+                  height="80vh"
+                  theme="vs-dark"
+                  options={editorOptions}
+                  defaultLanguage="json"
+                  className="w-full h-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="w-full flex col-span-1 p-4 justify-center">xxx</div>
+        <div className="w-full col-span-4 p-2">
+          <div className="mt-2">
+            <div className="flex flex-col justify-between gap-2 w-full">
+              <div className="flex flex-col justify-between gap-2 w-full">
+                <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
+                  <span>Decoded headers</span>
+                  <div className="flex flex-row gap-2 justify-center items-center">
+                    <Button
+                      variant="secondary"
+                      size="lg"
+                      className="hover:bg-gray-200 hover:text-black"
+                    >
+                      <Trash />
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <Editor
+                    height="20vh"
+                    theme="vs-dark"
+                    options={editorOptions}
+                    defaultLanguage="json"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col justify-between gap-2 w-full">
+                <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
+                  <span>Decoded headers</span>
+                  <div className="flex flex-row gap-2 justify-center items-center">
+                    <Button
+                      variant="secondary"
+                      size="lg"
+                      className="hover:bg-gray-200 hover:text-black"
+                    >
+                      <Trash />
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <Editor
+                    height="20vh"
+                    theme="vs-dark"
+                    options={editorOptions}
+                    defaultLanguage="json"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default JWTDecoder;

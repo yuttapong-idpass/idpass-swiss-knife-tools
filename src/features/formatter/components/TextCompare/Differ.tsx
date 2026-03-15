@@ -3,7 +3,7 @@ import Editor from "@monaco-editor/react";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useTextCompareStore from "@/features/formatter/stores/useTextCompareStore";
-import { Eraser } from "lucide-react";
+import { Eraser, Trash } from "lucide-react";
 
 const Differ = () => {
   const editorOriginalTextRef = useRef<any>(null);
@@ -58,73 +58,71 @@ const Differ = () => {
   }
 
   return (
-    <main className="">
-      <div>
-        <p className="text-xl font-extrabold text-default-800">Text Compare</p>
-        <div className="grid grid-cols-9 items-center">
-          <div className="w-full col-span-4 p-2">
-            <div className="mt-2">
-              <div className="flex flex-col justify-between gap-2 w-full">
-                <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
-                  <span>Original text</span>
-                  <div className="flex flex-row gap-2 justify-center items-center">
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      className="hover:bg-gray-200 hover:text-black"
-                      onClick={onClearOriginalText}
-                    >
-                      <Eraser />
-                    </Button>
-                  </div>
+    <main>
+      <p className="text-xl font-extrabold text-default-800">Text Compare</p>
+      <div className="grid grid-cols-9 items-center">
+        <div className="w-full col-span-4 p-2">
+          <div className="mt-2">
+            <div className="flex flex-col justify-between gap-2 w-full">
+              <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
+                <span>Original text</span>
+                <div className="flex flex-row gap-2 justify-center items-center">
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    className="hover:bg-gray-200 hover:text-black"
+                    onClick={onClearOriginalText}
+                  >
+                    <Trash />
+                  </Button>
                 </div>
-                <div>
-                  <Editor
-                    height="89vh" // By default, it takes 100% of the parent, so make sure the parent has height.
-                    theme="vs-dark" // 'light' or 'vs-dark'
-                    options={options}
-                    defaultValue={getOriginalText()}
-                    onMount={handleOriginalTextDidMount}
-                  />
-                </div>
+              </div>
+              <div>
+                <Editor
+                  height="86vh" // By default, it takes 100% of the parent, so make sure the parent has height.
+                  theme="vs-dark" // 'light' or 'vs-dark'
+                  options={options}
+                  defaultValue={getOriginalText()}
+                  onMount={handleOriginalTextDidMount}
+                />
               </div>
             </div>
           </div>
-          <div className="w-full flex col-span-1 p-4 justify-center">
-            <Button
-              variant="secondary"
-              size="lg"
-              className="hover:bg-gray-200 hover:text-black"
-              onClick={onRouteToResultCompare}
-            >
-              Find Diff
-            </Button>
-          </div>
-          <div className="w-full col-span-4 p-2">
-            <div className="mt-2">
-              <div className="flex flex-col justify-between gap-2 w-full">
-                <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
-                  <span>Modified text</span>
-                  <div className="flex flex-row gap-2 justify-center items-center">
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      className="hover:bg-gray-200 hover:text-black"
-                      onClick={onClearModifiedText}
-                    >
-                      <Eraser />
-                    </Button>
-                  </div>
+        </div>
+        <div className="w-full flex col-span-1 p-4 justify-center">
+          <Button
+            variant="secondary"
+            size="lg"
+            className="hover:bg-gray-200 hover:text-black"
+            onClick={onRouteToResultCompare}
+          >
+            Compare
+          </Button>
+        </div>
+        <div className="w-full col-span-4 p-2">
+          <div className="mt-2">
+            <div className="flex flex-col justify-between gap-2 w-full">
+              <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
+                <span>Modified text</span>
+                <div className="flex flex-row gap-2 justify-center items-center">
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    className="hover:bg-gray-200 hover:text-black"
+                    onClick={onClearModifiedText}
+                  >
+                    <Trash />
+                  </Button>
                 </div>
-                <div>
-                  <Editor
-                    height="89vh" // By default, it takes 100% of the parent, so make sure the parent has height.
-                    theme="vs-dark" // 'light' or 'vs-dark'
-                    options={options}
-                    defaultValue={getModifiedText()}
-                    onMount={handleModifiedTextDidMount}
-                  />
-                </div>
+              </div>
+              <div>
+                <Editor
+                  height="86vh" // By default, it takes 100% of the parent, so make sure the parent has height.
+                  theme="vs-dark" // 'light' or 'vs-dark'
+                  options={options}
+                  defaultValue={getModifiedText()}
+                  onMount={handleModifiedTextDidMount}
+                />
               </div>
             </div>
           </div>

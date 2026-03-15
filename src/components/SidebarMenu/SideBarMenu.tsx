@@ -63,9 +63,9 @@ let menuList = [
     icon: <KeyRound size={30} />,
     menuLists: [
       {
-        name: "JWT Parser",
+        name: "JWT Decoder",
         active: true,
-        link: "/jwt",
+        link: "/jwt-decoder",
       },
       {
         name: "Encode/Decoded",

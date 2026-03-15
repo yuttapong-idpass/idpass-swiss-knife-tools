@@ -27,10 +27,12 @@ import {
 import SideBarMenu from "./components/SidebarMenu/SideBarMenu";
 import TextCompare from "@/features/formatter/components/TextCompare/TextCompare";
 import XMLToJson from "@/container/Formatter/XmlToJson/XMLJson";
-import XMLFormatter from "@/container/Formatter/XmlFormatter/XMLFormatter";
 import JsonFormatter from "@/features/formatter/components/JsonFormatter/JsonFormatter";
 import ResultCompare from "./features/formatter/components/TextCompare/ResultCompare";
 import Differ from "./features/formatter/components/TextCompare/Differ";
+import XMLToJSON from "./features/formatter/components/XmlTojson/XmlTojson";
+import XMLFormatter from "./features/formatter/components/XmlFormatter/XmlFormatter";
+import JWTDecoder from "./features/encoding/components/jwt";
 
 function App() {
   let menuList = [
@@ -74,7 +76,7 @@ function App() {
           name: "JWT Parser",
           icon: <BsKey size={20} />,
           active: true,
-          link: "/jwt",
+          link: "/jwt-decoder",
         },
         {
           name: "Encode/Decoded",
@@ -164,8 +166,9 @@ function App() {
                 <Route path="differ" element={<Differ />} />
                 <Route path="result-compare" element={<ResultCompare />} />
               </Route>
-              <Route path="/xml-to-json" element={<XMLToJson />} />
+              <Route path="/xml-to-json" element={<XMLToJSON />} />
               <Route path="/xml-formatter" element={<XMLFormatter />} />
+              <Route path="/jwt-decoder" element={<JWTDecoder />} />
               {/* <Route path="/base64Image" element={<Base64Image />} />
               <Route path="/jwt" element={<JsonWebToken />} />
               <Route path="/id-card-random" element={<IdCardGenerator />} />
