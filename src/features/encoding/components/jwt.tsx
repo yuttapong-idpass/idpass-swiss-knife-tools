@@ -3,7 +3,14 @@ import { Editor } from "@monaco-editor/react";
 import { Trash } from "lucide-react";
 
 const JWTDecoder = () => {
-  const editorOptions = {
+  const editorEncodedTokenOptions = {
+    minimap: { enabled: false },
+    formatOnPaste: true,
+    formatOnType: true,
+    fontSize: 14,
+  };
+
+  const editorDecodedOptions = {
     minimap: { enabled: false },
     formatOnPaste: true,
     formatOnType: true,
@@ -18,7 +25,7 @@ const JWTDecoder = () => {
           <div className="mt-2">
             <div className="flex flex-col justify-between gap-2 w-full">
               <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
-                <span>JWT</span>
+                <span>Encoded Token</span>
                 <div className="flex flex-row gap-2 justify-center items-center">
                   <Button
                     variant="secondary"
@@ -31,9 +38,9 @@ const JWTDecoder = () => {
               </div>
               <div>
                 <Editor
-                  height="80vh"
+                  height="88vh"
                   theme="vs-dark"
-                  options={editorOptions}
+                  options={editorEncodedTokenOptions}
                   defaultLanguage="json"
                   className="w-full h-full"
                 />
@@ -41,13 +48,21 @@ const JWTDecoder = () => {
             </div>
           </div>
         </div>
-        <div className="w-full flex col-span-1 p-4 justify-center">xxx</div>
+        <div className="w-full flex col-span-1 p-4 justify-center">
+          <Button
+            variant="secondary"
+            size="lg"
+            className="hover:bg-gray-200 hover:text-black"
+          >
+            Decode
+          </Button>
+        </div>
         <div className="w-full col-span-4 p-2">
           <div className="mt-2">
             <div className="flex flex-col justify-between gap-2 w-full">
               <div className="flex flex-col justify-between gap-2 w-full">
                 <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
-                  <span>Decoded headers</span>
+                  <span>Decoded Header</span>
                   <div className="flex flex-row gap-2 justify-center items-center">
                     <Button
                       variant="secondary"
@@ -60,9 +75,9 @@ const JWTDecoder = () => {
                 </div>
                 <div>
                   <Editor
-                    height="20vh"
+                    height="10vh"
                     theme="vs-dark"
-                    options={editorOptions}
+                    options={editorDecodedOptions}
                     defaultLanguage="json"
                     className="w-full h-full"
                   />
@@ -70,7 +85,7 @@ const JWTDecoder = () => {
               </div>
               <div className="flex flex-col justify-between gap-2 w-full">
                 <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
-                  <span>Decoded headers</span>
+                  <span>Secret</span>
                   <div className="flex flex-row gap-2 justify-center items-center">
                     <Button
                       variant="secondary"
@@ -83,9 +98,32 @@ const JWTDecoder = () => {
                 </div>
                 <div>
                   <Editor
-                    height="20vh"
+                    height="10vh"
                     theme="vs-dark"
-                    options={editorOptions}
+                    options={editorDecodedOptions}
+                    defaultLanguage="json"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col justify-between gap-2 w-full">
+                <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
+                  <span>Decoded Payload</span>
+                  <div className="flex flex-row gap-2 justify-center items-center">
+                    <Button
+                      variant="secondary"
+                      size="lg"
+                      className="hover:bg-gray-200 hover:text-black"
+                    >
+                      <Trash />
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <Editor
+                    height="57vh"
+                    theme="vs-dark"
+                    options={editorDecodedOptions}
                     defaultLanguage="json"
                     className="w-full h-full"
                   />
