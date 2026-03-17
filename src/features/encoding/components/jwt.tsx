@@ -1,8 +1,20 @@
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectItem,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Editor } from "@monaco-editor/react";
 import { Trash } from "lucide-react";
+import { SyntheticEvent, useState } from "react";
 
 const JWTDecoder = () => {
+  const algorithms = ["HS256", "HS384", "HS512", "RS256", "ES256"];
+  const [algorithm, setAlgorithm] = useState<string>("HS256");
   const editorEncodedTokenOptions = {
     minimap: { enabled: false },
     formatOnPaste: true,
@@ -15,6 +27,14 @@ const JWTDecoder = () => {
     formatOnPaste: true,
     formatOnType: true,
     fontSize: 14,
+  };
+
+  const handleSelectAlgorithm = ($event: SyntheticEvent<EventTarget>) => {
+    const value = ($event.target as HTMLSelectElement).value;
+    // setAlgorithm(value);
+    console.log("value --->", value);
+    // setAlgorithm((value as HTMLSelectElement).value as string);
+    // console.log((value as HTMLSelectElement).value);
   };
 
   return (
@@ -64,13 +84,22 @@ const JWTDecoder = () => {
                 <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
                   <span>Decoded Header</span>
                   <div className="flex flex-row gap-2 justify-center items-center">
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      className="hover:bg-gray-200 hover:text-black"
-                    >
-                      <Trash />
-                    </Button>
+                    <span>Algorithm</span>
+                    <Select onValueChange={setAlgorithm} value={algorithm}>
+                      <SelectTrigger className="w-full max-w-48">
+                        <SelectValue placeholder="Select an algorithm" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Algorithms</SelectLabel>
+                          {algorithms.map((algorithm) => (
+                            <SelectItem key={algorithm} value={algorithm}>
+                              {algorithm}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 <div>
@@ -86,15 +115,6 @@ const JWTDecoder = () => {
               <div className="flex flex-col justify-between gap-2 w-full">
                 <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
                   <span>Secret</span>
-                  <div className="flex flex-row gap-2 justify-center items-center">
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      className="hover:bg-gray-200 hover:text-black"
-                    >
-                      <Trash />
-                    </Button>
-                  </div>
                 </div>
                 <div>
                   <Editor
@@ -109,15 +129,6 @@ const JWTDecoder = () => {
               <div className="flex flex-col justify-between gap-2 w-full">
                 <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-between">
                   <span>Decoded Payload</span>
-                  <div className="flex flex-row gap-2 justify-center items-center">
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      className="hover:bg-gray-200 hover:text-black"
-                    >
-                      <Trash />
-                    </Button>
-                  </div>
                 </div>
                 <div>
                   <Editor
