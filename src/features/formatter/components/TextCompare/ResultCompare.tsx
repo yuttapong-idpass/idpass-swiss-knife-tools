@@ -1,7 +1,7 @@
 import { DiffEditor } from "@monaco-editor/react";
 import useTextCompareStore from "../../stores/useTextCompareStore";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Trash } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 const ResultCompare = () => {
   const { getOriginalText, getModifiedText }: any = useTextCompareStore();
@@ -19,34 +19,29 @@ const ResultCompare = () => {
   }
 
   return (
-    <main className="grid items-center">
-      <div className="w-full p-2">
-        <p className="text-xl font-extrabold text-default-800">Result</p>
-        <div className="mt-2">
-          <div className="flex flex-col justify-start w-full">
-            <div className="flex flex-row gap-2 h-4 mt-3 mb-3 justify-end">
-              <div className="flex flex-row gap-2 mb-4 justify-center items-center">
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="hover:bg-gray-200 hover:text-black"
-                  onClick={onBackToDiffer}
-                >
-                  <Trash />
-                </Button>
-              </div>
-            </div>
-            <div>
-              <DiffEditor
-                height="86vh"
-                language="text"
-                original={getOriginalText()}
-                modified={getModifiedText()}
-                theme="vs-dark"
-                options={options}
-              />
-            </div>
-          </div>
+    <main className="p-2 w-full">
+      <p className="text-xl font-extrabold text-default-800 mb-2">Result</p>
+      <div className="flex flex-col gap-2 h-auto lg:h-[calc(100vh-5rem)]">
+        <div className="flex flex-row items-center mb-2 justify-between">
+          <span>Diff View</span>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="hover:bg-gray-200 hover:text-black"
+            onClick={onBackToDiffer}
+          >
+            <ArrowLeft /> Back
+          </Button>
+        </div>
+        <div className="flex-1 min-h-[400px] lg:min-h-0">
+          <DiffEditor
+            height="100%"
+            language="text"
+            original={getOriginalText()}
+            modified={getModifiedText()}
+            theme="vs-dark"
+            options={options}
+          />
         </div>
       </div>
     </main>

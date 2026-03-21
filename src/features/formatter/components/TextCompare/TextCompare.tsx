@@ -227,7 +227,7 @@ const TextCompare = (props: Props) => {
   //   </section>
   // );
   return (
-    <main className="w-full p-2 gap-2">
+    <main className="p-2 w-full">
       <Outlet />
     </main>
   );

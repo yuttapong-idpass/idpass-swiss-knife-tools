@@ -16,14 +16,16 @@ const JsonFormatter = (props: Props) => {
   };
 
   return (
-    <main className="w-full p-2 gap-2">
-      <p className="text-xl font-extrabold text-default-800">JSON Formatter</p>
-      <div className="grid grid-cols-9 items-center">
-        <div className="w-full col-span-4 p-2">
+    <main className="p-2 w-full">
+      <p className="text-xl font-extrabold text-default-800 mb-2">
+        JSON Formatter
+      </p>
+      <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-5rem)]">
+        <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
           <JsonEditorInput />
         </div>
 
-        <div className="w-full flex col-span-1 p-4 justify-center">
+        <div className="flex items-center justify-center px-2 py-2 lg:py-0">
           <Button
             variant="secondary"
             size="lg"
@@ -34,7 +36,7 @@ const JsonFormatter = (props: Props) => {
           </Button>
         </div>
 
-        <div className="w-full col-span-4 p-2">
+        <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
           <JsonEditorOutput />
         </div>
       </div>

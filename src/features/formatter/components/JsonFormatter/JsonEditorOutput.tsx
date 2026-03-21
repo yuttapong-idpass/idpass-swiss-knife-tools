@@ -361,59 +361,19 @@ const JsonEditorOutput = () => {
   };
 
   return (
-    <div className="mt-2" id="jsonEditorInput">
-      <div className="flex flex-col justify-between gap-2 w-full">
-        <div className="flex flex-row gap-2 h-4 justify-between">
-          <span>Formatted Output</span>
-          <div className="flex flex-row gap-2 justify-center items-center">
-            <span className="text-xs text-green-500">
-              {isCopied ? "Copied!" : ""}
-            </span>
-            {/* <ButtonGroup>
-              <Button
-                variant="secondary"
-                size="default"
-                onClick={onOpenFileClick}
-              >
-                <FolderOpen />
-                <input
-                  id="file-input"
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".json,.txt"
-                  onChange={onHandleFileChange}
-                  className="hidden"
-                />
-              </Button>
-              <ButtonGroupSeparator />
-              <Button
-                variant="secondary"
-                size="default"
-                onClick={() => onSaveFile()}
-              >
-                <Save />
-              </Button>
-              <ButtonGroupSeparator />
-              <Button
-                variant="secondary"
-                size="default"
-                onClick={onHandleCopyToClipBoard}
-              >
-                <Copy />
-              </Button>
-              <ButtonGroupSeparator />
-              <Button variant="secondary" size="default" onClick={onFullScreen}>
-                <Maximize2 />
-              </Button>
-            </ButtonGroup> */}
-          </div>
+    <div className="flex flex-col flex-1" id="jsonEditorOutput">
+      <div className="flex flex-row items-center mb-2 justify-between">
+        <span>Formatted Output</span>
+        <div className="flex flex-row gap-2 justify-center items-center">
+          <span className="text-xs text-green-500">
+            {isCopied ? "Copied!" : ""}
+          </span>
         </div>
-        <div
-          id="jsonEditorInput"
-          className="jse-theme-dark h-[87vh]"
-          ref={refContainer}
-        ></div>
       </div>
+      <div
+        className="jse-theme-dark flex-1"
+        ref={refContainer}
+      ></div>
     </div>
   );
 };
