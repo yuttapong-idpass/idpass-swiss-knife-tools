@@ -13,7 +13,7 @@ import { decodeJwt, decodeProtectedHeader } from "jose";
 import { CopyIcon, Trash } from "lucide-react";
 import { SyntheticEvent, useRef, useState } from "react";
 import { toast } from "sonner";
-import useJwtStore from "../stores/jwtSTore";
+import useJwtStore from "../stores/jwtStore";
 
 const JWTDecoder = () => {
   const editorEncodedTokenRef = useRef<any>(null);
