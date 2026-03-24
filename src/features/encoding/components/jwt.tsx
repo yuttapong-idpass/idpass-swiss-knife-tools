@@ -1,4 +1,4 @@
-import { decodeJwt, decodeProtectedHeader } from "jose";
+import { decodeJwt, decodeProtectedHeader, SignJWT } from "jose";
 import { SyntheticEvent, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Trash, CopyIcon, ArrowLeftRight } from "lucide-react";
@@ -20,18 +20,26 @@ const JWTDecoder = () => {
   const editorDecodedHeadersRef = useRef<any>(null);
   const editorDecodedPayloadRef = useRef<any>(null);
 
-  const algorithms = ["HS256", "HS384", "HS512", "RS256", "ES256"];
+  const algorithms = [
+    { name: "HS256", alg: "HS256", typ: "JWT", algorithm: "HMACSHA256" },
+    { name: "HS384", alg: "HS384", typ: "JWT", algorithm: "HMACSHA384" },
+    { name: "HS512", alg: "HS512", typ: "JWT", algorithm: "HMACSHA512" },
+  ];
   const modes = ["encode", "decode"];
-  const [algorithm, setAlgorithm] = useState<string>("HS256");
+  const [algorithmName, setAlgorithmName] = useState<string>("HS256");
   const [mode, setMode] = useState<string>("decode");
 
   const {
-    encodedToken,
+    encodedText,
     decodedHeaders,
-    decodedPayload,
-    setEncodedToken,
+    decodedText,
+    secretKey,
+    algorithm,
+    setEncodedText,
     setDecodedHeaders,
-    setDecodedPayload,
+    setDecodedText,
+    setSecretKey,
+    setAlgorithm,
   }: any = useJwtStore();
 
   const editorEdit = {
@@ -55,16 +63,16 @@ const JWTDecoder = () => {
     editorEncodedTokenRef.current = editor;
     editor.onDidChangeModelContent(() => {
       const value = editor.getValue();
-      setEncodedToken(value);
+      setEncodedText(value);
     });
   }
 
   function handleDecode() {
     try {
-      const decoded = decodeJwt(encodedToken);
-      const headers = decodeProtectedHeader(encodedToken);
+      const decoded = decodeJwt(encodedText);
+      const headers = decodeProtectedHeader(encodedText);
       setDecodedHeaders(headers);
-      setDecodedPayload(decoded);
+      setDecodedText(decoded);
       editorDecodedHeadersRef.current?.setValue(
         JSON.stringify(headers, null, 2),
       );
@@ -80,8 +88,15 @@ const JWTDecoder = () => {
     }
   }
 
-  function handleEncode() {
+  async function handleEncode() {
     try {
+      const secret = new TextEncoder().encode("1234556");
+
+      const jwt = await new SignJWT(decodedText)
+        .setProtectedHeader({ alg: algorithmName, typ: "JWT" })
+        .sign(secret);
+
+      console.log(jwt);
     } catch (error: any) {
       toast.error(error.message, {
         position: "top-center",
@@ -103,16 +118,14 @@ const JWTDecoder = () => {
     editorEncodedTokenRef.current?.setValue("");
     editorDecodedHeadersRef.current?.setValue("");
     editorDecodedPayloadRef.current?.setValue("");
-    setEncodedToken("");
+    setEncodedText("");
     setDecodedHeaders({});
-    setDecodedPayload({});
+    setDecodedText({});
   }
 
   async function onCopyPayload() {
     try {
-      await navigator.clipboard.writeText(
-        JSON.stringify(decodedPayload, null, 2),
-      );
+      await navigator.clipboard.writeText(JSON.stringify(decodedText, null, 2));
       toast.success("Copied to clipboard", {
         position: "top-center",
         closeButton: true,
@@ -172,7 +185,7 @@ const JWTDecoder = () => {
                 theme="vs-dark"
                 options={editorEdit}
                 onMount={handleTextEncoded}
-                defaultValue={encodedToken}
+                defaultValue={encodedText}
                 defaultLanguage="plaintext"
               />
             </div>
@@ -184,15 +197,19 @@ const JWTDecoder = () => {
                 <span>Decoded Header</span>
                 <div className="flex flex-row gap-2 items-center">
                   <span>Algorithm</span>
-                  <Select>
+                  <Select
+                    defaultValue="HS256"
+                    value={algorithmName}
+                    onValueChange={(value) => setAlgorithmName(value)}
+                  >
                     <SelectTrigger className="w-full max-w-48">
-                      <SelectValue placeholder="H256" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         {algorithms.map((item, index) => (
-                          <SelectItem key={index} value={item}>
-                            {item}
+                          <SelectItem key={index} value={item.name}>
+                            {item.name}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -227,7 +244,7 @@ const JWTDecoder = () => {
                   height="100%"
                   theme="vs-dark"
                   options={editorEdit}
-                  defaultValue={JSON.stringify(decodedPayload, null, 2)}
+                  defaultValue={JSON.stringify(decodedText, null, 2)}
                   defaultLanguage="json"
                   onMount={handleJwtPayload}
                 />
@@ -249,7 +266,7 @@ const JWTDecoder = () => {
                   height="100%"
                   theme="vs-dark"
                   options={editorEdit}
-                  defaultValue={JSON.stringify(decodedPayload, null, 2)}
+                  defaultValue={JSON.stringify(decodedText, null, 2)}
                   defaultLanguage="json"
                   onMount={handleJwtPayload}
                 />
@@ -275,7 +292,7 @@ const JWTDecoder = () => {
             variant="secondary"
             size="lg"
             className="hover:bg-gray-200 hover:text-black"
-            onClick={handleDecode}
+            onClick={mode === "decode" ? handleDecode : handleEncode}
           >
             {mode === "decode" ? "Decode" : "Encode"}
           </Button>
@@ -324,7 +341,7 @@ const JWTDecoder = () => {
                   height="100%"
                   theme="vs-dark"
                   options={editorReadOnly}
-                  defaultValue={JSON.stringify(decodedPayload, null, 2)}
+                  defaultValue={JSON.stringify(decodedText, null, 2)}
                   defaultLanguage="json"
                   onMount={handleJwtPayload}
                 />
@@ -350,7 +367,7 @@ const JWTDecoder = () => {
                 theme="vs-dark"
                 options={editorReadOnly}
                 onMount={handleTextEncoded}
-                defaultValue={encodedToken}
+                defaultValue={encodedText}
                 defaultLanguage="plaintext"
               />
             </div>

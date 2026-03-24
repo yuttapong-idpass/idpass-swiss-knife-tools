@@ -4,6 +4,7 @@ import { Trash } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import useXMLFormatterStore from "@/features/formatter/stores/useXMLFormatterStore";
 import { toast } from "react-toastify";
+import xmlFormat from "xml-formatter";
 
 const XMLFormatter = () => {
   const editorInputRef = useRef<any>(null);
@@ -11,7 +12,7 @@ const XMLFormatter = () => {
   const editorOutputRef = useRef<any>(null);
 
   const [defaultInputText, setDefaultInputText] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [defaultOutputText, setDefaultOutputText] = useState<
     string | undefined
@@ -43,45 +44,6 @@ const XMLFormatter = () => {
       };
     }
     return { isValid: true, message: "Valid XML Syntax" };
-  }
-
-  function formatXML(xml: string, indent = "  "): string {
-    const PADDING = indent;
-    let formatted = "";
-    let pad = 0;
-
-    const lines = xml
-      .replace(/(>)(<)(\/*)/g, "$1\n$2$3")
-      .replace(/\r?\n/g, "\n")
-      .split("\n");
-
-    for (const rawLine of lines) {
-      const line = rawLine.trim();
-      if (!line) continue;
-
-      if (line.startsWith("<?")) {
-        formatted += line + "\n";
-        continue;
-      }
-
-      if (line.startsWith("</")) {
-        pad = Math.max(0, pad - 1);
-      }
-
-      formatted += PADDING.repeat(pad) + line + "\n";
-
-      if (
-        line.startsWith("<") &&
-        !line.startsWith("</") &&
-        !line.startsWith("<?") &&
-        !line.endsWith("/>") &&
-        !/<\/[^>]+>$/.test(line)
-      ) {
-        pad++;
-      }
-    }
-
-    return formatted.trimEnd();
   }
 
   function handleInputEditorMount(editor: any, monaco: any) {
@@ -131,7 +93,11 @@ const XMLFormatter = () => {
     }
 
     try {
-      const formatted = formatXML(xmlText);
+      const formatted = xmlFormat(xmlText, {
+        lineSeparator: "\n",
+        collapseContent: true,
+        indentation: "  ",
+      });
       setFormattedXML(formatted);
       editorOutputRef.current?.setValue(formatted);
       toast.success("XML formatted successfully!");

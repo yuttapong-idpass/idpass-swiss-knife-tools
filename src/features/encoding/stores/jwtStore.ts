@@ -1,13 +1,24 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
+interface Algorithm {
+  name: string;
+  alg: string;
+  typ: string;
+  algorithm: string;
+}
+
 interface JwtStore {
-  encodedToken: string;
+  encodedText: string;
   decodedHeaders: any;
-  decodedPayload: any;
-  setEncodedToken: (data: string) => void;
+  decodedText: any;
+  secretKey: string;
+  algorithm: Algorithm;
+  setEncodedText: (data: string) => void;
   setDecodedHeaders: (data: any) => void;
-  setDecodedPayload: (data: any) => void;
+  setDecodedText: (data: any) => void;
+  setSecretKey: (data: string) => void;
+  setAlgorithm: (data: Algorithm) => void;
   getEncodedToken: () => string;
   getDecodedHeaders: () => any;
   getDecodedPayload: () => any;
@@ -16,12 +27,16 @@ interface JwtStore {
 const useJwtStore = create(
   devtools(
     (set: any, get: any): JwtStore => ({
-      encodedToken: "",
+      encodedText: "",
       decodedHeaders: undefined,
-      decodedPayload: undefined,
-      setEncodedToken: (data: string) => set({ encodedToken: data }),
+      decodedText: undefined,
+      secretKey: "",
+      algorithm: { name: "", alg: "", typ: "", algorithm: "" },
+      setEncodedText: (data: string) => set({ encodedText: data }),
       setDecodedHeaders: (data: any) => set({ decodedHeaders: data }),
-      setDecodedPayload: (data: any) => set({ decodedPayload: data }),
+      setDecodedText: (data: any) => set({ decodedText: data }),
+      setSecretKey: (data: string) => set({ secretKey: data }),
+      setAlgorithm: (data: Algorithm) => set({ algorithm: data }),
       getEncodedToken: () => get().encodedToken,
       getDecodedHeaders: () => get().decodedHeaders,
       getDecodedPayload: () => get().decodedPayload,
