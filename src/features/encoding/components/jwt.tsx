@@ -34,7 +34,7 @@ const JWTDecoder = () => {
     setDecodedPayload,
   }: any = useJwtStore();
 
-  const editorEncodedTokenOptions = {
+  const editorEdit = {
     minimap: { enabled: false },
     formatOnPaste: true,
     formatOnType: true,
@@ -43,7 +43,7 @@ const JWTDecoder = () => {
     automaticLayout: true,
   };
 
-  const editorDecodedOptions = {
+  const editorReadOnly = {
     minimap: { enabled: false },
     formatOnPaste: true,
     formatOnType: true,
@@ -170,7 +170,7 @@ const JWTDecoder = () => {
               <Editor
                 height="100%"
                 theme="vs-dark"
-                options={editorEncodedTokenOptions}
+                options={editorEdit}
                 onMount={handleTextEncoded}
                 defaultValue={encodedToken}
                 defaultLanguage="plaintext"
@@ -204,7 +204,7 @@ const JWTDecoder = () => {
                 <Editor
                   height="100%"
                   theme="vs-dark"
-                  options={editorDecodedOptions}
+                  options={editorEdit}
                   defaultValue={JSON.stringify(decodedHeaders, null, 2)}
                   defaultLanguage="json"
                   onMount={handleJwtHeader}
@@ -226,7 +226,7 @@ const JWTDecoder = () => {
                 <Editor
                   height="100%"
                   theme="vs-dark"
-                  options={editorDecodedOptions}
+                  options={editorEdit}
                   defaultValue={JSON.stringify(decodedPayload, null, 2)}
                   defaultLanguage="json"
                   onMount={handleJwtPayload}
@@ -248,7 +248,7 @@ const JWTDecoder = () => {
                 <Editor
                   height="100%"
                   theme="vs-dark"
-                  options={editorDecodedOptions}
+                  options={editorEdit}
                   defaultValue={JSON.stringify(decodedPayload, null, 2)}
                   defaultLanguage="json"
                   onMount={handleJwtPayload}
@@ -301,7 +301,7 @@ const JWTDecoder = () => {
                 <Editor
                   height="100%"
                   theme="vs-dark"
-                  options={editorDecodedOptions}
+                  options={editorReadOnly}
                   defaultValue={JSON.stringify(decodedHeaders, null, 2)}
                   defaultLanguage="json"
                   onMount={handleJwtHeader}
@@ -323,7 +323,7 @@ const JWTDecoder = () => {
                 <Editor
                   height="100%"
                   theme="vs-dark"
-                  options={editorDecodedOptions}
+                  options={editorReadOnly}
                   defaultValue={JSON.stringify(decodedPayload, null, 2)}
                   defaultLanguage="json"
                   onMount={handleJwtPayload}
@@ -348,7 +348,7 @@ const JWTDecoder = () => {
               <Editor
                 height="100%"
                 theme="vs-dark"
-                options={editorEncodedTokenOptions}
+                options={editorReadOnly}
                 onMount={handleTextEncoded}
                 defaultValue={encodedToken}
                 defaultLanguage="plaintext"
