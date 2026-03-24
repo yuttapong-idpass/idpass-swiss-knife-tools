@@ -1,9 +1,8 @@
-import React, { createRef, useEffect, useState } from "react";
+import React from "react";
 import "@/features/formatter/components/JsonFormatter/JsonFormatter.css";
 import JsonEditorInput from "./JsonEditorInput";
 import JsonEditorOutput from "./JsonEditorOutput";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import useJsonFormatStore from "@/features/formatter/stores/useJsonFormatStore";
 type Props = {};
 
@@ -32,7 +31,7 @@ const JsonFormatter = (props: Props) => {
             className="hover:bg-gray-200 hover:text-black"
             onClick={onClickJsonFormat}
           >
-            Format <ArrowRight />
+            Format
           </Button>
         </div>
 
