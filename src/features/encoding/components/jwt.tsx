@@ -1,8 +1,9 @@
 import { decodeJwt, decodeProtectedHeader, SignJWT } from "jose";
-import { SyntheticEvent, useRef, useState } from "react";
+import { lazy, Suspense, SyntheticEvent, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Trash, CopyIcon, ArrowLeftRight } from "lucide-react";
-import { Editor } from "@monaco-editor/react";
+
+const Editor = lazy(() => import("@monaco-editor/react"));
 import { toast } from "sonner";
 import useJwtStore from "../stores/jwtStore";
 import {
@@ -165,6 +166,7 @@ const JWTDecoder = () => {
         JWT Decoder
       </p>
 
+      <Suspense fallback={<div className="flex items-center justify-center h-[calc(100vh-5rem)] text-muted-foreground">Loading editor...</div>}>
       <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-5rem)]">
         {mode === "decode" ? (
           <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
@@ -374,6 +376,7 @@ const JWTDecoder = () => {
           </div>
         )}
       </div>
+      </Suspense>
     </main>
   );
 };

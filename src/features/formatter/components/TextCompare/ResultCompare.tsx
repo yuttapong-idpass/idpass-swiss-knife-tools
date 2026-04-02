@@ -1,5 +1,9 @@
-import { DiffEditor } from "@monaco-editor/react";
+import { lazy, Suspense } from "react";
 import useTextCompareStore from "../../stores/useTextCompareStore";
+
+const DiffEditor = lazy(() =>
+  import("@monaco-editor/react").then((mod) => ({ default: mod.DiffEditor }))
+);
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +25,7 @@ const ResultCompare = () => {
   return (
     <main className="p-2 w-full">
       <p className="text-xl font-extrabold text-default-800 mb-2">Result</p>
+      <Suspense fallback={<div className="flex items-center justify-center h-[calc(100vh-5rem)] text-muted-foreground">Loading editor...</div>}>
       <div className="flex flex-col gap-2 h-auto lg:h-[calc(100vh-5rem)]">
         <div className="flex flex-row items-center mb-2 justify-between">
           <span>Diff View</span>
@@ -44,6 +49,7 @@ const ResultCompare = () => {
           />
         </div>
       </div>
+      </Suspense>
     </main>
   );
 };

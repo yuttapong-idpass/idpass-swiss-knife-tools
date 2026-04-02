@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Editor } from "@monaco-editor/react";
 import { Trash } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+
+const Editor = lazy(() =>
+  import("@monaco-editor/react").then((mod) => ({ default: mod.Editor }))
+);
 import useXMLFormatterStore from "@/features/formatter/stores/useXMLFormatterStore";
 import { toast } from "react-toastify";
 import xmlFormat from "xml-formatter";
@@ -121,6 +124,7 @@ const XMLFormatter = () => {
       <p className="text-xl font-extrabold text-default-800 mb-2">
         XML Formatter
       </p>
+      <Suspense fallback={<div className="flex items-center justify-center h-[calc(100vh-5rem)] text-muted-foreground">Loading editor...</div>}>
       <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-5rem)]">
         <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
           <div className="flex flex-row items-center mb-2 justify-between">
@@ -182,6 +186,7 @@ const XMLFormatter = () => {
           </div>
         </div>
       </div>
+      </Suspense>
     </main>
   );
 };

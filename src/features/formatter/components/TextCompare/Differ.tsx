@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import Editor from "@monaco-editor/react";
-import { useRef } from "react";
+import { lazy, Suspense, useRef } from "react";
+
+const Editor = lazy(() => import("@monaco-editor/react"));
 import { useNavigate } from "react-router-dom";
 import useTextCompareStore from "@/features/formatter/stores/useTextCompareStore";
 import { Eraser, Trash } from "lucide-react";
@@ -62,6 +63,7 @@ const Differ = () => {
       <p className="text-xl font-extrabold text-default-800 mb-2">
         Text Compare
       </p>
+      <Suspense fallback={<div className="flex items-center justify-center h-[calc(100vh-5rem)] text-muted-foreground">Loading editor...</div>}>
       <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-5rem)]">
         <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
           <div className="flex flex-row items-center mb-2 justify-between">
@@ -120,6 +122,7 @@ const Differ = () => {
           </div>
         </div>
       </div>
+      </Suspense>
     </main>
   );
 };

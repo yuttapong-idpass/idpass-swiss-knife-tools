@@ -29,7 +29,6 @@ import {
   Search,
   Type,
 } from "lucide-react";
-import { Editor } from "@monaco-editor/react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Separator } from "@/components/ui/separator";
 import useJsonFormatStore from "@/features/formatter/stores/useJsonFormatStore";
