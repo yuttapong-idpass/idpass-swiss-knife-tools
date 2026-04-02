@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Delete } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const Editor = lazy(() =>
@@ -137,7 +137,7 @@ const XMLToJSON = () => {
               className="hover:bg-gray-200 hover:text-black"
               onClick={onClearXML}
             >
-              <Trash />
+              <Delete />
             </Button>
           </div>
           <div className="flex-1">
@@ -173,7 +173,7 @@ const XMLToJSON = () => {
               className="hover:bg-gray-200 hover:text-black"
               onClick={onClearJSON}
             >
-              <Trash />
+              <Delete />
             </Button>
           </div>
           <div className="flex-1">

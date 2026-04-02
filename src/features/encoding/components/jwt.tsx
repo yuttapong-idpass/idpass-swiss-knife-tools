@@ -1,7 +1,7 @@
 import { decodeJwt, decodeProtectedHeader, SignJWT } from "jose";
 import { lazy, Suspense, SyntheticEvent, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Trash, CopyIcon, ArrowLeftRight } from "lucide-react";
+import { Delete, CopyIcon, ArrowLeftRight } from "lucide-react";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 import { toast } from "sonner";
@@ -178,7 +178,7 @@ const JWTDecoder = () => {
                 className="hover:bg-gray-200 hover:text-black"
                 onClick={onClearEncodedToken}
               >
-                <Trash />
+                <Delete />
               </Button>
             </div>
             <div className="flex-1">
@@ -246,8 +246,8 @@ const JWTDecoder = () => {
                   height="100%"
                   theme="vs-dark"
                   options={editorEdit}
-                  defaultValue={JSON.stringify(decodedText, null, 2)}
-                  defaultLanguage="json"
+                  defaultValue={''}
+                  defaultLanguage="plaintext"
                   onMount={handleJwtPayload}
                 />
               </div>
@@ -360,7 +360,7 @@ const JWTDecoder = () => {
                 className="hover:bg-gray-200 hover:text-black"
                 onClick={onClearEncodedToken}
               >
-                <Trash />
+                <Delete />
               </Button>
             </div>
             <div className="flex-1">

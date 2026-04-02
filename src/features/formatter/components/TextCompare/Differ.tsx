@@ -4,7 +4,7 @@ import { lazy, Suspense, useRef } from "react";
 const Editor = lazy(() => import("@monaco-editor/react"));
 import { useNavigate } from "react-router-dom";
 import useTextCompareStore from "@/features/formatter/stores/useTextCompareStore";
-import { Eraser, Trash } from "lucide-react";
+import { Delete } from "lucide-react";
 
 const Differ = () => {
   const editorOriginalTextRef = useRef<any>(null);
@@ -74,7 +74,7 @@ const Differ = () => {
               className="hover:bg-gray-200 hover:text-black"
               onClick={onClearOriginalText}
             >
-              <Trash />
+              <Delete />
             </Button>
           </div>
           <div className="flex-1">
@@ -108,7 +108,7 @@ const Differ = () => {
               className="hover:bg-gray-200 hover:text-black"
               onClick={onClearModifiedText}
             >
-              <Trash />
+              <Delete />
             </Button>
           </div>
           <div className="flex-1">
