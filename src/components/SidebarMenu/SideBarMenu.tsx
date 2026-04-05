@@ -68,9 +68,9 @@ let menuList = [
         link: "/jwt-decoder",
       },
       {
-        name: "Encode/Decoded",
+        name: "Encode/Decoded URL",
         active: true,
-        link: "/encoded-decoded",
+        link: "/encoded-decoded-url",
       },
     ],
   },

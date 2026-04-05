@@ -33,6 +33,7 @@ import Differ from "./features/formatter/components/TextCompare/Differ";
 import XMLToJSON from "./features/formatter/components/XmlTojson/XmlTojson";
 import XMLFormatter from "./features/formatter/components/XmlFormatter/XmlFormatter";
 import JWTDecoder from "./features/encoding/components/jwt";
+import EncodedDecodeURI from "./features/encoding/components/encodedDecodedURI";
 
 function App() {
   let menuList = [
@@ -169,6 +170,7 @@ function App() {
               <Route path="/xml-to-json" element={<XMLToJSON />} />
               <Route path="/xml-formatter" element={<XMLFormatter />} />
               <Route path="/jwt-decoder" element={<JWTDecoder />} />
+              <Route path="/encoded-decoded-url" element={<EncodedDecodeURI />} />
               {/* <Route path="/base64Image" element={<Base64Image />} />
               <Route path="/jwt" element={<JsonWebToken />} />
               <Route path="/id-card-random" element={<IdCardGenerator />} />
