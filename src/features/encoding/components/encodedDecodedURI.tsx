@@ -50,8 +50,7 @@ export default function EncodedDecodedURI() {
 
   const onDecodeURL = () => {
     try {
-      const raw =
-        editorEncodedURLRef.current?.getValue() ?? encodedText;
+      const raw = editorEncodedURLRef.current?.getValue() ?? encodedText;
       const decodedURL = decodeURIComponent(raw);
       editorDecodedURLRef.current?.setValue(decodedURL);
       setDecodedText(decodedURL);
@@ -66,8 +65,7 @@ export default function EncodedDecodedURI() {
 
   const onEncodeURL = () => {
     try {
-      const raw =
-        editorDecodedURLRef.current?.getValue() ?? decodedText;
+      const raw = editorDecodedURLRef.current?.getValue() ?? decodedText;
       const encodedURL = encodeURIComponent(raw);
       editorEncodedURLRef.current?.setValue(encodedURL);
       setEncodedText(encodedURL);
@@ -81,14 +79,16 @@ export default function EncodedDecodedURI() {
   };
 
   return (
-    <main className="p-2 w-full">
+    <main className="p-4 w-full">
       <p className="text-xl font-extrabold text-default-800 mb-2">
         Encoded/Decoded URL
       </p>
       <Suspense
         fallback={
           <div className="flex items-center justify-center h-[calc(100vh-5rem)] text-muted-foreground">
-            Loading editor...
+            <span className="font-medium text-sm text-muted-foreground">
+              Loading editor...
+            </span>
           </div>
         }
       >
@@ -99,7 +99,9 @@ export default function EncodedDecodedURI() {
         >
           <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
             <div className="flex flex-row items-center mb-2 justify-between">
-              <span>Encoded URL</span>
+              <span className="font-medium text-sm text-muted-foreground">
+                Encoded URL
+              </span>
             </div>
             <div className="flex-1">
               <Editor
@@ -138,7 +140,9 @@ export default function EncodedDecodedURI() {
 
           <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
             <div className="flex flex-row items-center mb-2 justify-between">
-              <span>Decoded URL</span>
+              <span className="font-medium text-sm text-muted-foreground">
+                Decoded URL
+              </span>
             </div>
             <div className="flex-1">
               <Editor

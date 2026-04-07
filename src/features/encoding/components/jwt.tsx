@@ -281,7 +281,7 @@ const JWTDecoder = () => {
   }
 
   return (
-    <main className="p-2 w-full">
+    <main className="p-4 w-full">
       <p className="text-xl font-extrabold text-default-800 mb-2">
         JWT Decoder
       </p>

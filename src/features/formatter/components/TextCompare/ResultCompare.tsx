@@ -23,7 +23,7 @@ const ResultCompare = () => {
   }
 
   return (
-    <main className="p-2 w-full">
+    <main className="p-4 w-full">
       <p className="text-xl font-extrabold text-default-800 mb-2">Result</p>
       <Suspense fallback={<div className="flex items-center justify-center h-[calc(100vh-5rem)] text-muted-foreground">Loading editor...</div>}>
       <div className="flex flex-col gap-2 h-auto lg:h-[calc(100vh-5rem)]">
