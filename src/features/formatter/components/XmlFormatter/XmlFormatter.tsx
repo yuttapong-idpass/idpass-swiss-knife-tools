@@ -5,7 +5,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 const Editor = lazy(() =>
   import("@monaco-editor/react").then((mod) => ({ default: mod.Editor }))
 );
-import useXMLFormatterStore from "@/features/formatter/stores/useXMLFormatterStore";
+import useXMLFormatterStore from "@/features/formatter/stores/useXMLFormatter.store";
 import { toast } from "react-toastify";
 import xmlFormat from "xml-formatter";
 

@@ -106,7 +106,7 @@ let menuList = [
       {
         name: "Kibana Log Extractor",
         active: true,
-        link: "/id-card-generator",
+        link: "/kibana-log-extractor",
       },
     ],
   },

@@ -6,7 +6,7 @@ const Editor = lazy(() =>
   import("@monaco-editor/react").then((mod) => ({ default: mod.Editor }))
 );
 import { parseStringPromise } from "xml2js";
-import useXMLToJsonStore from "@/features/formatter/stores/useXMLToJsonStore";
+import useXMLToJsonStore from "@/features/formatter/stores/useXMLToJson.store";
 import { toast } from "react-toastify";
 
 const XMLToJSON = () => {

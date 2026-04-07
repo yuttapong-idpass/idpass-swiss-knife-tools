@@ -28,6 +28,7 @@ import XMLToJSON from "./features/formatter/components/XmlTojson/XmlTojson";
 import XMLFormatter from "./features/formatter/components/XmlFormatter/XmlFormatter";
 import JWTDecoder from "./features/encoding/components/jwt";
 import EncodedDecodedURI from "./features/encoding/components/encodedDecodedURI";
+import KibanaLogExtractor from "./features/utilities/components/KibanaLogExtractor";
 
 function App() {
   let menuList = [
@@ -167,6 +168,10 @@ function App() {
               <Route
                 path="/encoded-decoded-url"
                 element={<EncodedDecodedURI />}
+              />
+              <Route
+                path="/kibana-log-extractor"
+                element={<KibanaLogExtractor />}
               />
               {/* <Route path="/base64Image" element={<Base64Image />} />
               <Route path="/jwt" element={<JsonWebToken />} />
