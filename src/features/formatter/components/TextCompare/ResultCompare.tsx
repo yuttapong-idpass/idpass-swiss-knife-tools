@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import useTextCompareStore from "../../stores/useTextCompareStore";
+import useTextCompareStore from "../../stores/useTextCompare.store";
 
 const DiffEditor = lazy(() =>
   import("@monaco-editor/react").then((mod) => ({ default: mod.DiffEditor }))

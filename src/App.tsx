@@ -14,16 +14,10 @@ import {
   BsKey,
   BsFileEarmarkDiff,
 } from "react-icons/bs";
-import { CgDebug } from "react-icons/cg";
-import { TbNetwork } from "react-icons/tb";
 import { PiBracketsCurly } from "react-icons/pi";
 import { PiBracketsAngleBold } from "react-icons/pi";
 import { LuBinary } from "react-icons/lu";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarProvider,
-} from "./components/ui/sidebar";
+import { SidebarProvider } from "./components/ui/sidebar";
 import SideBarMenu from "./components/SidebarMenu/SideBarMenu";
 import TextCompare from "@/features/formatter/components/TextCompare/TextCompare";
 import XMLToJson from "@/container/Formatter/XmlToJson/XMLJson";
@@ -33,7 +27,7 @@ import Differ from "./features/formatter/components/TextCompare/Differ";
 import XMLToJSON from "./features/formatter/components/XmlTojson/XmlTojson";
 import XMLFormatter from "./features/formatter/components/XmlFormatter/XmlFormatter";
 import JWTDecoder from "./features/encoding/components/jwt";
-import EncodedDecodeURI from "./features/encoding/components/encodedDecodedURI";
+import EncodedDecodedURI from "./features/encoding/components/encodedDecodedURI";
 
 function App() {
   let menuList = [
@@ -130,8 +124,8 @@ function App() {
     console.log("idxItem", idxItem);
     setItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === idxItem ? { ...item, active: !item.active } : item
-      )
+        item.id === idxItem ? { ...item, active: !item.active } : item,
+      ),
     );
   };
 
@@ -170,7 +164,10 @@ function App() {
               <Route path="/xml-to-json" element={<XMLToJSON />} />
               <Route path="/xml-formatter" element={<XMLFormatter />} />
               <Route path="/jwt-decoder" element={<JWTDecoder />} />
-              <Route path="/encoded-decoded-url" element={<EncodedDecodeURI />} />
+              <Route
+                path="/encoded-decoded-url"
+                element={<EncodedDecodedURI />}
+              />
               {/* <Route path="/base64Image" element={<Base64Image />} />
               <Route path="/jwt" element={<JsonWebToken />} />
               <Route path="/id-card-random" element={<IdCardGenerator />} />

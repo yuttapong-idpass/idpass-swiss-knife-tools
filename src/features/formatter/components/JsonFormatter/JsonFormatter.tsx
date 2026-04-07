@@ -3,7 +3,7 @@ import "@/features/formatter/components/JsonFormatter/JsonFormatter.css";
 import JsonEditorInput from "./JsonEditorInput";
 import JsonEditorOutput from "./JsonEditorOutput";
 import { Button } from "@/components/ui/button";
-import useJsonFormatStore from "@/features/formatter/stores/useJsonFormatStore";
+import useJsonFormatStore from "@/features/formatter/stores/useJsonFormat.store";
 type Props = {};
 
 const JsonFormatter = (props: Props) => {
@@ -20,7 +20,7 @@ const JsonFormatter = (props: Props) => {
         JSON Formatter
       </p>
       <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-5rem)]">
-        <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
+        <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0 overflow-hidden">
           <JsonEditorInput />
         </div>
 
@@ -35,7 +35,7 @@ const JsonFormatter = (props: Props) => {
           </Button>
         </div>
 
-        <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
+        <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0 overflow-hidden">
           <JsonEditorOutput />
         </div>
       </div>

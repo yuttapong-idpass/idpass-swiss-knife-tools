@@ -58,7 +58,7 @@ let menuList = [
   },
   {
     id: 2,
-    title: "Convert & Encoding",
+    title: "Conversions & Encoding",
     active: true,
     icon: <KeyRound size={30} />,
     menuLists: [
@@ -72,24 +72,16 @@ let menuList = [
         active: true,
         link: "/encoded-decoded-url",
       },
-    ],
-  },
-  {
-    id: 3,
-    title: "Convertor",
-    active: true,
-    menuLists: [
       {
         name: "Base64 Image",
-        // icon: <BsImage size={20} />,
         active: true,
         link: "/base64Image",
       },
     ],
   },
   {
-    id: 4,
-    title: "Generator",
+    id: 3,
+    title: "Generators",
     active: true,
     icon: <Shuffle size={30} />,
     menuLists: [
@@ -103,6 +95,18 @@ let menuList = [
         // icon: <FaBarcode size={20} />,
         active: true,
         link: "/barcode",
+      },
+    ],
+  },
+  {
+    id: 4,
+    title: "Utilities",
+    active: true,
+    menuLists: [
+      {
+        name: "Kibana Log Extractor",
+        active: true,
+        link: "/id-card-generator",
       },
     ],
   },

@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Separator } from "@/components/ui/separator";
-import useJsonFormatStore from "@/features/formatter/stores/useJsonFormatStore";
+import useJsonFormatStore from "@/features/formatter/stores/useJsonFormat.store";
 import {
   faCopy,
   faFloppyDisk,
@@ -360,8 +360,8 @@ const JsonEditorOutput = () => {
   };
 
   return (
-    <div className="flex flex-col flex-1" id="jsonEditorOutput">
-      <div className="flex flex-row items-center mb-2 justify-between">
+    <div className="flex flex-col flex-1 min-h-0 overflow-hidden" id="jsonEditorOutput">
+      <div className="flex flex-row items-center mb-2 justify-between shrink-0">
         <span>Formatted Output</span>
         <div className="flex flex-row gap-2 justify-center items-center">
           <span className="text-xs text-green-500">
@@ -370,7 +370,7 @@ const JsonEditorOutput = () => {
         </div>
       </div>
       <div
-        className="jse-theme-dark flex-1"
+        className="jse-theme-dark flex-1 min-h-0 overflow-hidden"
         ref={refContainer}
       ></div>
     </div>

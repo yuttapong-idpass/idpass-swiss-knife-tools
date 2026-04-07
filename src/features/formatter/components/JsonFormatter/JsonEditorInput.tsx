@@ -9,7 +9,7 @@ import {
   faCopy,
   faMaximize,
 } from "@fortawesome/free-solid-svg-icons";
-import useJsonFormatStore from "@/features/formatter/stores/useJsonFormatStore";
+import useJsonFormatStore from "@/features/formatter/stores/useJsonFormat.store";
 
 const JsonEditorInput = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -266,8 +266,8 @@ const JsonEditorInput = () => {
     //   />
     // </div>
 
-    <div className="flex flex-col flex-1" id="jsonEditorInput">
-      <div className="flex flex-row items-center mb-2 justify-between">
+    <div className="flex flex-col flex-1 min-h-0 overflow-hidden" id="jsonEditorInput">
+      <div className="flex flex-row items-center mb-2 justify-between shrink-0">
         <span>RAW JSON</span>
         <div className="flex flex-row gap-2 justify-center items-center">
           <span className="text-xs text-green-500">
@@ -284,7 +284,7 @@ const JsonEditorInput = () => {
         </div>
       </div>
       <div
-        className="jse-theme-dark flex-1"
+        className="jse-theme-dark flex-1 min-h-0 overflow-hidden"
         ref={refContainer}
       ></div>
     </div>

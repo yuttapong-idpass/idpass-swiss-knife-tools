@@ -3,7 +3,7 @@ import { lazy, Suspense, useRef } from "react";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 import { useNavigate } from "react-router-dom";
-import useTextCompareStore from "@/features/formatter/stores/useTextCompareStore";
+import useTextCompareStore from "@/features/formatter/stores/useTextCompare.store";
 import { Delete } from "lucide-react";
 
 const Differ = () => {
