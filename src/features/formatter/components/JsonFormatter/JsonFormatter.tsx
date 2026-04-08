@@ -28,7 +28,7 @@ const JsonFormatter = (props: Props) => {
           <Button
             variant="secondary"
             size="lg"
-            className="hover:bg-gray-200 hover:text-black"
+            className="hover:bg-gray-200 hover:text-black text-muted-foreground"
             onClick={onClickJsonFormat}
           >
             Format

@@ -26,9 +26,9 @@ import ResultCompare from "./features/formatter/components/TextCompare/ResultCom
 import Differ from "./features/formatter/components/TextCompare/Differ";
 import XMLToJSON from "./features/formatter/components/XmlTojson/XmlTojson";
 import XMLFormatter from "./features/formatter/components/XmlFormatter/XmlFormatter";
-import JWTDecoder from "./features/encoding/components/jwt";
-import EncodedDecodedURI from "./features/encoding/components/encodedDecodedURI";
+import EncodedDecodedURI from "./features/encoding/components/EncodedDecodedURI";
 import KibanaLogExtractor from "./features/utilities/components/KibanaLogExtractor";
+import JWTDecoder from "./features/encoding/components/jwt";
 
 function App() {
   let menuList = [

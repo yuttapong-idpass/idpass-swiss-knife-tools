@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeftRight } from "lucide-react";
+import { ArrowLeftRight, Trash2 } from "lucide-react";
 import { lazy, Suspense, useRef, useState } from "react";
 import { toast } from "sonner";
-import useEncodedDecodedURIStore from "../stores/encodedDecodedURI.store";
+import useEncodedDecodedURIStore from "../stores/EncodedDecodedURI.store";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
@@ -102,6 +102,16 @@ export default function EncodedDecodedURI() {
               <span className="font-medium text-sm text-muted-foreground">
                 Encoded URL
               </span>
+              <Button
+                variant="secondary"
+                size="lg"
+                className="hover:bg-gray-200 hover:text-black text-muted-foreground"
+              >
+                <Trash2 size={16} aria-label="clear" />
+                <span className="font-medium text-sm text-muted-foreground">
+                  clear
+                </span>
+              </Button>
             </div>
             <div className="flex-1">
               <Editor
@@ -143,6 +153,16 @@ export default function EncodedDecodedURI() {
               <span className="font-medium text-sm text-muted-foreground">
                 Decoded URL
               </span>
+              <Button
+                variant="secondary"
+                size="lg"
+                className="hover:bg-gray-200 hover:text-black text-muted-foreground"
+              >
+                <Trash2 size={16} aria-label="clear" />
+                <span className="font-medium text-sm text-muted-foreground">
+                  clear
+                </span>
+              </Button>
             </div>
             <div className="flex-1">
               <Editor

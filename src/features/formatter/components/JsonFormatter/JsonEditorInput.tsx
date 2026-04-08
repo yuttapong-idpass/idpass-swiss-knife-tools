@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "vanilla-jsoneditor/themes/jse-theme-dark.css";
 import "./JsonEditorInput.css";
-import { createJSONEditor } from "vanilla-jsoneditor";
 import {
   faStar,
   faFolder,
@@ -10,6 +9,7 @@ import {
   faMaximize,
 } from "@fortawesome/free-solid-svg-icons";
 import useJsonFormatStore from "@/features/formatter/stores/useJsonFormat.store";
+import { createJSONEditor } from "vanilla-jsoneditor";
 
 const JsonEditorInput = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -30,19 +30,14 @@ const JsonEditorInput = () => {
           mode: "text",
           onChange: (
             updatedContent: any,
-            previousContent: any,
-            { contentErrors, patchResult }: any
+            _previousContent: any,
+            { contentErrors, patchResult }: any,
           ) => {
             // Call the parent onChange handler
             // setData({ text: updatedContent });
-            console.log("previous content", previousContent);
-            console.log("updated content", updatedContent);
-            console.log("contentErrors", contentErrors);
-            console.log("patchResult", patchResult);
             setInputData(updatedContent);
           },
           onRenderMenu: (items: any, context: any) => {
-            console.log("items -->", items);
             //disable tree and table mode
             items = items.map((item: any) => {
               if (
@@ -63,8 +58,8 @@ const JsonEditorInput = () => {
               {
                 type: "button",
                 title: "Open File",
-                className: "my-custom-button-class",
                 icon: faFolder,
+                className: "my-custom-button-class",
                 onClick: () => onOpenFileClick(),
               },
               {
@@ -179,7 +174,7 @@ const JsonEditorInput = () => {
       }
       if (getCurrentValue.json) {
         await navigator.clipboard.writeText(
-          JSON.stringify(getCurrentValue.json, null, 4)
+          JSON.stringify(getCurrentValue.json, null, 4),
         );
       }
       setIsCopied(true);
@@ -266,9 +261,12 @@ const JsonEditorInput = () => {
     //   />
     // </div>
 
-    <div className="flex flex-col flex-1 min-h-0 overflow-hidden" id="jsonEditorInput">
+    <div
+      className="flex flex-col flex-1 min-h-0 overflow-hidden"
+      id="jsonEditorInput"
+    >
       <div className="flex flex-row items-center mb-2 justify-between shrink-0">
-        <span>RAW JSON</span>
+        <span className="font-medium text-sm text-muted-foreground">Raw Json</span>
         <div className="flex flex-row gap-2 justify-center items-center">
           <span className="text-xs text-green-500">
             {isCopied ? "Copied!" : ""}

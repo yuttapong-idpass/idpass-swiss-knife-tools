@@ -1,12 +1,11 @@
 import { decodeJwt, decodeProtectedHeader, SignJWT } from "jose";
 import { lazy, Suspense, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Delete, CopyIcon, ArrowLeftRight } from "lucide-react";
+import { CopyIcon, ArrowLeftRight, Trash2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 import { toast } from "sonner";
-import useJwtStore from "../stores/jwtStore.store";
 import {
   Select,
   SelectContent,
@@ -15,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useJwtStore from "../stores/JwtStore.store";
 
 /** Encode raw bytes as Base64URL (no padding). */
 function bytesToBase64Url(bytes: Uint8Array): string {
@@ -298,14 +298,19 @@ const JWTDecoder = () => {
             /* ── Decode mode – Left: Token Input ─────────────────────────────── */
             <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
               <div className="flex flex-row items-center mb-2 justify-between">
-                <span>Encoded Token</span>
+                <span className="font-medium text-sm text-muted-foreground">
+                  Encoded Token
+                </span>
                 <Button
                   variant="secondary"
                   size="lg"
-                  className="hover:bg-gray-200 hover:text-black"
+                  className="hover:bg-gray-200 hover:text-black text-muted-foreground"
                   onClick={onClearEncodedTokenArea}
                 >
-                  <Delete />
+                  <Trash2 size={16} aria-label="clear" />
+                  <span className="font-medium text-sm text-muted-foreground">
+                    clear
+                  </span>
                 </Button>
               </div>
               <div className="flex-1">
@@ -324,9 +329,13 @@ const JWTDecoder = () => {
             <div className="w-full lg:flex-1 flex flex-col min-h-[500px] lg:min-h-0">
               <div className="flex flex-col h-full">
                 <div className="flex flex-row items-center mb-2 justify-between">
-                  <span>Header</span>
+                  <span className="font-medium text-sm text-muted-foreground">
+                    Header
+                  </span>
                   <div className="flex flex-row gap-2 items-center">
-                    <span>Algorithm</span>
+                    <span className="font-medium text-sm text-muted-foreground">
+                      Algorithm
+                    </span>
                     <Select
                       defaultValue="HS256"
                       value={algorithmName}
@@ -363,7 +372,9 @@ const JWTDecoder = () => {
                 </div>
 
                 <div className="flex flex-row items-center my-2 justify-between">
-                  <span>Secret key</span>
+                  <span className="font-medium text-sm text-muted-foreground">
+                    Secret key
+                  </span>
                   <div className="flex flex-row gap-2 items-center">
                     <div className="flex flex-row gap-2 items-center">
                       <Checkbox
@@ -372,7 +383,9 @@ const JWTDecoder = () => {
                         checked={secretIsBase64Url}
                         onCheckedChange={onSecretKeyArea}
                       />
-                      <span>Base64URL Encoded</span>
+                      <span className="font-medium text-sm text-muted-foreground">
+                        Base64URL Encoded
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -388,14 +401,20 @@ const JWTDecoder = () => {
                 </div>
 
                 <div className="flex flex-row items-center my-2 justify-between">
-                  <span>Payload</span>
+                  <span className="font-medium text-sm text-muted-foreground">
+                    Payload
+                  </span>
                 </div>
                 <div className="flex-1 min-h-[200px]">
                   <Editor
                     height="100%"
                     theme="vs-dark"
                     options={editorEdit}
-                    defaultValue={JSON.stringify(payloadArea ?? {}, null, 2)}
+                    defaultValue={JSON.stringify(
+                      payloadArea ?? undefined,
+                      null,
+                      2,
+                    )}
                     defaultLanguage="json"
                     onMount={handleEncodePayload}
                   />
@@ -405,8 +424,8 @@ const JWTDecoder = () => {
           )}
 
           {/* ── Center controls ──────────────────────────────────────────────── */}
-          <div className="flex flex-row lg:flex-col items-center justify-center px-2 py-2 lg:py-0 gap-2">
-            <span className="text-xs text-muted-foreground whitespace-nowrap">
+          <div className="flex flex-row lg:flex-col items-center justify-center px-2 py-2 lg:py-0 gap-2 lg:w-[120px] shrink-0">
+            <span className="font-medium text-sm text-muted-foreground whitespace-nowrap">
               {mode === "decode" ? "Encoded → Decoded" : "Decoded → Encoded"}
             </span>
             <Button
@@ -421,7 +440,7 @@ const JWTDecoder = () => {
             <Button
               variant="secondary"
               size="lg"
-              className="hover:bg-gray-200 hover:text-black"
+              className="hover:bg-gray-200 hover:text-black w-full"
               onClick={mode === "decode" ? onDecode : onEncode}
             >
               {mode === "decode" ? "Decode" : "Encode"}
@@ -433,15 +452,20 @@ const JWTDecoder = () => {
             <div className="w-full lg:flex-1 flex flex-col min-h-[500px] lg:min-h-0">
               <div className="flex flex-col h-full">
                 <div className="flex flex-row items-center mb-2 justify-between">
-                  <span>Decoded Header</span>
+                  <span className="font-medium text-sm text-muted-foreground">
+                    Decoded Header
+                  </span>
                   <div className="flex flex-row gap-2 items-center">
                     <Button
                       variant="secondary"
                       size="lg"
-                      className="hover:bg-gray-200 hover:text-black"
+                      className="hover:bg-gray-200 hover:text-black text-muted-foreground"
                       onClick={onCopyHeader}
                     >
-                      <CopyIcon />
+                      <CopyIcon size={16} aria-label="copy" />
+                      <span className="font-medium text-sm text-muted-foreground">
+                        copy
+                      </span>
                     </Button>
                   </div>
                 </div>
@@ -461,14 +485,19 @@ const JWTDecoder = () => {
                 </div>
 
                 <div className="flex flex-row items-center my-2 justify-between">
-                  <span>Decoded Payload</span>
+                  <span className="font-medium text-sm text-muted-foreground">
+                    Decoded Payload
+                  </span>
                   <Button
                     variant="secondary"
                     size="lg"
-                    className="hover:bg-gray-200 hover:text-black"
+                    className="hover:bg-gray-200 hover:text-black text-muted-foreground"
                     onClick={onCopyPayload}
                   >
-                    <CopyIcon />
+                    <CopyIcon size={16} aria-label="copy" />
+                    <span className="font-medium text-sm text-muted-foreground">
+                      copy
+                    </span>
                   </Button>
                 </div>
                 <div className="flex-1 min-h-[200px]">
@@ -491,14 +520,19 @@ const JWTDecoder = () => {
             /* ── Encode mode – Right: Token Output ───────────────────────────── */
             <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
               <div className="flex flex-row items-center mb-2 justify-between">
-                <span>Encoded Token</span>
+                <span className="font-medium text-sm text-muted-foreground">
+                  Encoded Token
+                </span>
                 <Button
                   variant="secondary"
                   size="lg"
-                  className="hover:bg-gray-200 hover:text-black"
+                  className="hover:bg-gray-200 hover:text-black text-muted-foreground"
                   onClick={onClearEncodedTokenArea}
                 >
-                  <Delete />
+                  <Trash2 size={16} aria-label="clear" />
+                  <span className="font-medium text-sm text-muted-foreground">
+                    clear
+                  </span>
                 </Button>
               </div>
               <div className="flex-1">

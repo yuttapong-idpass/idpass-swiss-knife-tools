@@ -341,13 +341,12 @@ const JsonEditorOutput = () => {
   const onHandleCopyToClipBoard = async () => {
     try {
       const getCurrentValue: any = jsonEditorRef.current?.get();
-      console.log("getCurrentValue", getCurrentValue);
       if (getCurrentValue.text) {
         await navigator.clipboard.writeText(getCurrentValue.text);
       }
       if (getCurrentValue.json) {
         await navigator.clipboard.writeText(
-          JSON.stringify(getCurrentValue.json, null, 4)
+          JSON.stringify(getCurrentValue.json, null, 4),
         );
       }
       setIsCopied(true);
@@ -360,9 +359,14 @@ const JsonEditorOutput = () => {
   };
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 overflow-hidden" id="jsonEditorOutput">
+    <div
+      className="flex flex-col flex-1 min-h-0 overflow-hidden"
+      id="jsonEditorOutput"
+    >
       <div className="flex flex-row items-center mb-2 justify-between shrink-0">
-        <span>Formatted Output</span>
+        <span className="font-medium text-sm text-muted-foreground">
+          Formatted Output
+        </span>
         <div className="flex flex-row gap-2 justify-center items-center">
           <span className="text-xs text-green-500">
             {isCopied ? "Copied!" : ""}
