@@ -5,11 +5,30 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import {
   ChevronRight,
+  ChevronDown,
   Trash2,
   FileDown,
   Table2,
   Loader2,
+  ChevronLeft,
+  ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react";
+import {
+  useReactTable,
+  getCoreRowModel,
+  getPaginationRowModel,
+  flexRender,
+  createColumnHelper,
+} from "@tanstack/react-table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 type UnknownRecord = Record<string, unknown>;
 
@@ -91,7 +110,10 @@ function parseInputToObjects(raw: string): UnknownRecord[] {
     );
   }
 
-  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  const lines = text
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
   const fromNdjson: UnknownRecord[] = [];
   for (const line of lines) {
     const row = tryParse(line);
@@ -169,7 +191,9 @@ function buildRows(hits: UnknownRecord[]): KibanaParsedRow[] {
     const region = firstScalarFromFields(fields, ["REGION.keyword", "REGION"]);
 
     const indexName =
-      typeof hit._index === "string" ? hit._index : firstScalarFromFields(fields, ["_index"]);
+      typeof hit._index === "string"
+        ? hit._index
+        : firstScalarFromFields(fields, ["_index"]);
 
     return {
       key: `${zipRelativePath}-${index}`,
@@ -190,16 +214,173 @@ function buildRows(hits: UnknownRecord[]): KibanaParsedRow[] {
   });
 }
 
+const columnHelper = createColumnHelper<KibanaParsedRow>();
+
+const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
+
 export default function KibanaLogExtractor() {
   const [input, setInput] = useState("");
   const [rows, setRows] = useState<KibanaParsedRow[]>([]);
   const [zipping, setZipping] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
   const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
+  const [selectedTopicFilter, setSelectedTopicFilter] = useState("all");
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
 
   const topicCount = useMemo(() => {
     return new Set(rows.map((r) => r.topicFolder)).size;
   }, [rows]);
+
+  const topicFilterOptions = useMemo(() => {
+    return Array.from(new Set(rows.map((r) => r.topicFolder))).sort((a, b) =>
+      a.localeCompare(b),
+    );
+  }, [rows]);
+
+  const filteredRows = useMemo(() => {
+    if (selectedTopicFilter === "all") return rows;
+    return rows.filter((r) => r.topicFolder === selectedTopicFilter);
+  }, [rows, selectedTopicFilter]);
+
+  const columns = useMemo(
+    () => [
+      columnHelper.display({
+        id: "expand",
+        header: () => null,
+        cell: ({ row }) => {
+          const isExpanded = expandedKeys.has(row.original.key);
+          return (
+            <button
+              type="button"
+              aria-label={isExpanded ? "Collapse details" : "Expand details"}
+              onClick={() => handleToggleExpand(row.original.key)}
+              className="flex items-center justify-center h-5 w-5 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+            >
+              {isExpanded ? (
+                <ChevronDown size={14} />
+              ) : (
+                <ChevronRight size={14} />
+              )}
+            </button>
+          );
+        },
+        size: 32,
+      }),
+      columnHelper.display({
+        id: "select",
+        header: ({ table }) => {
+          const pageRows = table.getRowModel().rows;
+          const allPageSelected =
+            pageRows.length > 0 &&
+            pageRows.every((r) => selectedKeys.has(r.original.key));
+          return (
+            <input
+              type="checkbox"
+              checked={allPageSelected}
+              onChange={() => {
+                const keys = pageRows.map((r) => r.original.key);
+                setSelectedKeys((prev) => {
+                  const next = new Set(prev);
+                  if (allPageSelected) {
+                    keys.forEach((k) => next.delete(k));
+                  } else {
+                    keys.forEach((k) => next.add(k));
+                  }
+                  return next;
+                });
+              }}
+              aria-label="Select all on page"
+              className="h-4 w-4"
+            />
+          );
+        },
+        cell: ({ row }) => {
+          const isSelected = selectedKeys.has(row.original.key);
+          return (
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={() => handleToggleSelect(row.original.key)}
+              aria-label={`Select ${row.original.fileBaseName}`}
+              className="h-4 w-4"
+            />
+          );
+        },
+        size: 40,
+      }),
+      columnHelper.accessor("topicFolder", {
+        header: "Service folder",
+        cell: (info) => (
+          <span className="font-mono text-xs break-words">
+            {info.getValue()}
+          </span>
+        ),
+      }),
+      columnHelper.accessor("fileBaseName", {
+        header: "File",
+        cell: (info) => (
+          <span className="font-mono text-xs text-primary break-words">
+            {info.getValue()}
+          </span>
+        ),
+        size: 100,
+      }),
+      columnHelper.accessor("requestUri", {
+        header: "Request URI",
+        cell: (info) => (
+          <span className="text-muted-foreground break-all">
+            {info.getValue()}
+          </span>
+        ),
+        size: 110,
+      }),
+      columnHelper.accessor("method", {
+        header: "Method",
+        size: 80,
+      }),
+      columnHelper.accessor("status", {
+        header: "Status",
+        size: 70,
+      }),
+      columnHelper.accessor("timestamp", {
+        header: "Timestamp",
+        cell: (info) => (
+          <span className="text-xs">{info.getValue()}</span>
+        ),
+        size: 160,
+      }),
+      columnHelper.accessor("requestId", {
+        header: "Request ID",
+        cell: (info) => (
+          <span className="font-mono text-xs break-all">{info.getValue()}</span>
+        ),
+        size: 100,
+      }),
+      columnHelper.accessor("responseTime", {
+        header: "ms",
+        size: 60,
+      }),
+      columnHelper.accessor("serviceEndpoint", {
+        header: "Endpoint",
+        size: 120,
+      }),
+      columnHelper.accessor("region", {
+        header: "Region",
+        size: 90,
+      }),
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [expandedKeys, selectedKeys],
+  );
+
+  const table = useReactTable({
+    data: filteredRows,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    state: { pagination },
+    onPaginationChange: setPagination,
+  });
 
   const handleParse = useCallback(() => {
     try {
@@ -215,6 +396,7 @@ export default function KibanaLogExtractor() {
       setRows(parsedRows);
       setSelectedKeys(new Set(parsedRows.map((row) => row.key)));
       setExpandedKeys(new Set());
+      setSelectedTopicFilter("all");
       toast.success(
         `Parsed ${hits.length} ${hits.length === 1 ? "entry" : "entries"}.`,
       );
@@ -224,6 +406,7 @@ export default function KibanaLogExtractor() {
       setRows([]);
       setSelectedKeys(new Set());
       setExpandedKeys(new Set());
+      setSelectedTopicFilter("all");
     }
   }, [input]);
 
@@ -232,6 +415,7 @@ export default function KibanaLogExtractor() {
     setRows([]);
     setSelectedKeys(new Set());
     setExpandedKeys(new Set());
+    setSelectedTopicFilter("all");
   }, []);
 
   const handleToggleSelect = useCallback((key: string) => {
@@ -260,41 +444,58 @@ export default function KibanaLogExtractor() {
 
   const handleToggleSelectAll = useCallback(() => {
     setSelectedKeys((prev) => {
-      if (prev.size === rows.length) return new Set();
-      return new Set(rows.map((r) => r.key));
-    });
-  }, [rows]);
-
-  const handleDownloadZip = useCallback(async (targetRows: KibanaParsedRow[]) => {
-    if (targetRows.length === 0) {
-      toast.info("Select at least one log entry first.");
-      return;
-    }
-    setZipping(true);
-    try {
-      const zip = new JSZip();
-      for (const row of targetRows) {
-        const json = JSON.stringify(row.hit, null, 2);
-        zip.file(row.zipRelativePath, json);
+      const visibleKeys = filteredRows.map((r) => r.key);
+      const visibleKeySet = new Set(visibleKeys);
+      const allVisibleSelected =
+        visibleKeys.length > 0 && visibleKeys.every((k) => prev.has(k));
+      if (allVisibleSelected) {
+        return new Set([...prev].filter((k) => !visibleKeySet.has(k)));
       }
-      const blob = await zip.generateAsync({ type: "blob" });
-      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-      saveAs(blob, `kibana-logs-${stamp}.zip`);
-      toast.success(
-        `ZIP ready — download started (${targetRows.length} file${targetRows.length === 1 ? "" : "s"}).`,
-      );
-    } catch {
-      toast.error("Could not build ZIP.");
-    } finally {
-      setZipping(false);
-    }
-  }, []);
+      const next = new Set(prev);
+      for (const key of visibleKeys) next.add(key);
+      return next;
+    });
+  }, [filteredRows]);
+
+  const handleDownloadZip = useCallback(
+    async (targetRows: KibanaParsedRow[]) => {
+      if (targetRows.length === 0) {
+        toast.info("Select at least one log entry first.");
+        return;
+      }
+      setZipping(true);
+      try {
+        const zip = new JSZip();
+        for (const row of targetRows) {
+          const json = JSON.stringify(row.hit, null, 2);
+          zip.file(row.zipRelativePath, json);
+        }
+        const blob = await zip.generateAsync({ type: "blob" });
+        const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+        saveAs(blob, `kibana-logs-${stamp}.zip`);
+        toast.success(
+          `ZIP ready — download started (${targetRows.length} file${targetRows.length === 1 ? "" : "s"}).`,
+        );
+      } catch {
+        toast.error("Could not build ZIP.");
+      } finally {
+        setZipping(false);
+      }
+    },
+    [],
+  );
 
   const selectedRows = useMemo(
-    () => rows.filter((row) => selectedKeys.has(row.key)),
-    [rows, selectedKeys],
+    () => filteredRows.filter((row) => selectedKeys.has(row.key)),
+    [filteredRows, selectedKeys],
   );
-  const allSelected = rows.length > 0 && selectedKeys.size === rows.length;
+
+  const allVisibleSelected =
+    filteredRows.length > 0 &&
+    filteredRows.every((row) => selectedKeys.has(row.key));
+
+  const { pageIndex, pageSize } = pagination;
+  const pageCount = table.getPageCount();
 
   return (
     <main className="p-4 w-full max-w-[1400px] mx-auto">
@@ -309,10 +510,13 @@ export default function KibanaLogExtractor() {
         </span>
         , with each hit saved as{" "}
         <span className="font-mono text-xs bg-muted px-1 rounded">
-          {'{last URI segment}'}.json
+          {"{last URI segment}"}.json
         </span>
         . Duplicate path names get a suffix from{" "}
-        <span className="font-mono text-xs bg-muted px-1 rounded">REQUEST_ID</span>.
+        <span className="font-mono text-xs bg-muted px-1 rounded">
+          REQUEST_ID
+        </span>
+        .
       </p>
 
       <div className="flex flex-col gap-4">
@@ -328,7 +532,12 @@ export default function KibanaLogExtractor() {
                 JSON array
               </span>
             </span>
-            <Button variant="ghost" size="sm" type="button" onClick={handleClear}>
+            <Button
+              variant="ghost"
+              size="sm"
+              type="button"
+              onClick={handleClear}
+            >
               <Trash2 size={14} className="mr-1" />
               Clear
             </Button>
@@ -346,6 +555,31 @@ export default function KibanaLogExtractor() {
               <ChevronRight size={16} className="mr-1" />
               Parse logs
             </Button>
+            <label className="flex items-center gap-2 text-sm text-muted-foreground">
+              Filter:
+              <select
+                value={selectedTopicFilter}
+                onChange={(e) => {
+                  const newFilter = e.target.value;
+                  setSelectedTopicFilter(newFilter);
+                  const newFiltered =
+                    newFilter === "all"
+                      ? rows
+                      : rows.filter((r) => r.topicFolder === newFilter);
+                  setSelectedKeys(new Set(newFiltered.map((r) => r.key)));
+                  setPagination((p) => ({ ...p, pageIndex: 0 }));
+                }}
+                className="h-9 rounded-md border border-border bg-background px-2 text-sm"
+                disabled={rows.length === 0}
+              >
+                <option value="all">All service folders</option>
+                {topicFilterOptions.map((topic) => (
+                  <option key={topic} value={topic}>
+                    {topic}
+                  </option>
+                ))}
+              </select>
+            </label>
             <Button
               type="button"
               variant="secondary"
@@ -376,7 +610,11 @@ export default function KibanaLogExtractor() {
         </div>
 
         {rows.length > 0 && (
-          <section className="flex flex-col gap-3 border border-border rounded-lg overflow-hidden bg-card">
+          <section
+            className="flex flex-col gap-0 border border-border rounded-lg overflow-hidden bg-card"
+            id="entries-table"
+          >
+            {/* Table header bar */}
             <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-muted/40 border-b border-border">
               <div className="flex items-center gap-2 text-sm font-medium">
                 <Table2 size={18} className="text-muted-foreground" />
@@ -384,126 +622,201 @@ export default function KibanaLogExtractor() {
               </div>
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 <span>
-                  {rows.length} file{rows.length === 1 ? "" : "s"} · {topicCount}{" "}
-                  service folder{topicCount === 1 ? "" : "s"}
+                  {filteredRows.length}/{rows.length} file
+                  {rows.length === 1 ? "" : "s"} · {topicCount} service folder
+                  {topicCount === 1 ? "" : "s"}
                 </span>
                 <span>Selected: {selectedKeys.size}</span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="h-7 px-2"
+                  className="hover:text-foreground px-2 py-1 rounded border border-border hover:bg-muted transition-colors"
                   onClick={handleToggleSelectAll}
                 >
-                  {allSelected ? "Unselect all" : "Select all"}
+                  {allVisibleSelected ? "Unselect visible" : "Select visible"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="hover:text-foreground px-2 py-1 rounded border border-border hover:bg-muted transition-colors"
+                  onClick={() =>
+                    setExpandedKeys(new Set(filteredRows.map((r) => r.key)))
+                  }
+                >
+                  Expand all
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="hover:text-foreground px-2 py-1 rounded border border-border hover:bg-muted transition-colors"
+                  onClick={() => setExpandedKeys(new Set())}
+                >
+                  Collapse all
                 </Button>
               </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="bg-muted/60 text-left text-xs uppercase tracking-wide text-muted-foreground border-b border-border">
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">Pick</th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      Service folder
-                    </th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      File
-                    </th>
-                    <th className="px-3 py-2 font-medium min-w-[200px]">
-                      Request URI
-                    </th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      Method
-                    </th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      Status
-                    </th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      Timestamp
-                    </th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      Request ID
-                    </th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      ms
-                    </th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      Endpoint
-                    </th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      Region
-                    </th>
-                    <th className="px-3 py-2 font-medium whitespace-nowrap">
-                      Preview
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((r) => {
-                    const isExpanded = expandedKeys.has(r.key);
-                    const isSelected = selectedKeys.has(r.key);
-                    return (
-                      <Fragment key={r.key}>
-                        <tr
-                          className="border-b border-border/80 hover:bg-muted/30 transition-colors"
+            {/* Scrollable table */}
+            <div className="overflow-auto max-h-[520px]">
+              <Table className="text-sm">
+                <TableHeader className="sticky top-0 z-10 bg-muted/80 backdrop-blur-sm">
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow
+                      key={headerGroup.id}
+                      className="text-xs uppercase tracking-wide text-muted-foreground border-b border-border hover:bg-transparent"
+                    >
+                      {headerGroup.headers.map((header) => (
+                        <TableHead
+                          key={header.id}
+                          style={{ width: header.getSize() !== 150 ? header.getSize() : undefined }}
+                          className="px-3 py-2 font-medium whitespace-nowrap"
                         >
-                          <td className="px-3 py-2 align-top">
-                            <input
-                              type="checkbox"
-                              checked={isSelected}
-                              onChange={() => handleToggleSelect(r.key)}
-                              aria-label={`Select ${r.fileBaseName}`}
-                              className="h-4 w-4"
-                            />
-                          </td>
-                          <td className="px-3 py-2 font-mono text-xs align-top">
-                            {r.topicFolder}
-                          </td>
-                          <td className="px-3 py-2 font-mono text-xs align-top text-primary">
-                            {r.fileBaseName}
-                          </td>
-                          <td className="px-3 py-2 align-top break-all max-w-md text-muted-foreground">
-                            {r.requestUri}
-                          </td>
-                          <td className="px-3 py-2 align-top">{r.method}</td>
-                          <td className="px-3 py-2 align-top">{r.status}</td>
-                          <td className="px-3 py-2 align-top whitespace-nowrap text-xs">
-                            {r.timestamp}
-                          </td>
-                          <td className="px-3 py-2 align-top font-mono text-xs">
-                            {r.requestId}
-                          </td>
-                          <td className="px-3 py-2 align-top">{r.responseTime}</td>
-                          <td className="px-3 py-2 align-top">{r.serviceEndpoint}</td>
-                          <td className="px-3 py-2 align-top">{r.region}</td>
-                          <td className="px-3 py-2 align-top">
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 px-2"
-                              onClick={() => handleToggleExpand(r.key)}
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows.map((row) => {
+                    const isExpanded = expandedKeys.has(row.original.key);
+                    return (
+                      <Fragment key={row.original.key}>
+                        <TableRow
+                          className={`border-b border-border/80 hover:bg-muted/30 transition-colors ${isExpanded ? "bg-muted/20" : ""}`}
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell
+                              key={cell.id}
+                              className="px-3 py-2 align-top"
                             >
-                              {isExpanded ? "Collapse" : "Expand"}
-                            </Button>
-                          </td>
-                        </tr>
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
                         {isExpanded && (
-                          <tr className="border-b border-border/80 bg-muted/20">
-                            <td colSpan={12} className="px-3 py-3">
-                              <pre className="text-xs font-mono whitespace-pre-wrap break-all bg-background border border-border rounded p-3 max-h-72 overflow-auto">
-                                {JSON.stringify(r.hit, null, 2)}
-                              </pre>
-                            </td>
-                          </tr>
+                          <TableRow className="border-b border-border bg-muted/10 hover:bg-muted/10">
+                            <TableCell
+                              colSpan={columns.length}
+                              className="px-4 py-3"
+                            >
+                              <div className="flex flex-col gap-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                                    JSON Details — {row.original.fileBaseName}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      void navigator.clipboard.writeText(
+                                        JSON.stringify(row.original.hit, null, 2),
+                                      );
+                                      toast.success("Copied to clipboard");
+                                    }}
+                                    className="text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded border border-border hover:bg-muted transition-colors"
+                                  >
+                                    Copy JSON
+                                  </button>
+                                </div>
+                                <pre className="text-xs font-mono whitespace-pre-wrap break-all bg-[#1e1e1e] text-[#d4d4d4] border border-border rounded-md p-3 max-h-80 overflow-auto leading-relaxed">
+                                  {JSON.stringify(row.original.hit, null, 2)}
+                                </pre>
+                              </div>
+                            </TableCell>
+                          </TableRow>
                         )}
                       </Fragment>
                     );
                   })}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Pagination footer */}
+            <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-t border-border bg-muted/20 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <span>Rows per page:</span>
+                <select
+                  value={pagination.pageSize}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    setPagination({ pageIndex: 0, pageSize: val });
+                  }}
+                  className="h-7 rounded border border-border bg-background px-2 text-xs"
+                >
+                  {PAGE_SIZE_OPTIONS.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <span>
+                {filteredRows.length === 0
+                  ? "0 of 0"
+                  : `${pageIndex * pageSize + 1}–${Math.min(
+                      (pageIndex + 1) * pageSize,
+                      filteredRows.length,
+                    )} of ${filteredRows.length}`}
+              </span>
+
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 w-7 p-0"
+                  onClick={() => table.setPageIndex(0)}
+                  disabled={!table.getCanPreviousPage()}
+                  aria-label="First page"
+                >
+                  <ChevronsLeft size={14} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 w-7 p-0"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                  aria-label="Previous page"
+                >
+                  <ChevronLeft size={14} />
+                </Button>
+                <span className="px-2">
+                  {pageCount === 0 ? 1 : pageIndex + 1} / {pageCount === 0 ? 1 : pageCount}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 w-7 p-0"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                  aria-label="Next page"
+                >
+                  <ChevronRight size={14} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 w-7 p-0"
+                  onClick={() => table.setPageIndex(pageCount - 1)}
+                  disabled={!table.getCanNextPage()}
+                  aria-label="Last page"
+                >
+                  <ChevronsRight size={14} />
+                </Button>
+              </div>
             </div>
           </section>
         )}
