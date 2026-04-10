@@ -1,4 +1,12 @@
-import { Fragment, useCallback, useMemo, useState } from "react";
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import JSZip from "jszip";
@@ -13,6 +21,8 @@ import {
   ChevronLeft,
   ChevronsLeft,
   ChevronsRight,
+  FolderOpen,
+  FolderPlus,
 } from "lucide-react";
 import {
   useReactTable,
@@ -29,213 +39,103 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type {
+  KibanaParsedRowMeta,
+  WorkerResponse,
+} from "../workers/kibanaParser.worker";
 
 type UnknownRecord = Record<string, unknown>;
 
-interface KibanaParsedRow {
-  key: string;
-  topicFolder: string;
-  requestUri: string;
-  fileBaseName: string;
-  zipRelativePath: string;
-  method: string;
-  status: string;
-  timestamp: string;
-  requestId: string;
-  responseTime: string;
-  serviceEndpoint: string;
-  region: string;
-  indexName: string;
-  hit: UnknownRecord;
-}
-
-function firstScalarFromFields(
-  fields: UnknownRecord | undefined,
-  keys: string[],
-): string {
-  if (!fields) return "";
-  for (const k of keys) {
-    const raw = fields[k];
-    if (raw === undefined || raw === null) continue;
-    if (Array.isArray(raw) && raw.length > 0) {
-      const v = raw[0];
-      if (v !== undefined && v !== null) return String(v);
-    } else if (typeof raw === "string" || typeof raw === "number") {
-      return String(raw);
-    }
-  }
-  return "";
-}
-
-function getFieldsContainer(hit: UnknownRecord): UnknownRecord {
-  const f = hit.fields;
-  if (f && typeof f === "object" && !Array.isArray(f)) {
-    return f as UnknownRecord;
-  }
-  return hit;
-}
-
-function uriLastSegment(uri: string): string {
-  const trimmed = uri.trim().replace(/\/+$/, "");
-  if (!trimmed) return "entry";
-  const parts = trimmed.split("/").filter(Boolean);
-  const last = parts[parts.length - 1];
-  return last && last.length > 0 ? last : "entry";
-}
-
-function sanitizePathSegment(name: string, fallback: string): string {
-  const cleaned = name
-    .replace(/[\\/:*?"<>|]/g, "_")
-    .replace(/\s+/g, " ")
-    .trim();
-  return cleaned.length > 0 ? cleaned : fallback;
-}
-
-function parseInputToObjects(raw: string): UnknownRecord[] {
-  const text = raw.trim();
-  if (!text) return [];
-
-  const tryParse = (s: string): unknown => {
-    try {
-      return JSON.parse(s);
-    } catch {
-      return null;
-    }
-  };
-
-  const asArray = tryParse(text);
-  if (Array.isArray(asArray)) {
-    return asArray.filter(
-      (x): x is UnknownRecord => x !== null && typeof x === "object",
-    );
-  }
-
-  const lines = text
-    .split(/\r?\n/)
-    .map((l) => l.trim())
-    .filter(Boolean);
-  const fromNdjson: UnknownRecord[] = [];
-  for (const line of lines) {
-    const row = tryParse(line);
-    if (row && typeof row === "object" && !Array.isArray(row)) {
-      fromNdjson.push(row as UnknownRecord);
-    }
-  }
-  if (fromNdjson.length > 0) return fromNdjson;
-
-  throw new Error(
-    "Could not parse input. Use a JSON array of hits or NDJSON (one object per line).",
-  );
-}
-
-function buildRows(hits: UnknownRecord[]): KibanaParsedRow[] {
-  const usedNames = new Map<string, number>();
-
-  return hits.map((hit, index) => {
-    const fields = getFieldsContainer(hit);
-
-    const topicRaw =
-      firstScalarFromFields(fields, [
-        "kafka_topic_name.keyword",
-        "kafka_topic_name",
-      ]) || "unknown-topic";
-
-    const requestUri = firstScalarFromFields(fields, [
-      "REQUEST_URI.keyword",
-      "REQUEST_URI",
-    ]);
-
-    const topicFolder = sanitizePathSegment(topicRaw, "unknown-topic");
-    const baseFromUri = uriLastSegment(requestUri);
-    const fileBase = sanitizePathSegment(baseFromUri, `entry-${index + 1}`);
-
-    const requestId = firstScalarFromFields(fields, [
-      "REQUEST_ID.keyword",
-      "REQUEST_ID",
-    ]);
-
-    let uniqueStem = fileBase;
-    const mapKey = `${topicFolder}/${fileBase}`;
-    const seen = usedNames.get(mapKey) ?? 0;
-    usedNames.set(mapKey, seen + 1);
-    if (seen > 0) {
-      const suffix = requestId || String(seen + 1);
-      uniqueStem = sanitizePathSegment(`${fileBase}_${suffix}`, fileBase);
-    }
-
-    const zipRelativePath = `${topicFolder}/${uniqueStem}.json`;
-
-    const method = firstScalarFromFields(fields, [
-      "REQUEST_METHOD.keyword",
-      "REQUEST_METHOD",
-    ]);
-
-    const status = firstScalarFromFields(fields, [
-      "RESPONSE_STATUS.keyword",
-      "RESPONSE_STATUS",
-    ]);
-
-    const timestamp = firstScalarFromFields(fields, [
-      "TIMESTAMP.keyword",
-      "TIMESTAMP",
-      "@timestamp",
-    ]);
-
-    const responseTime = firstScalarFromFields(fields, ["RESPONSE_TIME"]);
-
-    const serviceEndpoint = firstScalarFromFields(fields, [
-      "SERVICE_ENDPOINT.keyword",
-      "SERVICE_ENDPOINT",
-    ]);
-
-    const region = firstScalarFromFields(fields, ["REGION.keyword", "REGION"]);
-
-    const indexName =
-      typeof hit._index === "string"
-        ? hit._index
-        : firstScalarFromFields(fields, ["_index"]);
-
-    return {
-      key: `${zipRelativePath}-${index}`,
-      topicFolder,
-      requestUri: requestUri || "—",
-      fileBaseName: `${uniqueStem}.json`,
-      zipRelativePath,
-      method: method || "—",
-      status: status || "—",
-      timestamp: timestamp || "—",
-      requestId: requestId || "—",
-      responseTime: responseTime || "—",
-      serviceEndpoint: serviceEndpoint || "—",
-      region: region || "—",
-      indexName: indexName || "—",
-      hit,
-    };
-  });
-}
-
-const columnHelper = createColumnHelper<KibanaParsedRow>();
+const columnHelper = createColumnHelper<KibanaParsedRowMeta>();
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 
+// ---------------------------------------------------------------------------
+// Memoised expanded JSON panel — avoids re-running JSON.stringify on every
+// render triggered by selectedKeys / expandedKeys state changes.
+// ---------------------------------------------------------------------------
+const ExpandedJsonCell = memo(function ExpandedJsonCell({
+  fileBaseName,
+  hit,
+}: {
+  fileBaseName: string;
+  hit: UnknownRecord | undefined;
+}) {
+  const json = useMemo(
+    () => (hit ? JSON.stringify(hit, null, 2) : "{}"),
+    [hit],
+  );
+
+  const handleCopy = useCallback(() => {
+    void navigator.clipboard.writeText(json);
+    toast.success("Copied to clipboard");
+  }, [json]);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+          JSON Details — {fileBaseName}
+        </span>
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded border border-border hover:bg-muted transition-colors"
+        >
+          Copy JSON
+        </button>
+      </div>
+      <pre className="text-xs font-mono whitespace-pre-wrap break-all bg-[#1e1e1e] text-[#d4d4d4] border border-border rounded-md p-3 max-h-80 overflow-auto leading-relaxed">
+        {json}
+      </pre>
+    </div>
+  );
+});
+
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
 export default function KibanaLogExtractor() {
-  const [input, setInput] = useState("");
-  const [rows, setRows] = useState<KibanaParsedRow[]>([]);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const workerRef = useRef<Worker | null>(null);
+  // Hit data lives in a ref — React never tracks it, preventing expensive
+  // reconciliation of large objects on every state update.
+  const hitsMapRef = useRef<Map<string, UnknownRecord>>(new Map());
+
+  const [rows, setRows] = useState<KibanaParsedRowMeta[]>([]);
+  const [isParsing, setIsParsing] = useState(false);
+  const [parseProgress, setParseProgress] = useState(0);
   const [zipping, setZipping] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
   const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
   const [selectedTopicFilter, setSelectedTopicFilter] = useState("all");
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
 
-  const topicCount = useMemo(() => {
-    return new Set(rows.map((r) => r.topicFolder)).size;
-  }, [rows]);
-
-  const topicFilterOptions = useMemo(() => {
-    return Array.from(new Set(rows.map((r) => r.topicFolder))).sort((a, b) =>
-      a.localeCompare(b),
+  // Spin up the worker once for the lifetime of the component.
+  useEffect(() => {
+    workerRef.current = new Worker(
+      new URL("../workers/kibanaParser.worker.ts", import.meta.url),
+      { type: "module" },
     );
-  }, [rows]);
+    return () => {
+      workerRef.current?.terminate();
+      workerRef.current = null;
+    };
+  }, []);
+
+  const topicCount = useMemo(
+    () => new Set(rows.map((r) => r.topicFolder)).size,
+    [rows],
+  );
+
+  const topicFilterOptions = useMemo(
+    () =>
+      Array.from(new Set(rows.map((r) => r.topicFolder))).sort((a, b) =>
+        a.localeCompare(b),
+      ),
+    [rows],
+  );
 
   const filteredRows = useMemo(() => {
     if (selectedTopicFilter === "all") return rows;
@@ -311,28 +211,38 @@ export default function KibanaLogExtractor() {
       columnHelper.accessor("topicFolder", {
         header: "Service folder",
         cell: (info) => (
-          <span className="font-mono text-xs break-words">
+          <span
+            className="font-mono text-xs block truncate max-w-[180px]"
+            title={info.getValue()}
+          >
             {info.getValue()}
           </span>
         ),
+        size: 180,
       }),
       columnHelper.accessor("fileBaseName", {
         header: "File",
         cell: (info) => (
-          <span className="font-mono text-xs text-primary break-words">
+          <span
+            className="font-mono text-xs text-primary block truncate max-w-[160px]"
+            title={info.getValue()}
+          >
             {info.getValue()}
           </span>
         ),
-        size: 100,
+        size: 160,
       }),
       columnHelper.accessor("requestUri", {
         header: "Request URI",
         cell: (info) => (
-          <span className="text-muted-foreground break-all">
+          <span
+            className="text-muted-foreground block truncate max-w-[220px]"
+            title={info.getValue()}
+          >
             {info.getValue()}
           </span>
         ),
-        size: 110,
+        size: 220,
       }),
       columnHelper.accessor("method", {
         header: "Method",
@@ -344,9 +254,7 @@ export default function KibanaLogExtractor() {
       }),
       columnHelper.accessor("timestamp", {
         header: "Timestamp",
-        cell: (info) => (
-          <span className="text-xs">{info.getValue()}</span>
-        ),
+        cell: (info) => <span className="text-xs">{info.getValue()}</span>,
         size: 160,
       }),
       columnHelper.accessor("requestId", {
@@ -383,39 +291,74 @@ export default function KibanaLogExtractor() {
   });
 
   const handleParse = useCallback(() => {
-    try {
-      const hits = parseInputToObjects(input);
-      if (hits.length === 0) {
+    const raw = textareaRef.current?.value ?? "";
+    if (!raw.trim()) return;
+
+    const worker = workerRef.current;
+    if (!worker) return;
+
+    setIsParsing(true);
+    setParseProgress(0);
+
+    // Remove any previous listener before attaching a new one.
+    worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
+      const data = e.data;
+
+      if (data.type === "progress") {
+        setParseProgress(data.value);
+        return;
+      }
+
+      setIsParsing(false);
+      setParseProgress(100);
+
+      if (data.type === "error") {
+        toast.error(data.message);
+        setRows([]);
+        hitsMapRef.current = new Map();
+        setSelectedKeys(new Set());
+        setExpandedKeys(new Set());
+        setSelectedTopicFilter("all");
+        return;
+      }
+
+      // type === "done"
+      const { metas, hitEntries, count } = data;
+      hitsMapRef.current = new Map(hitEntries);
+
+      if (count === 0) {
         toast.info("No log entries found in the input.");
         setRows([]);
         setSelectedKeys(new Set());
         setExpandedKeys(new Set());
         return;
       }
-      const parsedRows = buildRows(hits);
-      setRows(parsedRows);
-      setSelectedKeys(new Set(parsedRows.map((row) => row.key)));
-      setExpandedKeys(new Set());
-      setSelectedTopicFilter("all");
-      toast.success(
-        `Parsed ${hits.length} ${hits.length === 1 ? "entry" : "entries"}.`,
-      );
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Parse failed.";
-      toast.error(msg);
-      setRows([]);
+
+      setRows(metas);
       setSelectedKeys(new Set());
       setExpandedKeys(new Set());
       setSelectedTopicFilter("all");
-    }
-  }, [input]);
+      toast.success(
+        `Parsed ${count} ${count === 1 ? "entry" : "entries"}.`,
+      );
+    };
+
+    worker.onerror = (err) => {
+      setIsParsing(false);
+      toast.error(err.message || "Parse failed.");
+    };
+
+    worker.postMessage(raw);
+  }, []);
 
   const handleClear = useCallback(() => {
-    setInput("");
+    if (textareaRef.current) textareaRef.current.value = "";
+    hitsMapRef.current = new Map();
     setRows([]);
     setSelectedKeys(new Set());
     setExpandedKeys(new Set());
     setSelectedTopicFilter("all");
+    setParseProgress(0);
   }, []);
 
   const handleToggleSelect = useCallback((key: string) => {
@@ -458,7 +401,7 @@ export default function KibanaLogExtractor() {
   }, [filteredRows]);
 
   const handleDownloadZip = useCallback(
-    async (targetRows: KibanaParsedRow[]) => {
+    async (targetRows: KibanaParsedRowMeta[]) => {
       if (targetRows.length === 0) {
         toast.info("Select at least one log entry first.");
         return;
@@ -467,7 +410,8 @@ export default function KibanaLogExtractor() {
       try {
         const zip = new JSZip();
         for (const row of targetRows) {
-          const json = JSON.stringify(row.hit, null, 2);
+          const hit = hitsMapRef.current.get(row.key);
+          const json = hit ? JSON.stringify(hit, null, 2) : "{}";
           zip.file(row.zipRelativePath, json);
         }
         const blob = await zip.generateAsync({ type: "blob" });
@@ -480,6 +424,62 @@ export default function KibanaLogExtractor() {
         toast.error("Could not build ZIP.");
       } finally {
         setZipping(false);
+      }
+    },
+    [],
+  );
+
+  const handleSaveFiles = useCallback(
+    async (targetRows: KibanaParsedRowMeta[], withFolders: boolean) => {
+      if (targetRows.length === 0) {
+        toast.info("Select at least one log entry first.");
+        return;
+      }
+      if (!("showDirectoryPicker" in window)) {
+        toast.error(
+          "Your browser does not support the File System Access API. Please use Chrome or Edge.",
+        );
+        return;
+      }
+      setSaving(true);
+      try {
+        const dirHandle = await (
+          window as Window & {
+            showDirectoryPicker: (
+              options?: Record<string, unknown>,
+            ) => Promise<FileSystemDirectoryHandle>;
+          }
+        ).showDirectoryPicker({ mode: "readwrite" });
+
+        let savedCount = 0;
+        for (const row of targetRows) {
+          try {
+            let targetDir: FileSystemDirectoryHandle = dirHandle;
+            if (withFolders) {
+              targetDir = await dirHandle.getDirectoryHandle(row.topicFolder, {
+                create: true,
+              });
+            }
+            const fileHandle = await targetDir.getFileHandle(row.fileBaseName, {
+              create: true,
+            });
+            const writable = await fileHandle.createWritable();
+            const hit = hitsMapRef.current.get(row.key);
+            await writable.write(hit ? JSON.stringify(hit, null, 2) : "{}");
+            await writable.close();
+            savedCount++;
+          } catch {
+            // skip individual file errors silently
+          }
+        }
+        toast.success(
+          `Saved ${savedCount} file${savedCount === 1 ? "" : "s"} successfully.`,
+        );
+      } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") return;
+        toast.error("Could not save files to the selected folder.");
+      } finally {
+        setSaving(false);
       }
     },
     [],
@@ -498,7 +498,7 @@ export default function KibanaLogExtractor() {
   const pageCount = table.getPageCount();
 
   return (
-    <main className="p-4 w-full max-w-[1400px] mx-auto">
+    <main className="p-4 w-full  mx-auto">
       <p className="text-xl font-extrabold text-default-800 mb-4">
         Kibana Log Extractor
       </p>
@@ -544,16 +544,30 @@ export default function KibanaLogExtractor() {
           </div>
 
           <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
+            ref={textareaRef}
+            defaultValue=""
             className="w-full min-h-[12rem] h-48 p-3 font-mono text-sm bg-[#1e1e1e] text-white border border-border rounded-md resize-y focus:outline-none focus:ring-1 focus:ring-ring"
             placeholder={`Paste a JSON array of hits, or one JSON object per line:\n\n[{"_index":"...","fields":{"kafka_topic_name.keyword":["az-sit-..."],"REQUEST_URI.keyword":["/path/MyEndpoint"],...}}, ...]`}
           />
 
+          {/* Progress bar — visible only while parsing */}
+          {isParsing && (
+            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary transition-all duration-200 rounded-full"
+                style={{ width: `${parseProgress}%` }}
+              />
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-2">
-            <Button type="button" onClick={handleParse}>
-              <ChevronRight size={16} className="mr-1" />
-              Parse logs
+            <Button type="button" onClick={handleParse} disabled={isParsing}>
+              {isParsing ? (
+                <Loader2 size={16} className="mr-1 animate-spin" />
+              ) : (
+                <ChevronRight size={16} className="mr-1" />
+              )}
+              {isParsing ? `Parsing… ${parseProgress}%` : "Parse logs"}
             </Button>
             <label className="flex items-center gap-2 text-sm text-muted-foreground">
               Filter:
@@ -562,11 +576,6 @@ export default function KibanaLogExtractor() {
                 onChange={(e) => {
                   const newFilter = e.target.value;
                   setSelectedTopicFilter(newFilter);
-                  const newFiltered =
-                    newFilter === "all"
-                      ? rows
-                      : rows.filter((r) => r.topicFolder === newFilter);
-                  setSelectedKeys(new Set(newFiltered.map((r) => r.key)));
                   setPagination((p) => ({ ...p, pageIndex: 0 }));
                 }}
                 className="h-9 rounded-md border border-border bg-background px-2 text-sm"
@@ -605,6 +614,32 @@ export default function KibanaLogExtractor() {
                 <FileDown size={16} className="mr-1" />
               )}
               Download selected ({selectedRows.length})
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={selectedRows.length === 0 || saving}
+              onClick={() => void handleSaveFiles(selectedRows, false)}
+            >
+              {saving ? (
+                <Loader2 size={16} className="mr-1 animate-spin" />
+              ) : (
+                <FolderOpen size={16} className="mr-1" />
+              )}
+              Save files ({selectedRows.length})
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={selectedRows.length === 0 || saving}
+              onClick={() => void handleSaveFiles(selectedRows, true)}
+            >
+              {saving ? (
+                <Loader2 size={16} className="mr-1 animate-spin" />
+              ) : (
+                <FolderPlus size={16} className="mr-1" />
+              )}
+              Save and create folders ({selectedRows.length})
             </Button>
           </div>
         </div>
@@ -671,7 +706,12 @@ export default function KibanaLogExtractor() {
                       {headerGroup.headers.map((header) => (
                         <TableHead
                           key={header.id}
-                          style={{ width: header.getSize() !== 150 ? header.getSize() : undefined }}
+                          style={{
+                            width:
+                              header.getSize() !== 150
+                                ? header.getSize()
+                                : undefined,
+                          }}
                           className="px-3 py-2 font-medium whitespace-nowrap"
                         >
                           {header.isPlaceholder
@@ -696,7 +736,17 @@ export default function KibanaLogExtractor() {
                           {row.getVisibleCells().map((cell) => (
                             <TableCell
                               key={cell.id}
-                              className="px-3 py-2 align-top"
+                              className="px-3 py-2 align-top overflow-hidden"
+                              style={{
+                                width:
+                                  cell.column.getSize() !== 150
+                                    ? cell.column.getSize()
+                                    : undefined,
+                                maxWidth:
+                                  cell.column.getSize() !== 150
+                                    ? cell.column.getSize()
+                                    : undefined,
+                              }}
                             >
                               {flexRender(
                                 cell.column.columnDef.cell,
@@ -711,28 +761,10 @@ export default function KibanaLogExtractor() {
                               colSpan={columns.length}
                               className="px-4 py-3"
                             >
-                              <div className="flex flex-col gap-2">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                                    JSON Details — {row.original.fileBaseName}
-                                  </span>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      void navigator.clipboard.writeText(
-                                        JSON.stringify(row.original.hit, null, 2),
-                                      );
-                                      toast.success("Copied to clipboard");
-                                    }}
-                                    className="text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded border border-border hover:bg-muted transition-colors"
-                                  >
-                                    Copy JSON
-                                  </button>
-                                </div>
-                                <pre className="text-xs font-mono whitespace-pre-wrap break-all bg-[#1e1e1e] text-[#d4d4d4] border border-border rounded-md p-3 max-h-80 overflow-auto leading-relaxed">
-                                  {JSON.stringify(row.original.hit, null, 2)}
-                                </pre>
-                              </div>
+                              <ExpandedJsonCell
+                                fileBaseName={row.original.fileBaseName}
+                                hit={hitsMapRef.current.get(row.original.key)}
+                              />
                             </TableCell>
                           </TableRow>
                         )}
@@ -794,7 +826,8 @@ export default function KibanaLogExtractor() {
                   <ChevronLeft size={14} />
                 </Button>
                 <span className="px-2">
-                  {pageCount === 0 ? 1 : pageIndex + 1} / {pageCount === 0 ? 1 : pageCount}
+                  {pageCount === 0 ? 1 : pageIndex + 1} /{" "}
+                  {pageCount === 0 ? 1 : pageCount}
                 </span>
                 <Button
                   variant="ghost"
