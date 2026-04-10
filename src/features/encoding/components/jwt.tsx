@@ -1,7 +1,7 @@
 import { decodeJwt, decodeProtectedHeader, SignJWT } from "jose";
 import { lazy, Suspense, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CopyIcon, ArrowLeftRight, Trash2 } from "lucide-react";
+import { CopyIcon, ArrowLeftRight, Trash2, Eye, EyeOff } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useJwtStore from "../stores/JwtStore.store";
+import { Input } from "@/components/ui/input";
 
 /** Encode raw bytes as Base64URL (no padding). */
 function bytesToBase64Url(bytes: Uint8Array): string {
@@ -68,6 +69,7 @@ const JWTDecoder = () => {
   const [mode, setMode] = useState<string>("decode");
   /** When true, secret field is interpreted as Base64URL; otherwise UTF-8 plaintext. */
   const [secretIsBase64Url, setSecretIsBase64Url] = useState(false);
+  const [showSecret, setShowSecret] = useState(false);
 
   const {
     encodedTextArea,
@@ -182,7 +184,7 @@ const JWTDecoder = () => {
   async function onEncode() {
     try {
       const payloadStr = editorEncodePayloadRef.current?.getValue() ?? "{}";
-      const secretKeyStr = editorSecretKeyRef.current?.getValue() ?? "";
+      const secretKeyStr = secretKeyArea ?? "";
       const secret = secretIsBase64Url
         ? base64UrlToBytes(secretKeyStr)
         : new TextEncoder().encode(secretKeyStr);
@@ -200,15 +202,18 @@ const JWTDecoder = () => {
     }
   }
 
+  function handleSecretKeyArea(value: string) {
+    setSecretKeyArea(value);
+  }
+
   async function onSecretKeyArea(next: any) {
     const wantBase64 = next === true;
-    const editor = editorSecretKeyRef.current;
-    const raw = editor?.getValue() ?? "";
+    const raw = secretKeyArea ?? "";
 
     if (wantBase64) {
       if (raw.length > 0) {
         const encoded = bytesToBase64Url(new TextEncoder().encode(raw));
-        editor?.setValue(encoded);
+        setSecretKeyArea(encoded);
       }
       setSecretIsBase64Url(true);
       return;
@@ -218,7 +223,7 @@ const JWTDecoder = () => {
       try {
         const bytes = base64UrlToBytes(raw);
         const plaintext = new TextDecoder().decode(bytes);
-        editor?.setValue(plaintext);
+        setSecretKeyArea(plaintext);
       } catch (e: any) {
         toast.error(e?.message ?? "Invalid Base64URL secret", {
           position: "top-center",
@@ -389,15 +394,32 @@ const JWTDecoder = () => {
                     </div>
                   </div>
                 </div>
-                <div className="h-[140px] shrink-0">
-                  <Editor
+                <div className="h-[40px] shrink-0">
+                  {/* <Editor
                     height="100%"
                     theme="vs-dark"
                     options={editorEdit}
                     defaultValue={secretKeyArea}
                     defaultLanguage="plaintext"
                     onMount={handleSecretKey}
-                  />
+                  /> */}
+
+                  <div className="relative">
+                    <Input
+                      type={showSecret ? "text" : "password"}
+                      value={secretKeyArea}
+                      onChange={(e) => handleSecretKeyArea(e.target.value)}
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowSecret((v) => !v)}
+                      className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label={showSecret ? "Hide secret" : "Show secret"}
+                    >
+                      {showSecret ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="flex flex-row items-center my-2 justify-between">

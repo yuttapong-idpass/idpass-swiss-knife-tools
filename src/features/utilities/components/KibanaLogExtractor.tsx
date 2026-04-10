@@ -533,9 +533,10 @@ export default function KibanaLogExtractor() {
               </span>
             </span>
             <Button
-              variant="ghost"
-              size="sm"
-              type="button"
+              variant="secondary"
+              size="lg"
+              type="button" 
+              className="hover:bg-gray-200 hover:text-black text-muted-foreground"
               onClick={handleClear}
             >
               <Trash2 size={14} className="mr-1" />
