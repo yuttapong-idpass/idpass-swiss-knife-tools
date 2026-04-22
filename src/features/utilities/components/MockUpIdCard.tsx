@@ -370,10 +370,10 @@ const IdCardFront = ({
       <div className="absolute inset-0 text-slate-900 font-[system-ui]">
         {/* Header title */}
         <div
-          className="absolute text-center leading-tight"
+          className="absolute text-left leading-tight"
           style={{ top: "3.5%", left: "18%", right: "4%" }}
         >
-          <div className="font-bold text-2xl sm:text-base md:text-2xl text-slate-900">
+          <div className="font-bold text-xl sm:text-lg md:text-xl text-slate-900">
             บัตรประจำตัวประชาชน{" "}
             <span className="fond-bold text-blue-700">
               Thai National ID Card
@@ -389,7 +389,7 @@ const IdCardFront = ({
           className="absolute leading-tight"
           style={{ top: "14%", left: "18%" }}
         >
-          <div className="text-base sm:text-sm md:text-md text-slate-700 flex flex-row gap-1">
+          <div className="font-bold text-base sm:text-sm md:text-md text-slate-700 flex flex-row gap-1">
             <div className="flex flex-col items-center">
               <span className="font-bold">เลขประจำตัวประชาชน</span>
               <span className="text-blue-700 font-bold">
@@ -405,9 +405,9 @@ const IdCardFront = ({
         {/* Name (Thai) */}
         <div
           className="absolute leading-tight"
-          style={{ top: "27%", left: "18%" }}
+          style={{ top: "27%", left: "13%" }}
         >
-          <div className="text-[7px] sm:text-[9px] md:text-[11px] text-slate-700">
+          <div className="text-base sm:text-sm md:text-md text-slate-700">
             ชื่อตัวและชื่อสกุล
             <span className="ml-1 italic text-slate-600">Name</span>
           </div>
