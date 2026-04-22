@@ -28,7 +28,8 @@ import XMLToJSON from "./features/formatter/components/XmlTojson/XmlTojson";
 import XMLFormatter from "./features/formatter/components/XmlFormatter/XmlFormatter";
 import EncodedDecodedURI from "./features/encoding/components/EncodedDecodedURI";
 import KibanaLogExtractor from "./features/utilities/components/KibanaLogExtractor";
-import JWTDecoder from "./features/encoding/components/jwt";
+import MockUpIdCard from "./features/utilities/components/MockUpIdCard";
+import JWTDecoder from "./features/encoding/components/Jwt";
 
 function App() {
   let menuList = [
@@ -173,6 +174,7 @@ function App() {
                 path="/kibana-log-extractor"
                 element={<KibanaLogExtractor />}
               />
+              <Route path="/mock-up-id-card" element={<MockUpIdCard />} />
               {/* <Route path="/base64Image" element={<Base64Image />} />
               <Route path="/jwt" element={<JsonWebToken />} />
               <Route path="/id-card-random" element={<IdCardGenerator />} />

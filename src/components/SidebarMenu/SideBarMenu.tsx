@@ -108,6 +108,11 @@ let menuList = [
         active: true,
         link: "/kibana-log-extractor",
       },
+      {
+        name: "Mock Up ID Card",
+        active: true,
+        link: "/mock-up-id-card",
+      },
     ],
   },
 ];
