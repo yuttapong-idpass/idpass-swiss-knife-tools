@@ -405,16 +405,12 @@ const IdCardFront = ({
         {/* Name (Thai) */}
         <div
           className="absolute leading-tight"
-          style={{ top: "27%", left: "13%" }}
+          style={{ top: "25%", left: "13%" }}
         >
-          <div className="text-base sm:text-sm md:text-md text-slate-700">
+          <div className="text-base font-semibold sm:text-sm md:text-md text-slate-700">
             ชื่อตัวและชื่อสกุล
-            <span className="ml-1 italic text-slate-600">Name</span>
-          </div>
-          <div className="font-semibold text-[9px] sm:text-[11px] md:text-[14px] text-slate-900">
-            {fullNameTh}{" "}
-            <span className="font-normal text-slate-700">
-              นามสกุล {data.lastNameTh}
+            <span className="ml-1 text-xl sm:text-base md:text-xl font-bold text-slate-700">
+              {data.firstNameTh} {data.lastNameTh}
             </span>
           </div>
         </div>
@@ -422,20 +418,29 @@ const IdCardFront = ({
         {/* Name (English) */}
         <div
           className="absolute leading-tight"
-          style={{ top: "35%", left: "18%" }}
+          style={{ top: "35%", left: "30%" }}
         >
-          <div className="text-[7px] sm:text-[9px] md:text-[11px] italic text-slate-600">
+          {/* <div className="text-[7px] sm:text-[9px] md:text-[11px] italic text-slate-600">
             Last name {data.lastNameEn}
+          </div> */}
+          <div className="font-bold text-base sm:text-sm md:text-md text-blue-800">
+            Name{" "}
+            <span className="ml-1 fond-semibold text-lg sm:text-md md:text-lg">
+              {data.firstNameEn}
+            </span>
           </div>
-          <div className="font-semibold text-[9px] sm:text-[11px] md:text-[13px] italic text-slate-800">
-            Name {fullNameEn}
+          <div className="font-bold text-base sm:text-sm md:text-md text-blue-800">
+            Last name{" "}
+            <span className="ml-1 fond-semibold text-lg sm:text-md md:text-lg">
+              {data.lastNameEn}
+            </span>
           </div>
         </div>
 
         {/* Date of Birth */}
         <div
           className="absolute leading-tight"
-          style={{ top: "45%", left: "18%" }}
+          style={{ top: "50%", left: "32%" }}
         >
           <div className="text-[7px] sm:text-[9px] md:text-[11px] text-slate-700">
             เกิดวันที่
