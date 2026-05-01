@@ -73,31 +73,29 @@ let menuList = [
         link: "/encoded-decoded-url",
       },
       {
-        name: "Base64 Image",
+        name: "Base64 To Image",
         active: true,
-        link: "/base64Image",
+        link: "/base64ToImage",
       },
     ],
   },
-  {
-    id: 3,
-    title: "Generators",
-    active: true,
-    icon: <Shuffle size={30} />,
-    menuLists: [
-      {
-        name: "Random Id Card",
-        // icon: <BsPersonVcard size={20} />,
-        link: "/id-card-random",
-      },
-      {
-        name: "Barcode",
-        // icon: <FaBarcode size={20} />,
-        active: true,
-        link: "/barcode",
-      },
-    ],
-  },
+  // {
+  //   id: 3,
+  //   title: "Generators",
+  //   active: true,
+  //   icon: <Shuffle size={30} />,
+  //   menuLists: [
+  //     {
+  //       name: "Random Id Card",
+  //       link: "/id-card-random",
+  //     },
+  //     {
+  //       name: "Barcode",
+  //       active: true,
+  //       link: "/barcode",
+  //     },
+  //   ],
+  // },
   {
     id: 4,
     title: "Utilities",
@@ -108,11 +106,11 @@ let menuList = [
         active: true,
         link: "/kibana-log-extractor",
       },
-      {
-        name: "Mock Up ID Card",
-        active: true,
-        link: "/mock-up-id-card",
-      },
+      // {
+      //   name: "Mock Up ID Card",
+      //   active: true,
+      //   link: "/mock-up-id-card",
+      // },
     ],
   },
 ];

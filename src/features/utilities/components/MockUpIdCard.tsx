@@ -442,13 +442,16 @@ const IdCardFront = ({
           className="absolute leading-tight"
           style={{ top: "50%", left: "32%" }}
         >
-          <div className="text-[7px] sm:text-[9px] md:text-[11px] text-slate-700">
-            เกิดวันที่
-            <span className="ml-1 italic text-slate-600">Date of Birth</span>
+          <div className="font-semibold text-base sm:text-sm md:text-md text-slate-700">
+            เกิดวันที่{" "}
+            <span className="ml-1 font-bold text-lg sm:text-md md:text-lg text-slate-600">
+              {formatThaiDate(data.dob)}
+            </span>
+            {/* <span className="ml-1 italic text-slate-600">Date of Birth</span> */}
           </div>
-          <div className="font-semibold text-[9px] sm:text-[11px] md:text-[13px] text-slate-900">
-            {formatThaiDate(data.dob)}
-            <span className="ml-2 italic font-normal text-slate-700 text-[8px] sm:text-[10px] md:text-[12px]">
+          <div className="font-semibold text-base sm:text-sm md:text-md text-blue-700">
+            Date of Birth{" "}
+            <span className="ml-2 font-bold text-lg sm:text-md md:text-lg text-blue-700">
               {formatEnDate(data.dob)}
             </span>
           </div>
@@ -457,26 +460,20 @@ const IdCardFront = ({
         {/* Religion + Sex */}
         <div
           className="absolute leading-tight"
-          style={{ top: "53%", left: "18%" }}
+          style={{ top: "63%", left: "32%" }}
         >
-          <div className="text-[7px] sm:text-[9px] md:text-[11px] text-slate-700">
+          <div className="font-semibold text-base sm:text-sm md:text-md text-slate-700">
             ศาสนา
-            <span className="ml-1 italic text-slate-600">Religion</span>
-            <span className="ml-3">เพศ</span>
-            <span className="ml-1 italic text-slate-600">Sex</span>
-          </div>
-          <div className="font-semibold text-[9px] sm:text-[11px] md:text-[13px] text-slate-900">
-            {data.religion}
-            <span className="ml-6 font-normal text-slate-800">{data.sex}</span>
+            <span className="ml-1 italic text-slate-600">{data.religion}</span>
           </div>
         </div>
 
         {/* Address */}
         <div
           className="absolute leading-snug"
-          style={{ top: "61%", left: "18%", width: "58%" }}
+          style={{ top: "68%", left: "13%", width: "40%" }}
         >
-          <div className="text-[7px] sm:text-[9px] md:text-[11px] text-slate-700">
+          <div className="font-semibold text-base sm:text-sm md:text-md text-slate-700">
             ที่อยู่
             <span className="ml-1 italic text-slate-600">Address</span>
           </div>
