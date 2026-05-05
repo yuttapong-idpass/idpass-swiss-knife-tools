@@ -26,10 +26,10 @@ import ResultCompare from "./features/formatter/components/TextCompare/ResultCom
 import Differ from "./features/formatter/components/TextCompare/Differ";
 import XMLToJSON from "./features/formatter/components/XmlTojson/XmlTojson";
 import XMLFormatter from "./features/formatter/components/XmlFormatter/XmlFormatter";
-import EncodedDecodedURI from "./features/encoding/components/EncodedDecodedURI";
+import EncodedDecodedURI from "./features/encoding/components/encodedDecodedURI";
 import KibanaLogExtractor from "./features/utilities/components/KibanaLogExtractor";
 import MockUpIdCard from "./features/utilities/components/MockUpIdCard";
-import JWTDecoder from "./features/encoding/components/Jwt";
+import JWTDecoder from "./features/encoding/components/jwt";
 import Base64ToImage from "./features/formatter/components/Base64ToImage/ฺBase64ToImage";
 
 function App() {

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Delete, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { appToast } from "@/lib/toast";
 
 const Editor = lazy(() =>
   import("@monaco-editor/react").then((mod) => ({ default: mod.Editor })),
@@ -8,7 +9,6 @@ const Editor = lazy(() =>
 
 import { parseStringPromise } from "xml2js";
 import useXMLToJsonStore from "@/features/formatter/stores/useXMLToJson.store";
-import { toast } from "react-toastify";
 
 const XMLToJSON = () => {
   const editorXMLRef = useRef<any>(null);
@@ -86,13 +86,13 @@ const XMLToJSON = () => {
   async function onConvertXMLToJSON() {
     const xmlText = getXMLText();
     if (!xmlText?.trim()) {
-      toast.warn("Please enter XML text to convert.");
+      appToast.warning("Please enter XML text to convert.");
       return;
     }
 
     const validation = validateXML(xmlText);
     if (!validation.isValid) {
-      toast.error(validation.message);
+      appToast.error(validation.message);
       return;
     }
 
@@ -102,13 +102,20 @@ const XMLToJSON = () => {
         trim: true,
         mergeAttrs: true,
       });
-      const jsonString = JSON.stringify(result, null, 2);
+      const jsonString = JSON.stringify(result);
+      let formattedJson = "";
+      try {
+        formattedJson = JSON.stringify(JSON.parse(jsonString), null, 2);
+      } catch {
+        appToast.error("Failed to format JSON. Please try again.");
+        return;
+      }
 
-      setJSONText(jsonString);
-      editorJSONRef.current?.setValue(jsonString);
-      toast.success("XML converted to JSON successfully!");
+      setJSONText(formattedJson);
+      editorJSONRef.current?.setValue(formattedJson);
+      appToast.success("XML converted to JSON successfully!");
     } catch (err: any) {
-      toast.error(err?.message || "Failed to parse XML. Check your syntax.");
+      appToast.error(err?.message || "Failed to parse XML. Check your syntax.");
     }
   }
 

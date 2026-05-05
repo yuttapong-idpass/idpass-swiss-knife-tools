@@ -5,7 +5,6 @@ import { CopyIcon, ArrowLeftRight, Trash2, Eye, EyeOff } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
-import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -14,8 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import useJwtStore from "../stores/JwtStore.store";
+import useJwtStore from "../stores/jwtStore.store";
 import { Input } from "@/components/ui/input";
+import { appToast } from "@/lib/toast";
 
 /** Encode raw bytes as Base64URL (no padding). */
 function bytesToBase64Url(bytes: Uint8Array): string {
@@ -31,11 +31,7 @@ function bytesToBase64Url(bytes: Uint8Array): string {
 function base64UrlToBytes(input: string): Uint8Array {
   const trimmed = input.trim();
   if (!trimmed) {
-    toast.error("Secret is empty", {
-      position: "top-center",
-      closeButton: true,
-      duration: 3000,
-    });
+    appToast.error("Secret is empty");
   }
   const base64 = trimmed.replace(/-/g, "+").replace(/_/g, "/");
   const pad = base64.length % 4;
@@ -164,11 +160,7 @@ const JWTDecoder = () => {
         JSON.stringify(decoded, null, 2),
       );
     } catch (error: any) {
-      toast.error(error.message, {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.error(error.message);
     }
   }
 
@@ -194,11 +186,7 @@ const JWTDecoder = () => {
       setResultEncodedTextArea(jwt);
       editorTokenOutputRef.current?.setValue(jwt);
     } catch (error: any) {
-      toast.error(error.message, {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.error(error.message);
     }
   }
 
@@ -225,11 +213,7 @@ const JWTDecoder = () => {
         const plaintext = new TextDecoder().decode(bytes);
         setSecretKeyArea(plaintext);
       } catch (e: any) {
-        toast.error(e?.message ?? "Invalid Base64URL secret", {
-          position: "top-center",
-          closeButton: true,
-          duration: 3000,
-        });
+        appToast.error(e?.message ?? "Invalid Base64URL secret");
         return;
       }
     }
@@ -251,17 +235,9 @@ const JWTDecoder = () => {
         editorDecodePayloadRef.current?.getValue() ??
         JSON.stringify(resultDecodedPayloadArea, null, 2);
       await navigator.clipboard.writeText(value);
-      toast.success("Copied to clipboard", {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.success("Copied to clipboard");
     } catch (error: any) {
-      toast.error(error.message, {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.error(error.message);
     }
   }
 
@@ -271,17 +247,9 @@ const JWTDecoder = () => {
         editorDecodeHeaderRef.current?.getValue() ??
         JSON.stringify(resultDecodedHeadersArea, null, 2);
       await navigator.clipboard.writeText(value);
-      toast.success("Copied to clipboard", {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.success("Copied to clipboard");
     } catch (error: any) {
-      toast.error(error.message, {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.error(error.message);
     }
   }
 

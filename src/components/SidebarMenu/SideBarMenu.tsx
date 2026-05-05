@@ -15,7 +15,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "../ui/sidebar";
-import { ChevronUp, KeyRound, Shuffle, Wrench } from "lucide-react";
+import { ChevronUp, KeyRound, Shuffle, Sparkles, Wrench } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -118,7 +118,26 @@ let menuList = [
 export default function SideBarMenu() {
   const { state } = useSidebar();
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <Link to="/">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <Sparkles className="size-4" />
+                </div>
+                <div className="flex flex-col gap-1 leading-none">
+                  <span className="font-semibold">Buzz Tool</span>
+                  <span className="text-xs text-muted-foreground">
+                    tools for developer
+                  </span>
+                </div>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
