@@ -30,6 +30,7 @@ import EncodedDecodedURI from "./features/encoding/components/EncodedDecodedURI"
 import KibanaLogExtractor from "./features/utilities/components/KibanaLogExtractor";
 import MockUpIdCard from "./features/utilities/components/MockUpIdCard";
 import JWTDecoder from "./features/encoding/components/Jwt";
+import Base64ToImage from "./features/formatter/components/Base64ToImage/ฺBase64ToImage";
 
 function App() {
   let menuList = [
@@ -175,6 +176,7 @@ function App() {
                 element={<KibanaLogExtractor />}
               />
               <Route path="/mock-up-id-card" element={<MockUpIdCard />} />
+              <Route path="/base64ToImage" element={<Base64ToImage />} />
               {/* <Route path="/base64Image" element={<Base64Image />} />
               <Route path="/jwt" element={<JsonWebToken />} />
               <Route path="/id-card-random" element={<IdCardGenerator />} />
