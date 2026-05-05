@@ -1,16 +1,12 @@
 import React, { SyntheticEvent, useState } from "react";
 
 import { BiSolidRightArrow, BiSolidLeftArrow } from "react-icons/bi";
-import { encoded, decoded } from "../../../store/slice/enCodeSlice";
-import { useAppDispatch } from "../../../store/store";
 
 import "./UrlEncoded.css";
 
 type Props = {};
 
 const UrlEncoded = (props: Props) => {
-  const dispatch = useAppDispatch();
-
   const [encodedText, setEncodedText] = useState("");
   const [decodedText, setDecodedText] = useState("");
 
@@ -25,24 +21,15 @@ const UrlEncoded = (props: Props) => {
   };
 
   const URLEncoded = () => {
-    dispatch(encoded({ encoded: encodedText, decoded: decodedText }));
+    try {
+      setDecodedText(decodeURIComponent(encodedText));
+    } catch {
+      setDecodedText(encodedText);
+    }
   };
 
   const URLDecoded = () => {
-    dispatch(decoded({ encoded: encodedText, decoded: decodedText }));
-  };
-
-  const isValidURL = (url: string) => {
-    const urlPattern = new RegExp(
-      "^(https?:\\/\\/)?" + // protocol (optional)
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path (optional)
-        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string (optional)
-        "(\\#[-a-z\\d_]*)?$",
-      "i" // fragment locator (optional)
-    );
-    return !!urlPattern.test(url);
+    setEncodedText(encodeURIComponent(decodedText));
   };
 
   return (
