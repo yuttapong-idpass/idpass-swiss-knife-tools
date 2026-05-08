@@ -124,7 +124,7 @@ const Base64ToImage = () => {
   function generateImage(rawInput?: string, silent = false) {
     const value = (rawInput ?? getBase64() ?? "").toString();
     if (!value.trim()) {
-      if (!silent) toast.warn("Please paste base64 text or upload an image.");
+      if (!silent) toast.warn("Please paste base64 text or upload a text file.");
       setPreviewSrc("");
       setImageData("");
       setMeta(EMPTY_META);
@@ -162,14 +162,14 @@ const Base64ToImage = () => {
 
     const reader = new FileReader();
     reader.onload = () => {
-      const result = reader.result as string;
+      const result = (reader.result as string).trim();
       editorInputRef.current?.setValue(result);
       setBase64(result);
       generateImage(result, true);
-      toast.success("Image loaded.");
+      toast.success("Text file loaded.");
     };
     reader.onerror = () => toast.error("Failed to read file.");
-    reader.readAsDataURL(file);
+    reader.readAsText(file);
     event.target.value = "";
   }
 
@@ -209,7 +209,7 @@ const Base64ToImage = () => {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
+                  accept=".txt,text/plain"
                   className="hidden"
                   onChange={onUploadFile}
                 />

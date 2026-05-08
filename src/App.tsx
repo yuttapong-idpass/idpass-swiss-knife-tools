@@ -26,11 +26,12 @@ import ResultCompare from "./features/formatter/components/TextCompare/ResultCom
 import Differ from "./features/formatter/components/TextCompare/Differ";
 import XMLToJSON from "./features/formatter/components/XmlTojson/XmlTojson";
 import XMLFormatter from "./features/formatter/components/XmlFormatter/XmlFormatter";
-import EncodedDecodedURI from "./features/encoding/components/encodedDecodedURI";
 import KibanaLogExtractor from "./features/utilities/components/KibanaLogExtractor";
 import MockUpIdCard from "./features/utilities/components/MockUpIdCard";
 import JWTDecoder from "./features/encoding/components/jwt";
 import Base64ToImage from "./features/formatter/components/Base64ToImage/ฺBase64ToImage";
+import UrlEncoderDecoder from "./features/encoding/components/URLEncoderDecoder";
+import Base64EncoderDecoder from "./features/encoding/components/base64EncoderDecoder";
 
 function App() {
   let menuList = [
@@ -169,7 +170,7 @@ function App() {
               <Route path="/jwt-decoder" element={<JWTDecoder />} />
               <Route
                 path="/encoded-decoded-url"
-                element={<EncodedDecodedURI />}
+                element={<UrlEncoderDecoder />}
               />
               <Route
                 path="/kibana-log-extractor"
@@ -177,6 +178,7 @@ function App() {
               />
               <Route path="/mock-up-id-card" element={<MockUpIdCard />} />
               <Route path="/base64ToImage" element={<Base64ToImage />} />
+              <Route path="/base64-encoder-decoder" element={<Base64EncoderDecoder />} />
               {/* <Route path="/base64Image" element={<Base64Image />} />
               <Route path="/jwt" element={<JsonWebToken />} />
               <Route path="/id-card-random" element={<IdCardGenerator />} />
