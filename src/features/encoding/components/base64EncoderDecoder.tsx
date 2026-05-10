@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Trash2 } from "lucide-react";
 import { lazy, Suspense, useRef } from "react";
-import { toast } from "sonner";
 import useBase64EncoderDecoderStore from "../stores/base64EncoderDecoder.store";
+import { appToast } from "@/lib/toast";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
@@ -47,11 +47,7 @@ export default function Base64EncoderDecoder() {
       editorEncodedRef.current?.setValue(encoded);
       setEncodedText(encoded);
     } catch (error: any) {
-      toast.error(error.message, {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.error(error.message);
     }
   };
 
@@ -63,11 +59,7 @@ export default function Base64EncoderDecoder() {
       editorPlainRef.current?.setValue(decoded);
       setPlainText(decoded);
     } catch (error: any) {
-      toast.error(error.message, {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.error(error.message);
     }
   };
 

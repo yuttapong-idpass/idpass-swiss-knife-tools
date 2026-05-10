@@ -17,6 +17,7 @@ import {
 } from "../ui/sidebar";
 import {
   ArrowRightLeft,
+  Barcode,
   Binary,
   Braces,
   ChevronUp,
@@ -139,6 +140,12 @@ let menuList = [
         link: "/kibana-log-extractor",
         icon: <FileSearch size={14} />,
       },
+      {
+        name: "Bar Code Generator",
+        active: true,
+        link: "/barcode-generator",
+        icon: <Barcode size={14} />,
+      }
       // {
       //   name: "Mock Up ID Card",
       //   active: true,

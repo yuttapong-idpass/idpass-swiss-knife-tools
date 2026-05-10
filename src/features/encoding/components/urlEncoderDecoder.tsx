@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Trash2 } from "lucide-react";
 import { lazy, Suspense, useRef } from "react";
-import { toast } from "sonner";
 import useEncodedDecodedURIStore from "../stores/encodedDecodedURI.store";
+import { appToast } from "@/lib/toast";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
@@ -44,11 +44,7 @@ export default function UrlEncoderDecoder() {
       editorDecodedURLRef.current?.setValue(decoded);
       setDecodedText(decoded);
     } catch (error: any) {
-      toast.error(error.message, {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.error(error.message);
     }
   };
 
@@ -60,11 +56,7 @@ export default function UrlEncoderDecoder() {
       editorEncodedURLRef.current?.setValue(encoded);
       setEncodedText(encoded);
     } catch (error: any) {
-      toast.error(error.message, {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
+      appToast.error(error.message);
     }
   };
 

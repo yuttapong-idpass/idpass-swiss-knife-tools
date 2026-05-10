@@ -42,7 +42,7 @@ const Base64ToImage = () => {
   );
   const [previewSrc, setPreviewSrc] = useState<string>("");
   const [meta, setMeta] = useState<ImageMeta>(EMPTY_META);
-  const [autoGenerate, setAutoGenerate] = useState<boolean>(true);
+  const [autoGenerate, setAutoGenerate] = useState<boolean>(false);
 
   const { setBase64, setImageData, getBase64, getImageData }: any =
     useBase64ImageStore();
@@ -165,7 +165,9 @@ const Base64ToImage = () => {
       const result = (reader.result as string).trim();
       editorInputRef.current?.setValue(result);
       setBase64(result);
-      generateImage(result, true);
+      if (autoGenerate) {
+        generateImage(result, true);
+      }
       toast.success("Text file loaded.");
     };
     reader.onerror = () => toast.error("Failed to read file.");
