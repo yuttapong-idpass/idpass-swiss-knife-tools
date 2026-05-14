@@ -9,7 +9,7 @@ type Props = {};
 const JsonFormatter = (props: Props) => {
   const { getInputData, setOutputData }: any = useJsonFormatStore();
 
-  const onClickJsonFormat = () => {
+  const OnClickJsonFormat = () => {
     const data = getInputData();
     setOutputData(data);
   };
@@ -29,7 +29,7 @@ const JsonFormatter = (props: Props) => {
             variant="secondary"
             size="lg"
             className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-            onClick={onClickJsonFormat}
+            onClick={OnClickJsonFormat}
           >
             Format
           </Button>

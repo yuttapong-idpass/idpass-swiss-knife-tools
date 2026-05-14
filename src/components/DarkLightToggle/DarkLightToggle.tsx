@@ -6,7 +6,7 @@ type Props = {};
 
 const DarkLightToggle = (props: Props) => {
   // const { theme, setTheme } = useContext(ThemeContext);
-  // const toggleTheme = () => {
+  // const ToggleTheme = () => {
   //   setTheme && setTheme(isDark ? "light" : "dark");
   // };
 
@@ -17,7 +17,7 @@ const DarkLightToggle = (props: Props) => {
     setMounted(true);
   }, []);
 
-  const toggleTheme = () => { 
+  const ToggleTheme = () => { 
   }
 
   return (
@@ -46,7 +46,7 @@ const DarkLightToggle = (props: Props) => {
     // </div>
     
     <div className="flex flex-row gap-4">
-      <button className="text-default-800" onClick={toggleTheme}>
+      <button className="text-default-800" onClick={ToggleTheme}>
       </button>
     </div>
   );

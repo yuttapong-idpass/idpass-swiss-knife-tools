@@ -42,7 +42,7 @@ const Base64ToImage = () => {
   );
   const [previewSrc, setPreviewSrc] = useState<string>("");
   const [meta, setMeta] = useState<ImageMeta>(EMPTY_META);
-  const [autoGenerate, setAutoGenerate] = useState<boolean>(true);
+  const [autoGenerate, setAutoGenerate] = useState<boolean>(false);
 
   const { setBase64, setImageData, getBase64, getImageData }: any =
     useBase64ImageStore();
@@ -60,7 +60,7 @@ const Base64ToImage = () => {
     if (cachedBase64) setDefaultInputText(cachedBase64);
     if (cachedImage) {
       setPreviewSrc(cachedImage);
-      computeMeta(cachedImage);
+      ComputeMeta(cachedImage);
     }
   }, []);
 
@@ -69,26 +69,26 @@ const Base64ToImage = () => {
     [previewSrc],
   );
 
-  function handleInputEditorMount(editor: any) {
+  function HandleInputEditorMount(editor: any) {
     editorInputRef.current = editor;
     editor.onDidChangeModelContent(() => {
       const value = editor.getValue();
       setBase64(value);
       if (autoGenerate) {
-        debouncedGenerate(value);
+        DebouncedGenerate(value);
       }
     });
   }
 
   const debounceTimer = useRef<number | null>(null);
-  function debouncedGenerate(value: string) {
+  function DebouncedGenerate(value: string) {
     if (debounceTimer.current) window.clearTimeout(debounceTimer.current);
     debounceTimer.current = window.setTimeout(() => {
-      generateImage(value, true);
+      GenerateImage(value, true);
     }, 350);
   }
 
-  function buildDataUrl(input: string): string | null {
+  function BuildDataUrl(input: string): string | null {
     const trimmed = input.trim();
     if (!trimmed) return null;
 
@@ -100,7 +100,7 @@ const Base64ToImage = () => {
     return `data:image/png;base64,${cleaned}`;
   }
 
-  function computeMeta(dataUrl: string) {
+  function ComputeMeta(dataUrl: string) {
     const img = new Image();
     img.onload = () => {
       const mimeMatch = dataUrl.match(/^data:([^;]+);base64,/);
@@ -121,17 +121,17 @@ const Base64ToImage = () => {
     img.src = dataUrl;
   }
 
-  function generateImage(rawInput?: string, silent = false) {
+  function GenerateImage(rawInput?: string, silent = false) {
     const value = (rawInput ?? getBase64() ?? "").toString();
     if (!value.trim()) {
-      if (!silent) toast.warn("Please paste base64 text or upload an image.");
+      if (!silent) toast.warn("Please paste base64 text or upload a text file.");
       setPreviewSrc("");
       setImageData("");
       setMeta(EMPTY_META);
       return;
     }
 
-    const dataUrl = buildDataUrl(value);
+    const dataUrl = BuildDataUrl(value);
     if (!dataUrl) {
       if (!silent) toast.error("Invalid base64 string.");
       setPreviewSrc("");
@@ -144,7 +144,7 @@ const Base64ToImage = () => {
     probe.onload = () => {
       setPreviewSrc(dataUrl);
       setImageData(dataUrl);
-      computeMeta(dataUrl);
+      ComputeMeta(dataUrl);
       if (!silent) toast.success("Image generated successfully!");
     };
     probe.onerror = () => {
@@ -156,24 +156,26 @@ const Base64ToImage = () => {
     probe.src = dataUrl;
   }
 
-  function onUploadFile(event: ChangeEvent<HTMLInputElement>) {
+  function OnUploadFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = () => {
-      const result = reader.result as string;
+      const result = (reader.result as string).trim();
       editorInputRef.current?.setValue(result);
       setBase64(result);
-      generateImage(result, true);
-      toast.success("Image loaded.");
+      if (autoGenerate) {
+        GenerateImage(result, true);
+      }
+      toast.success("Text file loaded.");
     };
     reader.onerror = () => toast.error("Failed to read file.");
-    reader.readAsDataURL(file);
+    reader.readAsText(file);
     event.target.value = "";
   }
 
-  function onClearInput() {
+  function OnClearInput() {
     editorInputRef.current?.setValue("");
     setBase64("");
     setPreviewSrc("");
@@ -181,7 +183,7 @@ const Base64ToImage = () => {
     setMeta(EMPTY_META);
   }
 
-  function onClearOutput() {
+  function OnClearOutput() {
     setPreviewSrc("");
     setImageData("");
     setMeta(EMPTY_META);
@@ -209,9 +211,9 @@ const Base64ToImage = () => {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
+                  accept=".txt,text/plain"
                   className="hidden"
-                  onChange={onUploadFile}
+                  onChange={OnUploadFile}
                 />
                 <Button
                   variant="secondary"
@@ -228,7 +230,7 @@ const Base64ToImage = () => {
                   variant="secondary"
                   size="lg"
                   className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                  onClick={onClearInput}
+                  onClick={OnClearInput}
                 >
                   <Trash2 size={16} aria-label="clear" />
                   <span className="font-medium text-sm text-muted-foreground">
@@ -244,7 +246,7 @@ const Base64ToImage = () => {
                 options={editorOptions}
                 defaultLanguage="plaintext"
                 defaultValue={defaultInputText}
-                onMount={handleInputEditorMount}
+                onMount={HandleInputEditorMount}
               />
             </div>
           </div>
@@ -254,7 +256,7 @@ const Base64ToImage = () => {
               variant="secondary"
               size="lg"
               className="hover:bg-gray-200 hover:text-black"
-              onClick={() => generateImage()}
+              onClick={() => GenerateImage()}
             >
               Generate
             </Button>
@@ -309,7 +311,7 @@ const Base64ToImage = () => {
                   variant="secondary"
                   size="lg"
                   className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                  onClick={onClearOutput}
+                  onClick={OnClearOutput}
                 >
                   <Trash2 size={16} aria-label="clear" />
                   <span className="font-medium text-sm text-muted-foreground">

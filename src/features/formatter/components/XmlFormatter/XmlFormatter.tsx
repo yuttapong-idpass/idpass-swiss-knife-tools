@@ -36,7 +36,7 @@ const XMLFormatter = () => {
     if (getFormattedXML()) setDefaultOutputText(getFormattedXML());
   }, []);
 
-  function validateXML(xml: string) {
+  function ValidateXML(xml: string) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xml, "application/xml");
     const errorNode = xmlDoc.getElementsByTagName("parsererror")[0];
@@ -49,7 +49,7 @@ const XMLFormatter = () => {
     return { isValid: true, message: "Valid XML Syntax" };
   }
 
-  function handleInputEditorMount(editor: any, monaco: any) {
+  function HandleInputEditorMount(editor: any, monaco: any) {
     editorInputRef.current = editor;
     monacoRef.current = monaco;
     editor.onDidChangeModelContent(() => {
@@ -57,15 +57,15 @@ const XMLFormatter = () => {
     });
   }
 
-  function handleOutputEditorMount(editor: any) {
+  function HandleOutputEditorMount(editor: any) {
     editorOutputRef.current = editor;
   }
 
-  const handleValidation = (value: any) => {
+  const HandleValidation = (value: any) => {
     if (!monacoRef.current) return;
     const monaco = monacoRef.current;
     const model = monaco.editor.getModels()[0];
-    const validation = validateXML(value);
+    const validation = ValidateXML(value);
     if (!validation.isValid) {
       monaco.editor.setModelMarkers(model, "owner", [
         {
@@ -82,14 +82,14 @@ const XMLFormatter = () => {
     }
   };
 
-  function onFormatXML() {
+  function OnFormatXML() {
     const xmlText = getXMLText();
     if (!xmlText?.trim()) {
       toast.warn("Please enter XML text to format.");
       return;
     }
 
-    const validation = validateXML(xmlText);
+    const validation = ValidateXML(xmlText);
     if (!validation.isValid) {
       toast.error(validation.message);
       return;
@@ -109,12 +109,12 @@ const XMLFormatter = () => {
     }
   }
 
-  function onClearInput() {
+  function OnClearInput() {
     editorInputRef.current?.setValue("");
     setXMLText("");
   }
 
-  function onClearOutput() {
+  function OnClearOutput() {
     editorOutputRef.current?.setValue("");
     setFormattedXML("");
   }
@@ -141,7 +141,7 @@ const XMLFormatter = () => {
                 variant="secondary"
                 size="lg"
                 className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={onClearInput}
+                onClick={OnClearInput}
               >
                 <Trash2 size={16} aria-label="clear" />
                 <span className="font-medium text-sm text-muted-foreground">
@@ -156,8 +156,8 @@ const XMLFormatter = () => {
                 options={editorOptions}
                 defaultLanguage="xml"
                 defaultValue={defaultInputText}
-                onMount={handleInputEditorMount}
-                onChange={handleValidation}
+                onMount={HandleInputEditorMount}
+                onChange={HandleValidation}
               />
             </div>
           </div>
@@ -167,7 +167,7 @@ const XMLFormatter = () => {
               variant="secondary"
               size="lg"
               className="hover:bg-gray-200 hover:text-black"
-              onClick={onFormatXML}
+              onClick={OnFormatXML}
             >
               Format
             </Button>
@@ -182,7 +182,7 @@ const XMLFormatter = () => {
                 variant="secondary"
                 size="lg"
                 className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={onClearOutput}
+                onClick={OnClearOutput}
               >
                 <Trash2 size={16} aria-label="clear" />
                 <span className="font-medium text-sm text-muted-foreground">
@@ -197,7 +197,7 @@ const XMLFormatter = () => {
                 options={{ ...editorOptions, readOnly: true }}
                 defaultLanguage="xml"
                 defaultValue={defaultOutputText}
-                onMount={handleOutputEditorMount}
+                onMount={HandleOutputEditorMount}
               />
             </div>
           </div>

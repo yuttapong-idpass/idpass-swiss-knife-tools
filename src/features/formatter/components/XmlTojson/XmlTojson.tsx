@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Delete, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { appToast } from "@/lib/toast";
 
 const Editor = lazy(() =>
   import("@monaco-editor/react").then((mod) => ({ default: mod.Editor })),
@@ -8,7 +9,6 @@ const Editor = lazy(() =>
 
 import { parseStringPromise } from "xml2js";
 import useXMLToJsonStore from "@/features/formatter/stores/useXMLToJson.store";
-import { toast } from "react-toastify";
 
 const XMLToJSON = () => {
   const editorXMLRef = useRef<any>(null);
@@ -37,7 +37,7 @@ const XMLToJSON = () => {
     if (getJSONText()) setDefaultJSONText(getJSONText());
   }, []);
 
-  function validateXML(xml: string) {
+  function ValidateXML(xml: string) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xml, "application/xml");
     const errorNode = xmlDoc.getElementsByTagName("parsererror")[0];
@@ -50,7 +50,7 @@ const XMLToJSON = () => {
     return { isValid: true, message: "Valid XML Syntax" };
   }
 
-  function handleXMLEditorMount(editor: any, monaco: any) {
+  function HandleXMLEditorMount(editor: any, monaco: any) {
     editorXMLRef.current = editor;
     monacoRef.current = monaco;
     editor.onDidChangeModelContent(() => {
@@ -58,15 +58,15 @@ const XMLToJSON = () => {
     });
   }
 
-  function handleJSONEditorMount(editor: any) {
+  function HandleJSONEditorMount(editor: any) {
     editorJSONRef.current = editor;
   }
 
-  const handleValidation = (value: any) => {
+  const HandleValidation = (value: any) => {
     if (!monacoRef.current) return;
     const monaco = monacoRef.current;
     const model = monaco.editor.getModels()[0];
-    const validation = validateXML(value);
+    const validation = ValidateXML(value);
     if (!validation.isValid) {
       monaco.editor.setModelMarkers(model, "owner", [
         {
@@ -83,16 +83,16 @@ const XMLToJSON = () => {
     }
   };
 
-  async function onConvertXMLToJSON() {
+  async function OnConvertXMLToJSON() {
     const xmlText = getXMLText();
     if (!xmlText?.trim()) {
-      toast.warn("Please enter XML text to convert.");
+      appToast.warning("Please enter XML text to convert.");
       return;
     }
 
-    const validation = validateXML(xmlText);
+    const validation = ValidateXML(xmlText);
     if (!validation.isValid) {
-      toast.error(validation.message);
+      appToast.error(validation.message);
       return;
     }
 
@@ -102,22 +102,29 @@ const XMLToJSON = () => {
         trim: true,
         mergeAttrs: true,
       });
-      const jsonString = JSON.stringify(result, null, 2);
+      const jsonString = JSON.stringify(result);
+      let formattedJson = "";
+      try {
+        formattedJson = JSON.stringify(JSON.parse(jsonString), null, 2);
+      } catch {
+        appToast.error("Failed to format JSON. Please try again.");
+        return;
+      }
 
-      setJSONText(jsonString);
-      editorJSONRef.current?.setValue(jsonString);
-      toast.success("XML converted to JSON successfully!");
+      setJSONText(formattedJson);
+      editorJSONRef.current?.setValue(formattedJson);
+      appToast.success("XML converted to JSON successfully!");
     } catch (err: any) {
-      toast.error(err?.message || "Failed to parse XML. Check your syntax.");
+      appToast.error(err?.message || "Failed to parse XML. Check your syntax.");
     }
   }
 
-  function onClearXML() {
+  function OnClearXML() {
     editorXMLRef.current?.setValue("");
     setXMLText("");
   }
 
-  function onClearJSON() {
+  function OnClearJSON() {
     editorJSONRef.current?.setValue("");
     setJSONText("");
   }
@@ -144,7 +151,7 @@ const XMLToJSON = () => {
                 variant="secondary"
                 size="lg"
                 className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={onClearXML}
+                onClick={OnClearXML}
               >
                 <Trash2 size={16} aria-label="clear" />
                 <span className="font-medium text-sm text-muted-foreground">
@@ -159,8 +166,8 @@ const XMLToJSON = () => {
                 options={editorOptions}
                 defaultLanguage="xml"
                 defaultValue={defaultXMLText}
-                onMount={handleXMLEditorMount}
-                onChange={handleValidation}
+                onMount={HandleXMLEditorMount}
+                onChange={HandleValidation}
               />
             </div>
           </div>
@@ -170,7 +177,7 @@ const XMLToJSON = () => {
               variant="secondary"
               size="lg"
               className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-              onClick={onConvertXMLToJSON}
+              onClick={OnConvertXMLToJSON}
             >
               Convert
             </Button>
@@ -185,7 +192,7 @@ const XMLToJSON = () => {
                 variant="secondary"
                 size="lg"
                 className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={onClearJSON}
+                onClick={OnClearJSON}
               >
                 <Trash2 size={16} aria-label="clear" />
                 <span className="font-medium text-sm text-muted-foreground">
@@ -200,7 +207,7 @@ const XMLToJSON = () => {
                 options={{ ...editorOptions, readOnly: true }}
                 defaultLanguage="json"
                 defaultValue={defaultJSONText}
-                onMount={handleJSONEditorMount}
+                onMount={HandleJSONEditorMount}
               />
             </div>
           </div>

@@ -93,11 +93,11 @@ export default function Sidebar({ children }: Props) {
 export function SidebarItem(props: SidebarProps) {
   const expanded = useContext(SidebarContext);
 
-  const onCollapse = (idx: any) => {
+  const OnCollapse = (idx: any) => {
     props.onHandlerActive(idx);
   };
 
-  const onClickLink = (link: string) => {
+  const OnClickLink = (link: string) => {
     props.onLink(link);
   };
 
@@ -111,7 +111,7 @@ export function SidebarItem(props: SidebarProps) {
         className={`overflow-hidden transition-all ${
           expanded ? "w-52 ml-1" : "w-0"
         } flex items-center`}
-        onClick={() => onCollapse(props.keyNumber)}
+        onClick={() => OnCollapse(props.keyNumber)}
       >
         <div className="shrink-0">
           <span className="text-gray-600 dark:text-gray-400 text-xs">

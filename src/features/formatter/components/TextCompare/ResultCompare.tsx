@@ -18,7 +18,7 @@ const ResultCompare = () => {
     readOnly: true,
   };
 
-  function onBackToDiffer() {
+  function OnBackToDiffer() {
     navigate("/text-compare/differ");
   }
 
@@ -33,7 +33,7 @@ const ResultCompare = () => {
             variant="secondary"
             size="lg"
             className="hover:bg-gray-200 hover:text-black"
-            onClick={onBackToDiffer}
+            onClick={OnBackToDiffer}
           >
             <ArrowLeft /> Back
           </Button>
