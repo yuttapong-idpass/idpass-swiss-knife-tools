@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
+import App from "@/app/App";
 import "./index.css";
 import "./assets/fonts/NotoSansThai-Black.ttf";
 import "./assets/fonts/NotoSansThai-Bold.ttf";
@@ -11,15 +11,12 @@ import "./assets/fonts/NotoSansThai-Medium.ttf";
 import "./assets/fonts/NotoSansThai-Regular.ttf";
 import "./assets/fonts/NotoSansThai-SemiBold.ttf";
 import "./assets/fonts/NotoSansThai-Thin.ttf";
-import { Toaster } from "@/components/ui/sonner"
-import { Provider } from "react-redux";
-import { ThemeProvider } from "./providers/ThemeProvider";
+import { AppProviders } from "@/app/providers/AppProviders";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+  <AppProviders>
     <App />
-    <Toaster />
-  </ThemeProvider>
+  </AppProviders>
   // </React.StrictMode>
 );
