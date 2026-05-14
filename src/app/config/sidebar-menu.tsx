@@ -98,6 +98,12 @@ export const sidebarMenu: NavigationSection[] = [
         link: "/barcode-generator",
         icon: <Barcode size={14} />,
       },
+      {
+        name: "JSON to Interface",
+        active: true,
+        link: "/json-to-interface",
+        icon: <Code2 size={14} />,
+      },
     ],
   },
 ];

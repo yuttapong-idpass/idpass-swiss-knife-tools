@@ -12,6 +12,7 @@ import Base64ToImage from "@/features/formatter/components/Base64ToImage/ฺBase
 import UrlEncoderDecoder from "@/features/encoding/components/urlEncoderDecoder";
 import Base64EncoderDecoder from "@/features/encoding/components/base64EncoderDecoder";
 import BarCodeGenerator from "@/features/utilities/components/BarCodeGenerator";
+import JsonToInterface from "@/features/utilities/components/JsonToInterface";
 
 export default function AppRoutes() {
   return (
@@ -35,6 +36,7 @@ export default function AppRoutes() {
         element={<Base64EncoderDecoder />}
       />
       <Route path="/barcode-generator" element={<BarCodeGenerator />} />
+      <Route path="/json-to-interface" element={<JsonToInterface />} />
     </Routes>
   );
 }

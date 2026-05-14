@@ -89,6 +89,7 @@ When implementing changes:
 3. Reuse shared UI from `src/components` instead of duplicating.
 4. If touching legacy `src/container`, migrate to `src/features` when practical.
 5. Update routes only through `src/app/routes.tsx`.
+6. If CSS is global/shared across features, move it to `src/styles/global.css` and keep shared style concerns separated into dedicated files under `src/styles` (for example: `variables.css`, `typography.css`, `utilities.css`), then compose them through `global.css`.
 
 ## Definition of Done
 
