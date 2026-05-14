@@ -64,14 +64,14 @@ const JsonEditorOutput = () => {
                 title: "Save File",
                 className: "my-custom-button-class",
                 icon: faFloppyDisk,
-                onClick: () => onSaveFile(),
+                onClick: () => OnSaveFile(),
               },
               {
                 type: "button",
                 title: "Copy",
                 className: "my-custom-button-class",
                 icon: faCopy,
-                onClick: () => onHandleCopyToClipBoard(),
+                onClick: () => OnHandleCopyToClipBoard(),
               },
             ];
             const newItems = [...items, ...customMenu];
@@ -303,11 +303,11 @@ const JsonEditorOutput = () => {
   //   editorRef.current?.trigger("source", "actions.find");
   // };
 
-  const onOpenFileClick = () => {
+  const OnOpenFileClick = () => {
     fileInputRef.current?.click();
   };
 
-  const onSaveFile = async () => {
+  const OnSaveFile = async () => {
     try {
       const options = {
         suggestedName: "untitled.txt",
@@ -338,7 +338,7 @@ const JsonEditorOutput = () => {
     }
   };
 
-  const onHandleCopyToClipBoard = async () => {
+  const OnHandleCopyToClipBoard = async () => {
     try {
       const getCurrentValue: any = jsonEditorRef.current?.get();
       if (getCurrentValue.text) {

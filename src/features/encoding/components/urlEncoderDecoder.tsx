@@ -22,21 +22,21 @@ export default function UrlEncoderDecoder() {
     automaticLayout: true,
   };
 
-  function handleEncodedURLDidMount(editor: any) {
+  function HandleEncodedURLDidMount(editor: any) {
     editorEncodedURLRef.current = editor;
     editor.onDidChangeModelContent(() => {
       setEncodedText(editor.getValue());
     });
   }
 
-  function handleDecodedURLDidMount(editor: any) {
+  function HandleDecodedURLDidMount(editor: any) {
     editorDecodedURLRef.current = editor;
     editor.onDidChangeModelContent(() => {
       setDecodedText(editor.getValue());
     });
   }
 
-  const onDecodeURL = () => {
+  const OnDecodeURL = () => {
     try {
       const raw = editorEncodedURLRef.current?.getValue() ?? encodedText;
       if (!raw?.trim()) return;
@@ -48,7 +48,7 @@ export default function UrlEncoderDecoder() {
     }
   };
 
-  const onEncodeURL = () => {
+  const OnEncodeURL = () => {
     try {
       const raw = editorDecodedURLRef.current?.getValue() ?? decodedText;
       if (!raw?.trim()) return;
@@ -60,12 +60,12 @@ export default function UrlEncoderDecoder() {
     }
   };
 
-  const onClearEncoded = () => {
+  const OnClearEncoded = () => {
     editorEncodedURLRef.current?.setValue("");
     setEncodedText("");
   };
 
-  const onClearDecoded = () => {
+  const OnClearDecoded = () => {
     editorDecodedURLRef.current?.setValue("");
     setDecodedText("");
   };
@@ -95,7 +95,7 @@ export default function UrlEncoderDecoder() {
                 variant="secondary"
                 size="lg"
                 className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={onClearEncoded}
+                onClick={OnClearEncoded}
               >
                 <Trash2 size={16} aria-label="clear" />
                 <span className="font-medium text-sm text-muted-foreground">
@@ -110,7 +110,7 @@ export default function UrlEncoderDecoder() {
                 options={editorOptions}
                 defaultValue={encodedText}
                 defaultLanguage="plaintext"
-                onMount={handleEncodedURLDidMount}
+                onMount={HandleEncodedURLDidMount}
               />
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function UrlEncoderDecoder() {
             <Button
               variant="secondary"
               size="lg"
-              onClick={onDecodeURL}
+              onClick={OnDecodeURL}
               title="Decode: Encoded → Decoded"
               className="group flex flex-col items-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-muted-foreground transition-all hover:bg-primary hover:text-primary-foreground active:scale-95"
             >
@@ -133,7 +133,7 @@ export default function UrlEncoderDecoder() {
             <Button
               variant="secondary"
               size="lg"
-              onClick={onEncodeURL}
+              onClick={OnEncodeURL}
               title="Encode: Decoded → Encoded"
               className="group flex flex-col items-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-muted-foreground transition-all hover:bg-primary hover:text-primary-foreground active:scale-95"
             >
@@ -154,7 +154,7 @@ export default function UrlEncoderDecoder() {
                   variant="secondary"
                   size="lg"
                   className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                  onClick={onClearDecoded}
+                  onClick={OnClearDecoded}
                 >
                   <Trash2 size={16} aria-label="clear" />
                   <span className="font-medium text-sm text-muted-foreground">
@@ -169,7 +169,7 @@ export default function UrlEncoderDecoder() {
                   options={editorOptions}
                   defaultValue={decodedText}
                   defaultLanguage="plaintext"
-                  onMount={handleDecodedURLDidMount}
+                  onMount={HandleDecodedURLDidMount}
                 />
               </div>
             </div>

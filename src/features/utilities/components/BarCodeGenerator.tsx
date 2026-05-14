@@ -55,7 +55,7 @@ export default function BarCodeGenerator() {
     automaticLayout: true,
   };
 
-  function generateBarcode() {
+  function GenerateBarcode() {
     if (!inputText.trim()) {
       appToast.warning("Please enter text to generate a barcode.");
       return;
@@ -79,7 +79,7 @@ export default function BarCodeGenerator() {
   }
 
 
-  function handlePlainDidMount(editor: any) {
+  function HandlePlainDidMount(editor: any) {
     editorPlainRef.current = editor;
     editor.onDidChangeModelContent(() => {
       setInputText(editor.getValue());
@@ -88,7 +88,7 @@ export default function BarCodeGenerator() {
 
 
 
-  function onClearOutput() {
+  function OnClearOutput() {
     if (svgRef.current) {
       svgRef.current.innerHTML = "";
       svgRef.current.removeAttribute("style");
@@ -100,24 +100,24 @@ export default function BarCodeGenerator() {
     setBarcodeInfo({ format: "", value: "" });
   }
 
-  function onClearInput() {
+  function OnClearInput() {
     setInputText("");
     if (editorPlainRef.current) {
       editorPlainRef.current.setValue("");
     }
-    onClearOutput();
+    OnClearOutput();
   }
 
-  function applyExample(exampleFormat: string, exampleValue: string) {
+  function ApplyExample(exampleFormat: string, exampleValue: string) {
     setFormat(exampleFormat);
     setInputText(exampleValue);
     if (editorPlainRef.current) {
       editorPlainRef.current.setValue(exampleValue);
     }
-    onClearOutput();
+    OnClearOutput();
   }
 
-  function downloadSVG() {
+  function DownloadSVG() {
     if (!svgRef.current || !hasBarcode) return;
     const svgData = new XMLSerializer().serializeToString(svgRef.current);
     const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
@@ -145,7 +145,7 @@ export default function BarCodeGenerator() {
               variant="secondary"
               size="lg"
               className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-              onClick={onClearInput}
+              onClick={OnClearInput}
             >
               <Trash2 size={16} aria-label="clear" />
               <span className="font-medium text-sm text-muted-foreground">
@@ -160,7 +160,7 @@ export default function BarCodeGenerator() {
                 options={editorOptions}
                 defaultValue={inputText}
                 defaultLanguage="plaintext"
-                onMount={handlePlainDidMount}
+                onMount={HandlePlainDidMount}
             />
           </div>
         </div>
@@ -183,7 +183,7 @@ export default function BarCodeGenerator() {
             variant="secondary"
             size="lg"
             className="hover:bg-gray-200 hover:text-black"
-            onClick={generateBarcode}
+            onClick={GenerateBarcode}
           >
             Generate
           </Button>
@@ -203,7 +203,7 @@ export default function BarCodeGenerator() {
                   size="lg"
                   className="hover:bg-gray-200 hover:text-black text-muted-foreground disabled:opacity-50"
                   disabled={!hasBarcode}
-                  onClick={downloadSVG}
+                  onClick={DownloadSVG}
                 >
                   <Download size={16} aria-label="download" />
                   <span className="font-medium text-sm text-muted-foreground">
@@ -214,7 +214,7 @@ export default function BarCodeGenerator() {
                   variant="secondary"
                   size="lg"
                   className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                  onClick={onClearOutput}
+                  onClick={OnClearOutput}
                 >
                   <Trash2 size={16} aria-label="clear" />
                   <span className="font-medium text-sm text-muted-foreground">
@@ -263,7 +263,7 @@ export default function BarCodeGenerator() {
                 {BARCODE_EXAMPLES.map((ex) => (
                   <button
                     key={ex.format}
-                    onClick={() => applyExample(ex.format, ex.value)}
+                    onClick={() => ApplyExample(ex.format, ex.value)}
                     className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-muted/40 transition-colors group"
                   >
                     <div className="flex flex-col min-w-0">

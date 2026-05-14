@@ -18,7 +18,7 @@ import { appToast } from "@/lib/toast";
 const Editor = lazy(() => import("@monaco-editor/react"));
 
 /** Encode raw bytes as Base64URL (no padding). */
-function bytesToBase64Url(bytes: Uint8Array): string {
+function BytesToBase64Url(bytes: Uint8Array): string {
   let binary = "";
   for (let i = 0; i < bytes.length; i++) {
     binary += String.fromCharCode(bytes[i]!);
@@ -27,7 +27,7 @@ function bytesToBase64Url(bytes: Uint8Array): string {
 }
 
 /** Decode a Base64URL string to raw bytes for HMAC secret. */
-function base64UrlToBytes(input: string): Uint8Array {
+function Base64UrlToBytes(input: string): Uint8Array {
   const trimmed = input.trim();
   if (!trimmed) appToast.error("Secret is empty");
   const base64 = trimmed.replace(/-/g, "+").replace(/_/g, "/");
@@ -83,16 +83,16 @@ const JWTDecoder = () => {
 
   // ── Mount handlers ────────────────────────────────────────────────────────
 
-  function handleTokenMount(editor: any) {
+  function HandleTokenMount(editor: any) {
     editorTokenRef.current = editor;
     editor.onDidChangeModelContent(() => setEncodeTextArea(editor.getValue()));
   }
 
-  function handleHeaderMount(editor: any) {
+  function HandleHeaderMount(editor: any) {
     editorHeaderRef.current = editor;
   }
 
-  function handlePayloadMount(editor: any) {
+  function HandlePayloadMount(editor: any) {
     editorPayloadRef.current = editor;
     editor.onDidChangeModelContent(() => {
       try {
@@ -105,7 +105,7 @@ const JWTDecoder = () => {
 
   // ── Actions ───────────────────────────────────────────────────────────────
 
-  function onDecode() {
+  function OnDecode() {
     try {
       const token = editorTokenRef.current?.getValue() ?? encodedTextArea;
       if (!token?.trim()) return;
@@ -120,7 +120,7 @@ const JWTDecoder = () => {
     }
   }
 
-  async function onEncode() {
+  async function OnEncode() {
     try {
       const payloadStr = editorPayloadRef.current?.getValue() ?? "{}";
       const secretKeyStr = secretKeyArea ?? "";
@@ -129,7 +129,7 @@ const JWTDecoder = () => {
         return;
       }
       const secret = secretIsBase64Url
-        ? base64UrlToBytes(secretKeyStr)
+        ? Base64UrlToBytes(secretKeyStr)
         : new TextEncoder().encode(secretKeyStr);
       const jwt = await new SignJWT(JSON.parse(payloadStr))
         .setProtectedHeader({ alg: algorithmName, typ: "JWT" })
@@ -141,7 +141,7 @@ const JWTDecoder = () => {
     }
   }
 
-  function onSelectAlgorithm(value: string) {
+  function OnSelectAlgorithm(value: string) {
     const algorithm = algorithms.find((a) => a.name === value);
     setAlgorithmName(value);
     const headerStr = JSON.stringify({ alg: algorithm?.alg, typ: algorithm?.typ }, null, 2);
@@ -149,17 +149,17 @@ const JWTDecoder = () => {
     editorHeaderRef.current?.setValue(headerStr);
   }
 
-  async function onSecretKeyArea(next: any) {
+  async function OnSecretKeyArea(next: any) {
     const wantBase64 = next === true;
     const raw = secretKeyArea ?? "";
     if (wantBase64) {
-      if (raw.length > 0) setSecretKeyArea(bytesToBase64Url(new TextEncoder().encode(raw)));
+      if (raw.length > 0) setSecretKeyArea(BytesToBase64Url(new TextEncoder().encode(raw)));
       setSecretIsBase64Url(true);
       return;
     }
     if (raw.trim().length > 0) {
       try {
-        setSecretKeyArea(new TextDecoder().decode(base64UrlToBytes(raw)));
+        setSecretKeyArea(new TextDecoder().decode(Base64UrlToBytes(raw)));
       } catch (e: any) {
         appToast.error(e?.message ?? "Invalid Base64URL secret");
         return;
@@ -168,12 +168,12 @@ const JWTDecoder = () => {
     setSecretIsBase64Url(false);
   }
 
-  function onClearLeft() {
+  function OnClearLeft() {
     editorTokenRef.current?.setValue("");
     setEncodeTextArea("");
   }
 
-  function onClearRight() {
+  function OnClearRight() {
     editorHeaderRef.current?.setValue("");
     editorPayloadRef.current?.setValue("");
     setResultDecodedHeadersArea(undefined);
@@ -181,7 +181,7 @@ const JWTDecoder = () => {
     setPayloadArea(undefined);
   }
 
-  async function onCopyToken() {
+  async function OnCopyToken() {
     try {
       await navigator.clipboard.writeText(editorTokenRef.current?.getValue() ?? "");
       appToast.success("Copied to clipboard");
@@ -190,7 +190,7 @@ const JWTDecoder = () => {
     }
   }
 
-  async function onCopyPayload() {
+  async function OnCopyPayload() {
     try {
       const value =
         editorPayloadRef.current?.getValue() ??
@@ -202,7 +202,7 @@ const JWTDecoder = () => {
     }
   }
 
-  async function onCopyHeader() {
+  async function OnCopyHeader() {
     try {
       const value =
         editorHeaderRef.current?.getValue() ??
@@ -238,7 +238,7 @@ const JWTDecoder = () => {
                   variant="secondary"
                   size="lg"
                   className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                  onClick={onCopyToken}
+                  onClick={OnCopyToken}
                 >
                   <CopyIcon size={16} />
                   <span className="font-medium text-sm text-muted-foreground">copy</span>
@@ -247,7 +247,7 @@ const JWTDecoder = () => {
                   variant="secondary"
                   size="lg"
                   className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                  onClick={onClearLeft}
+                  onClick={OnClearLeft}
                 >
                   <Trash2 size={16} />
                   <span className="font-medium text-sm text-muted-foreground">clear</span>
@@ -261,7 +261,7 @@ const JWTDecoder = () => {
                 options={editorOptions}
                 defaultValue={encodedTextArea}
                 defaultLanguage="plaintext"
-                onMount={handleTokenMount}
+                onMount={HandleTokenMount}
               />
             </div>
           </div>
@@ -271,7 +271,7 @@ const JWTDecoder = () => {
             <Button
               variant="secondary"
               size="lg"
-              onClick={onDecode}
+              onClick={OnDecode}
               title="Decode: Token → Header + Payload"
               className="group flex flex-col items-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-muted-foreground transition-all hover:bg-primary hover:text-primary-foreground active:scale-95"
             >
@@ -284,7 +284,7 @@ const JWTDecoder = () => {
             <Button
               variant="secondary"
               size="lg"
-              onClick={onEncode}
+              onClick={OnEncode}
               title="Encode: Payload + Secret → Token"
               className="group flex flex-col items-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-muted-foreground transition-all hover:bg-primary hover:text-primary-foreground active:scale-95"
             >
@@ -304,7 +304,7 @@ const JWTDecoder = () => {
                   <Select
                     defaultValue="HS256"
                     value={algorithmName}
-                    onValueChange={onSelectAlgorithm}
+                    onValueChange={OnSelectAlgorithm}
                   >
                     <SelectTrigger className="h-7 w-24 text-xs">
                       <SelectValue />
@@ -324,7 +324,7 @@ const JWTDecoder = () => {
                   variant="secondary"
                   size="lg"
                   className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                  onClick={onCopyHeader}
+                  onClick={OnCopyHeader}
                 >
                   <CopyIcon size={16} />
                   <span className="font-medium text-sm text-muted-foreground">copy</span>
@@ -341,7 +341,7 @@ const JWTDecoder = () => {
                       : JSON.stringify({ alg: "HS256", typ: "JWT" }, null, 2)
                   }
                   defaultLanguage="json"
-                  onMount={handleHeaderMount}
+                  onMount={HandleHeaderMount}
                 />
               </div>
             </div>
@@ -357,7 +357,7 @@ const JWTDecoder = () => {
                     variant="secondary"
                     size="lg"
                     className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                    onClick={onCopyPayload}
+                    onClick={OnCopyPayload}
                   >
                     <CopyIcon size={16} />
                     <span className="font-medium text-sm text-muted-foreground">copy</span>
@@ -366,7 +366,7 @@ const JWTDecoder = () => {
                     variant="secondary"
                     size="lg"
                     className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                    onClick={onClearRight}
+                    onClick={OnClearRight}
                   >
                     <Trash2 size={16} />
                     <span className="font-medium text-sm text-muted-foreground">clear</span>
@@ -384,7 +384,7 @@ const JWTDecoder = () => {
                       : undefined
                   }
                   defaultLanguage="json"
-                  onMount={handlePayloadMount}
+                  onMount={HandlePayloadMount}
                 />
               </div>
             </div>
@@ -399,7 +399,7 @@ const JWTDecoder = () => {
                   <Checkbox
                     id="encoded-secret-key"
                     checked={secretIsBase64Url}
-                    onCheckedChange={onSecretKeyArea}
+                    onCheckedChange={OnSecretKeyArea}
                   />
                   <label
                     htmlFor="encoded-secret-key"

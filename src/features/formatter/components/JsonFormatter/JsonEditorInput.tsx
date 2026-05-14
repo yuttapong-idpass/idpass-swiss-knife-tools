@@ -60,14 +60,14 @@ const JsonEditorInput = () => {
                 title: "Open File",
                 icon: faFolder,
                 className: "my-custom-button-class",
-                onClick: () => onOpenFileClick(),
+                onClick: () => OnOpenFileClick(),
               },
               {
                 type: "button",
                 title: "Copy",
                 className: "my-custom-button-class",
                 icon: faCopy,
-                onClick: () => onHandleCopyToClipBoard(),
+                onClick: () => OnHandleCopyToClipBoard(),
               },
             ];
             const newItems = [...items, ...customMenu];
@@ -133,11 +133,11 @@ const JsonEditorInput = () => {
   //     }
   //   });
   // }
-  const onOpenFileClick = () => {
+  const OnOpenFileClick = () => {
     fileInputRef.current?.click();
   };
 
-  const getLanguageFromExtension = (filename: string) => {
+  const GetLanguageFromExtension = (filename: string) => {
     if (filename.endsWith(".json")) return "json";
     if (filename.endsWith(".html")) return "html";
     if (filename.endsWith(".css")) return "css";
@@ -147,11 +147,11 @@ const JsonEditorInput = () => {
     return "javascript"; // default
   };
 
-  const onHandleFileChange = ($event: any) => {
+  const OnHandleFileChange = ($event: any) => {
     const file: any = $event.target.files[0];
     const reader = new FileReader();
     if (!file) return;
-    const detectedLanguage = getLanguageFromExtension(file.name);
+    const detectedLanguage = GetLanguageFromExtension(file.name);
     console.log("language --->", detectedLanguage);
     reader.onload = (e) => {
       const content = e.target?.result;
@@ -165,7 +165,7 @@ const JsonEditorInput = () => {
     reader.readAsText(file);
   };
 
-  const onHandleCopyToClipBoard = async () => {
+  const OnHandleCopyToClipBoard = async () => {
     try {
       const getCurrentValue: any = jsonEditorRef.current?.get();
       console.log("getCurrentValue", getCurrentValue);
@@ -276,7 +276,7 @@ const JsonEditorInput = () => {
             ref={fileInputRef}
             type="file"
             accept=".json,.txt"
-            onChange={onHandleFileChange}
+            onChange={OnHandleFileChange}
             className="hidden"
           />
         </div>

@@ -46,7 +46,7 @@ const DEFAULT_DATA: IdCardData = {
 
 // แปลงเลขบัตร 13 หลักให้อยู่ในรูปแบบ "X XXXX XXXXX XX X"
 // ถ้าไม่ใช่ตัวเลขล้วน หรือสั้น/ยาวกว่า 13 หลัก จะคืนค่าเดิม (ตัดเฉพาะอักขระที่ไม่ใช่ตัวเลข/ช่องว่าง)
-const formatIdNumber = (raw: string): string => {
+const FormatIdNumber = (raw: string): string => {
   const cleaned = raw.replace(/[^\d\s]/g, "");
   const digits = cleaned.replace(/\s/g, "");
   if (digits.length !== 13) return cleaned;
@@ -83,7 +83,7 @@ const EN_MONTHS = [
   "Dec.",
 ];
 
-const formatThaiDate = (iso: string): string => {
+const FormatThaiDate = (iso: string): string => {
   if (!iso) return "-";
   const d = new Date(iso);
   if (isNaN(d.getTime())) return "-";
@@ -93,7 +93,7 @@ const formatThaiDate = (iso: string): string => {
   return `${day} ${month} ${year}`;
 };
 
-const formatEnDate = (iso: string): string => {
+const FormatEnDate = (iso: string): string => {
   if (!iso) return "-";
   const d = new Date(iso);
   if (isNaN(d.getTime())) return "-";
@@ -104,18 +104,18 @@ const MockUpIdCard = () => {
   const [form, setForm] = useState<IdCardData>(DEFAULT_DATA);
   const [card, setCard] = useState<IdCardData>(DEFAULT_DATA);
 
-  const handleChange = <K extends keyof IdCardData>(
+  const HandleChange = <K extends keyof IdCardData>(
     key: K,
     value: IdCardData[K],
   ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const onApply = () => {
-    setCard({ ...form, idNumber: formatIdNumber(form.idNumber) });
+  const OnApply = () => {
+    setCard({ ...form, idNumber: FormatIdNumber(form.idNumber) });
   };
 
-  const onReset = () => {
+  const OnReset = () => {
     setForm(DEFAULT_DATA);
     setCard(DEFAULT_DATA);
   };
@@ -177,7 +177,7 @@ const MockUpIdCard = () => {
             <Input
               id="idNumber"
               value={form.idNumber}
-              onChange={(e) => handleChange("idNumber", e.target.value)}
+              onChange={(e) => HandleChange("idNumber", e.target.value)}
               placeholder="1 2345 67890 12 3 (รองรับ 13 หลัก จะ format อัตโนมัติ)"
               inputMode="numeric"
               maxLength={17}
@@ -190,7 +190,7 @@ const MockUpIdCard = () => {
               <Input
                 id="prefixTh"
                 value={form.prefixTh}
-                onChange={(e) => handleChange("prefixTh", e.target.value)}
+                onChange={(e) => HandleChange("prefixTh", e.target.value)}
                 placeholder="นาย / นาง / นางสาว"
               />
             </div>
@@ -199,7 +199,7 @@ const MockUpIdCard = () => {
               <Input
                 id="firstNameTh"
                 value={form.firstNameTh}
-                onChange={(e) => handleChange("firstNameTh", e.target.value)}
+                onChange={(e) => HandleChange("firstNameTh", e.target.value)}
                 placeholder="ชื่อจริง"
               />
             </div>
@@ -208,7 +208,7 @@ const MockUpIdCard = () => {
               <Input
                 id="lastNameTh"
                 value={form.lastNameTh}
-                onChange={(e) => handleChange("lastNameTh", e.target.value)}
+                onChange={(e) => HandleChange("lastNameTh", e.target.value)}
                 placeholder="นามสกุล"
               />
             </div>
@@ -220,7 +220,7 @@ const MockUpIdCard = () => {
               <Input
                 id="prefixEn"
                 value={form.prefixEn}
-                onChange={(e) => handleChange("prefixEn", e.target.value)}
+                onChange={(e) => HandleChange("prefixEn", e.target.value)}
                 placeholder="Mr. / Mrs. / Miss"
               />
             </div>
@@ -229,7 +229,7 @@ const MockUpIdCard = () => {
               <Input
                 id="firstNameEn"
                 value={form.firstNameEn}
-                onChange={(e) => handleChange("firstNameEn", e.target.value)}
+                onChange={(e) => HandleChange("firstNameEn", e.target.value)}
                 placeholder="First Name"
               />
             </div>
@@ -238,7 +238,7 @@ const MockUpIdCard = () => {
               <Input
                 id="lastNameEn"
                 value={form.lastNameEn}
-                onChange={(e) => handleChange("lastNameEn", e.target.value)}
+                onChange={(e) => HandleChange("lastNameEn", e.target.value)}
                 placeholder="Last Name"
               />
             </div>
@@ -253,7 +253,7 @@ const MockUpIdCard = () => {
                 id="dob"
                 type="date"
                 value={form.dob}
-                onChange={(e) => handleChange("dob", e.target.value)}
+                onChange={(e) => HandleChange("dob", e.target.value)}
               />
             </div>
             <div className="flex flex-col gap-1.5">
@@ -261,7 +261,7 @@ const MockUpIdCard = () => {
               <select
                 id="sex"
                 value={form.sex}
-                onChange={(e) => handleChange("sex", e.target.value as Sex)}
+                onChange={(e) => HandleChange("sex", e.target.value as Sex)}
                 className="border-input bg-transparent h-9 rounded-md border px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
               >
                 <option value="ชาย">ชาย</option>
@@ -273,7 +273,7 @@ const MockUpIdCard = () => {
               <Input
                 id="religion"
                 value={form.religion}
-                onChange={(e) => handleChange("religion", e.target.value)}
+                onChange={(e) => HandleChange("religion", e.target.value)}
                 placeholder="พุทธ / คริสต์ / อิสลาม ..."
               />
             </div>
@@ -286,7 +286,7 @@ const MockUpIdCard = () => {
             <textarea
               id="address"
               value={form.address}
-              onChange={(e) => handleChange("address", e.target.value)}
+              onChange={(e) => HandleChange("address", e.target.value)}
               rows={3}
               placeholder="บ้านเลขที่ หมู่ ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์"
               className="border-input bg-transparent rounded-md border px-3 py-2 text-sm shadow-xs outline-none resize-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
@@ -295,7 +295,7 @@ const MockUpIdCard = () => {
 
           <div className="flex gap-3 pt-2">
             <Button
-              onClick={onApply}
+              onClick={OnApply}
               className="gap-2"
               title="อัปเดตข้อมูลที่แสดงบนบัตร"
             >
@@ -304,7 +304,7 @@ const MockUpIdCard = () => {
             </Button>
             <Button
               variant="outline"
-              onClick={onReset}
+              onClick={OnReset}
               className="gap-2"
               title="ล้างข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้น"
             >
@@ -445,14 +445,14 @@ const IdCardFront = ({
           <div className="font-semibold text-base sm:text-sm md:text-md text-slate-700">
             เกิดวันที่{" "}
             <span className="ml-1 font-bold text-lg sm:text-md md:text-lg text-slate-600">
-              {formatThaiDate(data.dob)}
+              {FormatThaiDate(data.dob)}
             </span>
             {/* <span className="ml-1 italic text-slate-600">Date of Birth</span> */}
           </div>
           <div className="font-semibold text-base sm:text-sm md:text-md text-blue-700">
             Date of Birth{" "}
             <span className="ml-2 font-bold text-lg sm:text-md md:text-lg text-blue-700">
-              {formatEnDate(data.dob)}
+              {FormatEnDate(data.dob)}
             </span>
           </div>
         </div>
@@ -492,10 +492,10 @@ const IdCardFront = ({
             <span className="ml-1 italic text-slate-600">Date of Issue</span>
           </div>
           <div className="font-semibold text-[8px] sm:text-[10px] md:text-[12px] text-slate-900">
-            {formatThaiDate(issueDate)}
+            {FormatThaiDate(issueDate)}
           </div>
           <div className="italic text-[7px] sm:text-[9px] md:text-[11px] text-slate-700">
-            {formatEnDate(issueDate)}
+            {FormatEnDate(issueDate)}
           </div>
         </div>
 
@@ -509,10 +509,10 @@ const IdCardFront = ({
             <span className="ml-1 italic text-slate-600">Date of Expiry</span>
           </div>
           <div className="font-semibold text-[8px] sm:text-[10px] md:text-[12px] text-slate-900">
-            {formatThaiDate(expiryDate)}
+            {FormatThaiDate(expiryDate)}
           </div>
           <div className="italic text-[7px] sm:text-[9px] md:text-[11px] text-slate-700">
-            {formatEnDate(expiryDate)}
+            {FormatEnDate(expiryDate)}
           </div>
         </div>
 

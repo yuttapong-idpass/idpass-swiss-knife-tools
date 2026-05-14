@@ -23,11 +23,11 @@ const Differ = () => {
     fontSize: 14, // You can add other options here too
   };
 
-  function onRouteToResultCompare() {
+  function OnRouteToResultCompare() {
     navigate("/text-compare/result-compare");
   }
 
-  function handleOriginalTextDidMount(editor: any, monaco: any) {
+  function HandleOriginalTextDidMount(editor: any, monaco: any) {
     editorOriginalTextRef.current = editor;
 
     editor.onDidChangeModelContent(() => {
@@ -36,7 +36,7 @@ const Differ = () => {
     });
   }
 
-  function handleModifiedTextDidMount(editor: any, monaco: any) {
+  function HandleModifiedTextDidMount(editor: any, monaco: any) {
     editorModifiedTextRef.current = editor;
     editor.onDidChangeModelContent(() => {
       const value = editor.getValue();
@@ -44,14 +44,14 @@ const Differ = () => {
     });
   }
 
-  function onClearOriginalText() {
+  function OnClearOriginalText() {
     if (editorOriginalTextRef.current) {
       editorOriginalTextRef.current.setValue("");
       setOriginalText("");
     }
   }
 
-  function onClearModifiedText() {
+  function OnClearModifiedText() {
     if (editorModifiedTextRef.current) {
       editorModifiedTextRef.current.setValue("");
       setModifiedText("");
@@ -80,7 +80,7 @@ const Differ = () => {
                 variant="secondary"
                 size="lg"
                 className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={onClearOriginalText}
+                onClick={OnClearOriginalText}
               >
                 <Trash2 size={16} aria-label="clear" />
                 <span className="font-medium text-sm text-muted-foreground">
@@ -94,7 +94,7 @@ const Differ = () => {
                 theme="vs-dark"
                 options={options}
                 defaultValue={getOriginalText()}
-                onMount={handleOriginalTextDidMount}
+                onMount={HandleOriginalTextDidMount}
               />
             </div>
           </div>
@@ -104,7 +104,7 @@ const Differ = () => {
               variant="secondary"
               size="lg"
               className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-              onClick={onRouteToResultCompare}
+              onClick={OnRouteToResultCompare}
             >
               Compare
             </Button>
@@ -119,7 +119,7 @@ const Differ = () => {
                 variant="secondary"
                 size="lg"
                 className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={onClearModifiedText}
+                onClick={OnClearModifiedText}
               >
                 <Trash2 size={16} aria-label="clear" />
                 <span className="font-medium text-sm text-muted-foreground">
@@ -133,7 +133,7 @@ const Differ = () => {
                 theme="vs-dark"
                 options={options}
                 defaultValue={getModifiedText()}
-                onMount={handleModifiedTextDidMount}
+                onMount={HandleModifiedTextDidMount}
               />
             </div>
           </div>

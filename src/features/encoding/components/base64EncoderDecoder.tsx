@@ -22,21 +22,21 @@ export default function Base64EncoderDecoder() {
     automaticLayout: true,
   };
 
-  function handlePlainDidMount(editor: any) {
+  function HandlePlainDidMount(editor: any) {
     editorPlainRef.current = editor;
     editor.onDidChangeModelContent(() => {
       setPlainText(editor.getValue());
     });
   }
 
-  function handleEncodedDidMount(editor: any) {
+  function HandleEncodedDidMount(editor: any) {
     editorEncodedRef.current = editor;
     editor.onDidChangeModelContent(() => {
       setEncodedText(editor.getValue());
     });
   }
 
-  const onEncode = () => {
+  const OnEncode = () => {
     try {
       const raw = editorPlainRef.current?.getValue() ?? plainText;
       if (!raw?.trim()) return;
@@ -51,7 +51,7 @@ export default function Base64EncoderDecoder() {
     }
   };
 
-  const onDecode = () => {
+  const OnDecode = () => {
     try {
       const raw = editorEncodedRef.current?.getValue() ?? encodedText;
       if (!raw?.trim()) return;
@@ -63,12 +63,12 @@ export default function Base64EncoderDecoder() {
     }
   };
 
-  const onClearPlain = () => {
+  const OnClearPlain = () => {
     editorPlainRef.current?.setValue("");
     setPlainText("");
   };
 
-  const onClearEncoded = () => {
+  const OnClearEncoded = () => {
     editorEncodedRef.current?.setValue("");
     setEncodedText("");
   };
@@ -98,7 +98,7 @@ export default function Base64EncoderDecoder() {
                 variant="secondary"
                 size="lg"
                 className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={onClearPlain}
+                onClick={OnClearPlain}
               >
                 <Trash2 size={16} aria-label="clear" />
                 <span className="font-medium text-sm text-muted-foreground">
@@ -113,7 +113,7 @@ export default function Base64EncoderDecoder() {
                 options={editorOptions}
                 defaultValue={plainText}
                 defaultLanguage="plaintext"
-                onMount={handlePlainDidMount}
+                onMount={HandlePlainDidMount}
               />
             </div>
           </div>
@@ -123,7 +123,7 @@ export default function Base64EncoderDecoder() {
             <Button
               variant="secondary"
               size="lg"
-              onClick={onEncode}
+              onClick={OnEncode}
               title="Encode: Plain → Base64"
               className="group flex flex-col items-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-muted-foreground transition-all hover:bg-primary hover:text-primary-foreground active:scale-95"
             >
@@ -136,7 +136,7 @@ export default function Base64EncoderDecoder() {
             <Button
               variant="secondary"
               size="lg"
-              onClick={onDecode}
+              onClick={OnDecode}
               title="Decode: Base64 → Plain"
               className="group flex flex-col items-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-muted-foreground transition-all hover:bg-primary hover:text-primary-foreground active:scale-95"
             >
@@ -155,7 +155,7 @@ export default function Base64EncoderDecoder() {
                 variant="secondary"
                 size="lg"
                 className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={onClearEncoded}
+                onClick={OnClearEncoded}
               >
                 <Trash2 size={16} aria-label="clear" />
                 <span className="font-medium text-sm text-muted-foreground">
@@ -170,7 +170,7 @@ export default function Base64EncoderDecoder() {
                 options={editorOptions}
                 defaultValue={encodedText}
                 defaultLanguage="plaintext"
-                onMount={handleEncodedDidMount}
+                onMount={HandleEncodedDidMount}
               />
             </div>
           </div>
