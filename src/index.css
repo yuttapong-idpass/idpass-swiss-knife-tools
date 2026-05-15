@@ -153,6 +153,190 @@ body {
   --sidebar-ring: oklch(0.74 0.13 240);
 }
 
+/* ─── Frutiger Aero: Windows Vista Aero glass button ───────────────────────── */
+
+/*
+ * Authentic Vista Aero "gel" button:
+ * - outer border: 1px semi-transparent blue-grey
+ * - outer glow: soft blue halo
+ * - body: deep blue-to-teal gradient (bottom half)
+ * - gloss highlight: bright white oval on the top half (pseudo-element)
+ * - text: white with subtle shadow
+ */
+
+.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass),
+.frutiger-aero a[role="button"]:not(.no-glass),
+.frutiger-aero a.btn-glass {
+  position: relative !important;
+  overflow: hidden !important;
+  background: linear-gradient(
+    180deg,
+    #5bb8f5 0%,
+    #2a8fd4 48%,
+    #1a6fba 50%,
+    #1e8ee0 75%,
+    #3ba8f0 100%
+  ) !important;
+  border: 1px solid #1256a0 !important;
+  border-top-color: #5aaee8 !important;
+  border-radius: 0.45rem !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 50, 120, 0.7) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 2px 8px rgba(30, 100, 200, 0.45),
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+  cursor: pointer !important;
+  transition: filter 0.12s ease, box-shadow 0.12s ease, transform 0.1s ease !important;
+}
+
+/* Vista top-half gloss shine via pseudo-element */
+.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass)::after,
+.frutiger-aero a[role="button"]:not(.no-glass)::after,
+.frutiger-aero a.btn-glass::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 0 50% 0 !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.58) 0%,
+    rgba(255, 255, 255, 0.12) 100%
+  ) !important;
+  border-radius: 0.45rem 0.45rem 50% 50% / 0.45rem 0.45rem 60% 60% !important;
+  pointer-events: none !important;
+}
+
+/* Hover — brighten */
+.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass):hover,
+.frutiger-aero a[role="button"]:not(.no-glass):hover,
+.frutiger-aero a.btn-glass:hover {
+  filter: brightness(1.12) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.28),
+    0 4px 14px rgba(30, 100, 200, 0.6),
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Active / pressed — darken + invert gloss */
+.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass):active,
+.frutiger-aero a[role="button"]:not(.no-glass):active,
+.frutiger-aero a.btn-glass:active {
+  filter: brightness(0.88) !important;
+  transform: translateY(1px) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 1px 4px rgba(30, 100, 200, 0.35),
+    inset 0 2px 4px rgba(0, 40, 120, 0.3) !important;
+}
+
+/* Disabled */
+.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass):disabled {
+  filter: saturate(0.4) opacity(0.55) !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* ─── Frutiger Aero: glass icon badges in sidebar ─────────────────────────── */
+
+/* Icon spans inside sidebar menu buttons and sub-buttons */
+.frutiger-aero [data-slot="sidebar-menu-button"] > span.text-muted-foreground,
+.frutiger-aero [data-slot="sidebar-menu-sub-button"] > span.text-muted-foreground {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 0.4rem;
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(170, 220, 255, 0.55) 50%,
+    rgba(90, 175, 255, 0.38) 100%
+  );
+  backdrop-filter: blur(8px) saturate(1.5);
+  -webkit-backdrop-filter: blur(8px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-bottom-color: rgba(110, 185, 255, 0.45);
+  border-right-color: rgba(110, 185, 255, 0.45);
+  box-shadow:
+    0 1px 6px rgba(60, 140, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(90, 175, 255, 0.25);
+  color: #0c4a7a;
+  flex-shrink: 0;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.frutiger-aero [data-slot="sidebar-menu-button"]:hover > span.text-muted-foreground,
+.frutiger-aero [data-slot="sidebar-menu-sub-button"]:hover > span.text-muted-foreground {
+  box-shadow:
+    0 3px 10px rgba(60, 140, 255, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(90, 175, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* SVG color and glow inside the glass badge */
+.frutiger-aero [data-slot="sidebar-menu-button"] > span.text-muted-foreground svg,
+.frutiger-aero [data-slot="sidebar-menu-sub-button"] > span.text-muted-foreground svg {
+  color: #1565c0;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.7));
+}
+
+/* standalone utility — use .btn-glass on any element outside frutiger-aero scope */
+.btn-glass {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    #5bb8f5 0%,
+    #2a8fd4 48%,
+    #1a6fba 50%,
+    #1e8ee0 75%,
+    #3ba8f0 100%
+  );
+  border: 1px solid #1256a0;
+  border-top-color: #5aaee8;
+  border-radius: 0.45rem;
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 50, 120, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 2px 8px rgba(30, 100, 200, 0.45),
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+  transition: filter 0.12s ease, box-shadow 0.12s ease, transform 0.1s ease;
+}
+
+.btn-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 50% 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.58) 0%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  border-radius: 0.45rem 0.45rem 50% 50% / 0.45rem 0.45rem 60% 60%;
+  pointer-events: none;
+}
+
+.btn-glass:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+
+.btn-glass:active {
+  filter: brightness(0.88);
+  transform: translateY(1px);
+}
+
 .headers-text-gradient-dark {
   /* color: linear-gradient(to top left,#5433FF,#20BDFF,#A5FECB); */
   font-size: 20px;

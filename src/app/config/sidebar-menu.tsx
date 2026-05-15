@@ -27,6 +27,7 @@ export const sidebarMenu: NavigationSection[] = [
         name: "Home",
         active: true,
         link: "/",
+        icon: <Home size={14} />,
       },
     ],
   },
