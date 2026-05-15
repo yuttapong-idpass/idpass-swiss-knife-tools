@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { ArrowRight, ArrowLeft, Trash2 } from "lucide-react";
 import { lazy, Suspense, useRef } from "react";
 import useBase64EncoderDecoderStore from "../stores/base64EncoderDecoder.store";
@@ -7,6 +8,7 @@ import { appToast } from "@/lib/toast";
 const Editor = lazy(() => import("@monaco-editor/react"));
 
 export default function Base64EncoderDecoder() {
+  const monacoTheme = useMonacoTheme();
   const editorPlainRef = useRef<any>(null);
   const editorEncodedRef = useRef<any>(null);
 
@@ -109,7 +111,7 @@ export default function Base64EncoderDecoder() {
             <div className="flex-1 min-h-0">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={editorOptions}
                 defaultValue={plainText}
                 defaultLanguage="plaintext"
@@ -166,7 +168,7 @@ export default function Base64EncoderDecoder() {
             <div className="flex-1 min-h-0">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={editorOptions}
                 defaultValue={encodedText}
                 defaultLanguage="plaintext"

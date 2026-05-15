@@ -16,7 +16,7 @@ const JsonFormatter = (props: Props) => {
 
   return (
     <main className="p-4 w-full">
-      <p className="text-xl font-extrabold text-default-800 mb-2">
+      <p className="text-xl font-extrabold text-foreground mb-2">
         JSON Formatter
       </p>
       <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-5rem)]">
@@ -28,7 +28,7 @@ const JsonFormatter = (props: Props) => {
           <Button
             variant="secondary"
             size="lg"
-            className="hover:bg-gray-200 hover:text-black text-muted-foreground"
+            className="text-muted-foreground hover:text-foreground"
             onClick={OnClickJsonFormat}
           >
             Format

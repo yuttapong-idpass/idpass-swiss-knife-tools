@@ -7,6 +7,7 @@ import {
   FileSearch,
   GitCompareArrows,
   Globe,
+  Home,
   Image,
   KeyRound,
   Lock,
@@ -16,6 +17,19 @@ import {
 import { NavigationSection } from "@/app/types/navigation";
 
 export const sidebarMenu: NavigationSection[] = [
+  {
+    id: 0,
+    title: "Landing",
+    active: true,
+    icon: <Home size={16} />,
+    menuLists: [
+      {
+        name: "Home",
+        active: true,
+        link: "/",
+      },
+    ],
+  },
   {
     id: 1,
     title: "Text & Format",

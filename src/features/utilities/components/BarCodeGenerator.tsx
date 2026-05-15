@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
 import JsBarcode from "jsbarcode";
 import { Download, Trash2 } from "lucide-react";
@@ -39,6 +40,7 @@ const BARCODE_EXAMPLES = [
 ];
 
 export default function BarCodeGenerator() {
+  const monacoTheme = useMonacoTheme();
   const [inputText, setInputText] = useState("");
   const [format, setFormat] = useState("CODE128");
   const [hasBarcode, setHasBarcode] = useState(false);
@@ -156,7 +158,7 @@ export default function BarCodeGenerator() {
           <div className="flex-1 rounded-md border border-input overflow-hidden">
             <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={editorOptions}
                 defaultValue={inputText}
                 defaultLanguage="plaintext"

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import useBase64ImageStore from "@/features/formatter/stores/useBase64Image.store";
 import DOMPurify from "dompurify";
 import { Download, Trash2, Upload } from "lucide-react";
@@ -34,6 +35,7 @@ const EMPTY_META: ImageMeta = {
 };
 
 const Base64ToImage = () => {
+  const monacoTheme = useMonacoTheme();
   const editorInputRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -242,7 +244,7 @@ const Base64ToImage = () => {
             <div className="flex-1">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={editorOptions}
                 defaultLanguage="plaintext"
                 defaultValue={defaultInputText}

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { lazy, Suspense, useRef } from "react";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
@@ -7,6 +8,7 @@ import useTextCompareStore from "@/features/formatter/stores/useTextCompare.stor
 import { Delete, Trash2 } from "lucide-react";
 
 const Differ = () => {
+  const monacoTheme = useMonacoTheme();
   const editorOriginalTextRef = useRef<any>(null);
   const editorModifiedTextRef = useRef<any>(null);
   const navigate = useNavigate();
@@ -91,7 +93,7 @@ const Differ = () => {
             <div className="flex-1">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={options}
                 defaultValue={getOriginalText()}
                 onMount={HandleOriginalTextDidMount}
@@ -130,7 +132,7 @@ const Differ = () => {
             <div className="flex-1">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={options}
                 defaultValue={getModifiedText()}
                 onMount={HandleModifiedTextDidMount}

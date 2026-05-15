@@ -119,6 +119,40 @@ body {
   --color-button-primary: #7b5ea7;
 }
 
+.frutiger-aero {
+  --background: oklch(0.97 0.02 220);
+  --foreground: oklch(0.28 0.03 245);
+  --card: oklch(0.99 0.01 220);
+  --card-foreground: oklch(0.28 0.03 245);
+  --popover: oklch(0.99 0.01 220);
+  --popover-foreground: oklch(0.28 0.03 245);
+  --primary: oklch(0.67 0.15 245);
+  --primary-foreground: oklch(0.99 0.01 220);
+  --secondary: oklch(0.9 0.04 190);
+  --secondary-foreground: oklch(0.35 0.03 245);
+  --muted: oklch(0.93 0.03 200);
+  --muted-foreground: oklch(0.46 0.04 240);
+  --accent: oklch(0.89 0.06 180);
+  --accent-foreground: oklch(0.33 0.03 245);
+  --destructive: oklch(0.63 0.19 25);
+  --border: oklch(0.84 0.04 225);
+  --input: oklch(0.89 0.03 225);
+  --ring: oklch(0.74 0.13 240);
+  --chart-1: oklch(0.72 0.15 235);
+  --chart-2: oklch(0.79 0.11 175);
+  --chart-3: oklch(0.69 0.15 285);
+  --chart-4: oklch(0.81 0.14 125);
+  --chart-5: oklch(0.75 0.15 40);
+  --sidebar: oklch(0.96 0.03 215);
+  --sidebar-foreground: oklch(0.28 0.03 245);
+  --sidebar-primary: oklch(0.67 0.15 245);
+  --sidebar-primary-foreground: oklch(0.99 0.01 220);
+  --sidebar-accent: oklch(0.9 0.04 190);
+  --sidebar-accent-foreground: oklch(0.32 0.03 245);
+  --sidebar-border: oklch(0.84 0.04 225);
+  --sidebar-ring: oklch(0.74 0.13 240);
+}
+
 .headers-text-gradient-dark {
   /* color: linear-gradient(to top left,#5433FF,#20BDFF,#A5FECB); */
   font-size: 20px;

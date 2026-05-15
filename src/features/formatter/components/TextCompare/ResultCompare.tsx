@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import useTextCompareStore from "../../stores/useTextCompare.store";
+import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 
 const DiffEditor = lazy(() =>
   import("@monaco-editor/react").then((mod) => ({ default: mod.DiffEditor }))
@@ -9,6 +10,7 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 const ResultCompare = () => {
   const { getOriginalText, getModifiedText }: any = useTextCompareStore();
+  const monacoTheme = useMonacoTheme();
   const navigate = useNavigate();
   const options = {
     minimap: {
@@ -44,7 +46,7 @@ const ResultCompare = () => {
             language="text"
             original={getOriginalText()}
             modified={getModifiedText()}
-            theme="vs-dark"
+            theme={monacoTheme}
             options={options}
           />
         </div>

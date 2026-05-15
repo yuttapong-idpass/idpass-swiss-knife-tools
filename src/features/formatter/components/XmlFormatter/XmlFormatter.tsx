@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Delete, Trash2 } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 
 const Editor = lazy(() =>
   import("@monaco-editor/react").then((mod) => ({ default: mod.Editor })),
@@ -10,6 +11,7 @@ import { toast } from "react-toastify";
 import xmlFormat from "xml-formatter";
 
 const XMLFormatter = () => {
+  const monacoTheme = useMonacoTheme();
   const editorInputRef = useRef<any>(null);
   const monacoRef = useRef<any>(null);
   const editorOutputRef = useRef<any>(null);
@@ -152,7 +154,7 @@ const XMLFormatter = () => {
             <div className="flex-1">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={editorOptions}
                 defaultLanguage="xml"
                 defaultValue={defaultInputText}
@@ -193,7 +195,7 @@ const XMLFormatter = () => {
             <div className="flex-1">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={{ ...editorOptions, readOnly: true }}
                 defaultLanguage="xml"
                 defaultValue={defaultOutputText}

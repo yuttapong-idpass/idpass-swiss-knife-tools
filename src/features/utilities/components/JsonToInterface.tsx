@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useMonacoTheme } from "@/hooks/useMonacoTheme";
+import { appToast } from "@/lib/toast";
 import { lazy, Suspense, useState } from "react";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
@@ -136,17 +138,21 @@ const ConvertJsonToInterfaceText = (jsonText: string, rootName: string) => {
 };
 
 export default function JsonToInterface() {
+  const monacoTheme = useMonacoTheme();
   const [rootInterfaceName, setRootInterfaceName] = useState("Root");
   const [jsonInput, setJsonInput] = useState("");
   const [output, setOutput] = useState(
     "export interface Root {\n  // Paste JSON on the left side\n}",
   );
-  const [error, setError] = useState("");
 
   const HandleConvert = () => {
     const converted = ConvertJsonToInterfaceText(jsonInput, rootInterfaceName);
+    if (converted.error) {
+      appToast.error(converted.error);
+      return;
+    }
+
     setOutput(converted.output);
-    setError(converted.error);
   };
 
   const editorOptions = {
@@ -176,36 +182,29 @@ export default function JsonToInterface() {
 
       <Suspense
         fallback={
-          <div className="flex items-center justify-center h-[calc(100vh-12rem)] text-muted-foreground">
+          <div className="flex items-center justify-center h-[calc(100vh-10rem)] text-muted-foreground">
             <span className="font-medium text-sm">Loading editor...</span>
           </div>
         }
       >
-        <div className="flex flex-row gap-3 h-[calc(100vh-12rem)]">
-          <section className="flex-1 flex flex-col min-h-0">
+        <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-10rem)]">
+          <section className="w-full lg:flex-1 flex flex-col min-h-[320px] lg:min-h-0">
             <div className="flex items-center justify-between mb-2">
               <span className="font-medium text-sm text-muted-foreground">JSON Input</span>
             </div>
             <div className="flex-1 min-h-0 border rounded-md overflow-hidden">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 language="json"
                 value={jsonInput}
                 options={editorOptions}
                 onChange={(value) => setJsonInput(value ?? "")}
               />
             </div>
-            {error ? (
-              <p className="text-xs text-red-500 mt-2">JSON error: {error}</p>
-            ) : (
-              <p className="text-xs text-muted-foreground mt-2">
-                Paste JSON แล้วกด Convert เพื่อแปลงเป็น TypeScript interface
-              </p>
-            )}
           </section>
 
-          <div className="flex flex-col items-center justify-center px-1 gap-2">
+          <div className="flex flex-row lg:flex-col items-center justify-center px-1 py-1 lg:py-0 gap-2">
             <Button
               variant="secondary"
               size="lg"
@@ -214,10 +213,9 @@ export default function JsonToInterface() {
             >
               Convert
             </Button>
-            <div className="w-px h-6 bg-border" />
           </div>
 
-          <section className="flex-1 flex flex-col min-h-0">
+          <section className="w-full lg:flex-1 flex flex-col min-h-[320px] lg:min-h-0">
             <div className="flex items-center justify-between mb-2">
               <span className="font-medium text-sm text-muted-foreground">
                 Interface Output (Plain Text)
@@ -226,7 +224,7 @@ export default function JsonToInterface() {
             <div className="flex-1 min-h-0 border rounded-md overflow-hidden">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 language="typescript"
                 value={output}
                 options={{ ...editorOptions, readOnly: true }}
