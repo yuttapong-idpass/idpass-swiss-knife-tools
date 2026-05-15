@@ -16,6 +16,13 @@ import {
 } from "../ui/sidebar";
 import { ChevronUp, Sparkles } from "lucide-react";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -23,8 +30,12 @@ import {
 import { Link } from "react-router-dom";
 import { sidebarMenu } from "@/app/config/sidebar-menu";
 import { NavigationItem } from "@/app/types/navigation";
+import { Theme, useTheme } from "@/providers/ThemeProvider";
 
 export default function SideBarMenu() {
+  const { theme, setTheme } = useTheme();
+  const selectedTheme = theme === "system" ? "dark" : theme;
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -94,7 +105,25 @@ export default function SideBarMenu() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>xxx</SidebarFooter>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <Select
+              value={selectedTheme}
+              onValueChange={(value) => setTheme(value as Theme)}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Light</SelectItem>
+                <SelectItem value="dark">Dark</SelectItem>
+                <SelectItem value="frutiger-aero">Frutiger Aero</SelectItem>
+              </SelectContent>
+            </Select>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import useJwtStore from "../stores/jwtStore.store";
 import { Input } from "@/components/ui/input";
+import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
@@ -46,6 +47,7 @@ const algorithms = [
 ];
 
 const JWTDecoder = () => {
+  const monacoTheme = useMonacoTheme();
   // Always-mounted refs — never swap roles
   const editorTokenRef = useRef<any>(null);    // Left: encoded JWT (in + out)
   const editorHeaderRef = useRef<any>(null);   // Right-top: decoded header (readonly)
@@ -257,7 +259,7 @@ const JWTDecoder = () => {
             <div className="flex-1 min-h-0">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={editorOptions}
                 defaultValue={encodedTextArea}
                 defaultLanguage="plaintext"
@@ -333,7 +335,7 @@ const JWTDecoder = () => {
               <div className="flex-1 min-h-0">
                 <Editor
                   height="100%"
-                  theme="vs-dark"
+                  theme={monacoTheme}
                   options={editorReadOnlyOptions}
                   defaultValue={
                     resultDecodedHeadersArea
@@ -376,7 +378,7 @@ const JWTDecoder = () => {
               <div className="flex-1 min-h-0">
                 <Editor
                   height="100%"
-                  theme="vs-dark"
+                  theme={monacoTheme}
                   options={editorOptions}
                   defaultValue={
                     resultDecodedPayloadArea

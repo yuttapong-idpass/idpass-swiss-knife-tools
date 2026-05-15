@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
 
 const Editor = lazy(() =>
@@ -11,6 +12,7 @@ import { parseStringPromise } from "xml2js";
 import useXMLToJsonStore from "@/features/formatter/stores/useXMLToJson.store";
 
 const XMLToJSON = () => {
+  const monacoTheme = useMonacoTheme();
   const editorXMLRef = useRef<any>(null);
   const monacoRef = useRef<any>(null);
   const editorJSONRef = useRef<any>(null);
@@ -162,7 +164,7 @@ const XMLToJSON = () => {
             <div className="flex-1">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={editorOptions}
                 defaultLanguage="xml"
                 defaultValue={defaultXMLText}
@@ -203,7 +205,7 @@ const XMLToJSON = () => {
             <div className="flex-1">
               <Editor
                 height="100%"
-                theme="vs-dark"
+                theme={monacoTheme}
                 options={{ ...editorOptions, readOnly: true }}
                 defaultLanguage="json"
                 defaultValue={defaultJSONText}

@@ -13,11 +13,12 @@ import UrlEncoderDecoder from "@/features/encoding/components/urlEncoderDecoder"
 import Base64EncoderDecoder from "@/features/encoding/components/base64EncoderDecoder";
 import BarCodeGenerator from "@/features/utilities/components/BarCodeGenerator";
 import JsonToInterface from "@/features/utilities/components/JsonToInterface";
+import LandingPage from "@/features/landing/landing";
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<JsonFormatter />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/json-formatter" element={<JsonFormatter />} />
       <Route path="/text-compare" element={<TextCompare />}>
         <Route index element={<Differ />} />

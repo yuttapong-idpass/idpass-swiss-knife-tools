@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "vanilla-jsoneditor/themes/jse-theme-dark.css";
+// import "vanilla-jsoneditor/themes/jse-theme-light.css";
 import "./JsonEditorInput.css";
 import {
   faStar,
@@ -10,16 +11,23 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import useJsonFormatStore from "@/features/formatter/stores/useJsonFormat.store";
 import { createJSONEditor } from "vanilla-jsoneditor";
+import { useTheme } from "@/providers/ThemeProvider";
 
 const JsonEditorInput = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const refContainer = useRef<HTMLDivElement>(null);
   const jsonEditorRef = useRef<any>(null);
+  const { theme } = useTheme();
 
   const { setInputData, getInputData }: any = useJsonFormatStore();
 
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState("");
+  const isDarkTheme =
+    theme === "dark" ||
+    (theme === "system" &&
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   useEffect(() => {
     if (refContainer.current && !jsonEditorRef.current) {
@@ -282,7 +290,7 @@ const JsonEditorInput = () => {
         </div>
       </div>
       <div
-        className="jse-theme-dark flex-1 min-h-0 overflow-hidden"
+        className={`${isDarkTheme ? "jse-theme-dark" : "jse-theme-light"} flex-1 min-h-0 overflow-hidden`}
         ref={refContainer}
       ></div>
     </div>
