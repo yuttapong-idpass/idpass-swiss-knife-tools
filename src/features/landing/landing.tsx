@@ -2,8 +2,13 @@ import { Button } from "@/components/ui/button";
 import { sidebarMenu } from "@/app/config/sidebar-menu";
 import { Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@/providers/ThemeProvider";
+import Bee from "@/assets/images/bee.png";
+import BeeFrutiger from "@/assets/images/bee-frutiger.png";
 
 export default function LandingPage() {
+  const { theme } = useTheme();
+  const selectedTheme = theme === "system" ? "dark" : theme;
   const navigate = useNavigate();
 
   return (
@@ -11,8 +16,8 @@ export default function LandingPage() {
       <section className="mx-auto w-full max-w-7xl space-y-6">
         <div className="rounded-2xl border bg-card p-6 md:p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-              <Sparkles className="size-5" />
+            <div className="flex items-center justify-center rounded-xl  text-primary-foreground">
+              <img src={theme === "frutiger-aero" ? BeeFrutiger : Bee} alt="bee icon" className="size-16" />
             </div>
             <div>
               <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">
