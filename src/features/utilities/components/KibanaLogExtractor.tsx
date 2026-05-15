@@ -39,6 +39,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useTheme } from "@/providers/ThemeProvider";
 import type {
   KibanaParsedRowMeta,
   WorkerResponse,
@@ -96,6 +97,7 @@ const ExpandedJsonCell = memo(function ExpandedJsonCell({
 // Main component
 // ---------------------------------------------------------------------------
 export default function KibanaLogExtractor() {
+  const { theme } = useTheme();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const workerRef = useRef<Worker | null>(null);
   // Hit data lives in a ref — React never tracks it, preventing expensive
@@ -496,6 +498,14 @@ export default function KibanaLogExtractor() {
 
   const { pageIndex, pageSize } = pagination;
   const pageCount = table.getPageCount();
+  const isDarkMode =
+    theme === "dark" ||
+    (theme === "system" &&
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const inputThemeClass = isDarkMode
+    ? "bg-[#1e1e1e] text-[#d4d4d4] border-white/10 placeholder:text-white/50"
+    : "bg-white text-slate-900 border-slate-300 placeholder:text-slate-500";
 
   return (
     <main className="p-4 w-full  mx-auto">
@@ -547,7 +557,7 @@ export default function KibanaLogExtractor() {
           <textarea
             ref={textareaRef}
             defaultValue=""
-            className="w-full min-h-[12rem] h-48 p-3 font-mono text-sm bg-[#1e1e1e] text-white border border-border rounded-md resize-y focus:outline-none focus:ring-1 focus:ring-ring"
+            className={`w-full min-h-[12rem] h-48 p-3 font-mono text-sm border rounded-md resize-y focus:outline-none focus:ring-1 focus:ring-ring ${inputThemeClass}`}
             placeholder={`Paste a JSON array of hits, or one JSON object per line:\n\n[{"_index":"...","fields":{"kafka_topic_name.keyword":["az-sit-..."],"REQUEST_URI.keyword":["/path/MyEndpoint"],...}}, ...]`}
           />
 
