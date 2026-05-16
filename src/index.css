@@ -120,46 +120,46 @@ body {
 }
 
 .frutiger-aero {
-  --background: oklch(0.97 0.02 220);
-  --foreground: oklch(0.28 0.03 245);
-  --card: oklch(0.99 0.01 220);
-  --card-foreground: oklch(0.28 0.03 245);
-  --popover: oklch(0.99 0.01 220);
-  --popover-foreground: oklch(0.28 0.03 245);
-  --primary: oklch(0.67 0.15 245);
-  --primary-foreground: oklch(0.99 0.01 220);
-  --secondary: oklch(0.9 0.04 190);
-  --secondary-foreground: oklch(0.35 0.03 245);
-  --muted: oklch(0.93 0.03 200);
-  --muted-foreground: oklch(0.46 0.04 240);
-  --accent: oklch(0.89 0.06 180);
-  --accent-foreground: oklch(0.33 0.03 245);
+  --background: oklch(0.97 0.02 145);
+  --foreground: oklch(0.22 0.04 155);
+  --card: oklch(0.99 0.01 145);
+  --card-foreground: oklch(0.22 0.04 155);
+  --popover: oklch(0.99 0.01 145);
+  --popover-foreground: oklch(0.22 0.04 155);
+  --primary: oklch(0.55 0.18 145);
+  --primary-foreground: oklch(0.99 0.01 145);
+  --secondary: oklch(0.88 0.06 150);
+  --secondary-foreground: oklch(0.28 0.04 150);
+  --muted: oklch(0.92 0.04 148);
+  --muted-foreground: oklch(0.42 0.06 148);
+  --accent: oklch(0.87 0.08 160);
+  --accent-foreground: oklch(0.28 0.04 155);
   --destructive: oklch(0.63 0.19 25);
-  --border: oklch(0.84 0.04 225);
-  --input: oklch(0.89 0.03 225);
-  --ring: oklch(0.74 0.13 240);
-  --chart-1: oklch(0.72 0.15 235);
-  --chart-2: oklch(0.79 0.11 175);
-  --chart-3: oklch(0.69 0.15 285);
-  --chart-4: oklch(0.81 0.14 125);
-  --chart-5: oklch(0.75 0.15 40);
-  --sidebar: oklch(0.96 0.03 215);
-  --sidebar-foreground: oklch(0.28 0.03 245);
-  --sidebar-primary: oklch(0.67 0.15 245);
-  --sidebar-primary-foreground: oklch(0.99 0.01 220);
-  --sidebar-accent: oklch(0.9 0.04 190);
-  --sidebar-accent-foreground: oklch(0.32 0.03 245);
-  --sidebar-border: oklch(0.84 0.04 225);
-  --sidebar-ring: oklch(0.74 0.13 240);
+  --border: oklch(0.82 0.06 148);
+  --input: oklch(0.88 0.05 148);
+  --ring: oklch(0.65 0.16 148);
+  --chart-1: oklch(0.65 0.18 148);
+  --chart-2: oklch(0.72 0.14 185);
+  --chart-3: oklch(0.60 0.16 120);
+  --chart-4: oklch(0.78 0.13 165);
+  --chart-5: oklch(0.70 0.15 40);
+  --sidebar: oklch(0.94 0.04 148);
+  --sidebar-foreground: oklch(0.22 0.04 155);
+  --sidebar-primary: oklch(0.55 0.18 145);
+  --sidebar-primary-foreground: oklch(0.99 0.01 145);
+  --sidebar-accent: oklch(0.88 0.06 150);
+  --sidebar-accent-foreground: oklch(0.28 0.04 150);
+  --sidebar-border: oklch(0.82 0.06 148);
+  --sidebar-ring: oklch(0.65 0.16 148);
 }
 
-/* ─── Frutiger Aero: Windows Vista Aero glass button ───────────────────────── */
+/* ─── Frutiger Aero: Windows Vista green glass button ──────────────────────── */
 
 /*
- * Authentic Vista Aero "gel" button:
- * - outer border: 1px semi-transparent blue-grey
- * - outer glow: soft blue halo
- * - body: deep blue-to-teal gradient (bottom half)
+ * Vista Aero "gel" button — green glass edition:
+ * - outer border: 1px semi-transparent green
+ * - outer glow: soft green halo
+ * - body: deep green gradient (bottom half)
  * - gloss highlight: bright white oval on the top half (pseudo-element)
  * - text: white with subtle shadow
  */
@@ -171,21 +171,21 @@ body {
   overflow: hidden !important;
   background: linear-gradient(
     180deg,
-    #5bb8f5 0%,
-    #2a8fd4 48%,
-    #1a6fba 50%,
-    #1e8ee0 75%,
-    #3ba8f0 100%
+    #6ddc7a 0%,
+    #2db84a 48%,
+    #1a9933 50%,
+    #22b840 75%,
+    #4dd663 100%
   ) !important;
-  border: 1px solid #1256a0 !important;
-  border-top-color: #5aaee8 !important;
+  border: 1px solid #166e25 !important;
+  border-top-color: #5dd470 !important;
   border-radius: 0.45rem !important;
   color: #fff !important;
   font-weight: 600 !important;
-  text-shadow: 0 1px 2px rgba(0, 50, 120, 0.7) !important;
+  text-shadow: 0 1px 2px rgba(0, 60, 10, 0.7) !important;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 2px 8px rgba(30, 100, 200, 0.45),
+    0 2px 8px rgba(20, 140, 50, 0.45),
     0 1px 2px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
   cursor: pointer !important;
@@ -215,7 +215,7 @@ body {
   filter: brightness(1.12) !important;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.28),
-    0 4px 14px rgba(30, 100, 200, 0.6),
+    0 4px 14px rgba(20, 140, 50, 0.6),
     0 1px 3px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
   transform: translateY(-1px) !important;
@@ -229,8 +229,8 @@ body {
   transform: translateY(1px) !important;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 1px 4px rgba(30, 100, 200, 0.35),
-    inset 0 2px 4px rgba(0, 40, 120, 0.3) !important;
+    0 1px 4px rgba(20, 140, 50, 0.35),
+    inset 0 2px 4px rgba(0, 60, 10, 0.3) !important;
 }
 
 /* Disabled */
@@ -240,7 +240,7 @@ body {
   transform: none !important;
 }
 
-/* ─── Frutiger Aero: glass icon badges in sidebar ─────────────────────────── */
+/* ─── Frutiger Aero: glass icon badges in sidebar ────────────────────────── */
 
 /* Icon spans inside sidebar menu buttons and sub-buttons */
 .frutiger-aero [data-slot="sidebar-menu-button"] > span.text-muted-foreground,
@@ -254,19 +254,19 @@ body {
   background: linear-gradient(
     150deg,
     rgba(255, 255, 255, 0.78) 0%,
-    rgba(170, 220, 255, 0.55) 50%,
-    rgba(90, 175, 255, 0.38) 100%
+    rgba(170, 255, 190, 0.55) 50%,
+    rgba(60, 200, 100, 0.38) 100%
   );
   backdrop-filter: blur(8px) saturate(1.5);
   -webkit-backdrop-filter: blur(8px) saturate(1.5);
   border: 1px solid rgba(255, 255, 255, 0.75);
-  border-bottom-color: rgba(110, 185, 255, 0.45);
-  border-right-color: rgba(110, 185, 255, 0.45);
+  border-bottom-color: rgba(80, 200, 110, 0.45);
+  border-right-color: rgba(80, 200, 110, 0.45);
   box-shadow:
-    0 1px 6px rgba(60, 140, 255, 0.2),
+    0 1px 6px rgba(20, 160, 60, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(90, 175, 255, 0.25);
-  color: #0c4a7a;
+    inset 0 -1px 0 rgba(60, 200, 100, 0.25);
+  color: #0d5c1e;
   flex-shrink: 0;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
@@ -274,16 +274,16 @@ body {
 .frutiger-aero [data-slot="sidebar-menu-button"]:hover > span.text-muted-foreground,
 .frutiger-aero [data-slot="sidebar-menu-sub-button"]:hover > span.text-muted-foreground {
   box-shadow:
-    0 3px 10px rgba(60, 140, 255, 0.32),
+    0 3px 10px rgba(20, 160, 60, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(90, 175, 255, 0.4);
+    inset 0 -1px 0 rgba(60, 200, 100, 0.4);
   transform: translateY(-1px);
 }
 
 /* SVG color and glow inside the glass badge */
 .frutiger-aero [data-slot="sidebar-menu-button"] > span.text-muted-foreground svg,
 .frutiger-aero [data-slot="sidebar-menu-sub-button"] > span.text-muted-foreground svg {
-  color: #1565c0;
+  color: #1b6e30;
   filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.7));
 }
 
@@ -293,21 +293,21 @@ body {
   overflow: hidden;
   background: linear-gradient(
     180deg,
-    #5bb8f5 0%,
-    #2a8fd4 48%,
-    #1a6fba 50%,
-    #1e8ee0 75%,
-    #3ba8f0 100%
+    #6ddc7a 0%,
+    #2db84a 48%,
+    #1a9933 50%,
+    #22b840 75%,
+    #4dd663 100%
   );
-  border: 1px solid #1256a0;
-  border-top-color: #5aaee8;
+  border: 1px solid #166e25;
+  border-top-color: #5dd470;
   border-radius: 0.45rem;
   color: #fff;
   font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 50, 120, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 60, 10, 0.7);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 2px 8px rgba(30, 100, 200, 0.45),
+    0 2px 8px rgba(20, 140, 50, 0.45),
     0 1px 2px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.28);
   cursor: pointer;
