@@ -7,13 +7,14 @@ import XMLToJSON from "@/features/formatter/components/XmlTojson/XmlTojson";
 import XMLFormatter from "@/features/formatter/components/XmlFormatter/XmlFormatter";
 import KibanaLogExtractor from "@/features/utilities/components/KibanaLogExtractor";
 import MockUpIdCard from "@/features/utilities/components/MockUpIdCard";
-import JWTDecoder from "@/features/encoding/components/jwt";
-import Base64ToImage from "@/features/formatter/components/Base64ToImage/ฺBase64ToImage";
-import UrlEncoderDecoder from "@/features/encoding/components/urlEncoderDecoder";
-import Base64EncoderDecoder from "@/features/encoding/components/base64EncoderDecoder";
+import JWTDecoder from "@/features/encoding/components/Jwt";
+import UrlEncoderDecoder from "@/features/encoding/components/UrlEncoderDecoder";
+import Base64EncoderDecoder from "@/features/encoding/components/Base64EncoderDecoder";
 import BarCodeGenerator from "@/features/utilities/components/BarCodeGenerator";
 import JsonToInterface from "@/features/utilities/components/JsonToInterface";
 import LandingPage from "@/features/landing/landing";
+import Base64ToImage from "@/features/formatter/components/Base64ToImage/ฺBase64ToImage";
+import EnCryptDecryptText from "@/features/encoding/components/EnCryptDecryptText";
 
 export default function AppRoutes() {
   return (
@@ -38,6 +39,7 @@ export default function AppRoutes() {
       />
       <Route path="/barcode-generator" element={<BarCodeGenerator />} />
       <Route path="/json-to-interface" element={<JsonToInterface />} />
+      <Route path="/encrypt-decrypt-text" element={<EnCryptDecryptText />} />
     </Routes>
   );
 }

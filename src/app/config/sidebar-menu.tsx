@@ -13,6 +13,7 @@ import {
   Lock,
   Settings2,
   Wrench,
+  LockKeyhole,
 } from "lucide-react";
 import { NavigationSection } from "@/app/types/navigation";
 
@@ -92,6 +93,12 @@ export const sidebarMenu: NavigationSection[] = [
         active: true,
         link: "/base64ToImage",
         icon: <Image size={14} />,
+      },
+      { 
+        name: "Encrypt/Decrypt Text",
+        active: true,
+        link: "/encrypt-decrypt-text",
+        icon: <LockKeyhole size={14} />,
       },
     ],
   },
