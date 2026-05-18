@@ -4,6 +4,7 @@ import { ArrowRight, ArrowLeft, Trash2 } from "lucide-react";
 import { lazy, Suspense, useRef } from "react";
 import useBase64EncoderDecoderStore from "../stores/base64EncoderDecoder.store";
 import { appToast } from "@/lib/toast";
+import { monacoOptions } from "@/lib/editor";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
@@ -14,15 +15,6 @@ export default function Base64EncoderDecoder() {
 
   const { plainText, encodedText, setPlainText, setEncodedText } =
     useBase64EncoderDecoderStore();
-
-  const editorOptions = {
-    minimap: { enabled: false },
-    formatOnPaste: true,
-    formatOnType: true,
-    fontSize: 14,
-    wordWrap: "on" as const,
-    automaticLayout: true,
-  };
 
   function HandlePlainDidMount(editor: any) {
     editorPlainRef.current = editor;
@@ -112,7 +104,7 @@ export default function Base64EncoderDecoder() {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultValue={plainText}
                 defaultLanguage="plaintext"
                 onMount={HandlePlainDidMount}
@@ -169,7 +161,7 @@ export default function Base64EncoderDecoder() {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultValue={encodedText}
                 defaultLanguage="plaintext"
                 onMount={HandleEncodedDidMount}

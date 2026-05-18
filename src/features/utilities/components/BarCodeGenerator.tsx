@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
+import { monacoOptions } from "@/lib/editor";
 import JsBarcode from "jsbarcode";
 import { Download, Trash2 } from "lucide-react";
 import { lazy, useRef, useState } from "react";
@@ -47,15 +48,6 @@ export default function BarCodeGenerator() {
   const [barcodeInfo, setBarcodeInfo] = useState({ format: "", value: "" });
   const svgRef = useRef<SVGSVGElement | null>(null);
   const editorPlainRef = useRef<any>(null);
-
-  const editorOptions = {
-    minimap: { enabled: false },
-    formatOnPaste: true,
-    formatOnType: true,
-    fontSize: 14,
-    wordWrap: "on" as const,
-    automaticLayout: true,
-  };
 
   function GenerateBarcode() {
     if (!inputText.trim()) {
@@ -159,7 +151,7 @@ export default function BarCodeGenerator() {
             <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultValue={inputText}
                 defaultLanguage="plaintext"
                 onMount={HandlePlainDidMount}

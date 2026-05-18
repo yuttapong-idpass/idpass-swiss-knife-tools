@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
+import { monacoOptions, monacoReadOnlyOptions } from "@/lib/editor";
 import { lazy, Suspense, useState } from "react";
 import { run } from "json_typegen_wasm";
 
@@ -60,15 +61,6 @@ export default function JsonToInterface() {
     setOutput(converted.output);
   };
 
-  const editorOptions = {
-    minimap: { enabled: false },
-    fontSize: 14,
-    wordWrap: "on" as const,
-    automaticLayout: true,
-    formatOnPaste: true,
-    formatOnType: true,
-  };
-
   return (
     <main className="p-4 w-full">
       <p className="text-xl font-extrabold text-default-800 mb-3">
@@ -103,7 +95,7 @@ export default function JsonToInterface() {
                 theme={monacoTheme}
                 language="json"
                 value={jsonInput}
-                options={editorOptions}
+                options={monacoOptions}
                 onChange={(value) => setJsonInput(value ?? "")}
               />
             </div>
@@ -132,7 +124,7 @@ export default function JsonToInterface() {
                 theme={monacoTheme}
                 language="typescript"
                 value={output}
-                options={{ ...editorOptions, readOnly: true }}
+                options={monacoReadOnlyOptions}
               />
             </div>
           </section>

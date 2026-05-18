@@ -3,6 +3,7 @@ import { Trash2 } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
+import { monacoOptions, monacoReadOnlyOptions } from "@/lib/editor";
 
 const Editor = lazy(() =>
   import("@monaco-editor/react").then((mod) => ({ default: mod.Editor })),
@@ -26,13 +27,6 @@ const XMLToJSON = () => {
 
   const { setXMLText, setJSONText, getXMLText, getJSONText }: any =
     useXMLToJsonStore();
-
-  const editorOptions = {
-    minimap: { enabled: false },
-    formatOnPaste: true,
-    formatOnType: true,
-    fontSize: 14,
-  };
 
   useEffect(() => {
     if (getXMLText()) setDefaultXMLText(getXMLText());
@@ -165,7 +159,7 @@ const XMLToJSON = () => {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultLanguage="xml"
                 defaultValue={defaultXMLText}
                 onMount={HandleXMLEditorMount}
@@ -206,7 +200,7 @@ const XMLToJSON = () => {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={{ ...editorOptions, readOnly: true }}
+                options={monacoReadOnlyOptions}
                 defaultLanguage="json"
                 defaultValue={defaultJSONText}
                 onMount={HandleJSONEditorMount}
