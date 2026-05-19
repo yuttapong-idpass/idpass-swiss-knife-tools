@@ -15,6 +15,7 @@ import useJwtStore from "../stores/jwtStore.store";
 import { Input } from "@/components/ui/input";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
+import { monacoOptions, monacoReadOnlyOptions } from "@/lib/editor";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
@@ -30,7 +31,7 @@ function BytesToBase64Url(bytes: Uint8Array): string {
 /** Decode a Base64URL string to raw bytes for HMAC secret. */
 function Base64UrlToBytes(input: string): Uint8Array {
   const trimmed = input.trim();
-  if (!trimmed) appToast.error("Secret is empty");
+  if (!trimmed) throw new Error("Secret is empty");
   const base64 = trimmed.replace(/-/g, "+").replace(/_/g, "/");
   const pad = base64.length % 4;
   const padded = pad ? base64 + "=".repeat(4 - pad) : base64;
@@ -71,17 +72,6 @@ const JWTDecoder = () => {
     setPayloadArea,
     setResultEncodedTextArea,
   } = useJwtStore();
-
-  const editorOptions = {
-    minimap: { enabled: false },
-    formatOnPaste: true,
-    formatOnType: true,
-    fontSize: 14,
-    wordWrap: "on" as const,
-    automaticLayout: true,
-  };
-
-  const editorReadOnlyOptions = { ...editorOptions, readOnly: true };
 
   // ── Mount handlers ────────────────────────────────────────────────────────
 
@@ -124,7 +114,9 @@ const JWTDecoder = () => {
 
   async function OnEncode() {
     try {
-      const payloadStr = editorPayloadRef.current?.getValue() ?? "{}";
+      const payloadStr =
+        editorPayloadRef.current?.getValue() ??
+        (payloadArea ? JSON.stringify(payloadArea) : "{}");
       const secretKeyStr = secretKeyArea ?? "";
       if (!secretKeyStr.trim()) {
         appToast.error("Secret key is required");
@@ -260,7 +252,7 @@ const JWTDecoder = () => {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultValue={encodedTextArea}
                 defaultLanguage="plaintext"
                 onMount={HandleTokenMount}
@@ -336,7 +328,7 @@ const JWTDecoder = () => {
                 <Editor
                   height="100%"
                   theme={monacoTheme}
-                  options={editorReadOnlyOptions}
+                  options={monacoReadOnlyOptions}
                   defaultValue={
                     resultDecodedHeadersArea
                       ? JSON.stringify(resultDecodedHeadersArea, null, 2)
@@ -379,7 +371,7 @@ const JWTDecoder = () => {
                 <Editor
                   height="100%"
                   theme={monacoTheme}
-                  options={editorOptions}
+                  options={monacoOptions}
                   defaultValue={
                     resultDecodedPayloadArea
                       ? JSON.stringify(resultDecodedPayloadArea, null, 2)
@@ -414,7 +406,7 @@ const JWTDecoder = () => {
               <div className="relative">
                 <Input
                   type={showSecret ? "text" : "password"}
-                  value={secretKeyArea}
+                  value={secretKeyArea ?? ""}
                   placeholder="Enter secret key..."
                   onChange={(e) => setSecretKeyArea(e.target.value)}
                   className="pr-10"

@@ -4,6 +4,7 @@ import { ArrowRight, ArrowLeft, Trash2 } from "lucide-react";
 import { lazy, Suspense, useRef } from "react";
 import useEncodedDecodedURIStore from "../stores/encodedDecodedURI.store";
 import { appToast } from "@/lib/toast";
+import { monacoOptions } from "@/lib/editor";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
@@ -14,15 +15,6 @@ export default function UrlEncoderDecoder() {
 
   const { encodedText, decodedText, setEncodedText, setDecodedText } =
     useEncodedDecodedURIStore();
-
-  const editorOptions = {
-    minimap: { enabled: false },
-    formatOnPaste: true,
-    formatOnType: true,
-    fontSize: 14,
-    wordWrap: "on" as const,
-    automaticLayout: true,
-  };
 
   function HandleEncodedURLDidMount(editor: any) {
     editorEncodedURLRef.current = editor;
@@ -109,7 +101,7 @@ export default function UrlEncoderDecoder() {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultValue={encodedText}
                 defaultLanguage="plaintext"
                 onMount={HandleEncodedURLDidMount}
@@ -168,8 +160,8 @@ export default function UrlEncoderDecoder() {
                 <Editor
                   height="100%"
                   theme={monacoTheme}
-                  options={editorOptions}
-                  defaultValue={decodedText}
+                options={monacoOptions}
+                defaultValue={decodedText}
                   defaultLanguage="plaintext"
                   onMount={HandleDecodedURLDidMount}
                 />

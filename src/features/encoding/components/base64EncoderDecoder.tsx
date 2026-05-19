@@ -4,6 +4,8 @@ import { ArrowRight, ArrowLeft, Trash2 } from "lucide-react";
 import { lazy, Suspense, useRef } from "react";
 import useBase64EncoderDecoderStore from "../stores/base64EncoderDecoder.store";
 import { appToast } from "@/lib/toast";
+import { monacoOptions } from "@/lib/editor";
+import CryptoJS from "crypto-js";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
@@ -14,15 +16,6 @@ export default function Base64EncoderDecoder() {
 
   const { plainText, encodedText, setPlainText, setEncodedText } =
     useBase64EncoderDecoderStore();
-
-  const editorOptions = {
-    minimap: { enabled: false },
-    formatOnPaste: true,
-    formatOnType: true,
-    fontSize: 14,
-    wordWrap: "on" as const,
-    automaticLayout: true,
-  };
 
   function HandlePlainDidMount(editor: any) {
     editorPlainRef.current = editor;
@@ -42,10 +35,8 @@ export default function Base64EncoderDecoder() {
     try {
       const raw = editorPlainRef.current?.getValue() ?? plainText;
       if (!raw?.trim()) return;
-      const bytes = new TextEncoder().encode(raw);
-      let binary = "";
-      bytes.forEach((b) => (binary += String.fromCharCode(b)));
-      const encoded = btoa(binary);
+      const bytes = CryptoJS.enc.Utf8.parse(raw);
+      const encoded = CryptoJS.enc.Base64.stringify(bytes);
       editorEncodedRef.current?.setValue(encoded);
       setEncodedText(encoded);
     } catch (error: any) {
@@ -57,9 +48,10 @@ export default function Base64EncoderDecoder() {
     try {
       const raw = editorEncodedRef.current?.getValue() ?? encodedText;
       if (!raw?.trim()) return;
-      const decoded = decodeURIComponent(escape(atob(raw.trim())));
-      editorPlainRef.current?.setValue(decoded);
-      setPlainText(decoded);
+      const decoded = CryptoJS.enc.Base64.parse(raw);
+      const plain = decoded.toString(CryptoJS.enc.Utf8);
+      editorPlainRef.current?.setValue(plain);
+      setPlainText(plain);
     } catch (error: any) {
       appToast.error(error.message);
     }
@@ -112,7 +104,7 @@ export default function Base64EncoderDecoder() {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultValue={plainText}
                 defaultLanguage="plaintext"
                 onMount={HandlePlainDidMount}
@@ -169,7 +161,7 @@ export default function Base64EncoderDecoder() {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultValue={encodedText}
                 defaultLanguage="plaintext"
                 onMount={HandleEncodedDidMount}

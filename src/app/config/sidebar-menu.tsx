@@ -13,6 +13,8 @@ import {
   Lock,
   Settings2,
   Wrench,
+  LockKeyhole,
+  Hash,
 } from "lucide-react";
 import { NavigationSection } from "@/app/types/navigation";
 
@@ -27,6 +29,7 @@ export const sidebarMenu: NavigationSection[] = [
         name: "Home",
         active: true,
         link: "/",
+        icon: <Home size={14} />,
       },
     ],
   },
@@ -92,6 +95,18 @@ export const sidebarMenu: NavigationSection[] = [
         link: "/base64ToImage",
         icon: <Image size={14} />,
       },
+      { 
+        name: "Encrypt/Decrypt Text",
+        active: true,
+        link: "/encrypt-decrypt-text",
+        icon: <LockKeyhole size={14} />,
+      },
+      {
+        name: "Hash Generator",
+        active: true,
+        link: "/hash-generator",
+        icon: <Hash size={14} />,
+      }
     ],
   },
   {
@@ -113,7 +128,7 @@ export const sidebarMenu: NavigationSection[] = [
         icon: <Barcode size={14} />,
       },
       {
-        name: "JSON to Interface",
+        name: "JSON to Typescript",
         active: true,
         link: "/json-to-interface",
         icon: <Code2 size={14} />,

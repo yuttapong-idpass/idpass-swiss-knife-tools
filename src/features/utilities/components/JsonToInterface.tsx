@@ -3,131 +3,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
+import { monacoOptions, monacoReadOnlyOptions } from "@/lib/editor";
 import { lazy, Suspense, useState } from "react";
+import { run } from "json_typegen_wasm";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
-type GeneratorState = {
-  interfaces: string[];
-  usedNames: Map<string, number>;
-};
-
-const IsValidIdentifier = (name: string) => /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(name);
-
-const ToPascalCase = (value: string) =>
-  value
-    .replace(/[^A-Za-z0-9_$]+/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join("");
-
-const ToSafeInterfaceName = (value: string, fallback = "Root") => {
-  const candidate = ToPascalCase(value) || fallback;
-  return /^[A-Za-z_$]/.test(candidate) ? candidate : `${fallback}${candidate}`;
-};
-
-const CreateUniqueName = (name: string, state: GeneratorState) => {
-  const normalizedName = ToSafeInterfaceName(name, "Item");
-  const current = state.usedNames.get(normalizedName);
-
-  if (!current) {
-    state.usedNames.set(normalizedName, 1);
-    return normalizedName;
-  }
-
-  const next = current + 1;
-  state.usedNames.set(normalizedName, next);
-  return `${normalizedName}${next}`;
-};
-
-const BuildPropertyName = (rawKey: string) =>
-  IsValidIdentifier(rawKey) ? rawKey : `"${rawKey}"`;
-
-const InferType = (
-  value: unknown,
-  hintName: string,
-  state: GeneratorState,
-): string => {
-  if (value === null) return "null";
-  if (typeof value === "string") return "string";
-  if (typeof value === "number") return "number";
-  if (typeof value === "boolean") return "boolean";
-
-  if (Array.isArray(value)) {
-    if (value.length === 0) return "unknown[]";
-
-    const inferredItemTypes = Array.from(
-      new Set(value.map((item) => InferType(item, `${hintName}Item`, state))),
-    );
-
-    if (inferredItemTypes.length === 1) {
-      return `${inferredItemTypes[0]}[]`;
-    }
-
-    return `(${inferredItemTypes.join(" | ")})[]`;
-  }
-
-  if (typeof value === "object") {
-    const interfaceName = CreateUniqueName(hintName, state);
-    const entries = Object.entries(value as Record<string, unknown>);
-    const members = entries.map(([key, childValue]) => {
-      const childType = InferType(childValue, ToPascalCase(key) || "Field", state);
-      return `  ${BuildPropertyName(key)}: ${childType};`;
-    });
-
-    state.interfaces.push(
-      `export interface ${interfaceName} {\n${members.join("\n")}\n}`,
-    );
-
-    return interfaceName;
-  }
-
-  return "unknown";
-};
+const PLACEHOLDER_OUTPUT = "export interface Root {\n  // Paste JSON on the left side\n}";
 
 const ConvertJsonToInterfaceText = (jsonText: string, rootName: string) => {
-  const safeRootName = ToSafeInterfaceName(rootName, "Root");
+  const safeName = rootName.trim() || "Root";
 
   if (!jsonText.trim()) {
     return {
-      output: `export interface ${safeRootName} {\n  // Paste JSON on the left side\n}`,
+      output: `export interface ${safeName} {\n  // Paste JSON on the left side\n}`,
       error: "",
     };
   }
 
   try {
-    const parsed = JSON.parse(jsonText);
-    const state: GeneratorState = {
-      interfaces: [],
-      usedNames: new Map([[safeRootName, 1]]),
-    };
-
-    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-      const rootEntries = Object.entries(parsed as Record<string, unknown>);
-      const rootMembers = rootEntries.map(([key, childValue]) => {
-        const childType = InferType(childValue, ToPascalCase(key) || "Field", state);
-        return `  ${BuildPropertyName(key)}: ${childType};`;
-      });
-
-      return {
-        output: [
-          ...state.interfaces,
-          `export interface ${safeRootName} {\n${rootMembers.join("\n")}\n}`,
-        ].join("\n\n"),
-        error: "",
-      };
-    }
-
-    const rootType = InferType(parsed, `${safeRootName}Value`, state);
-    return {
-      output: [
-        ...state.interfaces,
-        `export type ${safeRootName} = ${rootType};`,
-      ].join("\n\n"),
-      error: "",
-    };
+    JSON.parse(jsonText);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Invalid JSON format";
     return {
@@ -135,15 +30,26 @@ const ConvertJsonToInterfaceText = (jsonText: string, rootName: string) => {
       error: message,
     };
   }
+
+  try {
+    const result = run(safeName, jsonText, `{ output_mode: "typescript" }`);
+
+    if (result.startsWith("Error:")) {
+      return { output: `// ${result}`, error: result };
+    }
+
+    return { output: result, error: "" };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Conversion failed";
+    return { output: `// Error\n// ${message}`, error: message };
+  }
 };
 
-export default function JsonToInterface() {
+export default function JsonToTypescriptInterface() {
   const monacoTheme = useMonacoTheme();
   const [rootInterfaceName, setRootInterfaceName] = useState("Root");
   const [jsonInput, setJsonInput] = useState("");
-  const [output, setOutput] = useState(
-    "export interface Root {\n  // Paste JSON on the left side\n}",
-  );
+  const [output, setOutput] = useState(PLACEHOLDER_OUTPUT);
 
   const HandleConvert = () => {
     const converted = ConvertJsonToInterfaceText(jsonInput, rootInterfaceName);
@@ -153,15 +59,6 @@ export default function JsonToInterface() {
     }
 
     setOutput(converted.output);
-  };
-
-  const editorOptions = {
-    minimap: { enabled: false },
-    fontSize: 14,
-    wordWrap: "on" as const,
-    automaticLayout: true,
-    formatOnPaste: true,
-    formatOnType: true,
   };
 
   return (
@@ -198,7 +95,7 @@ export default function JsonToInterface() {
                 theme={monacoTheme}
                 language="json"
                 value={jsonInput}
-                options={editorOptions}
+                options={monacoOptions}
                 onChange={(value) => setJsonInput(value ?? "")}
               />
             </div>
@@ -227,7 +124,7 @@ export default function JsonToInterface() {
                 theme={monacoTheme}
                 language="typescript"
                 value={output}
-                options={{ ...editorOptions, readOnly: true }}
+                options={monacoReadOnlyOptions}
               />
             </div>
           </section>

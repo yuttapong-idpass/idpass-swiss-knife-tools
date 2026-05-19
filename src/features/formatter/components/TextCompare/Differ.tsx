@@ -6,6 +6,7 @@ const Editor = lazy(() => import("@monaco-editor/react"));
 import { useNavigate } from "react-router-dom";
 import useTextCompareStore from "@/features/formatter/stores/useTextCompare.store";
 import { Delete, Trash2 } from "lucide-react";
+import { monacoOptions } from "@/lib/editor";
 
 const Differ = () => {
   const monacoTheme = useMonacoTheme();
@@ -18,13 +19,6 @@ const Differ = () => {
     getOriginalText,
     getModifiedText,
   }: any = useTextCompareStore();
-  const options = {
-    minimap: {
-      enabled: false,
-    },
-    fontSize: 14, // You can add other options here too
-  };
-
   function OnRouteToResultCompare() {
     navigate("/text-compare/result-compare");
   }
@@ -94,7 +88,7 @@ const Differ = () => {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={options}
+                options={monacoOptions}
                 defaultValue={getOriginalText()}
                 onMount={HandleOriginalTextDidMount}
               />
@@ -133,7 +127,7 @@ const Differ = () => {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={options}
+                options={monacoOptions}
                 defaultValue={getModifiedText()}
                 onMount={HandleModifiedTextDidMount}
               />

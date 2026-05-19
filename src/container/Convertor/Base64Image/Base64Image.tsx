@@ -216,6 +216,7 @@ const Base64Image = (props: Props) => {
                 <a
                   title="download"
                   id="download"
+                  role="button"
                   className="w-full item-centers text-center justify-center px-4 py-4 font-bold leading-6 rounded-md shadow-xs text-white dark:text-[#2d3748] bg-violet-400"
                   download="fromBase64Image.png"
                   href={textArea}

@@ -3,6 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import useBase64ImageStore from "@/features/formatter/stores/useBase64Image.store";
+import { monacoOptions } from "@/lib/editor";
 import DOMPurify from "dompurify";
 import { Download, Trash2, Upload } from "lucide-react";
 import {
@@ -48,13 +49,6 @@ const Base64ToImage = () => {
 
   const { setBase64, setImageData, getBase64, getImageData }: any =
     useBase64ImageStore();
-
-  const editorOptions = {
-    minimap: { enabled: false },
-    fontSize: 14,
-    wordWrap: "on" as const,
-    automaticLayout: true,
-  };
 
   useEffect(() => {
     const cachedBase64 = getBase64();
@@ -245,7 +239,7 @@ const Base64ToImage = () => {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultLanguage="plaintext"
                 defaultValue={defaultInputText}
                 onMount={HandleInputEditorMount}

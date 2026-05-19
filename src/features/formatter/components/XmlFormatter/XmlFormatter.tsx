@@ -9,6 +9,7 @@ const Editor = lazy(() =>
 import useXMLFormatterStore from "@/features/formatter/stores/useXMLFormatter.store";
 import { toast } from "react-toastify";
 import xmlFormat from "xml-formatter";
+import { monacoOptions, monacoReadOnlyOptions } from "@/lib/editor";
 
 const XMLFormatter = () => {
   const monacoTheme = useMonacoTheme();
@@ -25,13 +26,6 @@ const XMLFormatter = () => {
 
   const { setXMLText, setFormattedXML, getXMLText, getFormattedXML }: any =
     useXMLFormatterStore();
-
-  const editorOptions = {
-    minimap: { enabled: false },
-    formatOnPaste: true,
-    formatOnType: true,
-    fontSize: 14,
-  };
 
   useEffect(() => {
     if (getXMLText()) setDefaultInputText(getXMLText());
@@ -155,7 +149,7 @@ const XMLFormatter = () => {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={editorOptions}
+                options={monacoOptions}
                 defaultLanguage="xml"
                 defaultValue={defaultInputText}
                 onMount={HandleInputEditorMount}
@@ -196,7 +190,7 @@ const XMLFormatter = () => {
               <Editor
                 height="100%"
                 theme={monacoTheme}
-                options={{ ...editorOptions, readOnly: true }}
+                options={monacoReadOnlyOptions}
                 defaultLanguage="xml"
                 defaultValue={defaultOutputText}
                 onMount={HandleOutputEditorMount}

@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import useTextCompareStore from "../../stores/useTextCompare.store";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
+import { monacoReadOnlyOptions } from "@/lib/editor";
 
 const DiffEditor = lazy(() =>
   import("@monaco-editor/react").then((mod) => ({ default: mod.DiffEditor }))
@@ -12,14 +13,6 @@ const ResultCompare = () => {
   const { getOriginalText, getModifiedText }: any = useTextCompareStore();
   const monacoTheme = useMonacoTheme();
   const navigate = useNavigate();
-  const options = {
-    minimap: {
-      enabled: false,
-    },
-    fontSize: 14, // You can add other options here too
-    readOnly: true,
-  };
-
   function OnBackToDiffer() {
     navigate("/text-compare/differ");
   }
@@ -47,7 +40,7 @@ const ResultCompare = () => {
             original={getOriginalText()}
             modified={getModifiedText()}
             theme={monacoTheme}
-            options={options}
+            options={monacoReadOnlyOptions}
           />
         </div>
       </div>

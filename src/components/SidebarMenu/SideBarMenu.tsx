@@ -14,7 +14,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "../ui/sidebar";
-import { ChevronUp, Sparkles } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -31,6 +31,8 @@ import { Link } from "react-router-dom";
 import { sidebarMenu } from "@/app/config/sidebar-menu";
 import { NavigationItem } from "@/app/types/navigation";
 import { Theme, useTheme } from "@/providers/ThemeProvider";
+import Bee from "@/assets/images/bee.png";
+import BeeFrutiger from "@/assets/images/bee-frutiger.png";
 
 export default function SideBarMenu() {
   const { theme, setTheme } = useTheme();
@@ -43,8 +45,12 @@ export default function SideBarMenu() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Sparkles className="size-4" />
+                <div className="flex aspect-square size-14 items-center justify-center rounded-lg text-primary-foreground">
+                  <img
+                    src={theme === "frutiger-aero" ? BeeFrutiger : Bee}
+                    alt="bee icon"
+                    className="size-12"
+                  />
                 </div>
                 <div className="flex flex-col gap-1 leading-none">
                   <span className="font-semibold">Buzz Tool</span>
@@ -108,6 +114,8 @@ export default function SideBarMenu() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-muted-foreground whitespace-nowrap">Theme</p>
             <Select
               value={selectedTheme}
               onValueChange={(value) => setTheme(value as Theme)}
@@ -121,6 +129,7 @@ export default function SideBarMenu() {
                 <SelectItem value="frutiger-aero">Frutiger Aero</SelectItem>
               </SelectContent>
             </Select>
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
