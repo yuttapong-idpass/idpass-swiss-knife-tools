@@ -3,7 +3,7 @@ import { devtools, persist } from "zustand/middleware";
 
 type TransformMode = "encrypt" | "decrypt";
 type Algorithm = "AES";
-type AesMode = "CBC" | "GCM" | "CTR";
+type AesMode = "CBC" | "CFB" | "CTR" | "OFB" | "ECB";
 type WordWrap = "on" | "off";
 type LineNumbers = "on" | "off";
 

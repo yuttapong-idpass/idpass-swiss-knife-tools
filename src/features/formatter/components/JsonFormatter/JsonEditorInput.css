@@ -11,3 +11,20 @@
   --jse-menu-color: #ffffff;
   --jse-delimiter-color: #ffffff;
 }
+
+
+.jse-theme-light {
+  --jse-theme-color: #2d3748;
+  --jse-theme-color-highlight: oklch(70.7% 0.022 261.325);
+  --jse-menu-color: #ffffff;
+  --jse-delimiter-color: #ffffff;
+}
+
+.frutiger-aero .input-json,
+.frutiger-aero .jse-theme-dark,
+.frutiger-aero .jse-theme-light {
+  --jse-theme-color: var(--primary);
+  --jse-theme-color-highlight: var(--primary-foreground);
+  --jse-menu-color: var(--secondary-foreground);
+  --jse-delimiter-color: var(--foreground);
+}
