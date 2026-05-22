@@ -8,6 +8,20 @@ import {
   useState,
 } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { toast } from "react-toastify";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
@@ -46,6 +60,43 @@ import type {
 } from "../workers/kibanaParser.worker";
 
 type UnknownRecord = Record<string, unknown>;
+type ExportFileExtension = "json" | "txt";
+
+type PendingExportAction =
+  | { type: "zip"; rows: KibanaParsedRowMeta[]; label: string }
+  | {
+      type: "save";
+      rows: KibanaParsedRowMeta[];
+      withFolders: boolean;
+      label: string;
+    };
+
+function replaceJsonExtension(path: string, extension: ExportFileExtension) {
+  return path.replace(/\.json$/i, `.${extension}`);
+}
+
+function resolveUniqueExportPath(
+  path: string,
+  usedPaths: Set<string>,
+): string {
+  if (!usedPaths.has(path)) {
+    usedPaths.add(path);
+    return path;
+  }
+
+  const lastDot = path.lastIndexOf(".");
+  const stem = lastDot >= 0 ? path.slice(0, lastDot) : path;
+  const ext = lastDot >= 0 ? path.slice(lastDot) : "";
+
+  let counter = 1;
+  while (usedPaths.has(`${stem}(${counter})${ext}`)) {
+    counter++;
+  }
+
+  const uniquePath = `${stem}(${counter})${ext}`;
+  usedPaths.add(uniquePath);
+  return uniquePath;
+}
 
 const columnHelper = createColumnHelper<KibanaParsedRowMeta>();
 
@@ -113,6 +164,13 @@ export default function KibanaLogExtractor() {
   const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
   const [selectedTopicFilter, setSelectedTopicFilter] = useState("all");
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  const [pendingExport, setPendingExport] = useState<PendingExportAction | null>(
+    null,
+  );
+  const [selectedExtension, setSelectedExtension] =
+    useState<ExportFileExtension>("json");
+  const [inputOpen, setInputOpen] = useState(true);
 
   // Spin up the worker once for the lifetime of the component.
   useEffect(() => {
@@ -403,7 +461,7 @@ export default function KibanaLogExtractor() {
   }, [filteredRows]);
 
   const handleDownloadZip = useCallback(
-    async (targetRows: KibanaParsedRowMeta[]) => {
+    async (targetRows: KibanaParsedRowMeta[], extension: ExportFileExtension) => {
       if (targetRows.length === 0) {
         toast.info("Select at least one log entry first.");
         return;
@@ -411,16 +469,21 @@ export default function KibanaLogExtractor() {
       setZipping(true);
       try {
         const zip = new JSZip();
+        const usedPaths = new Set<string>();
         for (const row of targetRows) {
           const hit = hitsMapRef.current.get(row.key);
           const json = hit ? JSON.stringify(hit, null, 2) : "{}";
-          zip.file(row.zipRelativePath, json);
+          const exportPath = resolveUniqueExportPath(
+            replaceJsonExtension(row.zipRelativePath, extension),
+            usedPaths,
+          );
+          zip.file(exportPath, json);
         }
         const blob = await zip.generateAsync({ type: "blob" });
         const stamp = new Date().toISOString().replace(/[:.]/g, "-");
         saveAs(blob, `kibana-logs-${stamp}.zip`);
         toast.success(
-          `ZIP ready — download started (${targetRows.length} file${targetRows.length === 1 ? "" : "s"}).`,
+          `ZIP ready — download started (${targetRows.length} .${extension} file${targetRows.length === 1 ? "" : "s"}).`,
         );
       } catch {
         toast.error("Could not build ZIP.");
@@ -432,7 +495,11 @@ export default function KibanaLogExtractor() {
   );
 
   const handleSaveFiles = useCallback(
-    async (targetRows: KibanaParsedRowMeta[], withFolders: boolean) => {
+    async (
+      targetRows: KibanaParsedRowMeta[],
+      withFolders: boolean,
+      extension: ExportFileExtension,
+    ) => {
       if (targetRows.length === 0) {
         toast.info("Select at least one log entry first.");
         return;
@@ -454,6 +521,7 @@ export default function KibanaLogExtractor() {
         ).showDirectoryPicker({ mode: "readwrite" });
 
         let savedCount = 0;
+        const usedPaths = new Set<string>();
         for (const row of targetRows) {
           try {
             let targetDir: FileSystemDirectoryHandle = dirHandle;
@@ -462,7 +530,14 @@ export default function KibanaLogExtractor() {
                 create: true,
               });
             }
-            const fileHandle = await targetDir.getFileHandle(row.fileBaseName, {
+            const basePath = withFolders
+              ? replaceJsonExtension(row.zipRelativePath, extension)
+              : replaceJsonExtension(row.fileBaseName, extension);
+            const exportPath = resolveUniqueExportPath(basePath, usedPaths);
+            const fileName = exportPath.includes("/")
+              ? exportPath.slice(exportPath.lastIndexOf("/") + 1)
+              : exportPath;
+            const fileHandle = await targetDir.getFileHandle(fileName, {
               create: true,
             });
             const writable = await fileHandle.createWritable();
@@ -475,7 +550,7 @@ export default function KibanaLogExtractor() {
           }
         }
         toast.success(
-          `Saved ${savedCount} file${savedCount === 1 ? "" : "s"} successfully.`,
+          `Saved ${savedCount} .${extension} file${savedCount === 1 ? "" : "s"} successfully.`,
         );
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return;
@@ -486,6 +561,31 @@ export default function KibanaLogExtractor() {
     },
     [],
   );
+
+  const openExportDialog = useCallback((action: PendingExportAction) => {
+    if (action.rows.length === 0) {
+      toast.info("Select at least one log entry first.");
+      return;
+    }
+    setPendingExport(action);
+    setSelectedExtension("json");
+    setExportDialogOpen(true);
+  }, []);
+
+  const handleConfirmExport = useCallback(() => {
+    if (!pendingExport) return;
+
+    const action = pendingExport;
+    setExportDialogOpen(false);
+    setPendingExport(null);
+
+    if (action.type === "zip") {
+      void handleDownloadZip(action.rows, selectedExtension);
+      return;
+    }
+
+    void handleSaveFiles(action.rows, action.withFolders, selectedExtension);
+  }, [handleDownloadZip, handleSaveFiles, pendingExport, selectedExtension]);
 
   const selectedRows = useMemo(
     () => filteredRows.filter((row) => selectedKeys.has(row.key)),
@@ -522,30 +622,44 @@ export default function KibanaLogExtractor() {
         <span className="font-mono text-xs bg-muted px-1 rounded">
           {"{last URI segment}"}.json
         </span>
-        . Duplicate path names get a suffix from{" "}
+        . Duplicate API names in the same service folder get{" "}
         <span className="font-mono text-xs bg-muted px-1 rounded">
-          REQUEST_ID
-        </span>
-        .
+          (1), (2), …
+        </span>{" "}
+        suffixes so every log is exported.
       </p>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
+        <Collapsible
+          open={inputOpen}
+          onOpenChange={setInputOpen}
+          className="flex flex-col gap-2"
+        >
           <div className="flex justify-between items-center flex-wrap gap-2">
-            <span className="font-medium text-sm text-muted-foreground flex items-center gap-2">
-              Input —{" "}
-              <span className="font-mono text-xs bg-muted px-1 rounded">
-                NDJSON
-              </span>{" "}
-              or{" "}
-              <span className="font-mono text-xs bg-muted px-1 rounded">
-                JSON array
-              </span>
-            </span>
+            <CollapsibleTrigger asChild>
+              <button
+                type="button"
+                className="flex items-center gap-2 font-medium text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {inputOpen ? (
+                  <ChevronDown size={16} className="shrink-0" />
+                ) : (
+                  <ChevronRight size={16} className="shrink-0" />
+                )}
+                Input —{" "}
+                <span className="font-mono text-xs bg-muted px-1 rounded">
+                  NDJSON
+                </span>{" "}
+                or{" "}
+                <span className="font-mono text-xs bg-muted px-1 rounded">
+                  JSON array
+                </span>
+              </button>
+            </CollapsibleTrigger>
             <Button
               variant="secondary"
               size="lg"
-              type="button" 
+              type="button"
               className="hover:bg-gray-200 hover:text-black text-muted-foreground"
               onClick={handleClear}
             >
@@ -554,22 +668,23 @@ export default function KibanaLogExtractor() {
             </Button>
           </div>
 
-          <textarea
-            ref={textareaRef}
-            defaultValue=""
-            className={`w-full min-h-[12rem] h-48 p-3 font-mono text-sm border rounded-md resize-y focus:outline-none focus:ring-1 focus:ring-ring ${inputThemeClass}`}
-            placeholder={`Paste a JSON array of hits, or one JSON object per line:\n\n[{"_index":"...","fields":{"kafka_topic_name.keyword":["az-sit-..."],"REQUEST_URI.keyword":["/path/MyEndpoint"],...}}, ...]`}
-          />
+          <CollapsibleContent className="flex flex-col gap-2">
+            <textarea
+              ref={textareaRef}
+              defaultValue=""
+              className={`w-full min-h-[12rem] h-48 p-3 font-mono text-sm border rounded-md resize-y focus:outline-none focus:ring-1 focus:ring-ring ${inputThemeClass}`}
+              placeholder={`Paste a JSON array of hits, or one JSON object per line:\n\n[{"_index":"...","fields":{"kafka_topic_name.keyword":["az-sit-..."],"REQUEST_URI.keyword":["/path/MyEndpoint"],...}}, ...]`}
+            />
 
-          {/* Progress bar — visible only while parsing */}
-          {isParsing && (
-            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-primary transition-all duration-200 rounded-full"
-                style={{ width: `${parseProgress}%` }}
-              />
-            </div>
-          )}
+            {isParsing && (
+              <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-primary transition-all duration-200 rounded-full"
+                  style={{ width: `${parseProgress}%` }}
+                />
+              </div>
+            )}
+          </CollapsibleContent>
 
           <div className="flex flex-wrap gap-2">
             <Button type="button" onClick={handleParse} disabled={isParsing}>
@@ -603,8 +718,14 @@ export default function KibanaLogExtractor() {
             <Button
               type="button"
               variant="secondary"
-              disabled={rows.length === 0 || zipping}
-              onClick={() => void handleDownloadZip(rows)}
+              disabled={rows.length === 0 || zipping || saving}
+              onClick={() =>
+                openExportDialog({
+                  type: "zip",
+                  rows,
+                  label: `Download all (${rows.length})`,
+                })
+              }
             >
               {zipping ? (
                 <Loader2 size={16} className="mr-1 animate-spin" />
@@ -616,8 +737,14 @@ export default function KibanaLogExtractor() {
             <Button
               type="button"
               variant="secondary"
-              disabled={selectedRows.length === 0 || zipping}
-              onClick={() => void handleDownloadZip(selectedRows)}
+              disabled={selectedRows.length === 0 || zipping || saving}
+              onClick={() =>
+                openExportDialog({
+                  type: "zip",
+                  rows: selectedRows,
+                  label: `Download selected (${selectedRows.length})`,
+                })
+              }
             >
               {zipping ? (
                 <Loader2 size={16} className="mr-1 animate-spin" />
@@ -629,8 +756,15 @@ export default function KibanaLogExtractor() {
             <Button
               type="button"
               variant="outline"
-              disabled={selectedRows.length === 0 || saving}
-              onClick={() => void handleSaveFiles(selectedRows, false)}
+              disabled={selectedRows.length === 0 || zipping || saving}
+              onClick={() =>
+                openExportDialog({
+                  type: "save",
+                  rows: selectedRows,
+                  withFolders: false,
+                  label: `Save files (${selectedRows.length})`,
+                })
+              }
             >
               {saving ? (
                 <Loader2 size={16} className="mr-1 animate-spin" />
@@ -642,8 +776,15 @@ export default function KibanaLogExtractor() {
             <Button
               type="button"
               variant="outline"
-              disabled={selectedRows.length === 0 || saving}
-              onClick={() => void handleSaveFiles(selectedRows, true)}
+              disabled={selectedRows.length === 0 || zipping || saving}
+              onClick={() =>
+                openExportDialog({
+                  type: "save",
+                  rows: selectedRows,
+                  withFolders: true,
+                  label: `Save and create folders (${selectedRows.length})`,
+                })
+              }
             >
               {saving ? (
                 <Loader2 size={16} className="mr-1 animate-spin" />
@@ -653,7 +794,7 @@ export default function KibanaLogExtractor() {
               Save and create folders ({selectedRows.length})
             </Button>
           </div>
-        </div>
+        </Collapsible>
 
         {rows.length > 0 && (
           <section
@@ -865,6 +1006,62 @@ export default function KibanaLogExtractor() {
           </section>
         )}
       </div>
+
+      <Dialog
+        open={exportDialogOpen}
+        onOpenChange={(open) => {
+          setExportDialogOpen(open);
+          if (!open) setPendingExport(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Choose file extension</DialogTitle>
+            <DialogDescription>
+              {pendingExport?.label ?? "Select how exported log files should be saved."}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-3 py-2">
+            <Label className="text-sm font-medium">File extension</Label>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                type="button"
+                variant={selectedExtension === "json" ? "default" : "outline"}
+                onClick={() => setSelectedExtension("json")}
+              >
+                .json
+              </Button>
+              <Button
+                type="button"
+                variant={selectedExtension === "txt" ? "default" : "outline"}
+                onClick={() => setSelectedExtension("txt")}
+              >
+                .txt
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              File content stays the same formatted JSON. Only the extension changes.
+            </p>
+          </div>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setExportDialogOpen(false);
+                setPendingExport(null);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button type="button" onClick={handleConfirmExport}>
+              Export as .{selectedExtension}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
