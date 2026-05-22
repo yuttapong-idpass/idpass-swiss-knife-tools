@@ -134,19 +134,14 @@ function buildRowsWithHits(hits: UnknownRecord[]): {
     const baseFromUri = uriLastSegment(requestUri);
     const fileBase = sanitizePathSegment(baseFromUri, `entry-${index + 1}`);
 
-    const requestId = firstScalarFromFields(fields, [
-      "REQUEST_ID.keyword",
-      "REQUEST_ID",
-    ]);
-
-    let uniqueStem = fileBase;
     const mapKey = `${topicFolder}/${fileBase}`;
     const seen = usedNames.get(mapKey) ?? 0;
     usedNames.set(mapKey, seen + 1);
-    if (seen > 0) {
-      const suffix = requestId || String(seen + 1);
-      uniqueStem = sanitizePathSegment(`${fileBase}_${suffix}`, fileBase);
-    }
+
+    const uniqueStem =
+      seen > 0
+        ? sanitizePathSegment(`${fileBase}(${seen})`, `${fileBase}(${seen})`)
+        : fileBase;
 
     const zipRelativePath = `${topicFolder}/${uniqueStem}.json`;
     const key = `${zipRelativePath}-${index}`;
@@ -163,6 +158,10 @@ function buildRowsWithHits(hits: UnknownRecord[]): {
       "TIMESTAMP.keyword",
       "TIMESTAMP",
       "@timestamp",
+    ]);
+    const requestId = firstScalarFromFields(fields, [
+      "REQUEST_ID.keyword",
+      "REQUEST_ID",
     ]);
     const responseTime = firstScalarFromFields(fields, ["RESPONSE_TIME"]);
     const serviceEndpoint = firstScalarFromFields(fields, [
