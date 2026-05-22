@@ -15,6 +15,7 @@ import JsonToInterface from "@/features/utilities/components/JsonToInterface";
 import LandingPage from "@/features/landing/landing";
 import Base64ToImage from "@/features/formatter/components/Base64ToImage/ฺBase64ToImage";
 import EnCryptDecryptText from "@/features/encoding/components/EnCryptDecryptText";
+import HashGenerator from "@/features/encoding/components/HashGenerator";
 
 export default function AppRoutes() {
   return (
@@ -40,6 +41,7 @@ export default function AppRoutes() {
       <Route path="/barcode-generator" element={<BarCodeGenerator />} />
       <Route path="/json-to-interface" element={<JsonToInterface />} />
       <Route path="/encrypt-decrypt-text" element={<EnCryptDecryptText />} />
+      <Route path="/hash-generator" element={<HashGenerator />} />
     </Routes>
   );
 }

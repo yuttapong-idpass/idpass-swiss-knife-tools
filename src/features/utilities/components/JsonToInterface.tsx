@@ -45,7 +45,7 @@ const ConvertJsonToInterfaceText = (jsonText: string, rootName: string) => {
   }
 };
 
-export default function JsonToInterface() {
+export default function JsonToTypescriptInterface() {
   const monacoTheme = useMonacoTheme();
   const [rootInterfaceName, setRootInterfaceName] = useState("Root");
   const [jsonInput, setJsonInput] = useState("");

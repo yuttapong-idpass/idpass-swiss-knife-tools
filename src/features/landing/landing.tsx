@@ -17,7 +17,11 @@ export default function LandingPage() {
         <div className="rounded-2xl border bg-card p-6 md:p-8 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center rounded-xl  text-primary-foreground">
-              <img src={theme === "frutiger-aero" ? BeeFrutiger : Bee} alt="bee icon" className="size-16" />
+              <img
+                src={theme === "frutiger-aero" ? BeeFrutiger : Bee}
+                alt="bee icon"
+                className="size-16"
+              />
             </div>
             <div>
               <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">
@@ -51,7 +55,9 @@ export default function LandingPage() {
                     className="h-auto min-h-12 py-3 px-3 justify-start gap-2 cursor-default"
                     onClick={() => navigate(menu.link)}
                   >
-                    <span className="text-muted-foreground shrink-0">{menu.icon}</span>
+                    <span className="text-muted-foreground shrink-0">
+                      {menu.icon}
+                    </span>
                     <span className="text-left leading-tight">{menu.name}</span>
                   </Button>
                 ))}

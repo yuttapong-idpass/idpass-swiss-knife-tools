@@ -18,6 +18,18 @@ import useEncryptDecryptStore from "../stores/encryptDecrypt.store";
 import CryptoJS from "crypto-js";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
+type SupportedAesMode = "CBC" | "CFB" | "CTR" | "OFB" | "ECB";
+
+const AES_CONFIG_MAP: Record<
+  SupportedAesMode,
+  { mode: typeof CryptoJS.mode.CBC; padding: typeof CryptoJS.pad.Pkcs7 }
+> = {
+  CBC: { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 },
+  CFB: { mode: CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding },
+  CTR: { mode: CryptoJS.mode.CTR, padding: CryptoJS.pad.NoPadding },
+  OFB: { mode: CryptoJS.mode.OFB, padding: CryptoJS.pad.NoPadding },
+  ECB: { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 },
+};
 
 export default function EnCryptDecryptText() {
   const monacoTheme = useMonacoTheme();
@@ -59,8 +71,7 @@ export default function EnCryptDecryptText() {
       return;
     }
     try {
-      const mode = aesMode === "CTR" ? CryptoJS.mode.CTR : CryptoJS.mode.CBC;
-      const padding = aesMode === "CTR" ? CryptoJS.pad.NoPadding : CryptoJS.pad.Pkcs7;
+      const { mode, padding } = AES_CONFIG_MAP[aesMode];
       const result = CryptoJS.AES.encrypt(raw, passphrase, { mode, padding }).toString();
       editorRightRef.current?.setValue(result);
       setEncryptedText(result);
@@ -78,8 +89,7 @@ export default function EnCryptDecryptText() {
       return;
     }
     try {
-      const mode = aesMode === "CTR" ? CryptoJS.mode.CTR : CryptoJS.mode.CBC;
-      const padding = aesMode === "CTR" ? CryptoJS.pad.NoPadding : CryptoJS.pad.Pkcs7;
+      const { mode, padding } = AES_CONFIG_MAP[aesMode];
       const bytes = CryptoJS.AES.decrypt(raw.trim(), passphrase, { mode, padding });
       const result = bytes.toString(CryptoJS.enc.Utf8);
       if (!result) {
@@ -210,7 +220,7 @@ export default function EnCryptDecryptText() {
               <span className="text-xs text-muted-foreground">AES Mode</span>
               <Select
                 value={aesMode}
-                onValueChange={(v) => setAesMode(v as "CBC" | "GCM" | "CTR")}
+                onValueChange={(v) => setAesMode(v as SupportedAesMode)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -218,7 +228,10 @@ export default function EnCryptDecryptText() {
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem value="CBC">AES-CBC</SelectItem>
+                    <SelectItem value="CFB">AES-CFB</SelectItem>
                     <SelectItem value="CTR">AES-CTR</SelectItem>
+                    <SelectItem value="OFB">AES-OFB</SelectItem>
+                    <SelectItem value="ECB">AES-ECB</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
