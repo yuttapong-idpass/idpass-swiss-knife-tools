@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { ArrowRight, ArrowLeft, Trash2 } from "lucide-react";
 import { lazy, Suspense, useRef } from "react";
@@ -9,12 +11,22 @@ import CryptoJS from "crypto-js";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
+function stripBase64Padding(encoded: string): string {
+  return encoded.replace(/=+$/, "");
+}
+
+function addBase64Padding(encoded: string): string {
+  const trimmed = encoded.trim();
+  const pad = trimmed.length % 4;
+  return pad ? trimmed + "=".repeat(4 - pad) : trimmed;
+}
+
 export default function Base64EncoderDecoder() {
   const monacoTheme = useMonacoTheme();
   const editorPlainRef = useRef<any>(null);
   const editorEncodedRef = useRef<any>(null);
 
-  const { plainText, encodedText, setPlainText, setEncodedText } =
+  const { plainText, encodedText, usePadding, setPlainText, setEncodedText, setUsePadding } =
     useBase64EncoderDecoderStore();
 
   function HandlePlainDidMount(editor: any) {
@@ -36,7 +48,8 @@ export default function Base64EncoderDecoder() {
       const raw = editorPlainRef.current?.getValue() ?? plainText;
       if (!raw?.trim()) return;
       const bytes = CryptoJS.enc.Utf8.parse(raw);
-      const encoded = CryptoJS.enc.Base64.stringify(bytes);
+      let encoded = CryptoJS.enc.Base64.stringify(bytes);
+      if (!usePadding) encoded = stripBase64Padding(encoded);
       editorEncodedRef.current?.setValue(encoded);
       setEncodedText(encoded);
     } catch (error: any) {
@@ -48,7 +61,8 @@ export default function Base64EncoderDecoder() {
     try {
       const raw = editorEncodedRef.current?.getValue() ?? encodedText;
       if (!raw?.trim()) return;
-      const decoded = CryptoJS.enc.Base64.parse(raw);
+      const input = usePadding ? raw.trim() : addBase64Padding(raw);
+      const decoded = CryptoJS.enc.Base64.parse(input);
       const plain = decoded.toString(CryptoJS.enc.Utf8);
       editorPlainRef.current?.setValue(plain);
       setPlainText(plain);
@@ -113,7 +127,7 @@ export default function Base64EncoderDecoder() {
           </div>
 
           {/* Divider — Encode / Decode buttons */}
-          <div className="flex flex-col items-center justify-center px-1 gap-1">
+          <div className="flex flex-col items-center justify-center px-2 gap-3">
             <Button
               variant="secondary"
               size="lg"
@@ -125,7 +139,19 @@ export default function Base64EncoderDecoder() {
               Encode
             </Button>
 
-            <div className="w-px h-4 bg-border" />
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="base64-padding"
+                checked={usePadding}
+                onCheckedChange={(checked) => setUsePadding(checked === true)}
+              />
+              <Label
+                htmlFor="base64-padding"
+                className="text-sm text-muted-foreground"
+              >
+                Padding
+              </Label>
+            </div>
 
             <Button
               variant="secondary"
