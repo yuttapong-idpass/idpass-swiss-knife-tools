@@ -1,3 +1,11 @@
+import {
+  firstScalarFromFields,
+  getFieldsContainer,
+  prepareHitForExport,
+  sanitizePathSegment,
+  uriLastSegment,
+} from "./kibanaParser.utils";
+
 type UnknownRecord = Record<string, unknown>;
 
 export interface KibanaParsedRowMeta {
@@ -25,48 +33,6 @@ export type WorkerResponse =
       count: number;
     }
   | { type: "error"; message: string };
-
-function firstScalarFromFields(
-  fields: UnknownRecord | undefined,
-  keys: string[],
-): string {
-  if (!fields) return "";
-  for (const k of keys) {
-    const raw = fields[k];
-    if (raw === undefined || raw === null) continue;
-    if (Array.isArray(raw) && raw.length > 0) {
-      const v = raw[0];
-      if (v !== undefined && v !== null) return String(v);
-    } else if (typeof raw === "string" || typeof raw === "number") {
-      return String(raw);
-    }
-  }
-  return "";
-}
-
-function getFieldsContainer(hit: UnknownRecord): UnknownRecord {
-  const f = hit.fields;
-  if (f && typeof f === "object" && !Array.isArray(f)) {
-    return f as UnknownRecord;
-  }
-  return hit;
-}
-
-function uriLastSegment(uri: string): string {
-  const trimmed = uri.trim().replace(/\/+$/, "");
-  if (!trimmed) return "entry";
-  const parts = trimmed.split("/").filter(Boolean);
-  const last = parts[parts.length - 1];
-  return last && last.length > 0 ? last : "entry";
-}
-
-function sanitizePathSegment(name: string, fallback: string): string {
-  const cleaned = name
-    .replace(/[\\/:*?"<>|]/g, "_")
-    .replace(/\s+/g, " ")
-    .trim();
-  return cleaned.length > 0 ? cleaned : fallback;
-}
 
 function parseInputToObjects(raw: string): UnknownRecord[] {
   const text = raw.trim();
@@ -190,7 +156,7 @@ function buildRowsWithHits(hits: UnknownRecord[]): {
       indexName: indexName || "—",
     });
 
-    hitEntries.push([key, hit]);
+    hitEntries.push([key, prepareHitForExport(hit)]);
 
     if (index % progressStep === 0) {
       self.postMessage({
