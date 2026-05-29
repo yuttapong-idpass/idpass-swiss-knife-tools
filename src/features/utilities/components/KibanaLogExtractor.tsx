@@ -76,6 +76,10 @@ function replaceJsonExtension(path: string, extension: ExportFileExtension) {
   return path.replace(/\.json$/i, `.${extension}`);
 }
 
+function stripFileExtension(name: string): string {
+  return name.replace(/\.[^./\\]+$/i, "");
+}
+
 function resolveUniqueExportPath(
   path: string,
   usedPaths: Set<string>,
@@ -282,15 +286,18 @@ export default function KibanaLogExtractor() {
         size: 180,
       }),
       columnHelper.accessor("fileBaseName", {
-        header: "File",
-        cell: (info) => (
-          <span
-            className="font-mono text-xs text-primary block truncate max-w-[160px]"
-            title={info.getValue()}
-          >
-            {info.getValue()}
-          </span>
-        ),
+        header: "File Name",
+        cell: (info) => {
+          const displayName = stripFileExtension(info.getValue());
+          return (
+            <span
+              className="font-mono text-xs text-primary block truncate max-w-[160px]"
+              title={displayName}
+            >
+              {displayName}
+            </span>
+          );
+        },
         size: 160,
       }),
       columnHelper.accessor("requestUri", {
