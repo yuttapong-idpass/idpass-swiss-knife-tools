@@ -1,17 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
-import { lazy, Suspense, useRef } from "react";
+import { appToast } from "@/lib/toast";
+import { lazy, Suspense, useRef, type ChangeEvent } from "react";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 import { useNavigate } from "react-router-dom";
 import useTextCompareStore from "@/features/formatter/stores/useTextCompare.store";
-import { Delete, Trash2 } from "lucide-react";
+import { Trash2, Upload } from "lucide-react";
 import { monacoOptions } from "@/lib/editor";
+
+const ACCEPTED_FILE_TYPES = ".json,.txt,application/json,text/plain";
+
+function ReadTextFile(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve((reader.result as string) ?? "");
+    reader.onerror = () => reject(new Error("Failed to read file."));
+    reader.readAsText(file);
+  });
+}
 
 const Differ = () => {
   const monacoTheme = useMonacoTheme();
   const editorOriginalTextRef = useRef<any>(null);
   const editorModifiedTextRef = useRef<any>(null);
+  const originalFileInputRef = useRef<HTMLInputElement>(null);
+  const modifiedFileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const {
     setOriginalText,
@@ -54,6 +68,37 @@ const Differ = () => {
     }
   }
 
+  async function OnUploadFile(
+    event: ChangeEvent<HTMLInputElement>,
+    target: "original" | "modified",
+  ) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    const extension = file.name.split(".").pop()?.toLowerCase();
+    if (extension !== "json" && extension !== "txt") {
+      appToast.error("Only .json and .txt files are supported.");
+      return;
+    }
+
+    try {
+      const content = await ReadTextFile(file);
+      if (target === "original") {
+        editorOriginalTextRef.current?.setValue(content);
+        setOriginalText(content);
+      } else {
+        editorModifiedTextRef.current?.setValue(content);
+        setModifiedText(content);
+      }
+      appToast.success(`${file.name} loaded.`);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to read file.";
+      appToast.error(message);
+    }
+  }
+
   return (
     <main className="w-full p-4">
       <p className="text-xl font-extrabold text-default-800 mb-2">
@@ -72,17 +117,37 @@ const Differ = () => {
               <span className="font-medium text-sm text-muted-foreground">
                 Original text
               </span>
-              <Button
-                variant="secondary"
-                size="lg"
-                className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={OnClearOriginalText}
-              >
-                <Trash2 size={16} aria-label="clear" />
-                <span className="font-medium text-sm text-muted-foreground">
-                  clear
-                </span>
-              </Button>
+              <div className="flex items-center gap-2">
+                <input
+                  ref={originalFileInputRef}
+                  type="file"
+                  accept={ACCEPTED_FILE_TYPES}
+                  className="hidden"
+                  onChange={(event) => OnUploadFile(event, "original")}
+                />
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="hover:bg-gray-200 hover:text-black text-muted-foreground"
+                  onClick={() => originalFileInputRef.current?.click()}
+                >
+                  <Upload size={16} aria-label="upload" />
+                  <span className="font-medium text-sm text-muted-foreground">
+                    upload
+                  </span>
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="hover:bg-gray-200 hover:text-black text-muted-foreground"
+                  onClick={OnClearOriginalText}
+                >
+                  <Trash2 size={16} aria-label="clear" />
+                  <span className="font-medium text-sm text-muted-foreground">
+                    clear
+                  </span>
+                </Button>
+              </div>
             </div>
             <div className="flex-1">
               <Editor
@@ -111,17 +176,37 @@ const Differ = () => {
               <span className="font-medium text-sm text-muted-foreground">
                 Modified text
               </span>
-              <Button
-                variant="secondary"
-                size="lg"
-                className="hover:bg-gray-200 hover:text-black text-muted-foreground"
-                onClick={OnClearModifiedText}
-              >
-                <Trash2 size={16} aria-label="clear" />
-                <span className="font-medium text-sm text-muted-foreground">
-                  clear
-                </span>
-              </Button>
+              <div className="flex items-center gap-2">
+                <input
+                  ref={modifiedFileInputRef}
+                  type="file"
+                  accept={ACCEPTED_FILE_TYPES}
+                  className="hidden"
+                  onChange={(event) => OnUploadFile(event, "modified")}
+                />
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="hover:bg-gray-200 hover:text-black text-muted-foreground"
+                  onClick={() => modifiedFileInputRef.current?.click()}
+                >
+                  <Upload size={16} aria-label="upload" />
+                  <span className="font-medium text-sm text-muted-foreground">
+                    upload
+                  </span>
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="hover:bg-gray-200 hover:text-black text-muted-foreground"
+                  onClick={OnClearModifiedText}
+                >
+                  <Trash2 size={16} aria-label="clear" />
+                  <span className="font-medium text-sm text-muted-foreground">
+                    clear
+                  </span>
+                </Button>
+              </div>
             </div>
             <div className="flex-1">
               <Editor

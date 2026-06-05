@@ -58,6 +58,7 @@ import type {
   KibanaParsedRowMeta,
   WorkerResponse,
 } from "../workers/kibanaParser.worker";
+import { stringifyHitForExport } from "../workers/kibanaParser.utils";
 
 type UnknownRecord = Record<string, unknown>;
 type ExportFileExtension = "json" | "txt";
@@ -73,6 +74,10 @@ type PendingExportAction =
 
 function replaceJsonExtension(path: string, extension: ExportFileExtension) {
   return path.replace(/\.json$/i, `.${extension}`);
+}
+
+function stripFileExtension(name: string): string {
+  return name.replace(/\.[^./\\]+$/i, "");
 }
 
 function resolveUniqueExportPath(
@@ -114,7 +119,7 @@ const ExpandedJsonCell = memo(function ExpandedJsonCell({
   hit: UnknownRecord | undefined;
 }) {
   const json = useMemo(
-    () => (hit ? JSON.stringify(hit, null, 2) : "{}"),
+    () => (hit ? stringifyHitForExport(hit) : "{}"),
     [hit],
   );
 
@@ -281,15 +286,18 @@ export default function KibanaLogExtractor() {
         size: 180,
       }),
       columnHelper.accessor("fileBaseName", {
-        header: "File",
-        cell: (info) => (
-          <span
-            className="font-mono text-xs text-primary block truncate max-w-[160px]"
-            title={info.getValue()}
-          >
-            {info.getValue()}
-          </span>
-        ),
+        header: "File Name",
+        cell: (info) => {
+          const displayName = stripFileExtension(info.getValue());
+          return (
+            <span
+              className="font-mono text-xs text-primary block truncate max-w-[160px]"
+              title={displayName}
+            >
+              {displayName}
+            </span>
+          );
+        },
         size: 160,
       }),
       columnHelper.accessor("requestUri", {
@@ -472,21 +480,30 @@ export default function KibanaLogExtractor() {
         const usedPaths = new Set<string>();
         for (const row of targetRows) {
           const hit = hitsMapRef.current.get(row.key);
-          const json = hit ? JSON.stringify(hit, null, 2) : "{}";
+          if (!hit) {
+            throw new Error(`Missing log data for ${row.fileBaseName}`);
+          }
+          const json = stringifyHitForExport(hit);
           const exportPath = resolveUniqueExportPath(
             replaceJsonExtension(row.zipRelativePath, extension),
             usedPaths,
           );
           zip.file(exportPath, json);
         }
-        const blob = await zip.generateAsync({ type: "blob" });
+        const blob = await zip.generateAsync({
+          type: "blob",
+          compression: "DEFLATE",
+          compressionOptions: { level: 6 },
+        });
         const stamp = new Date().toISOString().replace(/[:.]/g, "-");
         saveAs(blob, `kibana-logs-${stamp}.zip`);
         toast.success(
           `ZIP ready — download started (${targetRows.length} .${extension} file${targetRows.length === 1 ? "" : "s"}).`,
         );
-      } catch {
-        toast.error("Could not build ZIP.");
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Could not build ZIP.";
+        toast.error(message);
       } finally {
         setZipping(false);
       }
@@ -521,9 +538,16 @@ export default function KibanaLogExtractor() {
         ).showDirectoryPicker({ mode: "readwrite" });
 
         let savedCount = 0;
+        const failedFiles: string[] = [];
         const usedPaths = new Set<string>();
         for (const row of targetRows) {
           try {
+            const hit = hitsMapRef.current.get(row.key);
+            if (!hit) {
+              failedFiles.push(`${row.fileBaseName} (missing log data)`);
+              continue;
+            }
+
             let targetDir: FileSystemDirectoryHandle = dirHandle;
             if (withFolders) {
               targetDir = await dirHandle.getDirectoryHandle(row.topicFolder, {
@@ -541,17 +565,31 @@ export default function KibanaLogExtractor() {
               create: true,
             });
             const writable = await fileHandle.createWritable();
-            const hit = hitsMapRef.current.get(row.key);
-            await writable.write(hit ? JSON.stringify(hit, null, 2) : "{}");
+            const json = stringifyHitForExport(hit);
+            await writable.write(
+              new Blob([json], { type: "application/json;charset=utf-8" }),
+            );
             await writable.close();
             savedCount++;
-          } catch {
-            // skip individual file errors silently
+          } catch (err) {
+            const reason =
+              err instanceof Error ? err.message : "Unknown write error";
+            failedFiles.push(`${row.fileBaseName} (${reason})`);
           }
         }
-        toast.success(
-          `Saved ${savedCount} .${extension} file${savedCount === 1 ? "" : "s"} successfully.`,
-        );
+        if (savedCount > 0) {
+          toast.success(
+            `Saved ${savedCount} .${extension} file${savedCount === 1 ? "" : "s"} successfully.`,
+          );
+        }
+        if (failedFiles.length > 0) {
+          toast.error(
+            `Could not save ${failedFiles.length} file${failedFiles.length === 1 ? "" : "s"}: ${failedFiles.slice(0, 2).join(", ")}${failedFiles.length > 2 ? "…" : ""}`,
+          );
+        }
+        if (savedCount === 0 && failedFiles.length === 0) {
+          toast.info("No files were saved.");
+        }
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return;
         toast.error("Could not save files to the selected folder.");

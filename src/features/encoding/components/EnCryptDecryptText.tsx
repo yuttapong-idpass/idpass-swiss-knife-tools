@@ -12,7 +12,7 @@ import {
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
 import { monacoOptions } from "@/lib/editor";
-import { ArrowLeft, ArrowRight, CopyIcon, Trash2 } from "lucide-react";
+import { CopyIcon, Trash2 } from "lucide-react";
 import { lazy, Suspense, useRef, useMemo } from "react";
 import useEncryptDecryptStore from "../stores/encryptDecrypt.store";
 import CryptoJS from "crypto-js";
@@ -75,7 +75,6 @@ export default function EnCryptDecryptText() {
       const result = CryptoJS.AES.encrypt(raw, passphrase, { mode, padding }).toString();
       editorRightRef.current?.setValue(result);
       setEncryptedText(result);
-      appToast.success("Encrypted successfully");
     } catch (error: any) {
       appToast.error(error?.message ?? "Encryption failed");
     }
@@ -98,21 +97,18 @@ export default function EnCryptDecryptText() {
       }
       editorRightRef.current?.setValue(result);
       setPlainText(result);
-      appToast.success("Decrypted successfully");
     } catch (error: any) {
       appToast.error(error?.message ?? "Decryption failed — wrong passphrase or corrupted data");
     }
   }
 
-  function handleSwap() {
-    const newMode = transformMode === "encrypt" ? "decrypt" : "encrypt";
-    setTransformMode(newMode);
-    const leftVal = editorLeftRef.current?.getValue() ?? "";
-    const rightVal = editorRightRef.current?.getValue() ?? "";
-    setTimeout(() => {
-      editorLeftRef.current?.setValue(rightVal);
-      editorRightRef.current?.setValue(leftVal);
-    }, 0);
+  function handleTransformModeChange(mode: "encrypt" | "decrypt") {
+    if (mode === transformMode) return;
+    setTransformMode(mode);
+    editorLeftRef.current?.setValue("");
+    editorRightRef.current?.setValue("");
+    setPlainText("");
+    setEncryptedText("");
   }
 
   function handleClear() {
@@ -183,11 +179,8 @@ export default function EnCryptDecryptText() {
 
             <div className="space-y-1">
               <span className="text-xs text-muted-foreground">Mode</span>
-              <Select
-                value={transformMode}
-                onValueChange={(v) => setTransformMode(v as "encrypt" | "decrypt")}
-              >
-                <SelectTrigger>
+              <Select value={transformMode} onValueChange={handleTransformModeChange}>
+                <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -205,7 +198,7 @@ export default function EnCryptDecryptText() {
                 value={algorithm}
                 onValueChange={(v) => setAlgorithm(v as "AES")}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -222,7 +215,7 @@ export default function EnCryptDecryptText() {
                 value={aesMode}
                 onValueChange={(v) => setAesMode(v as SupportedAesMode)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -247,38 +240,31 @@ export default function EnCryptDecryptText() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-2 pt-1">
+            <div className="flex flex-col gap-2 pt-1">
               <Button
-                variant="secondary"
-                onClick={handleSwap}
-                className="text-muted-foreground hover:text-primary-foreground"
-                title="Swap sides"
-              >
-                {transformMode === "encrypt" ? <ArrowRight size={16} /> : <ArrowLeft size={16} />}
-                Swap
-              </Button>
-              <Button
-                className="bg-primary text-primary-foreground"
+                className="w-full bg-primary text-primary-foreground"
                 onClick={transformMode === "encrypt" ? handleEncrypt : handleDecrypt}
               >
                 {transformMode === "encrypt" ? "Encrypt" : "Decrypt"}
               </Button>
-              <Button
-                variant="secondary"
-                onClick={handleClear}
-                className="text-muted-foreground"
-              >
-                <Trash2 size={16} />
-                Clear All
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={handleCopyRight}
-                className="text-muted-foreground"
-              >
-                <CopyIcon size={16} />
-                Copy Right
-              </Button>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="secondary"
+                  onClick={handleClear}
+                  className="text-muted-foreground"
+                >
+                  <Trash2 size={16} />
+                  Clear All
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={handleCopyRight}
+                  className="text-muted-foreground"
+                >
+                  <CopyIcon size={16} />
+                  Copy Right
+                </Button>
+              </div>
             </div>
 
             <p className="text-xs text-muted-foreground/60 leading-relaxed pt-1">
