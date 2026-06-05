@@ -32,17 +32,21 @@ const XMLFormatter = () => {
     if (getFormattedXML()) setDefaultOutputText(getFormattedXML());
   }, []);
 
-  function ValidateXML(xml: string) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xml, "application/xml");
-    const errorNode = xmlDoc.getElementsByTagName("parsererror")[0];
-    if (errorNode) {
-      return {
-        isValid: false,
-        message: errorNode.textContent || "Invalid XML Syntax",
-      };
+  function UnescapeXML(xml: string): string {
+    return xml
+      .replace(/\\"/g, '"')
+      .replace(/\\n/g, "\n")
+      .replace(/\\t/g, "\t")
+      .replace(/\\r/g, "\r");
+  }
+
+  function ValidateXML(xml: string): { isValid: boolean; message: string } {
+    try {
+      xmlFormat(UnescapeXML(xml), { lineSeparator: "\n", collapseContent: true, indentation: "  " });
+      return { isValid: true, message: "Valid XML Syntax" };
+    } catch (err: any) {
+      return { isValid: false, message: err?.message || "Invalid XML Syntax" };
     }
-    return { isValid: true, message: "Valid XML Syntax" };
   }
 
   function HandleInputEditorMount(editor: any, monaco: any) {
@@ -92,7 +96,7 @@ const XMLFormatter = () => {
     }
 
     try {
-      const formatted = xmlFormat(xmlText, {
+      const formatted = xmlFormat(UnescapeXML(xmlText), {
         lineSeparator: "\n",
         collapseContent: true,
         indentation: "  ",
