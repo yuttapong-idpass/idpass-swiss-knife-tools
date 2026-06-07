@@ -8,7 +8,12 @@
       "Bash(git checkout *)",
       "Bash(git pull *)",
       "Bash(git merge *)",
-      "Bash(npm audit *)"
+      "Bash(npm audit *)",
+      "Bash(findstr /i \"tailwind\")",
+      "Bash(Get-ChildItem *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\ilove\\\\Project\\\\front-end\\\\side-project\\\\idpass-swiss-knife-tools\" -Depth 0 -File | Where-Object { $_.Name -match '\\\\.\\(config|json\\)' } | Select-Object Name)",
+      "Bash(npm run *)"
     ]
   }
 }
