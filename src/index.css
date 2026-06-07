@@ -120,79 +120,96 @@ body {
 }
 
 .frutiger-aero {
-  --background: oklch(0.97 0.02 220);
-  --foreground: oklch(0.22 0.05 230);
-  --card: oklch(0.99 0.01 220);
-  --card-foreground: oklch(0.22 0.05 230);
-  --popover: oklch(0.99 0.01 220);
-  --popover-foreground: oklch(0.22 0.05 230);
-  --primary: oklch(0.52 0.20 225);
-  --primary-foreground: oklch(0.99 0.01 220);
-  --secondary: oklch(0.88 0.06 220);
-  --secondary-foreground: oklch(0.28 0.05 225);
-  --muted: oklch(0.92 0.04 220);
-  --muted-foreground: oklch(0.42 0.07 225);
-  --accent: oklch(0.87 0.09 200);
-  --accent-foreground: oklch(0.28 0.05 220);
+  /* ── Frutiger Aqua palette ──────────────────────────────────────────────────
+     Backgrounds carry alpha so they become frosted glass over the sky gradient.
+     Foreground / font colours are deep ocean blue — the defining Aqua character. */
+  --background: oklch(0.97 0.04 218 / 0.76);
+  --foreground: oklch(0.18 0.13 232);
+  --card: oklch(0.99 0.02 214 / 0.78);
+  --card-foreground: oklch(0.18 0.13 232);
+  --popover: oklch(0.99 0.02 214 / 0.92);
+  --popover-foreground: oklch(0.18 0.13 232);
+  --primary: oklch(0.48 0.20 216);
+  --primary-foreground: oklch(0.99 0.01 212);
+  --secondary: oklch(0.88 0.07 216);
+  --secondary-foreground: oklch(0.20 0.12 230);
+  --muted: oklch(0.92 0.04 216);
+  --muted-foreground: oklch(0.42 0.09 226);
+  --accent: oklch(0.85 0.11 200);
+  --accent-foreground: oklch(0.20 0.12 230);
   --destructive: oklch(0.63 0.19 25);
-  --border: oklch(0.82 0.06 220);
-  --input: oklch(0.88 0.05 220);
-  --ring: oklch(0.62 0.18 225);
-  --chart-1: oklch(0.58 0.20 225);
-  --chart-2: oklch(0.72 0.14 195);
-  --chart-3: oklch(0.60 0.16 250);
-  --chart-4: oklch(0.78 0.13 205);
-  --chart-5: oklch(0.70 0.15 40);
-  --sidebar: oklch(0.94 0.04 218);
-  --sidebar-foreground: oklch(0.22 0.05 230);
-  --sidebar-primary: oklch(0.52 0.20 225);
-  --sidebar-primary-foreground: oklch(0.99 0.01 220);
-  --sidebar-accent: oklch(0.88 0.06 220);
-  --sidebar-accent-foreground: oklch(0.28 0.05 225);
-  --sidebar-border: oklch(0.82 0.06 220);
-  --sidebar-ring: oklch(0.62 0.18 225);
+  --border: oklch(0.80 0.07 218);
+  --input: oklch(0.87 0.06 218);
+  --ring: oklch(0.58 0.18 218);
+  --chart-1: oklch(0.52 0.20 218);
+  --chart-2: oklch(0.68 0.16 192);
+  --chart-3: oklch(0.56 0.17 236);
+  --chart-4: oklch(0.74 0.13 206);
+  --chart-5: oklch(0.66 0.14 42);
+  --sidebar: oklch(0.94 0.05 216 / 0.72);
+  --sidebar-foreground: oklch(0.18 0.13 232);
+  --sidebar-primary: oklch(0.48 0.20 216);
+  --sidebar-primary-foreground: oklch(0.99 0.01 212);
+  --sidebar-accent: oklch(0.86 0.07 216);
+  --sidebar-accent-foreground: oklch(0.20 0.12 230);
+  --sidebar-border: oklch(0.80 0.07 218);
+  --sidebar-ring: oklch(0.58 0.18 218);
 }
 
-/* ─── Frutiger Aero: Windows Vista blue glass button ──────────────────────── */
+/* ─── Frutiger Aero: frosted-glass aquarium wall effect ──────────────────── */
+/* The sidebar panel and main editor area become frosted glass over the tank   */
 
-/*
- * Vista Aero "gel" button — blue glass edition:
- * - outer border: 1px semi-transparent blue
- * - outer glow: soft blue halo
- * - body: deep sky-blue gradient (bottom half)
- * - gloss highlight: bright white oval on the top half (pseudo-element)
- * - text: white with subtle shadow
- */
+html.frutiger-aero [data-slot="sidebar-inner"] {
+  backdrop-filter: blur(18px) saturate(1.6) brightness(1.04);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6) brightness(1.04);
+}
+
+html.frutiger-aero [data-slot="sidebar-inset"] {
+  backdrop-filter: blur(10px) saturate(1.4) brightness(1.02);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4) brightness(1.02);
+}
+
+/* Cards and panels inside the editor also get the glass treatment */
+html.frutiger-aero .bg-card,
+html.frutiger-aero [class*="rounded"][class*="border"],
+html.frutiger-aero [data-slot="card"] {
+  backdrop-filter: blur(8px) saturate(1.3);
+  -webkit-backdrop-filter: blur(8px) saturate(1.3);
+}
+
+/* ─── Frutiger Aero: aqua glass button ─────────────────────────────────────── */
 
 .frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass),
 .frutiger-aero a[role="button"]:not(.no-glass),
 .frutiger-aero a.btn-glass {
   position: relative !important;
   overflow: hidden !important;
+  /* Aqua gel: light cyan → sky blue → deep ocean at midpoint → cyan at bottom */
   background: linear-gradient(
     180deg,
-    #5ec8f5 0%,
-    #1e96e8 48%,
-    #1567c0 50%,
-    #1e8de8 75%,
-    #42b8f5 100%
+    #60f0ff 0%,
+    #18c8e8 30%,
+    #1098c8 48%,
+    #085898 50%,
+    #1090d8 75%,
+    #40d8f8 100%
   ) !important;
-  border: 1px solid #0d4e8a !important;
-  border-top-color: #5bc8f5 !important;
+  border: 1px solid #063a68 !important;
+  border-top-color: #50e8ff !important;
   border-radius: 0.45rem !important;
   color: #fff !important;
   font-weight: 600 !important;
-  text-shadow: 0 1px 2px rgba(0, 20, 70, 0.7) !important;
+  text-shadow: 0 1px 2px rgba(0, 20, 60, 0.80) !important;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 2px 8px rgba(20, 100, 220, 0.45),
-    0 1px 2px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+    0 0 0 1px rgba(255, 255, 255, 0.22),
+    0 2px 10px rgba(20, 140, 210, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
   cursor: pointer !important;
   transition: filter 0.12s ease, box-shadow 0.12s ease, transform 0.1s ease !important;
 }
 
-/* Vista top-half gloss shine via pseudo-element */
+/* Top-half gloss — cyan-tinted */
 .frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass)::after,
 .frutiger-aero a[role="button"]:not(.no-glass)::after,
 .frutiger-aero a.btn-glass::after {
@@ -201,27 +218,27 @@ body {
   inset: 0 0 50% 0 !important;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.58) 0%,
-    rgba(255, 255, 255, 0.12) 100%
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(200, 245, 255, 0.14) 100%
   ) !important;
   border-radius: 0.45rem 0.45rem 50% 50% / 0.45rem 0.45rem 60% 60% !important;
   pointer-events: none !important;
 }
 
-/* Hover — brighten */
+/* Hover — aqua glow */
 .frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass):hover,
 .frutiger-aero a[role="button"]:not(.no-glass):hover,
 .frutiger-aero a.btn-glass:hover {
-  filter: brightness(1.12) !important;
+  filter: brightness(1.12) saturate(1.1) !important;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.28),
-    0 4px 14px rgba(20, 100, 220, 0.6),
-    0 1px 3px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 4px 18px rgba(20, 160, 230, 0.72),
+    0 1px 3px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.40) !important;
   transform: translateY(-1px) !important;
 }
 
-/* Active / pressed — darken + invert gloss */
+/* Active / pressed */
 .frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass):active,
 .frutiger-aero a[role="button"]:not(.no-glass):active,
 .frutiger-aero a.btn-glass:active {
@@ -229,8 +246,8 @@ body {
   transform: translateY(1px) !important;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 1px 4px rgba(20, 100, 220, 0.35),
-    inset 0 2px 4px rgba(0, 20, 80, 0.3) !important;
+    0 1px 4px rgba(20, 120, 200, 0.38),
+    inset 0 2px 4px rgba(0, 20, 60, 0.32) !important;
 }
 
 /* Disabled */
@@ -251,22 +268,23 @@ body {
   width: 1.6rem;
   height: 1.6rem;
   border-radius: 0.4rem;
+  /* Aqua glass badge */
   background: linear-gradient(
     150deg,
-    rgba(255, 255, 255, 0.78) 0%,
-    rgba(170, 210, 255, 0.55) 50%,
-    rgba(60, 130, 220, 0.38) 100%
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(160, 230, 255, 0.58) 50%,
+    rgba(30, 140, 220, 0.42) 100%
   );
-  backdrop-filter: blur(8px) saturate(1.5);
-  -webkit-backdrop-filter: blur(8px) saturate(1.5);
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  border-bottom-color: rgba(80, 150, 220, 0.45);
-  border-right-color: rgba(80, 150, 220, 0.45);
+  backdrop-filter: blur(8px) saturate(1.6);
+  -webkit-backdrop-filter: blur(8px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.80);
+  border-bottom-color: rgba(30, 140, 220, 0.52);
+  border-right-color: rgba(30, 140, 220, 0.52);
   box-shadow:
-    0 1px 6px rgba(20, 100, 200, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(60, 130, 220, 0.25);
-  color: #0d3b6e;
+    0 1px 6px rgba(20, 140, 220, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+    inset 0 -1px 0 rgba(30, 140, 220, 0.30);
+  color: #0a2850;
   flex-shrink: 0;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
@@ -274,17 +292,17 @@ body {
 .frutiger-aero [data-slot="sidebar-menu-button"]:hover > span.text-muted-foreground,
 .frutiger-aero [data-slot="sidebar-menu-sub-button"]:hover > span.text-muted-foreground {
   box-shadow:
-    0 3px 10px rgba(20, 100, 200, 0.32),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(60, 130, 220, 0.4);
+    0 3px 12px rgba(20, 140, 220, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.97),
+    inset 0 -1px 0 rgba(30, 140, 220, 0.48);
   transform: translateY(-1px);
 }
 
 /* SVG color and glow inside the glass badge */
 .frutiger-aero [data-slot="sidebar-menu-button"] > span.text-muted-foreground svg,
 .frutiger-aero [data-slot="sidebar-menu-sub-button"] > span.text-muted-foreground svg {
-  color: #1b4e8c;
-  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.7));
+  color: #0a2e58;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.80));
 }
 
 /* standalone utility — use .btn-glass on any element outside frutiger-aero scope */
@@ -293,23 +311,24 @@ body {
   overflow: hidden;
   background: linear-gradient(
     180deg,
-    #5ec8f5 0%,
-    #1e96e8 48%,
-    #1567c0 50%,
-    #1e8de8 75%,
-    #42b8f5 100%
+    #60f0ff 0%,
+    #18c8e8 30%,
+    #1098c8 48%,
+    #085898 50%,
+    #1090d8 75%,
+    #40d8f8 100%
   );
-  border: 1px solid #0d4e8a;
-  border-top-color: #5bc8f5;
+  border: 1px solid #063a68;
+  border-top-color: #50e8ff;
   border-radius: 0.45rem;
   color: #fff;
   font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 20, 70, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 20, 60, 0.80);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 2px 8px rgba(20, 100, 220, 0.45),
-    0 1px 2px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    0 0 0 1px rgba(255, 255, 255, 0.22),
+    0 2px 10px rgba(20, 140, 210, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
   cursor: pointer;
   transition: filter 0.12s ease, box-shadow 0.12s ease, transform 0.1s ease;
 }
@@ -320,21 +339,113 @@ body {
   inset: 0 0 50% 0;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.58) 0%,
-    rgba(255, 255, 255, 0.12) 100%
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(200, 245, 255, 0.14) 100%
   );
   border-radius: 0.45rem 0.45rem 50% 50% / 0.45rem 0.45rem 60% 60%;
   pointer-events: none;
 }
 
 .btn-glass:hover {
-  filter: brightness(1.12);
+  filter: brightness(1.12) saturate(1.1);
   transform: translateY(-1px);
 }
 
 .btn-glass:active {
   filter: brightness(0.88);
   transform: translateY(1px);
+}
+
+/* ─── Frutiger Aqua: sky background ──────────────────────────────────────── */
+
+/* Clean sky-blue gradient — bright white-blue at top, deep azure at bottom   */
+html.frutiger-aero body {
+  background: linear-gradient(
+    170deg,
+    #f6fbff 0%,
+    #dceeff 22%,
+    #b8d8ff 45%,
+    #88bcff 68%,
+    #58a0ff 88%,
+    #3a8eff 100%
+  ) fixed !important;
+}
+
+/* ─── Frutiger Aqua: seaweed + bubbles (behind editor) ───────────────────── */
+
+/* Fixed layer behind all UI — z-index 0 */
+.aero-bg-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* ── Seaweed ── */
+.aero-seaweed {
+  position: absolute;
+  bottom: 0;
+  transform-origin: bottom center;
+  animation: seaweed-sway ease-in-out infinite;
+  opacity: 0.78;
+}
+
+@keyframes seaweed-sway {
+  0%,  100% { transform: rotate(0deg)   skewX(0deg);   }
+  30%        { transform: rotate(8deg)   skewX(2deg);   }
+  70%        { transform: rotate(-6deg)  skewX(-1.5deg);}
+}
+
+/* ── Air bubbles ── */
+.aero-aqua-bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 33% 27%,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(210, 245, 255, 0.44) 28%,
+    rgba(130, 215, 255, 0.12) 58%,
+    rgba(70,  185, 245, 0.20) 100%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.70),
+    0 0 0 1px rgba(120, 210, 255, 0.38),
+    0 0 5px 2px rgba(100, 200, 255, 0.22),
+    inset 0 0 8px rgba(255, 255, 255, 0.10);
+  will-change: transform, opacity;
+  animation: aqua-bubble-rise linear infinite;
+}
+
+.aero-aqua-bubble::before {
+  content: '';
+  position: absolute;
+  top: 11%;
+  left: 17%;
+  width: 40%;
+  height: 26%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(255, 255, 255, 0.42) 55%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  transform: rotate(-28deg);
+}
+
+@keyframes aqua-bubble-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.45);
+    opacity: 0;
+  }
+  6%  { opacity: 0.88; transform: translateY(-4vh) scale(1); }
+  50% { transform: translateY(-52vh) translateX(var(--bx,  12px)); }
+  91% { opacity: 0.52; }
+  100% {
+    transform: translateY(-110vh) translateX(var(--bx2, -9px)) scale(0.78);
+    opacity: 0;
+  }
 }
 
 .headers-text-gradient-dark {
