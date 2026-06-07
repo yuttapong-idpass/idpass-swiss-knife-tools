@@ -2,6 +2,7 @@
 
 Utility web app for encoding, formatting, and helper tools.
 
+
 ## Project Structure
 
 This project uses feature-first organization under `src`.
