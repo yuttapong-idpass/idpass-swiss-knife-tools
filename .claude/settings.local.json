@@ -13,7 +13,8 @@
       "Bash(Get-ChildItem *)",
       "PowerShell(Get-ChildItem *)",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\ilove\\\\Project\\\\front-end\\\\side-project\\\\idpass-swiss-knife-tools\" -Depth 0 -File | Where-Object { $_.Name -match '\\\\.\\(config|json\\)' } | Select-Object Name)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(npx tsc *)"
     ]
   }
 }
