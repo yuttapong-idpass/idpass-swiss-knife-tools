@@ -13,6 +13,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarTrigger,
+  useSidebar,
 } from "../ui/sidebar";
 import { ChevronUp } from "lucide-react";
 import {
@@ -36,6 +38,7 @@ import BeeFrutiger from "@/assets/images/bee-frutiger.png";
 
 export default function SideBarMenu() {
   const { theme, setTheme } = useTheme();
+  const { state } = useSidebar();
   const selectedTheme = theme === "system" ? "dark" : theme;
 
   return (
@@ -43,23 +46,26 @@ export default function SideBarMenu() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link to="/">
-                <div className="flex aspect-square size-14 items-center justify-center rounded-lg text-primary-foreground">
-                  <img
-                    src={theme === "frutiger-aero" ? BeeFrutiger : Bee}
-                    alt="bee icon"
-                    className="size-12"
-                  />
-                </div>
-                <div className="flex flex-col gap-1 leading-none">
-                  <span className="font-semibold">Buzz Tool</span>
-                  <span className="text-xs text-muted-foreground">
-                    tools for developer
-                  </span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
+            <div className="flex items-center justify-between">
+              <SidebarMenuButton size="lg" asChild>
+                <Link to="/">
+                  <div className="flex aspect-square size-14 items-center justify-center rounded-lg text-primary-foreground">
+                    <img
+                      src={theme === "frutiger-aero" ? BeeFrutiger : Bee}
+                      alt="bee icon"
+                      className="size-12"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1 leading-none">
+                    <span className="font-semibold">Buzz Tool</span>
+                    <span className="text-xs text-muted-foreground">
+                      tools for developer
+                    </span>
+                  </div>
+                </Link>
+              </SidebarMenuButton>
+              <SidebarTrigger />
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -111,28 +117,30 @@ export default function SideBarMenu() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <div className="flex items-center gap-2">
-              <p className="text-xs text-muted-foreground whitespace-nowrap">Theme</p>
-            <Select
-              value={selectedTheme}
-              onValueChange={(value) => setTheme(value as Theme)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select theme" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="frutiger-aero">Frutiger Aero</SelectItem>
-              </SelectContent>
-            </Select>
-            </div>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+      {state === "expanded" && (
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-muted-foreground whitespace-nowrap">Theme</p>
+                <Select
+                  value={selectedTheme}
+                  onValueChange={(value) => setTheme(value as Theme)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select theme" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="light">Light</SelectItem>
+                    <SelectItem value="dark">Dark</SelectItem>
+                    <SelectItem value="frutiger-aero">Frutiger Aero</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      )}
     </Sidebar>
   );
 }
