@@ -1,7 +1,16 @@
-import { decodeJwt, decodeProtectedHeader, SignJWT } from "jose";
+import { decodeJwt, decodeProtectedHeader, jwtVerify, SignJWT } from "jose";
 import { lazy, Suspense, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CopyIcon, Trash2, Eye, EyeOff, ArrowRight, ArrowLeft } from "lucide-react";
+import {
+  CopyIcon,
+  Trash2,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ArrowLeft,
+  ShieldCheck,
+  ShieldX,
+} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -57,6 +66,10 @@ const JWTDecoder = () => {
   const [algorithmName, setAlgorithmName] = useState("HS256");
   const [secretIsBase64Url, setSecretIsBase64Url] = useState(false);
   const [showSecret, setShowSecret] = useState(false);
+  const [verifyResult, setVerifyResult] = useState<{
+    isValid: boolean;
+    error: string | null;
+  } | null>(null);
 
   const {
     encodedTextArea,
@@ -77,7 +90,10 @@ const JWTDecoder = () => {
 
   function HandleTokenMount(editor: any) {
     editorTokenRef.current = editor;
-    editor.onDidChangeModelContent(() => setEncodeTextArea(editor.getValue()));
+    editor.onDidChangeModelContent(() => {
+      setEncodeTextArea(editor.getValue());
+      setVerifyResult(null);
+    });
   }
 
   function HandleHeaderMount(editor: any) {
@@ -132,6 +148,32 @@ const JWTDecoder = () => {
       editorTokenRef.current?.setValue(jwt);
     } catch (error: any) {
       appToast.error(error.message);
+    }
+  }
+
+  async function OnVerify() {
+    try {
+      const token = (editorTokenRef.current?.getValue() ?? encodedTextArea ?? "").trim();
+      if (!token) {
+        appToast.error("Token is required");
+        return;
+      }
+      const secretKeyStr = secretKeyArea ?? "";
+      if (!secretKeyStr.trim()) {
+        appToast.error("Secret key is required");
+        return;
+      }
+      const secret = secretIsBase64Url
+        ? Base64UrlToBytes(secretKeyStr)
+        : new TextEncoder().encode(secretKeyStr);
+      const { payload, protectedHeader } = await jwtVerify(token, secret);
+      setVerifyResult({ isValid: true, error: null });
+      setResultDecodedHeadersArea(protectedHeader);
+      setResultDecodedPayloadArea(payload);
+      editorHeaderRef.current?.setValue(JSON.stringify(protectedHeader, null, 2));
+      editorPayloadRef.current?.setValue(JSON.stringify(payload, null, 2));
+    } catch (error: any) {
+      setVerifyResult({ isValid: false, error: error?.message ?? "Verification failed" });
     }
   }
 
@@ -285,6 +327,19 @@ const JWTDecoder = () => {
               <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" />
               Encode
             </Button>
+
+            <div className="w-px h-4 bg-border" />
+
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={OnVerify}
+              title="Verify: Token + Secret → Signature check"
+              className="group flex flex-col items-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-muted-foreground transition-all hover:bg-primary hover:text-primary-foreground active:scale-95"
+            >
+              <ShieldCheck className="w-5 h-5 transition-transform group-hover:scale-110" />
+              Verify
+            </Button>
           </div>
 
           {/* ── Right panel: Header + Payload + Secret ────────────────────── */}
@@ -408,7 +463,10 @@ const JWTDecoder = () => {
                   type={showSecret ? "text" : "password"}
                   value={secretKeyArea ?? ""}
                   placeholder="Enter secret key..."
-                  onChange={(e) => setSecretKeyArea(e.target.value)}
+                  onChange={(e) => {
+                    setSecretKeyArea(e.target.value);
+                    setVerifyResult(null);
+                  }}
                   className="pr-10"
                 />
                 <button
@@ -420,6 +478,27 @@ const JWTDecoder = () => {
                   {showSecret ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
+              {verifyResult && (
+                <div
+                  className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
+                    verifyResult.isValid
+                      ? "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300"
+                      : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"
+                  }`}
+                >
+                  {verifyResult.isValid ? (
+                    <>
+                      <ShieldCheck size={16} className="shrink-0" />
+                      Signature verified
+                    </>
+                  ) : (
+                    <>
+                      <ShieldX size={16} className="shrink-0" />
+                      <span className="break-all">Invalid: {verifyResult.error}</span>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
