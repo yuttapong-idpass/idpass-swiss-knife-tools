@@ -53,6 +53,8 @@ function Button({
   return (
     <Comp
       data-slot="button"
+      // Exposed so themes can style each variant differently from CSS.
+      data-variant={variant ?? "default"}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />

@@ -1,0 +1,39 @@
+.jse-theme-dark {
+  --jse-theme-color: #2d3748;
+  --jse-theme-color-highlight: oklch(70.7% 0.022 261.325);
+  --jse-menu-color: #ffffff;
+  --jse-delimiter-color: #ffffff;
+}
+
+.jse-theme-light {
+  --jse-theme-color: #2d3748;
+  --jse-theme-color-highlight: oklch(70.7% 0.022 261.325);
+  --jse-menu-color: #ffffff;
+  --jse-delimiter-color: #ffffff;
+}
+
+.nature .jse-theme-dark,
+.nature .jse-theme-light,
+.frutiger-aero .jse-theme-dark,
+.frutiger-aero .jse-theme-light {
+  --jse-theme-color: var(--primary);
+  --jse-theme-color-highlight: var(--primary-foreground);
+  --jse-menu-color: var(--secondary-foreground);
+  --jse-delimiter-color: var(--foreground);
+}
+
+/* The menu bar stays mounted so `onRenderMenu` keeps handing us its buttons,
+   but the tool panel renders them, so the bar itself is hidden. */
+.json-editor-surface .jse-menu {
+  display: none;
+}
+
+/* The editor sits inside a rounded card, so drop its own border. */
+.json-editor-surface .jse-main {
+  border: none;
+}
+
+.json-editor-surface,
+.json-editor-surface .jse-main {
+  height: 100%;
+}

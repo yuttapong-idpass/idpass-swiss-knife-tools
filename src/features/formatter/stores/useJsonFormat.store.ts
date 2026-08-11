@@ -1,32 +1,22 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-interface IJsonData {
-  json: any;
-  text: string;
-}
-
 interface JsonFormatStore {
-  inputJson: IJsonData;
-  outputJson: IJsonData;
-  setInputData: (data: any) => void;
-  setOutputData: (data: any) => void;
-  getInputData: () => IJsonData;
-  getOutputData: () => IJsonData;
+  /** The working document of the JSON formatter, kept as raw text. */
+  content: string;
+  setContent: (content: string) => void;
+  getContent: () => string;
 }
 
-const useJsonFormatStore = create(
+const useJsonFormatStore = create<JsonFormatStore>()(
   devtools(
-    (set: any, get: any): JsonFormatStore => ({
-      inputJson: { text: "", json: undefined } as IJsonData,
-      outputJson: { text: "", json: undefined } as IJsonData,
-      setInputData: (data: IJsonData) => set({ inputJson: data }),
-      setOutputData: (data: IJsonData) => set({ outputJson: data }),
-      getInputData: () => get().inputJson,
-      getOutputData: () => get().outputJson,
+    (set, get) => ({
+      content: "",
+      setContent: (content: string) => set({ content }),
+      getContent: () => get().content,
     }),
-    { name: "json-format", enabled: true }
-  )
+    { name: "json-format", enabled: true },
+  ),
 );
 
 export default useJsonFormatStore;

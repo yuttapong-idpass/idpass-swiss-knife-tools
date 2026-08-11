@@ -51,7 +51,7 @@ export default function SideBarMenu() {
                 <Link to="/">
                   <div className="flex aspect-square size-14 items-center justify-center rounded-lg text-primary-foreground">
                     <img
-                      src={theme === "frutiger-aero" ? BeeFrutiger : Bee}
+                      src={theme === "nature" || theme === "frutiger-aero" ? BeeFrutiger : Bee}
                       alt="bee icon"
                       className="size-12"
                     />
@@ -133,6 +133,7 @@ export default function SideBarMenu() {
                   <SelectContent>
                     <SelectItem value="light">Light</SelectItem>
                     <SelectItem value="dark">Dark</SelectItem>
+                    <SelectItem value="nature">Nature</SelectItem>
                     <SelectItem value="frutiger-aero">Frutiger Aero</SelectItem>
                   </SelectContent>
                 </Select>

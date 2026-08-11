@@ -119,15 +119,105 @@ body {
   --color-button-primary: #7b5ea7;
 }
 
+.nature {
+  /* ── Clean nature palette ───────────────────────────────────────────────────
+     Soft paper-white surfaces with a hint of green, deep forest text, and a
+     single fresh-leaf green as the accent. Fully opaque — no glass, no layers. */
+  --background: oklch(0.985 0.008 150);
+  --foreground: oklch(0.24 0.035 155);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.035 155);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.035 155);
+  --primary: oklch(0.55 0.13 152);
+  --primary-foreground: oklch(0.99 0.005 150);
+  --secondary: oklch(0.94 0.025 150);
+  --secondary-foreground: oklch(0.30 0.05 155);
+  --muted: oklch(0.955 0.015 150);
+  --muted-foreground: oklch(0.50 0.03 152);
+  --accent: oklch(0.92 0.045 148);
+  --accent-foreground: oklch(0.28 0.06 155);
+  --destructive: oklch(0.58 0.18 27);
+  --border: oklch(0.90 0.02 150);
+  --input: oklch(0.92 0.02 150);
+  --ring: oklch(0.55 0.13 152);
+  --chart-1: oklch(0.55 0.13 152);
+  --chart-2: oklch(0.68 0.12 135);
+  --chart-3: oklch(0.45 0.10 165);
+  --chart-4: oklch(0.75 0.11 118);
+  --chart-5: oklch(0.62 0.09 175);
+  --sidebar: oklch(0.965 0.014 150);
+  --sidebar-foreground: oklch(0.24 0.035 155);
+  --sidebar-primary: oklch(0.55 0.13 152);
+  --sidebar-primary-foreground: oklch(0.99 0.005 150);
+  --sidebar-accent: oklch(0.92 0.035 148);
+  --sidebar-accent-foreground: oklch(0.28 0.06 155);
+  --sidebar-border: oklch(0.90 0.02 150);
+  --sidebar-ring: oklch(0.55 0.13 152);
+}
+
+/* ─── Nature: flat background, no gradient layer ─────────────────────────── */
+
+html.nature body {
+  background: var(--background);
+}
+
+/* ─── Nature: solid green buttons ───────────────────────────────────────────
+   Flat fill and a hairline border. No gloss overlay, no transform on hover.  */
+
+.nature [data-slot="button"][data-variant="default"],
+.nature [data-slot="button"][data-variant="secondary"] {
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 0.5rem;
+  color: var(--primary-foreground);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.nature [data-slot="button"][data-variant="default"]:hover,
+.nature [data-slot="button"][data-variant="secondary"]:hover {
+  background: oklch(0.49 0.13 152);
+  border-color: oklch(0.49 0.13 152);
+}
+
+.nature [data-slot="button"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Nature: sidebar icon chips ─────────────────────────────────────────── */
+
+.nature [data-slot="sidebar-menu-button"] > span.text-muted-foreground,
+.nature [data-slot="sidebar-menu-sub-button"] > span.text-muted-foreground {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 0.4rem;
+  background: var(--sidebar-accent);
+  border: 1px solid var(--sidebar-border);
+  flex-shrink: 0;
+}
+
+.nature [data-slot="sidebar-menu-button"] > span.text-muted-foreground svg,
+.nature [data-slot="sidebar-menu-sub-button"] > span.text-muted-foreground svg {
+  color: var(--sidebar-primary);
+}
+
+/* ═══ Frutiger Aero ═════════════════════════════════════════════════════════
+   Mid-2000s Aqua: sky gradients, frosted glass panels, and glossy gel buttons
+   with a hard highlight split across the middle. Skeuomorphic but static —
+   the depth comes from gradients and shadows, never from motion.            */
+
 .frutiger-aero {
-  /* ── Frutiger Aqua palette ──────────────────────────────────────────────────
-     Backgrounds carry alpha so they become frosted glass over the sky gradient.
-     Foreground / font colours are deep ocean blue — the defining Aqua character. */
+  /* Surfaces carry alpha so panels read as frosted glass over the sky. */
   --background: oklch(0.97 0.04 218 / 0.76);
   --foreground: oklch(0.18 0.13 232);
   --card: oklch(0.99 0.02 214 / 0.78);
   --card-foreground: oklch(0.18 0.13 232);
-  --popover: oklch(0.99 0.02 214 / 0.92);
+  --popover: oklch(0.99 0.02 214 / 0.94);
   --popover-foreground: oklch(0.18 0.13 232);
   --primary: oklch(0.48 0.20 216);
   --primary-foreground: oklch(0.99 0.01 212);
@@ -154,10 +244,36 @@ body {
   --sidebar-accent-foreground: oklch(0.20 0.12 230);
   --sidebar-border: oklch(0.80 0.07 218);
   --sidebar-ring: oklch(0.58 0.18 218);
+
+  /* Gel ramp, shared by every glass button. The hard stop at 49%/50% is the
+     defining Aqua move: lit top half, shadowed bottom half. */
+  --aero-gel-top: #6ceeff;
+  --aero-gel-upper: #23c9ec;
+  --aero-gel-split-a: #109ccc;
+  --aero-gel-split-b: #06598f;
+  --aero-gel-lower: #1194d8;
+  --aero-gel-bottom: #4cdcf8;
+  --aero-gel-edge: #063a68;
+  --aero-gel-edge-top: #62eaff;
+  --aero-gel-glow: 20 150 220;
 }
 
-/* ─── Frutiger Aero: frosted-glass aquarium wall effect ──────────────────── */
-/* The sidebar panel and main editor area become frosted glass over the tank   */
+/* ─── Sky ──────────────────────────────────────────────────────────────────
+   Static gradient: bright horizon at the top, deep azure at the bottom.    */
+
+html.frutiger-aero body {
+  background: linear-gradient(
+    170deg,
+    #f6fbff 0%,
+    #dceeff 22%,
+    #b8d8ff 45%,
+    #88bcff 68%,
+    #58a0ff 88%,
+    #3a8eff 100%
+  ) fixed;
+}
+
+/* ─── Frosted glass panels ─────────────────────────────────────────────── */
 
 html.frutiger-aero [data-slot="sidebar-inner"] {
   backdrop-filter: blur(18px) saturate(1.6) brightness(1.04);
@@ -169,97 +285,156 @@ html.frutiger-aero [data-slot="sidebar-inset"] {
   -webkit-backdrop-filter: blur(10px) saturate(1.4) brightness(1.02);
 }
 
-/* Cards and panels inside the editor also get the glass treatment */
 html.frutiger-aero .bg-card,
-html.frutiger-aero [class*="rounded"][class*="border"],
+html.frutiger-aero .bg-sidebar,
 html.frutiger-aero [data-slot="card"] {
   backdrop-filter: blur(8px) saturate(1.3);
   -webkit-backdrop-filter: blur(8px) saturate(1.3);
 }
 
-/* ─── Frutiger Aero: aqua glass button ─────────────────────────────────────── */
+/* ─── Gel buttons ──────────────────────────────────────────────────────────
+   Only the solid variants get the full gel. Ghost/link/outline stay quiet so
+   dense toolbars do not turn into a wall of blue lozenges.                  */
 
-.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass),
-.frutiger-aero a[role="button"]:not(.no-glass),
-.frutiger-aero a.btn-glass {
-  position: relative !important;
-  overflow: hidden !important;
-  /* Aqua gel: light cyan → sky blue → deep ocean at midpoint → cyan at bottom */
+.frutiger-aero [data-slot="button"][data-variant="default"],
+.frutiger-aero [data-slot="button"][data-variant="secondary"],
+.frutiger-aero [data-slot="button"][data-variant="destructive"],
+.frutiger-aero [data-slot="button"][data-variant="glass"],
+.btn-glass {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   background: linear-gradient(
     180deg,
-    #60f0ff 0%,
-    #18c8e8 30%,
-    #1098c8 48%,
-    #085898 50%,
-    #1090d8 75%,
-    #40d8f8 100%
-  ) !important;
-  border: 1px solid #063a68 !important;
-  border-top-color: #50e8ff !important;
-  border-radius: 0.45rem !important;
-  color: #fff !important;
-  font-weight: 600 !important;
-  text-shadow: 0 1px 2px rgba(0, 20, 60, 0.80) !important;
+    var(--aero-gel-top, #6ceeff) 0%,
+    var(--aero-gel-upper, #23c9ec) 30%,
+    var(--aero-gel-split-a, #109ccc) 49%,
+    var(--aero-gel-split-b, #06598f) 50%,
+    var(--aero-gel-lower, #1194d8) 76%,
+    var(--aero-gel-bottom, #4cdcf8) 100%
+  );
+  border: 1px solid var(--aero-gel-edge, #063a68);
+  border-top-color: var(--aero-gel-edge-top, #62eaff);
+  border-radius: 0.55rem;
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 20, 60, 0.8);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.22),
-    0 2px 10px rgba(20, 140, 210, 0.55),
-    0 1px 2px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
-  cursor: pointer !important;
-  transition: filter 0.12s ease, box-shadow 0.12s ease, transform 0.1s ease !important;
+    /* white inner rim, the "moulded plastic" edge */
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+    /* outer aqua glow */
+    0 2px 10px rgba(var(--aero-gel-glow, 20 150 220) / 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
 }
 
-/* Top-half gloss — cyan-tinted */
-.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass)::after,
-.frutiger-aero a[role="button"]:not(.no-glass)::after,
-.frutiger-aero a.btn-glass::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 0 50% 0 !important;
+/* Top-half gloss. The elliptical bottom radius is what makes it read as a
+   curved gel surface rather than a flat white band. */
+.frutiger-aero [data-slot="button"][data-variant="default"]::before,
+.frutiger-aero [data-slot="button"][data-variant="secondary"]::before,
+.frutiger-aero [data-slot="button"][data-variant="destructive"]::before,
+.frutiger-aero [data-slot="button"][data-variant="glass"]::before,
+.btn-glass::before {
+  content: "";
+  position: absolute;
+  inset: 1px 1px 50% 1px;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.65) 0%,
-    rgba(200, 245, 255, 0.14) 100%
-  ) !important;
-  border-radius: 0.45rem 0.45rem 50% 50% / 0.45rem 0.45rem 60% 60% !important;
-  pointer-events: none !important;
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(220, 250, 255, 0.34) 62%,
+    rgba(200, 245, 255, 0.06) 100%
+  );
+  border-radius: 0.45rem 0.45rem 50% 50% / 0.45rem 0.45rem 65% 65%;
+  pointer-events: none;
+  z-index: -1;
 }
 
-/* Hover — aqua glow */
-.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass):hover,
-.frutiger-aero a[role="button"]:not(.no-glass):hover,
-.frutiger-aero a.btn-glass:hover {
-  filter: brightness(1.12) saturate(1.1) !important;
+/* Bottom bounce light, the reflection off the "floor" of the gel. */
+.frutiger-aero [data-slot="button"][data-variant="default"]::after,
+.frutiger-aero [data-slot="button"][data-variant="secondary"]::after,
+.frutiger-aero [data-slot="button"][data-variant="destructive"]::after,
+.frutiger-aero [data-slot="button"][data-variant="glass"]::after,
+.btn-glass::after {
+  content: "";
+  position: absolute;
+  inset: 55% 12% 1px 12%;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(190, 250, 255, 0.55) 0%,
+    rgba(190, 250, 255, 0) 72%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.frutiger-aero [data-slot="button"][data-variant="default"]:hover,
+.frutiger-aero [data-slot="button"][data-variant="secondary"]:hover,
+.frutiger-aero [data-slot="button"][data-variant="destructive"]:hover,
+.frutiger-aero [data-slot="button"][data-variant="glass"]:hover,
+.btn-glass:hover {
+  filter: brightness(1.13) saturate(1.08);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.35),
-    0 4px 18px rgba(20, 160, 230, 0.72),
-    0 1px 3px rgba(0, 0, 0, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.40) !important;
-  transform: translateY(-1px) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.3),
+    0 3px 16px rgba(var(--aero-gel-glow, 20 150 220) / 0.7),
+    0 1px 3px rgba(0, 0, 0, 0.24);
 }
 
-/* Active / pressed */
-.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass):active,
-.frutiger-aero a[role="button"]:not(.no-glass):active,
-.frutiger-aero a.btn-glass:active {
-  filter: brightness(0.88) !important;
-  transform: translateY(1px) !important;
+/* Pressed: the gloss flips to a shadow, as if the gel is pushed in. */
+.frutiger-aero [data-slot="button"][data-variant="default"]:active,
+.frutiger-aero [data-slot="button"][data-variant="secondary"]:active,
+.frutiger-aero [data-slot="button"][data-variant="destructive"]:active,
+.frutiger-aero [data-slot="button"][data-variant="glass"]:active,
+.btn-glass:active {
+  filter: brightness(0.9);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 1px 4px rgba(20, 120, 200, 0.38),
-    inset 0 2px 4px rgba(0, 20, 60, 0.32) !important;
+    inset 0 2px 5px rgba(0, 25, 60, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.18),
+    0 1px 3px rgba(var(--aero-gel-glow, 20 150 220) / 0.3);
 }
 
-/* Disabled */
-.frutiger-aero button:not([data-slot="sidebar-menu-button"]):not(.no-glass):disabled {
-  filter: saturate(0.4) opacity(0.55) !important;
-  cursor: not-allowed !important;
-  transform: none !important;
+.frutiger-aero [data-slot="button"][data-variant="default"]:disabled,
+.frutiger-aero [data-slot="button"][data-variant="secondary"]:disabled,
+.frutiger-aero [data-slot="button"][data-variant="destructive"]:disabled,
+.frutiger-aero [data-slot="button"][data-variant="glass"]:disabled {
+  filter: saturate(0.35) opacity(0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
 }
 
-/* ─── Frutiger Aero: glass icon badges in sidebar ────────────────────────── */
+/* Destructive keeps the gel form but swaps to a warm red ramp. */
+.frutiger-aero [data-slot="button"][data-variant="destructive"] {
+  --aero-gel-top: #ffb4a8;
+  --aero-gel-upper: #f86b58;
+  --aero-gel-split-a: #d83828;
+  --aero-gel-split-b: #8e1408;
+  --aero-gel-lower: #d43a24;
+  --aero-gel-bottom: #ff8f74;
+  --aero-gel-edge: #6a1006;
+  --aero-gel-edge-top: #ffb0a0;
+  --aero-gel-glow: 220 70 45;
+}
 
-/* Icon spans inside sidebar menu buttons and sub-buttons */
+/* ─── Quiet variants: frosted, not gel ─────────────────────────────────── */
+
+.frutiger-aero [data-slot="button"][data-variant="ghost"],
+.frutiger-aero [data-slot="button"][data-variant="outline"] {
+  border-radius: 0.5rem;
+  color: var(--foreground);
+}
+
+.frutiger-aero [data-slot="button"][data-variant="ghost"]:hover,
+.frutiger-aero [data-slot="button"][data-variant="outline"]:hover {
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 4px rgba(20, 140, 220, 0.22);
+}
+
+/* ─── Sidebar icon chips: small glass tiles ────────────────────────────── */
+
 .frutiger-aero [data-slot="sidebar-menu-button"] > span.text-muted-foreground,
 .frutiger-aero [data-slot="sidebar-menu-sub-button"] > span.text-muted-foreground {
   display: inline-flex;
@@ -268,184 +443,28 @@ html.frutiger-aero [data-slot="card"] {
   width: 1.6rem;
   height: 1.6rem;
   border-radius: 0.4rem;
-  /* Aqua glass badge */
   background: linear-gradient(
     150deg,
-    rgba(255, 255, 255, 0.82) 0%,
-    rgba(160, 230, 255, 0.58) 50%,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(160, 230, 255, 0.6) 50%,
     rgba(30, 140, 220, 0.42) 100%
   );
   backdrop-filter: blur(8px) saturate(1.6);
   -webkit-backdrop-filter: blur(8px) saturate(1.6);
-  border: 1px solid rgba(255, 255, 255, 0.80);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-bottom-color: rgba(30, 140, 220, 0.52);
   border-right-color: rgba(30, 140, 220, 0.52);
   box-shadow:
     0 1px 6px rgba(20, 140, 220, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.94),
-    inset 0 -1px 0 rgba(30, 140, 220, 0.30);
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
   color: #0a2850;
   flex-shrink: 0;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-.frutiger-aero [data-slot="sidebar-menu-button"]:hover > span.text-muted-foreground,
-.frutiger-aero [data-slot="sidebar-menu-sub-button"]:hover > span.text-muted-foreground {
-  box-shadow:
-    0 3px 12px rgba(20, 140, 220, 0.40),
-    inset 0 1px 0 rgba(255, 255, 255, 0.97),
-    inset 0 -1px 0 rgba(30, 140, 220, 0.48);
-  transform: translateY(-1px);
-}
-
-/* SVG color and glow inside the glass badge */
 .frutiger-aero [data-slot="sidebar-menu-button"] > span.text-muted-foreground svg,
 .frutiger-aero [data-slot="sidebar-menu-sub-button"] > span.text-muted-foreground svg {
   color: #0a2e58;
-  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.80));
-}
-
-/* standalone utility — use .btn-glass on any element outside frutiger-aero scope */
-.btn-glass {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(
-    180deg,
-    #60f0ff 0%,
-    #18c8e8 30%,
-    #1098c8 48%,
-    #085898 50%,
-    #1090d8 75%,
-    #40d8f8 100%
-  );
-  border: 1px solid #063a68;
-  border-top-color: #50e8ff;
-  border-radius: 0.45rem;
-  color: #fff;
-  font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 20, 60, 0.80);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.22),
-    0 2px 10px rgba(20, 140, 210, 0.55),
-    0 1px 2px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32);
-  cursor: pointer;
-  transition: filter 0.12s ease, box-shadow 0.12s ease, transform 0.1s ease;
-}
-
-.btn-glass::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 50% 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.65) 0%,
-    rgba(200, 245, 255, 0.14) 100%
-  );
-  border-radius: 0.45rem 0.45rem 50% 50% / 0.45rem 0.45rem 60% 60%;
-  pointer-events: none;
-}
-
-.btn-glass:hover {
-  filter: brightness(1.12) saturate(1.1);
-  transform: translateY(-1px);
-}
-
-.btn-glass:active {
-  filter: brightness(0.88);
-  transform: translateY(1px);
-}
-
-/* ─── Frutiger Aqua: sky background ──────────────────────────────────────── */
-
-/* Clean sky-blue gradient — bright white-blue at top, deep azure at bottom   */
-html.frutiger-aero body {
-  background: linear-gradient(
-    170deg,
-    #f6fbff 0%,
-    #dceeff 22%,
-    #b8d8ff 45%,
-    #88bcff 68%,
-    #58a0ff 88%,
-    #3a8eff 100%
-  ) fixed !important;
-}
-
-/* ─── Frutiger Aqua: seaweed + bubbles (behind editor) ───────────────────── */
-
-/* Fixed layer behind all UI — z-index 0 */
-.aero-bg-container {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 0;
-}
-
-/* ── Seaweed ── */
-.aero-seaweed {
-  position: absolute;
-  bottom: 0;
-  transform-origin: bottom center;
-  animation: seaweed-sway ease-in-out infinite;
-  opacity: 0.78;
-}
-
-@keyframes seaweed-sway {
-  0%,  100% { transform: rotate(0deg)   skewX(0deg);   }
-  30%        { transform: rotate(8deg)   skewX(2deg);   }
-  70%        { transform: rotate(-6deg)  skewX(-1.5deg);}
-}
-
-/* ── Air bubbles ── */
-.aero-aqua-bubble {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 33% 27%,
-    rgba(255, 255, 255, 0.94) 0%,
-    rgba(210, 245, 255, 0.44) 28%,
-    rgba(130, 215, 255, 0.12) 58%,
-    rgba(70,  185, 245, 0.20) 100%
-  );
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.70),
-    0 0 0 1px rgba(120, 210, 255, 0.38),
-    0 0 5px 2px rgba(100, 200, 255, 0.22),
-    inset 0 0 8px rgba(255, 255, 255, 0.10);
-  will-change: transform, opacity;
-  animation: aqua-bubble-rise linear infinite;
-}
-
-.aero-aqua-bubble::before {
-  content: '';
-  position: absolute;
-  top: 11%;
-  left: 17%;
-  width: 40%;
-  height: 26%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(255, 255, 255, 0.42) 55%,
-    transparent 100%
-  );
-  border-radius: 50%;
-  transform: rotate(-28deg);
-}
-
-@keyframes aqua-bubble-rise {
-  0% {
-    transform: translateY(0) translateX(0) scale(0.45);
-    opacity: 0;
-  }
-  6%  { opacity: 0.88; transform: translateY(-4vh) scale(1); }
-  50% { transform: translateY(-52vh) translateX(var(--bx,  12px)); }
-  91% { opacity: 0.52; }
-  100% {
-    transform: translateY(-110vh) translateX(var(--bx2, -9px)) scale(0.78);
-    opacity: 0;
-  }
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8));
 }
 
 .headers-text-gradient-dark {

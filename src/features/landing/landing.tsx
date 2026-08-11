@@ -18,7 +18,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center rounded-xl  text-primary-foreground">
               <img
-                src={theme === "frutiger-aero" ? BeeFrutiger : Bee}
+                src={theme === "nature" || theme === "frutiger-aero" ? BeeFrutiger : Bee}
                 alt="bee icon"
                 className="size-16"
               />
