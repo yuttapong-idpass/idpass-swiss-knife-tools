@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useMonacoTheme } from "@/hooks/useMonacoTheme";
 import { appToast } from "@/lib/toast";
 import { lazy, Suspense, useRef, type ChangeEvent } from "react";
@@ -32,6 +33,10 @@ const Differ = () => {
     setModifiedText,
     getOriginalText,
     getModifiedText,
+    originalName,
+    modifiedName,
+    setOriginalName,
+    setModifiedName,
   }: any = useTextCompareStore();
   function OnRouteToResultCompare() {
     navigate("/text-compare/result-compare");
@@ -59,6 +64,7 @@ const Differ = () => {
       editorOriginalTextRef.current.setValue("");
       setOriginalText("");
     }
+    setOriginalName("");
   }
 
   function OnClearModifiedText() {
@@ -66,6 +72,7 @@ const Differ = () => {
       editorModifiedTextRef.current.setValue("");
       setModifiedText("");
     }
+    setModifiedName("");
   }
 
   async function OnUploadFile(
@@ -87,9 +94,11 @@ const Differ = () => {
       if (target === "original") {
         editorOriginalTextRef.current?.setValue(content);
         setOriginalText(content);
+        setOriginalName(file.name);
       } else {
         editorModifiedTextRef.current?.setValue(content);
         setModifiedText(content);
+        setModifiedName(file.name);
       }
       appToast.success(`${file.name} loaded.`);
     } catch (error) {
@@ -113,11 +122,21 @@ const Differ = () => {
       >
         <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-5rem)]">
           <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
-            <div className="flex flex-row items-center mb-2 justify-between">
-              <span className="font-medium text-sm text-muted-foreground">
-                Original text
-              </span>
-              <div className="flex items-center gap-2">
+            <div className="flex flex-row items-center mb-2 justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <span className="font-medium text-sm text-muted-foreground shrink-0">
+                  Original text
+                </span>
+                <Input
+                  value={originalName}
+                  onChange={(event) => setOriginalName(event.target.value)}
+                  placeholder="file name (optional)"
+                  aria-label="Original file name"
+                  title={originalName || undefined}
+                  className="h-8 w-full max-w-[220px] text-sm"
+                />
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
                 <input
                   ref={originalFileInputRef}
                   type="file"
@@ -172,11 +191,21 @@ const Differ = () => {
           </div>
 
           <div className="w-full lg:flex-1 flex flex-col min-h-[300px] lg:min-h-0">
-            <div className="flex flex-row items-center mb-2 justify-between">
-              <span className="font-medium text-sm text-muted-foreground">
-                Modified text
-              </span>
-              <div className="flex items-center gap-2">
+            <div className="flex flex-row items-center mb-2 justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <span className="font-medium text-sm text-muted-foreground shrink-0">
+                  Modified text
+                </span>
+                <Input
+                  value={modifiedName}
+                  onChange={(event) => setModifiedName(event.target.value)}
+                  placeholder="file name (optional)"
+                  aria-label="Modified file name"
+                  title={modifiedName || undefined}
+                  className="h-8 w-full max-w-[220px] text-sm"
+                />
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
                 <input
                   ref={modifiedFileInputRef}
                   type="file"

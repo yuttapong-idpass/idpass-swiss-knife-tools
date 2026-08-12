@@ -10,7 +10,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 const ResultCompare = () => {
-  const { getOriginalText, getModifiedText }: any = useTextCompareStore();
+  const {
+    getOriginalText,
+    getModifiedText,
+    originalName,
+    modifiedName,
+  }: any = useTextCompareStore();
+  const originalLabel = originalName?.trim() || "Original text";
+  const modifiedLabel = modifiedName?.trim() || "Modified text";
   const monacoTheme = useMonacoTheme();
   const navigate = useNavigate();
   function OnBackToDiffer() {
@@ -32,6 +39,21 @@ const ResultCompare = () => {
           >
             <ArrowLeft /> Back
           </Button>
+        </div>
+        <div className="flex flex-row items-center rounded-md border bg-muted/40 text-sm font-medium">
+          <span
+            className="flex-1 min-w-0 truncate px-3 py-2 text-muted-foreground"
+            title={originalLabel}
+          >
+            {originalLabel}
+          </span>
+          <span className="h-5 w-px shrink-0 bg-border" />
+          <span
+            className="flex-1 min-w-0 truncate px-3 py-2 text-muted-foreground"
+            title={modifiedLabel}
+          >
+            {modifiedLabel}
+          </span>
         </div>
         <div className="flex-1 min-h-[400px] lg:min-h-0">
           <DiffEditor

@@ -36,6 +36,8 @@ import { Theme, useTheme } from "@/providers/ThemeProvider";
 import Bee from "@/assets/images/bee.png";
 import BeeFrutiger from "@/assets/images/bee-frutiger.png";
 
+const APP_VERSION = `v${__APP_VERSION__}`;
+
 export default function SideBarMenu() {
   const { theme, setTheme } = useTheme();
   const { state } = useSidebar();
@@ -120,6 +122,11 @@ export default function SideBarMenu() {
       {state === "expanded" && (
         <SidebarFooter>
           <SidebarMenu>
+            <SidebarMenuItem>
+              <p className="px-1 pb-1 text-xs text-muted-foreground whitespace-nowrap">
+                {APP_VERSION}
+              </p>
+            </SidebarMenuItem>
             <SidebarMenuItem>
               <div className="flex items-center gap-2">
                 <p className="text-xs text-muted-foreground whitespace-nowrap">Theme</p>
