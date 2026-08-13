@@ -34,6 +34,70 @@ export type WorkerResponse =
     }
   | { type: "error"; message: string };
 
+function isPlainObject(value: unknown): value is UnknownRecord {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+/**
+ * Unwraps a full Elasticsearch/Kibana search response ({ hits: { hits: [...] } })
+ * down to the hit array. A bare hit is returned as-is.
+ */
+function expandToHits(value: UnknownRecord): UnknownRecord[] {
+  const outer = value.hits;
+  if (Array.isArray(outer)) {
+    return outer.filter(isPlainObject);
+  }
+  if (isPlainObject(outer) && Array.isArray(outer.hits)) {
+    return outer.hits.filter(isPlainObject);
+  }
+  return [value];
+}
+
+/**
+ * Last-resort scanner for input that is neither a single valid JSON document nor
+ * NDJSON: pretty-printed objects pasted back-to-back (what Kibana Discover's
+ * per-document copy button produces). Walks the text tracking brace depth while
+ * ignoring braces inside strings, and parses each balanced top-level object.
+ */
+function extractConcatenatedObjects(text: string): UnknownRecord[] {
+  const found: UnknownRecord[] = [];
+  let depth = 0;
+  let start = -1;
+  let inString = false;
+  let escaped = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === "\\") escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+
+    if (ch === '"') {
+      inString = true;
+    } else if (ch === "{") {
+      if (depth === 0) start = i;
+      depth++;
+    } else if (ch === "}" && depth > 0) {
+      depth--;
+      if (depth === 0 && start >= 0) {
+        try {
+          const parsed: unknown = JSON.parse(text.slice(start, i + 1));
+          if (isPlainObject(parsed)) found.push(...expandToHits(parsed));
+        } catch {
+          // Not a complete object after all — skip it and keep scanning.
+        }
+        start = -1;
+      }
+    }
+  }
+
+  return found;
+}
+
 function parseInputToObjects(raw: string): UnknownRecord[] {
   const text = raw.trim();
   if (!text) return [];
@@ -46,28 +110,34 @@ function parseInputToObjects(raw: string): UnknownRecord[] {
     }
   };
 
-  const asArray = tryParse(text);
-  if (Array.isArray(asArray)) {
-    return asArray.filter(
-      (x): x is UnknownRecord => x !== null && typeof x === "object",
-    );
+  // 1. A single valid JSON document: an array of hits, one hit, or a full
+  //    Elasticsearch search response.
+  const parsed = tryParse(text);
+  if (Array.isArray(parsed)) {
+    return parsed.filter(isPlainObject);
+  }
+  if (isPlainObject(parsed)) {
+    return expandToHits(parsed);
   }
 
+  // 2. NDJSON — one complete object per line.
   const lines = text
     .split(/\r?\n/)
-    .map((l) => l.trim())
+    .map((l) => l.trim().replace(/,$/, ""))
     .filter(Boolean);
   const fromNdjson: UnknownRecord[] = [];
   for (const line of lines) {
     const row = tryParse(line);
-    if (row && typeof row === "object" && !Array.isArray(row)) {
-      fromNdjson.push(row as UnknownRecord);
-    }
+    if (isPlainObject(row)) fromNdjson.push(...expandToHits(row));
   }
   if (fromNdjson.length > 0) return fromNdjson;
 
+  // 3. Pretty-printed objects pasted one after another.
+  const scanned = extractConcatenatedObjects(text);
+  if (scanned.length > 0) return scanned;
+
   throw new Error(
-    "Could not parse input. Use a JSON array of hits or NDJSON (one object per line).",
+    "Could not parse input. Paste Kibana hits as a JSON array, NDJSON (one object per line), or one or more JSON objects.",
   );
 }
 

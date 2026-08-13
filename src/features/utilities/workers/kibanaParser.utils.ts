@@ -67,7 +67,11 @@ export function sanitizePathSegment(name: string, fallback: string): string {
 }
 
 export function uriLastSegment(uri: string): string {
-  const trimmed = uri.trim().replace(/\/+$/, "");
+  // Drop the query string / fragment first — a URI such as
+  // "/api/SEARCH_BY_LOCATION?LATITUDE=13.9&LONGITUDE=100.5" must yield
+  // "SEARCH_BY_LOCATION", not the whole parameter blob.
+  const withoutQuery = uri.trim().split(/[?#]/)[0] ?? "";
+  const trimmed = withoutQuery.replace(/\/+$/, "");
   if (!trimmed) return "entry";
   const parts = trimmed.split("/").filter(Boolean);
   const last = parts[parts.length - 1];
